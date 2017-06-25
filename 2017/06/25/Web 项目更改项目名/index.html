@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="eclipse,web," />
 
 
 
@@ -93,19 +93,22 @@
 
 
 
-<meta name="description" content="mysql存入的中文数据乱码,可能有这两个原因原因一 : 数据源配置和mysql字符集编码不符,或数据源配置没有设置字符集 解决方案:在数据源配置添加字符集 useUnicode=true&amp;amp;amp;characterEncoding=utf-8            原因二: 在接受数据的时候已经乱码解决方案: 1，在接受数据的时候通过代码进行转码 request=ServletActio">
+<meta name="description" content="简单的记录web开发中基本的操作。 更改项目名直接修改找到原项目中的.project 文件，更改中项目名称。然后在同目录下找到.mymetadata 文件 并更改name、context-root、archive 中的项目名称。这些名称必须一致。重新导入，项目名称就成功更改了。 使用eclipse修改已导入eclipse中的项目，首先点击F2进行重命名，然后右键点击该项目，选择properties">
+<meta name="keywords" content="eclipse,web">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MySql 中文乱码解决办法">
-<meta property="og:url" content="http://yoursite.com/2017/06/25/MySql 中文乱码解决办法/index.html">
+<meta property="og:title" content="Web 项目更改项目名">
+<meta property="og:url" content="http://yoursite.com/2017/06/25/Web 项目更改项目名/index.html">
 <meta property="og:site_name" content="xuwujing&#39;s blog">
-<meta property="og:description" content="mysql存入的中文数据乱码,可能有这两个原因原因一 : 数据源配置和mysql字符集编码不符,或数据源配置没有设置字符集 解决方案:在数据源配置添加字符集 useUnicode=true&amp;amp;amp;characterEncoding=utf-8            原因二: 在接受数据的时候已经乱码解决方案: 1，在接受数据的时候通过代码进行转码 request=ServletActio">
-<meta property="og:image" content="http://img.blog.csdn.net/20170422112443024?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
-<meta property="og:image" content="http://img.blog.csdn.net/20170422113313446?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
-<meta property="og:updated_time" content="2017-06-25T06:47:56.426Z">
+<meta property="og:description" content="简单的记录web开发中基本的操作。 更改项目名直接修改找到原项目中的.project 文件，更改中项目名称。然后在同目录下找到.mymetadata 文件 并更改name、context-root、archive 中的项目名称。这些名称必须一致。重新导入，项目名称就成功更改了。 使用eclipse修改已导入eclipse中的项目，首先点击F2进行重命名，然后右键点击该项目，选择properties">
+<meta property="og:image" content="http://img.blog.csdn.net/20170625201836937?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170625201846470?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170625202015682?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170625202023891?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2017-06-25T12:31:42.442Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MySql 中文乱码解决办法">
-<meta name="twitter:description" content="mysql存入的中文数据乱码,可能有这两个原因原因一 : 数据源配置和mysql字符集编码不符,或数据源配置没有设置字符集 解决方案:在数据源配置添加字符集 useUnicode=true&amp;amp;amp;characterEncoding=utf-8            原因二: 在接受数据的时候已经乱码解决方案: 1，在接受数据的时候通过代码进行转码 request=ServletActio">
-<meta name="twitter:image" content="http://img.blog.csdn.net/20170422112443024?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta name="twitter:title" content="Web 项目更改项目名">
+<meta name="twitter:description" content="简单的记录web开发中基本的操作。 更改项目名直接修改找到原项目中的.project 文件，更改中项目名称。然后在同目录下找到.mymetadata 文件 并更改name、context-root、archive 中的项目名称。这些名称必须一致。重新导入，项目名称就成功更改了。 使用eclipse修改已导入eclipse中的项目，首先点击F2进行重命名，然后右键点击该项目，选择properties">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20170625201836937?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 
 
 
@@ -133,13 +136,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/06/25/MySql 中文乱码解决办法/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/06/25/Web 项目更改项目名/"/>
 
 
 
 
 
-  <title>MySql 中文乱码解决办法 | xuwujing's blog</title>
+  <title>Web 项目更改项目名 | xuwujing's blog</title>
   
 
 
@@ -268,7 +271,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/25/MySql 中文乱码解决办法/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/25/Web 项目更改项目名/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="xuwujing">
@@ -285,7 +288,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">MySql 中文乱码解决办法</h1>
+          <h1 class="post-title" itemprop="name headline">Web 项目更改项目名</h1>
         
 
         <div class="post-meta">
@@ -297,7 +300,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-25T14:20:11+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-25T20:25:02+08:00">
                 2017-06-25
               </time>
             
@@ -307,6 +310,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/开发工具/" itemprop="url" rel="index">
+                    <span itemprop="name">开发工具</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -332,10 +357,10 @@
       
 
       
-        <p>mysql存入的中文数据乱码,可能有这两个原因<br>原因一 : 数据源配置和mysql字符集编码不符,或数据源配置没有设置字符集<br> 解决方案:在数据源配置添加字符集 <code>useUnicode=true&amp;amp;characterEncoding=utf-8</code><br>           <img src="http://img.blog.csdn.net/20170422112443024?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
-<p>原因二: 在接受数据的时候已经乱码<br>解决方案: 1，在接受数据的时候通过代码进行转码</p>
-<figure class="highlight plain"><figcaption><span>request=ServletActionContext.getRequest();</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">request.setCharacterEncoding(&quot;UTF-8&quot;);</div><div class="line">String sex=request.getParameter(&quot;userSex&quot;);</div><div class="line">String sexs=new String(sex.getBytes(&quot;ISO-8859-1&quot;),&quot;UTF-8&quot;);</div></pre></td></tr></table></figure>
-<p>  2，在接受数据的时候就进行转码,在tomcat server.xml中添加  <code>useBodyEncodingForURI=&quot;true&quot;  URIEncoding=&quot;UTF-8&quot;</code><br>  <img src="http://img.blog.csdn.net/20170422113313446?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+        <p>简单的记录web开发中基本的操作。</p>
+<h2 id="更改项目名"><a href="#更改项目名" class="headerlink" title="更改项目名"></a>更改项目名</h2><h3 id="直接修改"><a href="#直接修改" class="headerlink" title="直接修改"></a>直接修改</h3><p>找到原项目中的.project 文件，更改<name>中项目名称。然后在同目录下找到.mymetadata 文件 并更改name、context-root、archive 中的项目名称。这些名称必须一致。重新导入，项目名称就成功更改了。<br><img src="http://img.blog.csdn.net/20170625201836937?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br><img src="http://img.blog.csdn.net/20170625201846470?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></name></p>
+<h3 id="使用eclipse修改"><a href="#使用eclipse修改" class="headerlink" title="使用eclipse修改"></a>使用eclipse修改</h3><p>已导入eclipse中的项目，首先点击F2进行重命名，然后右键点击该项目，选择properties，然后搜索web，更改Web Context-root中的名称，点击保存之后。项目名称更改就成功了。</p>
+<p><img src="http://img.blog.csdn.net/20170625202015682?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br><img src="http://img.blog.csdn.net/20170625202023891?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
 
       
     </div>
@@ -363,6 +388,14 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/eclipse/" rel="tag"># eclipse</a>
+          
+            <a href="/tags/web/" rel="tag"># web</a>
+          
+        </div>
+      
 
       
       
@@ -372,8 +405,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/06/25/Java WebService接口生成和调用 图文详解/" rel="next" title="Java WebService接口生成和调用 图文详解">
-                <i class="fa fa-chevron-left"></i> Java WebService接口生成和调用 图文详解
+              <a href="/2017/06/25/CSDN博客新手使用方案/" rel="next" title="CSDN博客新手使用方案">
+                <i class="fa fa-chevron-left"></i> CSDN博客新手使用方案
               </a>
             
           </div>
@@ -381,10 +414,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/06/25/postman安装使用教程---图文讲解/" rel="prev" title="postman安装使用教程---图文讲解">
-                postman安装使用教程---图文讲解 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -431,8 +460,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/xuwujing.png"
@@ -514,6 +552,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#更改项目名"><span class="nav-number">1.</span> <span class="nav-text">更改项目名</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#直接修改"><span class="nav-number">1.1.</span> <span class="nav-text">直接修改</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用eclipse修改"><span class="nav-number">1.2.</span> <span class="nav-text">使用eclipse修改</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
