@@ -1,0 +1,669 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="1、连接池概述        　　数据库连接是一种关键的有限的昂贵的资源，这一点在多用户的网页应用程序中体现得尤为突出。对数据库连接的管理能显著影响到整个        应用程序的伸缩性和健壮性，影响到程序的性能指标。数据库连接池正是针对这个问题提出来的。        　　数据库连接池负责分配、管理和释放数据库连接，它允许应用程序重复使用一个现有的数据库连接，而再">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring连接池的常用配置">
+<meta property="og:url" content="http://yoursite.com/2017/06/25/Spring连接池的常用配置/index.html">
+<meta property="og:site_name" content="xuwujing&#39;s blog">
+<meta property="og:description" content="1、连接池概述        　　数据库连接是一种关键的有限的昂贵的资源，这一点在多用户的网页应用程序中体现得尤为突出。对数据库连接的管理能显著影响到整个        应用程序的伸缩性和健壮性，影响到程序的性能指标。数据库连接池正是针对这个问题提出来的。        　　数据库连接池负责分配、管理和释放数据库连接，它允许应用程序重复使用一个现有的数据库连接，而再">
+<meta property="og:updated_time" content="2017-06-25T06:48:30.413Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring连接池的常用配置">
+<meta name="twitter:description" content="1、连接池概述        　　数据库连接是一种关键的有限的昂贵的资源，这一点在多用户的网页应用程序中体现得尤为突出。对数据库连接的管理能显著影响到整个        应用程序的伸缩性和健壮性，影响到程序的性能指标。数据库连接池正是针对这个问题提出来的。        　　数据库连接池负责分配、管理和释放数据库连接，它允许应用程序重复使用一个现有的数据库连接，而再">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/06/25/Spring连接池的常用配置/"/>
+
+
+
+
+
+  <title>Spring连接池的常用配置 | xuwujing's blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xuwujing's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/25/Spring连接池的常用配置/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xuwujing">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xuwujing's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Spring连接池的常用配置</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-25T14:20:11+08:00">
+                2017-06-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <div id="cnblogs_post_body"><br>    <a target="_blank" id="toTop" href="" style="visibility:visible; display:block"></a><br>    <p><br>        1、<strong>连接池概述</strong><br><br>        　　数据库连接是一种关键的有限的昂贵的资源，这一点在多用户的网页应用程序中体现得尤为突出。对数据库连接的管理能显著影响到整个<br><br>        应用程序的伸缩性和健壮性，影响到程序的性能指标。数据库连接池正是针对这个问题提出来的。<br><br>        　　数据库连接池负责分配、管理和释放数据库连接，它允许应用程序重复使用一个现有的数据库连接，而再不是重新建立一个；释放空闲时<br><br>        间超过最大空闲时间的数据库连接来避免因为没有释放数据库连接而引起的数据库连接遗漏。这项技术能明显提高对数据库操作的性能。<br><br>        　　数据库连接池在初始化时将创建一定数量的数据库连接放到连接池中，这些数据库连接的数量是由最小数据库连接数来设定的。无论这些<br><br>        数据库连接是否被使用，连接池都将一直保证至少拥有这么多的连接数量。连接池的最大数据库连接数量限定了这个连接池能占有的最大连接<br><br>        数，当应用程序向连接池请求的连接数超过最大连接数量时，这些请求将被加入到等待队列中。数据库连接池的最小连接数和最大连接数的设<br><br>        置要考虑到下列几个因素：<br><br>        　　1) 最小连接数是连接池一直保持的数据库连接，所以如果应用程序对数据库连接的使用量不大，将会有大量的数据库连接资源被浪费；<br><br>        　　2) 最大连接数是连接池能申请的最大连接数，如果数据库连接请求超过此数，后面的数据库连接请求将被加入到等待队列中，这会影响之<br><br>        后的数据库操作。<br><br>        　　3) 如果最小连接数与最大连接数相差太大，那么最先的连接请求将会获利，之后超过最小连接数量的连接请求等价于建立一个新的数据库<br><br>        连接。不过，这些大于最小连接数的数据库连接在使用完不会马上被释放，它将被放到连接池中等待重复使用或是空闲超时后被释放。<br><br>        　　目前常用的连接池有：C3P0、DBCP、Proxool<br>    </p><br>    <ul><br>        <li><br>            C3P0比较耗费资源，效率方面可能要低一点。<br>        </li><br>        <li><br>            DBCP在实践中存在BUG，在某些种情会产生很多空连接不能释放，Hibernate3.0已经放弃了对其的支持。<br>        </li><br>        <li><br>            Proxool的负面评价较少，现在比较推荐它，而且它还提供即时监控连接池状态的功能，便于发现连接泄漏的情况。<br>        </li><br>    </ul><br>    <p><br>        　　不管通过何种持久化技术，都必须通过数据连接访问数据库，在Spring中，数据连接是通过数据源获得的。在以往的应用中，数据源一般是<br>    </p><br>    <p><br>        Web应用服务器提供的。在Spring中，你不但可以通过JNDI获取应用服务器的数据源，也可以直接在Spring容器中配置数据源，此外，<br>    </p><br>    <p><br>        你还可以通过代码的方式创建一个数据源，以便进行无依赖的单元测试。<br>    </p><br>    <p><br>        2、<strong>DBCP数据源</strong><br>    </p><br>    <p><br>        　　DBCP类包为commons-dbcp.jar，DBCP是一个依赖 Jakarta commons-pool对象池机制的数据库连接池，所以还应包含commons-pool.jar。<br>    </p><br>    <p><br>        bean配置片段：<br>    </p><br>    <div class="cnblogs_code"><br>        <div class="cnblogs_code_toolbar"><br>            <span class="cnblogs_code_copy"><a target="_blank" href="" title="复制代码"><img src="" alt="复制代码"></a></span><br>        </div><br>        <pre><span style="color:#0000ff">&lt;</span><span style="color:#800000">bean </span><span style="color:#ff0000">id</span><span style="color:#0000ff">=&quot;dataSource&quot;</span><span style="color:#ff0000"> class</span><span style="color:#0000ff">=&quot;org.apache.commons.dbcp.BasicDataSource&quot;</span><span style="color:#ff0000"><br>        destroy-method</span><span style="color:#0000ff">=&quot;close&quot;</span><span style="color:#0000ff">&gt;</span><br>    <span style="color:#0000ff">&lt;</span><span style="color:#800000">property </span><span style="color:#ff0000">name</span><span style="color:#0000ff">=&quot;driverClassName&quot;</span><span style="color:#ff0000"> value</span><span style="color:#0000ff">=&quot;com.mysql.jdbc.Driver&quot;</span> <span style="color:#0000ff">/&gt;</span><br>    <span style="color:#0000ff">&lt;</span><span style="color:#800000">property </span><span style="color:#ff0000">name</span><span style="color:#0000ff">=&quot;url&quot;</span><span style="color:#ff0000"> value</span><span style="color:#0000ff">=&quot;jdbc:mysql://localhost:3306/sampledb&quot;</span> <span style="color:#0000ff">/&gt;</span><br>    <span style="color:#0000ff">&lt;</span><span style="color:#800000">property </span><span style="color:#ff0000">name</span><span style="color:#0000ff">=&quot;username&quot;</span><span style="color:#ff0000"> value</span><span style="color:#0000ff">=&quot;root&quot;</span> <span style="color:#0000ff">/&gt;</span><br>    <span style="color:#0000ff">&lt;</span><span style="color:#800000">property </span><span style="color:#ff0000">name</span><span style="color:#0000ff">=&quot;password&quot;</span><span style="color:#ff0000"> value</span><span style="color:#0000ff">=&quot;1234&quot;</span> <span style="color:#0000ff">/&gt;</span><br><span style="color:#0000ff">&lt;/</span><span style="color:#800000">bean</span><span style="color:#0000ff">&gt;</span></pre><br>        <div class="cnblogs_code_toolbar"><br>            <span class="cnblogs_code_copy"><a target="_blank" href="" title="复制代码"><img src="" alt="复制代码"></a></span><br>        </div><br>    </div><br>    <p><br>        常用属性：<br>    </p><br>    <div class="cnblogs_code"><br>        <div class="cnblogs_code_toolbar"><br>            <span class="cnblogs_code_copy"><a target="_blank" href="" title="复制代码"><img src="" alt="复制代码"></a></span><br>        </div><br>        <pre><span style="color:#000000">    BasicDataSource提供了close()方法关闭数据源，所以必须设定destroy-method=”close”属性， 以便Spring容器关闭时，数据源能够正常关闭。<br>    defaultAutoCommit：设置从数据源中返回的连接是否采用自动提交机制，默认值为 true；<br>    defaultReadOnly：设置数据源是否仅能执行只读操作， 默认值为 false；<br>    maxActive：最大连接数据库连接数，设置为0时，表示没有限制；<br>    maxIdle：最大等待连接中的数量，设置为0时，表示没有限制；<br>    maxWait：最大等待秒数，单位为毫秒， 超过时间会报出错误信息；<br>    validationQuery：用于验证连接是否成功的查询SQL语句，SQL语句必须至少要返回一行数据， 如你可以简单地设置为：“select count(*) from user”；<br>    removeAbandoned：是否自我中断，默认是 false ；<br>    removeAbandonedTimeout：几秒后数据连接会自动断开，在removeAbandoned为true，提供该值；<br>    logAbandoned：是否记录中断事件， 默认为 false；</span></pre><br>        <div class="cnblogs_code_toolbar"><br>            <span class="cnblogs_code_copy"><a target="_blank" href="" title="复制代码"><img src="" alt="复制代码"></a></span><br>        </div><br>    </div><br>    <p><br>        3、<strong>C3P0数据源</strong> <br><br>        &nbsp;&nbsp;&nbsp; C3P0是一个开放源代码的JDBC数据源实现项目，它在lib目录中与Hibernate一起发布，实现了JDBC3和JDBC2扩展规范说明的 Connection 和Statement 池。C3P0类包为c3p0-0.9.0.4.jar。<br>    </p><br>    <p><br>        bean配置片段：<br>    </p><br>    <div class="cnblogs_code"><br>        <div class="cnblogs_code_toolbar"><br>            <span class="cnblogs_code_copy"><a target="_blank" href="" title="复制代码"><img src="" alt="复制代码"></a></span><br>        </div><br>        <pre><span style="color:#0000ff">&lt;</span><span style="color:#800000">bean </span><span style="color:#ff0000">id</span><span style="color:#0000ff">=&quot;dataSource&quot;</span><span style="color:#ff0000"> class</span><span style="color:#0000ff">=&quot;com.mchange.v2.c3p0.ComboPooledDataSource&quot;</span><span style="color:#ff0000"><br>        destroy-method</span><span style="color:#0000ff">=&quot;close&quot;</span><span style="color:#0000ff">&gt;</span><br>    <span style="color:#0000ff">&lt;</span><span style="color:#800000">property </span><span style="color:#ff0000">name</span><span style="color:#0000ff">=&quot;driverClass&quot;</span><span style="color:#ff0000"> value</span><span style="color:#0000ff">=&quot;com.mysql.jdbc.Driver&quot;</span><span style="color:#0000ff">/&gt;</span><br>    <span style="color:#0000ff">&lt;</span><span style="color:#800000">property </span><span style="color:#ff0000">name</span><span style="color:#0000ff">=&quot;jdbcUrl&quot;</span><span style="color:#ff0000"> value</span><span style="color:#0000ff">=&quot;jdbc:mysql://localhost:3306/sampledb&quot;</span><span style="color:#0000ff">/&gt;</span><br>    <span style="color:#0000ff">&lt;</span><span style="color:#800000">property </span><span style="color:#ff0000">name</span><span style="color:#0000ff">=&quot;user&quot;</span><span style="color:#ff0000"> value</span><span style="color:#0000ff">=&quot;root&quot;</span><span style="color:#0000ff">/&gt;</span><br>    <span style="color:#0000ff">&lt;</span><span style="color:#800000">property </span><span style="color:#ff0000">name</span><span style="color:#0000ff">=&quot;password&quot;</span><span style="color:#ff0000"> value</span><span style="color:#0000ff">=&quot;1234&quot;</span><span style="color:#0000ff">/&gt;</span><br><span style="color:#0000ff">&lt;/</span><span style="color:#800000">bean</span><span style="color:#0000ff">&gt;</span></pre><br>        <div class="cnblogs_code_toolbar"><br>            <span class="cnblogs_code_copy"><a target="_blank" href="" title="复制代码"><img src="" alt="复制代码"></a></span><br>        </div><br>    </div><br>    <p><br>        常用属性：<br>    </p><br>    <div class="cnblogs_code"><br>        <div class="cnblogs_code_toolbar"><br>            <span class="cnblogs_code_copy"><a target="_blank" href="" title="复制代码"><img src="" alt="复制代码"></a></span><br>        </div><br>        <pre><span style="color:#000000">　　ComboPooledDataSource和BasicDataSource一样提供了一个用于关闭数据源的close()方法，这样我们就可以保证Spring容器关闭时数据源能够成功释放。<br>　　C3P0拥有比DBCP更丰富的配置属性，通过这些属性，可以对数据源进行各种有效的控制：<br>　　acquireIncrement：当连接池中的连接用完时，C3P0一次性创建新连接的数目；<br>    acquireRetryAttempts：定义在从数据库获取新连接失败后重复尝试获取的次数，默认为30；<br>    acquireRetryDelay：两次连接中间隔时间，单位毫秒，默认为1000；<br>    autoCommitOnClose：连接关闭时默认将所有未提交的操作回滚。默认为false；<br>    automaticTestTable： C3P0将建一张名为Test的空表，并使用其自带的查询语句进行测试。如果定义了这个参数，那么属性preferredTestQuery将被忽略。<br>你不能在这张Test表上进行任何操作，它将中为C3P0测试所用，默认为null；<br>    breakAfterAcquireFailure：获取连接失败将会引起所有等待获取连接的线程抛出异常。但是数据源仍有效保留，并在下次调用getConnection()的时候继续尝试获取连接。<br>如果设为true，那么在尝试获取连接失败后该数据源将申明已断开并永久关闭。默认为 false；<br>    checkoutTimeout：当连接池用完时客户端调用getConnection()后等待获取新连接的时间，超时后将抛出SQLException，如设为0则无限期等待。单位毫秒，默认为0；<br>    connectionTesterClassName： 通过实现ConnectionTester或QueryConnectionTester的类来测试连接，类名需设置为全限定名。<br>默认为 com.mchange.v2.C3P0.impl.DefaultConnectionTester；<br>    idleConnectionTestPeriod：隔多少秒检查所有连接池中的空闲连接，默认为0表示不检查；<br>    initialPoolSize：初始化时创建的连接数，应在minPoolSize与maxPoolSize之间取值。默认为3；<br>    maxIdleTime：最大空闲时间，超过空闲时间的连接将被丢弃。为0或负数则永不丢弃。默认为0；<br>    maxPoolSize：连接池中保留的最大连接数。默认为15；<br>    maxStatements：JDBC的标准参数，用以控制数据源内加载的PreparedStatement数量。但由于预缓存的Statement属于单个Connection而不是整个连接池。<br>所以设置这个参数需要考虑到多方面的因素，如果maxStatements与 maxStatementsPerConnection均为0，则缓存被关闭。默认为0；<br>    maxStatementsPerConnection：连接池内单个连接所拥有的最大缓存Statement数。默认为0；<br>    numHelperThreads：C3P0是异步操作的，缓慢的JDBC操作通过帮助进程完成。扩展这些操作可以有效的提升性能，通过多线程实现多个操作同时被执行。默认为3；<br>    preferredTestQuery：定义所有连接测试都执行的测试语句。在使用连接测试的情况下这个参数能显著提高测试速度。测试的表必须在初始数据源的时候就存在。默认为null；<br>    propertyCycle： 用户修改系统配置参数执行前最多等待的秒数。默认为300；<br>    testConnectionOnCheckout：因性能消耗大请只在需要的时候使用它。如果设为true那么在每个connection提交的时候都将校验其有效性。<br>建议使用idleConnectionTestPeriod或automaticTestTable 等方法来提升连接测试的性能。默认为false；<br>    testConnectionOnCheckin：如果设为true那么在取得连接的同时将校验连接的有效性。默认为false。</span></pre><br>        <div class="cnblogs_code_toolbar"><br>            <span class="cnblogs_code_copy"><a target="_blank" href="" title="复制代码"><img src="" alt="复制代码"></a></span><br>        </div><br>    </div><br>    <p><br>        4、<strong><span style="color:#000000">Proxool数据源</span></strong><br>    </p><br>    <p><br>        　　sourceforge下的一个开源项目,这个项目提供一个健壮、易用的连接池，最为关键的是这个连接池提供监控的功能，方便易用，便于发现连接泄漏的情况。<br>    </p><br>    <p><br>        可在官网<a target="_blank" href="http://proxool.sourceforge.net">http://proxool.sourceforge.net</a>下载需要的jar包。<br>    </p><br>    <div class="cnblogs_code"><br>        <div class="cnblogs_code_toolbar"><br>            <span class="cnblogs_code_copy"><a target="_blank" href="" title="复制代码"><img src="" alt="复制代码"></a></span><br>        </div><br>        <pre> <span style="color:#0000ff">&lt;</span><span style="color:#800000">bean </span><span style="color:#ff0000">id</span><span style="color:#0000ff">=&quot;dataSource&quot;</span><span style="color:#ff0000"><br>    class</span><span style="color:#0000ff">=&quot;org.logicalcobwebs.proxool.ProxoolDataSource&quot;</span><span style="color:#0000ff">&gt;</span><br>    <span style="color:#0000ff">&lt;</span><span style="color:#800000">property </span><span style="color:#ff0000">name</span><span style="color:#0000ff">=&quot;driver&quot;</span><span style="color:#0000ff">&gt;</span><br>        <span style="color:#0000ff">&lt;</span><span style="color:#800000">value</span><span style="color:#0000ff">&gt;</span>com.mysql.jdbc.Driver<span style="color:#0000ff">&lt;/</span><span style="color:#800000">value</span><span style="color:#0000ff">&gt;</span><br>    <span style="color:#0000ff">&lt;/</span><span style="color:#800000">property</span><span style="color:#0000ff">&gt;</span><br>    <span style="color:#0000ff">&lt;</span><span style="color:#800000">property </span><span style="color:#ff0000">name</span><span style="color:#0000ff">=&quot;driverUrl&quot;</span><span style="color:#0000ff">&gt;</span><br>        <span style="color:#0000ff">&lt;</span><span style="color:#800000">value</span><span style="color:#0000ff">&gt;</span>jdbc:mysql://localhost:3306/sampledb?user=root<span style="color:#ff0000">&amp;password</span>=1234<span style="color:#0000ff">&lt;/</span><span style="color:#800000">value</span><span style="color:#0000ff">&gt;</span><br>    <span style="color:#0000ff">&lt;/</span><span style="color:#800000">property</span><span style="color:#0000ff">&gt;</span><br>    <span style="color:#0000ff">&lt;</span><span style="color:#800000">property </span><span style="color:#ff0000">name</span><span style="color:#0000ff">=&quot;user&quot;</span><span style="color:#ff0000"> value</span><span style="color:#0000ff">=&quot;yourname&quot;</span> <span style="color:#0000ff">/&gt;</span><br>    <span style="color:#0000ff">&lt;</span><span style="color:#800000">property </span><span style="color:#ff0000">name</span><span style="color:#0000ff">=&quot;password&quot;</span><span style="color:#ff0000"> value</span><span style="color:#0000ff">=&quot;yourpass&quot;</span> <span style="color:#0000ff">/&gt;</span><br>    <span style="color:#0000ff">&lt;</span><span style="color:#800000">property </span><span style="color:#ff0000">name</span><span style="color:#0000ff">=&quot;alias&quot;</span><span style="color:#ff0000"> value</span><span style="color:#0000ff">=&quot;Pool_dbname&quot;</span> <span style="color:#0000ff">/&gt;</span><br>    <span style="color:#0000ff">&lt;</span><span style="color:#800000">property </span><span style="color:#ff0000">name</span><span style="color:#0000ff">=&quot;houseKeepingSleepTime&quot;</span><span style="color:#ff0000"> value</span><span style="color:#0000ff">=&quot;90000&quot;</span> <span style="color:#0000ff">/&gt;</span><br>    <span style="color:#0000ff">&lt;</span><span style="color:#800000">property </span><span style="color:#ff0000">name</span><span style="color:#0000ff">=&quot;prototypeCount&quot;</span><span style="color:#ff0000"> value</span><span style="color:#0000ff">=&quot;0&quot;</span> <span style="color:#0000ff">/&gt;</span><br>    <span style="color:#0000ff">&lt;</span><span style="color:#800000">property </span><span style="color:#ff0000">name</span><span style="color:#0000ff">=&quot;maximumConnectionCount&quot;</span><span style="color:#ff0000"> value</span><span style="color:#0000ff">=&quot;50&quot;</span> <span style="color:#0000ff">/&gt;</span><br>    <span style="color:#0000ff">&lt;</span><span style="color:#800000">property </span><span style="color:#ff0000">name</span><span style="color:#0000ff">=&quot;minimumConnectionCount&quot;</span><span style="color:#ff0000"> value</span><span style="color:#0000ff">=&quot;2&quot;</span> <span style="color:#0000ff">/&gt;</span><br>    <span style="color:#0000ff">&lt;</span><span style="color:#800000">property </span><span style="color:#ff0000">name</span><span style="color:#0000ff">=&quot;simultaneousBuildThrottle&quot;</span><span style="color:#ff0000"> value</span><span style="color:#0000ff">=&quot;50&quot;</span> <span style="color:#0000ff">/&gt;</span><br>    <span style="color:#0000ff">&lt;</span><span style="color:#800000">property </span><span style="color:#ff0000">name</span><span style="color:#0000ff">=&quot;maximumConnectionLifetime&quot;</span><span style="color:#ff0000"> value</span><span style="color:#0000ff">=&quot;14400000&quot;</span> <span style="color:#0000ff">/&gt;</span><br>    <span style="color:#0000ff">&lt;</span><span style="color:#800000">property </span><span style="color:#ff0000">name</span><span style="color:#0000ff">=&quot;houseKeepingTestSql&quot;</span><span style="color:#ff0000"> value</span><span style="color:#0000ff">=&quot;select CURRENT_DATE&quot;</span> <span style="color:#0000ff">/&gt;</span><br><span style="color:#0000ff">&lt;/</span><span style="color:#800000">bean</span><span style="color:#0000ff">&gt;</span></pre><br>        <div class="cnblogs_code_toolbar"><br>            <span class="cnblogs_code_copy"><a target="_blank" href="" title="复制代码"><img src="" alt="复制代码"></a></span><br>        </div><br>    </div><br>    <p><br>        　　这种方式需要把用户名和密码写在连接串里面，ProxoolDataSource类提供的user，password属性似乎没有什么用。<br><br>        无论提供什么，它都会以空用户名、密码去连接数据库，但是user，password两个属性必须设置，否则hibernate会报空指针错误。<br>    </p><br>    <p><br>        常用配置：<br>    </p><br>    <div class="cnblogs_code"><br>        <div class="cnblogs_code_toolbar"><br>            <span class="cnblogs_code_copy"><a target="_blank" href="" title="复制代码"><img src="" alt="复制代码"></a></span><br>        </div><br>        <pre><span style="color:#000000">　　fatal-sql-exception: 它是一个逗号分割的信息片段.当一个SQL异常发生时,他的异常信息将与这个信息片段进行比较.如果在片段中存在,那么这个异常将被认为是个致命错误<br>(Fatal SQL Exception ).这种情况下,数据库连接将要被放弃.无论发生什么,这个异常将会被重掷以提供给消费者.用户最好自己配置一个不同的异常来抛出.<br>　　fatal-sql-exception-wrapper-class:正如上面所说,你最好配置一个不同的异常来重掷.利用这个属性,用户可以包装<br>　　SQLException,使他变成另外一个异常.这个异常或者继承SQLException或者继承字RuntimeException.proxool<br>自带了2个实现:’org.logicalcobwebs.proxool.FatalSQLException’ 和’org.logicalcobwebs.proxool.FatalRuntimeException’.后者更合适.<br>　　house-keeping-sleep-time: house keeper 保留线程处于睡眠状态的最长时间,house keeper 的职责就是检查各个连接的状态,并判断是否需要销毁或者创建.<br>　　house-keeping-test-sql: 如果发现了空闲的数据库连接.house keeper 将会用这个语句来测试.这个语句最好非常快的被执行.如果没有定义,测试过程将会被忽略。<br>　　injectable-connection-interface: 允许proxool实现被代理的connection对象的方法.<br>　　injectable-statement-interface: 允许proxool实现被代理的Statement 对象方法.<br>　　injectable-prepared-statement-interface: 允许proxool实现被代理的PreparedStatement 对象方法.<br>　　injectable-callable-statement-interface: 允许proxool实现被代理的CallableStatement 对象方法.<br>　　jmx: 如果属性为true，就会注册一个消息Bean到jms服务，消息Bean对象名: &quot;Proxool:type=Pool, name=</span><span style="color:#0000ff">&lt;</span><span style="color:#800000">alias</span><span style="color:#0000ff">&gt;</span><span style="color:#000000">&quot;. 默认值为false.<br>　　jmx-agent-id: 一个逗号分隔的JMX代理列表(如使用MBeanServerFactory.findMBeanServer(String agentId)注册的连接池。）这个属性是仅当&quot;jmx&quot;属性设置为&quot;true&quot;才有效。<br>所有注册jmx服务器使用这个属性是不确定的<br>　　jndi-name: 数据源的名称<br>　　maximum-active-time: 如果housekeeper 检测到某个线程的活动时间大于这个数值.它将会杀掉这个线程.<br>所以确认一下你的服务器的带宽.然后定一个合适的值.默认是5分钟.<br>　　maximum-connection-count: 最大的数据库连接数.<br>　　maximum-connection-lifetime: 一个线程的最大寿命.<br>　　minimum-connection-count: 最小的数据库连接数<br>　　overload-without-refusal-lifetime: 这可以帮助我们确定连接池的状态。如果我们已经拒绝了一个连接在这个设定值(毫秒),然后被认为是超载。默认为60秒。<br>　　prototype-count: 连接池中可用的连接数量.如果当前的连接池中的连接少于这个数值.新的连接将被建立(假设没有超过最大可用数).例如.我们有3个活动连接2个可用连接,<br>而我们的prototype-count是4,那么数据库连接池将试图建立另外2个连接.这和 minimum-connection-count不同. minimum-connection-count<br>把活动的连接也计算在内.prototype-count 是spare connections 的数量.<br>　　recently-started-threshold: 这可以帮助我们确定连接池的状态,连接数少还是多或超载。只要至少有一个连接已开始在此值(毫秒)内,或者有一些多余的可用连接,<br>那么我们假设连接池是开启的。默认为60秒<br>　　simultaneous-build-throttle: 这是我们可一次建立的最大连接数。那就是新增的连接请求,但还没有可供使用的连接。由于连接可以使用多线程,<br>在有限的时间之间建立联系从而带来可用连接，但是我们需要通过一些方式确认一些线程并不是立即响应连接请求的，默认是10。<br>　　statistics: 连接池使用状况统计。参数“10s,1m,1d”<br>　　statistics-log-level: 日志统计跟踪类型。参数“ERROR”或 “INFO”<br>　　test-before-use: 如果为true，在每个连接被测试前都会服务这个连接，如果一个连接失败，那么将被丢弃，另一个连接将会被处理，如果所有连接都失败，<br>一个新的连接将会被建立。否则将会抛出一个SQLException异常。<br>　　test-after-use: 如果为true，在每个连接被测试后都会服务这个连接，使其回到连接池中，如果连接失败，那么将被废弃。<br>　　trace: 如果为true,那么每个被执行的SQL语句将会在执行期被log记录(DEBUG LEVEL).你也可以注册一个ConnectionListener (参看ProxoolFacade)得到这些信息.</span></pre><br>        <div class="cnblogs_code_toolbar"><br>            <span class="cnblogs_code_copy"><a target="_blank" href="" title="复制代码"><img src="" alt="复制代码"></a></span><br>        </div><br>    </div><br>    <p><br>        5、<strong>获取JNDI数据源</strong><br>    </p><br>    <p><br>        　　如果应用配置在高性能的应用服务器（如WebLogic或Websphere等）上，我们可能更希望使用应用服务器本身提供的数据源。应用服务器的数据源<br>    </p><br>    <p><br>        使用JNDI开放调用者使用，Spring为此专门提供引用JNDI资源的JndiObjectFactoryBean类。<br>    </p><br>    <p><br>        一个简单的配置片段：<br>    </p><br>    <div class="cnblogs_code"><br>        <pre><span style="color:#0000ff">&lt;</span><span style="color:#800000">bean </span><span style="color:#ff0000">id</span><span style="color:#0000ff">=&quot;dataSource&quot;</span><span style="color:#ff0000"> class</span><span style="color:#0000ff">=&quot;org.springframework.jndi.JndiObjectFactoryBean&quot;</span><span style="color:#0000ff">&gt;</span><br>    <span style="color:#0000ff">&lt;</span><span style="color:#800000">property </span><span style="color:#ff0000">name</span><span style="color:#0000ff">=&quot;jndiName&quot;</span><span style="color:#ff0000"> value</span><span style="color:#0000ff">=&quot;java:comp/env/jdbc/sample&quot;</span><span style="color:#0000ff">/&gt;</span><br><span style="color:#0000ff">&lt;/</span><span style="color:#800000">bean</span><span style="color:#0000ff">&gt;</span> </pre><br>    </div><br>    <p><br>        使用jee命名空间引用JNDI数据源的配置片段：<br>    </p><br>    <p><br>        　　Spring 为获取J2EE资源提供了一个jee命名空间，通过jee命名空间，可以有效地简化J2EE资源的引用。<br>    </p><br>    <div class="cnblogs_code"><br>        <div class="cnblogs_code_toolbar"><br>            <span class="cnblogs_code_copy"><a target="_blank" href="" title="复制代码"><img src="" alt="复制代码"></a></span><br>        </div><br>        <pre><span style="color:#0000ff">&lt;</span><span style="color:#800000">beans </span><span style="color:#ff0000">xmlns</span><span style="color:#0000ff">=&quot;<a href="http://www.springframework.org/schema/beans&amp;quot" target="_blank" rel="external">http://www.springframework.org/schema/beans&amp;quot</a>;</span><span style="color:#ff0000"><br>    xmlns:jee</span><span style="color:#0000ff">=<a href="http://www.springframework.org/schema/jee" target="_blank" rel="external">http://www.springframework.org/schema/jee</a><br>    </span><span style="color:#ff0000">xmlns:xsi</span><span style="color:#0000ff">=&quot;<a href="http://www.w3.org/2001/XMLSchema-instance&amp;quot" target="_blank" rel="external">http://www.w3.org/2001/XMLSchema-instance&amp;quot</a>;</span><span style="color:#ff0000"> xmlns:context</span><span style="color:#0000ff">=&quot;<a href="http://www.springframework.org/schema/context&amp;quot" target="_blank" rel="external">http://www.springframework.org/schema/context&amp;quot</a>;</span><span style="color:#ff0000"><br>    xmlns:p</span><span style="color:#0000ff">=&quot;<a href="http://www.springframework.org/schema/p&amp;quot" target="_blank" rel="external">http://www.springframework.org/schema/p&amp;quot</a>;</span><span style="color:#ff0000"> xmlns:aop</span><span style="color:#0000ff">=&quot;<a href="http://www.springframework.org/schema/aop&amp;quot" target="_blank" rel="external">http://www.springframework.org/schema/aop&amp;quot</a>;</span><span style="color:#ff0000"><br>    xmlns:tx</span><span style="color:#0000ff">=&quot;<a href="http://www.springframework.org/schema/tx&amp;quot" target="_blank" rel="external">http://www.springframework.org/schema/tx&amp;quot</a>;</span><span style="color:#ff0000"><br>    xsi:schemaLocation</span><span style="color:#0000ff">=&quot;<a href="http://www.springframework.org/schema/beans" target="_blank" rel="external">http://www.springframework.org/schema/beans</a> <a href="http://www.springframework.org/schema/beans/spring-beans-3.2.xsd" target="_blank" rel="external">http://www.springframework.org/schema/beans/spring-beans-3.2.xsd</a><br>    <a href="http://www.springframework.org/schema/context" target="_blank" rel="external">http://www.springframework.org/schema/context</a> <a href="http://www.springframework.org/schema/context/spring-context-3.2.xsd" target="_blank" rel="external">http://www.springframework.org/schema/context/spring-context-3.2.xsd</a><br>    <a href="http://www.springframework.org/schema/aop" target="_blank" rel="external">http://www.springframework.org/schema/aop</a> <a href="http://www.springframework.org/schema/aop/spring-aop-3.2.xsd" target="_blank" rel="external">http://www.springframework.org/schema/aop/spring-aop-3.2.xsd</a><br>     <a href="http://www.springframework.org/schema/tx" target="_blank" rel="external">http://www.springframework.org/schema/tx</a> <a href="http://www.springframework.org/schema/tx/spring-tx-3.2.xsd&amp;quot" target="_blank" rel="external">http://www.springframework.org/schema/tx/spring-tx-3.2.xsd&amp;quot</a>;</span><span style="color:#0000ff">&gt;</span><br><br>    <span style="color:#0000ff">&lt;</span><span style="color:#800000">jee:jndi-lookup </span><span style="color:#ff0000">id</span><span style="color:#0000ff">=&quot;dataSource&quot;</span><span style="color:#ff0000"> jndi-name</span><span style="color:#0000ff">=&quot;java:comp/env/jdbc/sample&quot;</span><span style="color:#0000ff">/&gt;</span><br><br><span style="color:#0000ff">&lt;/</span><span style="color:#800000">beans</span><span style="color:#0000ff">&gt;</span></pre><br>        <div class="cnblogs_code_toolbar"><br>            <span class="cnblogs_code_copy"><a target="_blank" href="" title="复制代码"><img src="" alt="复制代码"></a></span><br>        </div><br>    </div><br>    <p><br>        6、<strong>Spring的数据源实现类</strong><br>    </p><br>    <p><br>        　　Spring本身也提供了一个简单的数据源实现类DriverManagerDataSource ，它位于org.springframework.jdbc.datasource包中。这个类实现了<br>    </p><br>    <p><br>        javax.sql.DataSource接口，但 它并没有提供池化连接的机制，每次调用getConnection()获取新连接时，只是简单地创建一个新的连接。因此，<br>    </p><br>    <p><br>        这个数据源类比较适合在单元测试 或简单的独立应用中使用，因为它不需要额外的依赖类。<br>    </p><br>    <div class="cnblogs_code"><br>        <div class="cnblogs_code_toolbar"><br>            <span class="cnblogs_code_copy"><a target="_blank" href="" title="复制代码"><img src="" alt="复制代码"></a></span><br>        </div><br>        <pre>DriverManagerDataSource ds = <span style="color:#0000ff">new</span><span style="color:#000000"> DriverManagerDataSource ();<br>ds.setDriverClassName(</span>&quot;com.mysql.jdbc.Driver&quot;<span style="color:#000000">);<br>ds.setUrl(</span>&quot;jdbc:mysql://localhost:3306/sampledb&quot;<span style="color:#000000">);<br>ds.setUsername(</span>&quot;root&quot;<span style="color:#000000">);<br>ds.setPassword(</span>&quot;1234&quot;<span style="color:#000000">);<br>Connection actualCon </span>= ds.getConnection(); </pre><br>        <div class="cnblogs_code_toolbar"><br>            <span class="cnblogs_code_copy"><a target="_blank" href="" title="复制代码"><img src="" alt="复制代码"></a></span><br>        </div><br>    </div><br>    <p><br>        7、<strong>总结 </strong><br><br>        　　不管采用何种持久化技术，都需要定义数据源。Spring附带了两个数据源的实现类包，你可以自行选择进行定义。在实际部署时，我们可能会直接采用<br>    </p><br>    <p><br>        应用服务器本身提供的数据源，这时，则可以通过JndiObjectFactoryBean或jee命名空间引用JNDI中的数据源。&nbsp;<br>    </p><br>    <p><br>        <br><br><br>    </p><br>    <p><br>        原文:<a href="http://www.cnblogs.com/hehaiyang/p/4275228.html" target="_blank" rel="external">http://www.cnblogs.com/hehaiyang/p/4275228.html</a><br><br>        &nbsp;<br>    </p><br>    <p><br>        &nbsp;<br>    </p><br></div>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/25/Spring c3p0连接池无法释放解决方案/" rel="next" title="Spring c3p0连接池无法释放解决方案">
+                <i class="fa fa-chevron-left"></i> Spring c3p0连接池无法释放解决方案
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/25/SQL 常用语法一/" rel="prev" title="SQL 常用语法一">
+                SQL 常用语法一 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="xuwujing" />
+          <p class="site-author-name" itemprop="name">xuwujing</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xuwujing</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,721 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="一、购买阿里云服务器ECS     &amp;nbsp;    1，登录阿里云，选择阿里云服务器ECS    &amp;nbsp;    2，创建实例    &amp;nbsp;    或    &amp;nbsp;    3，选好配置    &amp;nbsp;    4，完成配置    &amp;nbsp;    注：记住用户名和密码    &amp;nbsp;    二、一键配置linux环境    1，下载xshell，安装成功后，建立">
+<meta property="og:type" content="article">
+<meta property="og:title" content="阿里云linux centos 一键部署web环境--图文详解">
+<meta property="og:url" content="http://yoursite.com/2017/06/25/阿里云linux centos 一键部署web环境--图文详解/index.html">
+<meta property="og:site_name" content="xuwujing&#39;s blog">
+<meta property="og:description" content="一、购买阿里云服务器ECS     &amp;nbsp;    1，登录阿里云，选择阿里云服务器ECS    &amp;nbsp;    2，创建实例    &amp;nbsp;    或    &amp;nbsp;    3，选好配置    &amp;nbsp;    4，完成配置    &amp;nbsp;    注：记住用户名和密码    &amp;nbsp;    二、一键配置linux环境    1，下载xshell，安装成功后，建立">
+<meta property="og:image" content="http://img.blog.csdn.net/20170415140005689?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170415140019643?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170415140054050?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170415140108901?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170415140128910?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170415140143520?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170415140218480?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170415140228505?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170415140239261?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170415140307412?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170415140329225?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170415140344668?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170415140403606?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170415140418914?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170415140441977?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170415140618948?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170415140643604?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170415140717467?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170415140736621?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170415140905498?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170415140920889?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170415140935670?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170415140951171?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170415141003030?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170415141014655?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:updated_time" content="2017-06-25T06:49:24.603Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="阿里云linux centos 一键部署web环境--图文详解">
+<meta name="twitter:description" content="一、购买阿里云服务器ECS     &amp;nbsp;    1，登录阿里云，选择阿里云服务器ECS    &amp;nbsp;    2，创建实例    &amp;nbsp;    或    &amp;nbsp;    3，选好配置    &amp;nbsp;    4，完成配置    &amp;nbsp;    注：记住用户名和密码    &amp;nbsp;    二、一键配置linux环境    1，下载xshell，安装成功后，建立">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20170415140005689?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/06/25/阿里云linux centos 一键部署web环境--图文详解/"/>
+
+
+
+
+
+  <title>阿里云linux centos 一键部署web环境--图文详解 | xuwujing's blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xuwujing's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/25/阿里云linux centos 一键部署web环境--图文详解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xuwujing">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xuwujing's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">阿里云linux centos 一键部署web环境--图文详解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-25T14:20:11+08:00">
+                2017-06-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p></p><h2><br>    <strong><span style="font-family:黑体">一、购买阿里云服务器</span>ECS</strong><br></h2><p></p>
+<p><br>    &nbsp;<br></p><br><h3><br>    <strong>1<span style="font-family:宋体">，登录阿里云，选择阿里云服务器</span><span style="font-family:Calibri">ECS</span></strong><br></h3><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170415140005689?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><h3><br>    <strong>2<span style="font-family:宋体">，创建实例</span></strong><br></h3><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170415140019643?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    或<br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170415140054050?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><h3><br>    <strong>3<span style="font-family:宋体">，选好配置</span></strong><br></h3><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170415140108901?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><h3><br>    <strong>4<span style="font-family:宋体">，完成配置</span></strong><br></h3><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170415140128910?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    注：记住用户名和密码<br></p><br><p><br>    &nbsp;<br></p><br><h2><br>    <strong>二、一键配置linux<span style="font-family:黑体">环境</span></strong><br></h2><br><h3><br>    <strong>1<span style="font-family:宋体">，下载</span><span style="font-family:Calibri">xshell</span><span style="font-family:宋体">，安装成功后，建立连接</span></strong><br></h3><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170415140143520?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170415140218480?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><img src="http://img.blog.csdn.net/20170415140228505?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170415140239261?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170415140307412?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><h3><br>    <strong>2<span style="font-family:宋体">，</span><span style="font-family:Calibri">xshell</span><span style="font-family:宋体">连接成功后</span><span style="font-family:Calibri">,</span><span style="font-family:宋体">配置环境</span></strong><br></h3><br><p><br>    参考链接：<br></p><br><p><br>    <a target="_blank" href="http://blog.csdn.net/dawangxiong123/article/details/52460413"><u><span style="color:rgb(0,0,255)">http://blog.csdn.net/dawangxiong123/article/details/52460413</span></u></a><br></p><br><p><br>    <span style="color:rgb(0,0,255)">&nbsp;&nbsp;&nbsp;</span><a target="_blank" href="http://blog.csdn.net/zhangbing2434/article/details/50549704"><u><span style="color:rgb(0,0,255)">http://blog.csdn.net/zhangbing2434/article/details/50549704</span></u></a><br></p><br><p><br>    &nbsp;<br></p><br><h3><br>    <strong>3<span style="font-family:宋体">，安装并配置环境</span></strong><br></h3><br><p><br>    &nbsp;<span style="font-family:宋体">下载阿里云</span>web<span style="font-family:宋体">一键安装包<a target="_blank" href="http://download.csdn.net/detail/qazwsxpcm/9823748"><span style="color:#ffcc33">sh-1.5.5</span></a><span style="color:#ff9900">&nbsp;</span>&nbsp; &nbsp;<span style="color:#ff9900"><a target="_blank" href="http://download.csdn.net/detail/qazwsxpcm/9823754">sh-1.3.0</a></span></span><br></p><br><p><br>    &nbsp;&nbsp;<span style="font-family:宋体">并将此上传到阿里云服务器</span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170415140329225?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    在Xshell 输入: <strong>chmod -R 777 sh-1.5.5</strong> &nbsp;&nbsp;&nbsp;<span style="font-family:宋体">获取权限</span><br></p><br><p><br>    &nbsp;&nbsp;&nbsp;&nbsp; <span style="white-space:pre"></span>&nbsp;&nbsp;cd sh-1.5.5 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:宋体">进入文件夹</span><br></p><br><p><br>    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="white-space:pre"> </span>&nbsp;<strong>&nbsp;&nbsp;<span style="color:rgb(54,46,43)">./install.sh</span></strong><span style="color:rgb(54,46,43)"><strong>&nbsp;</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:宋体">安装文件</span></span><br></p><br><p><br>    <span style="color:rgb(54,46,43)">&nbsp;&nbsp;&nbsp;&nbsp;</span><br></p><br><p><br>    <span style="color:rgb(54,46,43)">&nbsp;&nbsp;<span style="white-space:pre"> </span>&nbsp;&nbsp;&nbsp;</span><span style="color:rgb(73,73,73)">./uninstall.sh</span><span style="color:rgb(73,73,73)">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:宋体">卸载文件</span></span><br></p><br><p><br>    <span style="color:rgb(54,46,43)"><span style="font-family:宋体">选着好版本后开始安装</span>:</span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170415140344668?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    大约等待20<span style="font-family:宋体">分钟，安装成功</span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170415140403606?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    输入：<span style="color:rgb(54,46,43)">netstat&nbsp; -tunpl</span><span style="color:rgb(54,46,43)">&nbsp;&nbsp;&nbsp;<span style="font-family:宋体">查看安装版本</span></span><br></p><br><p><br>    <span style="color:rgb(54,46,43)">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color:rgb(54,46,43)">cat account.log</span><span style="color:rgb(54,46,43)">&nbsp;&nbsp;<span style="font-family:宋体">查看</span>FTP<span style="font-family:宋体">和</span><span style="font-family:Arial">MYSQL</span><span style="font-family:宋体">用户名和密码</span></span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170415140418914?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    <span style="font-family:宋体">修改密码</span>: &nbsp;mysqladmin -u root -p<span style="font-family:宋体">旧密码</span><span style="font-family:Calibri">password</span><span style="font-family:宋体">新密码 &nbsp;&nbsp;</span><span style="font-family:Calibri">(mysql 5.1</span><span style="font-family:宋体">才能用</span><span style="font-family:Calibri">)</span><br></p><br><p><br>    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:rgb(255,0,0)"><span style="font-family:宋体">注意</span>:-p<span style="font-family:宋体">旧密码没空格，新密码有</span></span><br></p><br><p><br>    <span style="font-family:宋体">参考</span>:<span style="color:rgb(0,112,192)">&nbsp;</span><u><span style="color:rgb(0,0,255)"><a href="http://blog.csdn.net/zml_2015/article/details/50483724" target="_blank" rel="external">http://blog.csdn.net/zml_2015/article/details/50483724</a></span></u><br></p><br><p><br>    <span style="color:rgb(255,0,0)">&nbsp;<img src="http://img.blog.csdn.net/20170415140441977?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></span><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    &nbsp;<br></p><br><p><br>    Mysql <span style="font-family:宋体">启动和停止 </span><span style="font-family:Calibri">: /etc/init.d/mysqld start</span><br></p><br><p><br>    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/etc/init.d/mysqld stop<br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170415140618948?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    输入：mysql -u root -p &nbsp;<span style="font-family:宋体">然后输入密码 </span><span style="font-family:Calibri">(</span><span style="color:rgb(255,0,0)"><span style="font-family:宋体">注</span>:<span style="font-family:宋体">输入的密码不显示</span><span style="font-family:Calibri">,</span><span style="font-family:宋体">输入完后直接回车</span><span style="font-family:Calibri">)</span></span><br></p><br><p><br>    &nbsp;<span style="font-family:宋体">成功进入</span><br></p><br><p><br>    <span style="font-family:宋体">如果失败，就直接输入</span>mysql<br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170415140643604?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    &nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:宋体">进入</span>mysql<br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170415140717467?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    &nbsp;<br></p><br><p><br>    &nbsp;<br></p><br><p align="justify"><br>    <span style="color:rgb(51,51,51)"><span style="font-family:微软雅黑">创建用户：</span></span><br></p><br><p align="justify"><br>    Insert into &nbsp;&nbsp;mysql.user(Host,User,Password,ssl_cipher,x509_issuer,x509_subject)values(‘localhost’,’baochengwx’,password(‘baochengwx’),’’,’’,’’);<br></p><br><p align="justify"><br>    <span style="color:rgb(51,51,51)">&nbsp;</span><br></p><br><p align="justify"><br>    <span style="color:rgb(51,51,51)"><span style="font-family:微软雅黑">刷新权限：</span>FLUSH PRIVILEGES; &nbsp;</span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170415140736621?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    远程连接设置权限&nbsp;<br></p><br><p><br>    <span style="font-family:宋体">参考</span>: <u><span style="color:rgb(0,0,255)"><a href="http://www.cnblogs.com/FCWORLD/p/5136265.html" target="_blank" rel="external">http://www.cnblogs.com/FCWORLD/p/5136265.html</a></span></u><br></p><br><h3><br>    <br><br><br></h3><br><h2><br>    三、购买已经配置好的镜像<br></h2><br><h3><br>    <strong>1<span style="font-family:宋体">，通过阿里云购买配置好的镜像</span><span style="font-family:Calibri">(</span><span style="font-family:宋体">系统</span><span style="font-family:Calibri">)</span></strong><br></h3><br><p><br>    &nbsp;&nbsp;<span style="font-family:宋体">创建实例中</span> <span style="font-family:宋体">选择镜像市场</span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170415140905498?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    然后搜索需要的环境配置<br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170415140920889?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    选择购买<br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170415140935670?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    创建成功实例后&nbsp;<span style="font-family:宋体">按照说明进行更换</span>mysql <span style="font-family:宋体">用户名和密码 然后部署项目</span><br></p><br><p><br>    <span style="font-family:宋体">测试用的是</span> <span style="font-family:宋体">中科九州科技股份公司的</span><span style="font-family:宋体">的</span>(tomcat jdk mysql)<span style="font-family:宋体">镜像 &nbsp;&nbsp;</span><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    <span style="font-family:宋体">连接成功后直接</span> <span style="font-family:宋体">输入</span>: &nbsp;mysqladmin -u root -h 127.0.0.1 -p password<span style="font-family:宋体">然后输入旧密码</span><br></p><br><p><br>    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:宋体">再输入新密码</span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170415140951171?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    &nbsp;<br></p><br><p><br>    然后进行远程连接设置<br></p><br><p><br>    &nbsp;<br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170415141003030?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    然后测试用本地mysql<span style="font-family:宋体">可视化界面连接工具连接</span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170415141014655?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    <br><br><br></p><br><h1><br>    四、不用一键web安装<br></h1><br><p><br>    <a target="_blank" href="http://blog.csdn.net/qazwsxpcm/article/details/69664925"><strong><span style="color:#000000">&nbsp;点击： &nbsp;</span></strong><span style="color:#ffcc33">tomcat+jdk+mysql配置&nbsp;</span></a><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    &nbsp;<br></p>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/25/Sublime Text 3 全程详细图文原创教程/" rel="next" title="Sublime Text 3 全程详细图文原创教程">
+                <i class="fa fa-chevron-left"></i> Sublime Text 3 全程详细图文原创教程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/25/CSDN博客新手使用方案/" rel="prev" title="CSDN博客新手使用方案">
+                CSDN博客新手使用方案 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="xuwujing" />
+          <p class="site-author-name" itemprop="name">xuwujing</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">    一、购买阿里云服务器ECS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.</span> <span class="nav-text">    1，登录阿里云，选择阿里云服务器ECS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.</span> <span class="nav-text">    2，创建实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.3.</span> <span class="nav-text">    3，选好配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.4.</span> <span class="nav-text">    4，完成配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">    二、一键配置linux环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.1.</span> <span class="nav-text">    1，下载xshell，安装成功后，建立连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.2.</span> <span class="nav-text">    2，xshell连接成功后,配置环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.3.</span> <span class="nav-text">    3，安装并配置环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.4.</span> <span class="nav-text">    </span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">    三、购买已经配置好的镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.1.</span> <span class="nav-text">    1，通过阿里云购买配置好的镜像(系统)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number"></span> <span class="nav-text">    四、不用一键web安装</span></a></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xuwujing</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

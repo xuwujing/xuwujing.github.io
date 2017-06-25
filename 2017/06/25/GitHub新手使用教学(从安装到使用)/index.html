@@ -1,0 +1,731 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="一、安装Git for Windows（又名msysgit）     &amp;nbsp;下载地址:&amp;nbsp;https://git-for-windows.github.io/&amp;nbsp;         &amp;nbsp;&amp;nbsp;在官方下载完后，安装到Windows Explorer integration的时候，将选项中将“Git Bash here”和“Git GUI here”打对勾。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GitHub新手使用教学(从安装到使用)">
+<meta property="og:url" content="http://yoursite.com/2017/06/25/GitHub新手使用教学(从安装到使用)/index.html">
+<meta property="og:site_name" content="xuwujing&#39;s blog">
+<meta property="og:description" content="一、安装Git for Windows（又名msysgit）     &amp;nbsp;下载地址:&amp;nbsp;https://git-for-windows.github.io/&amp;nbsp;         &amp;nbsp;&amp;nbsp;在官方下载完后，安装到Windows Explorer integration的时候，将选项中将“Git Bash here”和“Git GUI here”打对勾。">
+<meta property="og:image" content="http://img.blog.csdn.net/20170401174738941?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170401174814792?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170401174836505?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170401174850864?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170401174941512?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170401175013350?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170401175041857?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170401175057279?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170401175112357?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170401175129342?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170428181326130?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170401175159936?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170401175337187?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408100750902?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408100930835?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408100950496?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408101010575?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408101033290?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408101045215?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408101103544?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408101129416?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408101237855?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408101140041?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408101302951?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408101321451?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408101403607?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408101416342?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408101446983?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408101511109?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408101535047?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408101608298?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408101628705?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408101638859?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408101654172?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:updated_time" content="2017-06-25T06:32:43.611Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="GitHub新手使用教学(从安装到使用)">
+<meta name="twitter:description" content="一、安装Git for Windows（又名msysgit）     &amp;nbsp;下载地址:&amp;nbsp;https://git-for-windows.github.io/&amp;nbsp;         &amp;nbsp;&amp;nbsp;在官方下载完后，安装到Windows Explorer integration的时候，将选项中将“Git Bash here”和“Git GUI here”打对勾。">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20170401174738941?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/06/25/GitHub新手使用教学(从安装到使用)/"/>
+
+
+
+
+
+  <title>GitHub新手使用教学(从安装到使用) | xuwujing's blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xuwujing's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/25/GitHub新手使用教学(从安装到使用)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xuwujing">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xuwujing's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">GitHub新手使用教学(从安装到使用)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-25T14:20:11+08:00">
+                2017-06-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p></p><h3><br>    一、<span style="font-family:宋体">安装</span><span style="font-family:Calibri">Git for Windows</span><span style="font-family:宋体">（又名</span><span style="font-family:Calibri">msysgit</span><span style="font-family:宋体">）</span><br></h3><p></p>
+<p><div><br>    <strong><span style="font-family:宋体"><span style="font-family:&quot;microsoft yahei&quot;; font-size:14px">&nbsp;下载地址:&nbsp;</span><a target="_blank" href="https://git-for-windows.github.io/" style="color:rgb(255,153,0); text-decoration:none; font-family:&quot;microsoft yahei&quot;; font-size:14px">https://git-for-windows.github.io/</a><span style="font-family:&quot;microsoft yahei&quot;; font-size:14px">&nbsp;</span><br><br>    </span></strong><br></div></p>
+<p><br>    &nbsp;&nbsp;<span style="font-family:宋体">在官方下载完后，安装到</span><span style="color:rgb(51,51,51)">Windows Explorer integration</span><span style="color:rgb(51,51,51)"><span style="font-family:微软雅黑">的时候，将</span></span><span style="color:rgb(51,51,51)"><span style="font-family:微软雅黑">选项中将</span>“Git Bash here”和“Git GUI here”打对勾。</span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170401174738941?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><div><br>    <br><br><br></div><br><p><br></p><br><p><br>    然后就一直next<span style="font-family:宋体">直到</span><span style="color:rgb(51,51,51)">Finish</span><br></p><br><h3><br>    <span style="font-weight:normal">二、<span style="font-family:Calibri">github</span><span style="font-family:宋体">使用</span></span><br></h3><br><p><br>    <span style="font-family:宋体">博客参考</span>: <a target="_blank" href="http://www.cnblogs.com/schaepher/p/5561193.html"><u><span style="color:rgb(0,0,255)">http://www.cnblogs.com/schaepher/p/5561193.html</span></u></a><br></p><br><p><br>    <span style="font-family:微软雅黑">本地</span>git使用：<br></p><br><p><br>    新建一个文件夹<br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170401174814792?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    <span style="font-family:宋体">在目录下新建个测试的文本</span> <span style="font-family:宋体">测试文本</span>.txt<br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170401174836505?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    <span style="font-family:宋体">并在此文件夹目录下右键</span>Git Base Here 进入Gitbase<span style="font-family:宋体">命令</span><br></p><br><p><br>    <span style="font-family:宋体">输入</span>git init <span style="font-family:宋体">初始化仓库</span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170401174850864?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    输入git status &nbsp;<span style="font-family:宋体">查看状态</span><br></p><br><p><br>    <span style="font-family:宋体">如果中文文件的名称乱码</span> <span style="font-family:宋体">输入</span><span style="background:rgb(245,245,245)">git config –global core.quotepath false</span><br></p><br><p><br>    <span style="background:rgb(245,245,245)"><span style="font-family:宋体">就可以解决</span></span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170401174941512?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    然后输入git add &quot;测试文本.txt&quot;&nbsp;&nbsp;&nbsp;<span style="font-family:宋体">上传此文件</span><br></p><br><p><br>    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:宋体">或</span> git &nbsp;add -A &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:宋体">上传此目录下所有文件</span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170401175013350?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    可以&nbsp;git commit -m &quot;更新的信息&quot;&nbsp;&nbsp;<span style="font-family:宋体">来提交</span><br></p><br><p><br>    <span style="font-family:宋体">提交成功后</span> <span style="font-family:宋体">可以查看日志</span> git log<br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170401175041857?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    然后修改文件<br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170401175057279?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    输入git status<span style="font-family:宋体">查看状态</span><br></p><br><p><br>    <span style="font-family:宋体">输入</span>git diff<span style="font-family:宋体">查看改变</span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170401175112357?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    撤销更改&nbsp;git checkout – .&nbsp;<br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170401175129342?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    再次打开文件已经修改<br></p><br><p><br>    再次修改文件并上传<br></p><br><p><br>    看到两个版本了<br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170428181326130?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    版本回退<br></p><br><p><br>    版本回退命令&nbsp;: git reset –hard 版本号前7<span style="font-family:宋体">位</span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170401175159936?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    版本恢复<br></p><br><p><br>    <span style="font-family:宋体">输入</span> git reflog &nbsp;<span style="font-family:宋体">查看之前版本</span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170401175337187?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    <span style="font-family:宋体">再次输入</span> git reset –hard 版本号前7<span style="font-family:宋体">位 &nbsp;恢复到的版本</span><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    删除未跟踪的文件<br></p><br><p><br>    <span style="font-family:宋体">输入命令</span> git clean -xf &nbsp;<span style="font-family:宋体">会删除未跟踪的文件 就是没有上传过的文件</span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408100750902?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><img src="" alt=""><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408100930835?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><img src="" alt=""><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    Git与GitHub关联使用:<br></p><br><p><br>    &nbsp;<span style="font-family:宋体">到</span>github <span style="font-family:宋体">官网注册</span><span style="font-family:Calibri">(</span><span style="font-family:宋体">如果已经注册过就直接登录</span><span style="font-family:Calibri">)</span><br></p><br><p><br>    &nbsp;<span style="font-family:宋体">本地配置用户名和邮箱</span><br></p><br><p><br>    &nbsp;<span style="font-family:宋体">方法</span>1:&nbsp;Git Base <span style="font-family:宋体">设置</span><br></p><br><p><br>    &nbsp;&nbsp;&nbsp;<span style="font-family:宋体">输入</span><br></p><br><p><br>    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a target="_blank" name="config_user"></a>&nbsp;git config –global user.name &quot;<span style="font-family:宋体">你的用户名</span><span style="font-family:Calibri">&quot;</span><br><br>    <a target="_blank" name="config_email"></a>git config –global user.email &quot;<span style="font-family:宋体">你的邮箱</span><span style="font-family:Calibri">&quot;</span><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    &nbsp;<span style="font-family:宋体">方法</span>2<span style="font-family:宋体">：修改</span>.gitconfig<span style="font-family:宋体">文件</span><br></p><br><p><br>    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:宋体">路径</span>: <span style="background:rgb(245,245,245)">C:\Users\<span style="font-family:宋体">你的用户名</span><span style="font-family:Courier New">.gitconfig</span></span><span style="background:rgb(245,245,245)">&nbsp;</span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408100950496?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><img src="" alt=""><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    &nbsp;<br></p><br><p><br>    &nbsp;<br></p><br><p><br>    &nbsp;<br></p><br><p><br>    &nbsp;<br></p><br><p><br>    <span style="font-family:宋体">生成</span>ssh key<br></p><br><p><br>    <a target="_blank" name="ssh_key"></a><span style="font-family:宋体">输入</span>: ssh-keygen -t rsa -C &quot;你的邮箱&quot;<br></p><br><p><br>    &nbsp;<img src="" alt=""><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408101010575?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    <span style="font-family:宋体">复制</span>ssh key<br></p><br><p><br>    &nbsp;&nbsp;<span style="font-family:宋体">方法</span>1: <span style="font-family:宋体">输入 </span><span style="background:rgb(245,245,245)">clip &lt; ~/.ssh/id_rsa.pub</span><span style="background:rgb(245,245,245)">&nbsp;&nbsp;&nbsp;<span style="font-family:宋体">会自动复制</span>ssh key<span style="font-family:宋体">，可以直接粘贴</span></span><br></p><br><p><br>    <span style="background:rgb(245,245,245)">&nbsp;<img src="http://img.blog.csdn.net/20170408101033290?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><img src="" alt=""></span><br></p><br><p><br>    <span style="background:rgb(245,245,245)">&nbsp;&nbsp;</span><br></p><br><p><br>    <span style="background:rgb(245,245,245)">&nbsp;&nbsp;<span style="font-family:宋体">方法</span>2:<span style="font-family:宋体">在</span></span>c/Users/Administrator/.ssh/id_rsa)文件找到直接复制<br></p><br><p><br>    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="" alt=""><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408101045215?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    <span style="font-family:宋体">连接</span>github<br></p><br><p><br>    <span style="font-family:宋体">打开</span>GitHub <span style="font-family:宋体">进入</span><span style="font-family:Lucida Console">setting</span><span style="font-family:宋体">找到</span><span style="font-family:Lucida Console">ssh key</span><span style="font-family:宋体">并新建</span><br></p><br><p><br>    &nbsp;<img src="" alt=""><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408101103544?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><img src="" alt=""><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408101129416?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><img src="" alt=""><br></p><br><p><br>    <img src="http://img.blog.csdn.net/20170408101237855?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br><br></p><br><p><br>    <br><br><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408101140041?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    然后测试连接是否成功<br></p><br><p><br>    输入: <span style="background:rgb(245,245,245)">ssh -T git@github.com</span>&nbsp;<br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408101302951?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><img src="" alt=""><br></p><br><p><br>    连接成功<br></p><br><p><br>    &nbsp;<br></p><br><p><br>    &nbsp;<br></p><br><p><br>    <span style="font-family:微软雅黑">本地连接到</span>GitHub上面的仓库<br></p><br><p><br>    &nbsp;<span style="font-family:宋体">登录</span>GitHub <span style="font-family:宋体">新建个仓库</span><span style="font-family:Calibri">(</span><span style="font-family:宋体">如果已经建好就跳过此步骤</span><span style="font-family:Calibri">)</span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408101321451?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><img src="" alt=""><br></p><br><p><br>    &nbsp;<img src="" alt=""><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408101403607?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><img src="" alt=""><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408101416342?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    本地关联GitHub&nbsp;<br></p><br><p><br>    &nbsp;<span style="font-family:Helvetica Neue">运行</span>&nbsp;git remote add origin&nbsp;<span style="font-family:Helvetica Neue">你复制的地址</span><br></p><br><p><br>    <span style="font-family:Helvetica Neue">然后上传文件</span>&nbsp;<br></p><br><p><br>    <span style="font-family:Helvetica Neue">创</span><span style="font-family:宋体">建</span><span style="font-family:宋体">库</span>(repository)<span style="font-family:宋体">的时候，加入了</span><span style="font-family:Calibri">README.md</span><span style="font-family:宋体">或者</span><span style="font-family:Calibri">LICENSE</span><span style="font-family:宋体">，那么</span><span style="font-family:Calibri">github</span><span style="font-family:宋体">会拒绝你的</span><span style="font-family:Calibri">push</span>&nbsp;<br></p><br><p><br>    <span style="font-family:宋体">解决办法</span>: <span style="font-family:宋体">执行</span>&nbsp;git pull origin master<br></p><br><p><br>    <span style="font-family:微软雅黑">输入</span> git push -u origin master&nbsp;<br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408101446983?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><img src="" alt=""><br></p><br><p><br>    刷新GitHub<span style="font-family:宋体">界面 看到文件</span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408101511109?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><img src="" alt=""><br></p><br><p><br>    关联已经成功了！<br></p><br><p><br>    &nbsp;<br></p><br><p><br>    以后如果想更新文件到github <span style="font-family:宋体">提交完后输入 </span><span style="font-family:Calibri">git push</span><span style="font-family:宋体">就可以同步了</span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408101535047?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><img src="" alt=""><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    警告了&nbsp;&nbsp;<span style="font-family:宋体">但是不会影响结果</span><br></p><br><p><br>    &nbsp;<img src="" alt=""><br></p><br><p><br>    原因是没有指定分支<br></p><br><p><br>    按照提示提示执行就不会出现警告了<br></p><br><p><br>    输入：<strong><span style="color:rgb(51,51,51); background:rgb(255,255,51)">git config –global push.default matching</span></strong><span style="color:rgb(51,51,51)"><span style="font-family:宋体">或者</span></span><strong><span style="color:rgb(51,51,51); background:rgb(51,255,51)">git config –global push.default simple</span></strong><span style="color:rgb(51,51,51)"><span style="font-family:宋体">命令</span></span><br></p><br><p><br>    <span style="color:rgb(51,51,51)">push.default<span style="font-family:宋体">设置</span></span><strong><span style="color:rgb(51,51,51); background:rgb(255,255,51)">maching</span></strong><span style="color:rgb(51,51,51)"><span style="font-family:宋体">的意思是：</span></span><strong><span style="color:rgb(51,51,51); background:rgb(255,153,255)">git push</span></strong><span style="color:rgb(51,51,51)">&nbsp;<span style="font-family:宋体">会把你本地所有分支</span><span style="font-family:Arial">push</span><span style="font-family:宋体">到名称相对应的远程主机上。这意味着可能你会在不经意间</span><span style="font-family:Arial">push</span><span style="font-family:宋体">一些你原本没打算</span><span style="font-family:Arial">push</span><span style="font-family:宋体">的分支。</span></span><br></p><br><p><br>    <span style="color:rgb(51,51,51)">push.default<span style="font-family:宋体">设置成</span></span><strong><span style="color:rgb(51,51,51); background:rgb(51,255,51)">simple</span></strong><span style="color:rgb(51,51,51)"><span style="font-family:宋体">的意思是：</span></span><strong><span style="color:rgb(51,51,51); background:rgb(255,153,255)">git push</span></strong><span style="color:rgb(51,51,51)"><span style="font-family:宋体">仅仅把当前所在分支</span>push<span style="font-family:宋体">到从当初</span></span><strong><span style="color:rgb(51,51,51); background:rgb(255,153,255)">git pull</span></strong><span style="color:rgb(51,51,51)">&nbsp;pull<span style="font-family:宋体">下来的那个对应分支上，另外，这个过程也会同时检查各个分支的名称是否相对应。</span></span><br></p><br><p><br>    <img src="" alt="">&nbsp;<img src="http://img.blog.csdn.net/20170408101608298?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    <span style="font-family:宋体">输入</span>: git config –global push.default simple&nbsp;，<br></p><br><p><br>    <span style="font-family:宋体">成功</span>push<span style="font-family:宋体">之后没有警告了</span><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    获取别人的仓库<br></p><br><p><br>    &nbsp;<br></p><br><p><br>    <span style="font-family:宋体">登录</span>GitHub <span style="font-family:宋体">进行搜索 点击一个进去</span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408101628705?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><img src="" alt=""><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    &nbsp;<img src="" alt=""><br></p><br><p><br>    <img src="" alt=""><br><br><br></p><br><p><br>    下载方式有几种&nbsp;<span style="font-family:宋体">我们选择</span> git<span style="font-family:宋体">下载</span><br></p><br><p><br>    &nbsp;<span style="font-family:宋体">执行</span>: &nbsp;<a target="_blank" name="clone">git clone<span style="font-family:宋体">复制的</span><span style="font-family:Calibri">SSH</span><span style="font-family:宋体">地址</span></a>&nbsp;<br></p><br><p><br>    可以直接下载到本地的仓库<br></p><br><p><br>    也可以直接下载解压包<br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408101638859?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408101654172?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    &nbsp;<br></p><br><p><br>    另一种关联远程空仓库的方法<br></p><br><p><br>    <span style="font-family:微软雅黑">在</span>Github上创建仓库<br></p><br><p><br>    <span style="font-family:微软雅黑">复制刚才创建的仓库的</span>SSH<br></p><br><p><br>    clone到本地<br></p><br><p><br>    这样可以不用再做关联了。<br></p><br><p><br>    <span style="font-family:微软雅黑">省去了上面的</span>&nbsp;init&nbsp;和&nbsp;git remote add origin&nbsp;以及&nbsp;git push -u origin master&nbsp;。<br></p>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/25/关于Tomcat一些启动错误的解决方法/" rel="next" title="关于Tomcat一些启动错误的解决方法">
+                <i class="fa fa-chevron-left"></i> 关于Tomcat一些启动错误的解决方法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/25/Linux Ubuntu从零开始部署web环境及项目-----搭建ssh环境(一)/" rel="prev" title="Linux Ubuntu从零开始部署web环境及项目-----搭建ssh环境(一)">
+                Linux Ubuntu从零开始部署web环境及项目-----搭建ssh环境(一) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="xuwujing" />
+          <p class="site-author-name" itemprop="name">xuwujing</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">    一、安装Git for Windows（又名msysgit）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">    二、github使用</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xuwujing</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
