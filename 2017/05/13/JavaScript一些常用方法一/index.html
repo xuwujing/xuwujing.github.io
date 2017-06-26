@@ -1,0 +1,772 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="javascript," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="整理以前的笔记，在学习JavaScript时候,经常会用到一些方法，但是有时忘掉了具体用法，因此记下。方便以后查阅。 这篇博文先说明这些方法的用途：splice()、push()、pop() 、shift()、unshift()、hasOwnProperty() 、match() 、map() 、reduce()、filter()。 .splice()  通过删除现有元素和/或添加新元素来更改数组">
+<meta name="keywords" content="javascript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript一些常用方法一">
+<meta property="og:url" content="http://yoursite.com/2017/05/13/JavaScript一些常用方法一/index.html">
+<meta property="og:site_name" content="xuwujing&#39;s blog">
+<meta property="og:description" content="整理以前的笔记，在学习JavaScript时候,经常会用到一些方法，但是有时忘掉了具体用法，因此记下。方便以后查阅。 这篇博文先说明这些方法的用途：splice()、push()、pop() 、shift()、unshift()、hasOwnProperty() 、match() 、map() 、reduce()、filter()。 .splice()  通过删除现有元素和/或添加新元素来更改数组">
+<meta property="og:updated_time" content="2017-06-26T09:51:23.779Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JavaScript一些常用方法一">
+<meta name="twitter:description" content="整理以前的笔记，在学习JavaScript时候,经常会用到一些方法，但是有时忘掉了具体用法，因此记下。方便以后查阅。 这篇博文先说明这些方法的用途：splice()、push()、pop() 、shift()、unshift()、hasOwnProperty() 、match() 、map() 、reduce()、filter()。 .splice()  通过删除现有元素和/或添加新元素来更改数组">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/05/13/JavaScript一些常用方法一/"/>
+
+
+
+
+
+  <title>JavaScript一些常用方法一 | xuwujing's blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xuwujing's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/13/JavaScript一些常用方法一/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xuwujing">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xuwujing's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JavaScript一些常用方法一</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-13T11:07:00+08:00">
+                2017-05-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <pre><code>整理以前的笔记，在学习JavaScript时候,经常会用到一些方法，但是有时忘掉了具体用法，因此记下。方便以后查阅。
+</code></pre><p><strong>这篇博文先说明这些方法的用途：</strong><br><strong>splice()、push()、pop() 、shift()、unshift()、hasOwnProperty() 、match() 、map() 、reduce()、filter()</strong>。</p>
+<h2 id="splice"><a href="#splice" class="headerlink" title=".splice()"></a>.splice()</h2><hr>
+<p> <strong>通过删除现有元素和/或添加新元素来更改数组的内容</strong><br>    <strong>例如:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">var myFish = [&quot;angel&quot;, &quot;clown&quot;, &quot;mandarin&quot;, &quot;surgeon&quot;];</div><div class="line">//从第 2 位开始删除 0 个元素，插入 &quot;drum&quot;</div><div class="line">var removed = myFish.splice(2, 0, &quot;drum&quot;);</div><div class="line">//运算后的 myFish:[&quot;angel&quot;, &quot;clown&quot;, &quot;drum&quot;, &quot;mandarin&quot;, &quot;surgeon&quot;]</div><div class="line">//被删除元素数组：[]，没有元素被删除</div><div class="line">console.log(&quot;1:&quot;+removed+&quot;---&quot;+myFish); //1:---angel,clown,drum,mandarin,surgeon</div><div class="line">//从第 3 位开始删除 1 个元素</div><div class="line">removed = myFish.splice(3, 1);</div><div class="line">//运算后的myFish：[&quot;angel&quot;, &quot;clown&quot;, &quot;drum&quot;, &quot;surgeon&quot;]</div><div class="line">//被删除元素数组：[&quot;mandarin&quot;]</div><div class="line">console.log(&quot;2:&quot;+removed+&quot;---&quot;+myFish); //2:mandarin---angel,clown,drum,surgeon</div><div class="line">//从第 2 位开始删除 1 个元素，然后插入 &quot;trumpet&quot;</div><div class="line">removed = myFish.splice(2, 1, &quot;trumpet&quot;);</div><div class="line">//运算后的myFish: [&quot;angel&quot;, &quot;clown&quot;, &quot;trumpet&quot;, &quot;surgeon&quot;]</div><div class="line">//被删除元素数组：[&quot;drum&quot;]</div><div class="line">console.log(&quot;3:&quot;+removed+&quot;---&quot;+myFish);//3:drum---angel,clown,trumpet,surgeon</div><div class="line">//从第 0 位开始删除 2 个元素，然后插入 &quot;parrot&quot;, &quot;anemone&quot; 和 &quot;blue&quot;</div><div class="line">removed = myFish.splice(0, 2, &quot;parrot&quot;, &quot;anemone&quot;, &quot;blue&quot;);</div><div class="line">//运算后的myFish：[&quot;parrot&quot;, &quot;anemone&quot;, &quot;blue&quot;, &quot;trumpet&quot;, &quot;surgeon&quot;]</div><div class="line">//被删除元素的数组：[&quot;angel&quot;, &quot;clown&quot;]</div><div class="line">console.log(&quot;4:&quot;+removed+&quot;---&quot;+myFish);//4:angel,clown---parrot,anemone,blue,trumpet,surgeon</div><div class="line">//从第 3 位开始删除 2 个元素</div><div class="line">removed = myFish.splice(3, Number.MAX_VALUE);</div><div class="line">//运算后的myFish: [&quot;parrot&quot;, &quot;anemone&quot;, &quot;blue&quot;]</div><div class="line">//被删除元素的数组：[&quot;trumpet&quot;, &quot;surgeon&quot;]</div><div class="line">console.log(&quot;5:&quot;+removed+&quot;---&quot;+myFish);//5:trumpet,surgeon---parrot,anemone,blue</div></pre></td></tr></table></figure></p>
+<h2 id="push"><a href="#push" class="headerlink" title=".push()"></a>.push()</h2><hr>
+<p> <strong>一个或多个参数添加到数组末尾</strong><br><strong>例如：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var arr = [1,2,3]; </div><div class="line">arr.push(4); // 现在arr的值为 [1,2,3,4]</div></pre></td></tr></table></figure>
+<h2 id="pop"><a href="#pop" class="headerlink" title=".pop()"></a>.pop()</h2><hr>
+<p><strong>“抛出”一个数组末尾的值</strong><br><strong>例如:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var arr=[1, 4, 6]</div><div class="line">var oneDown = arr.pop();//现在 oneDown 的值为 6 ，arr变成了 [1, 4]</div></pre></td></tr></table></figure>
+<h2 id="shift"><a href="#shift" class="headerlink" title=".shift()"></a>.shift()</h2><hr>
+<p><strong>“移出”一个数组的第一个并赋值</strong><br><strong>例如:</strong> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var arr=[1, 4, 6]</div><div class="line">var oneDown = arr.shift();//现在 oneDown 的值为 1 ，arr变成了 [4, 6]</div></pre></td></tr></table></figure>
+<h2 id="unshift"><a href="#unshift" class="headerlink" title=".unshift()"></a>.unshift()</h2><hr>
+<p><strong>头部添加元素</strong><br><strong>例如：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var arr = [1,2,3]; </div><div class="line">arr.unshift(4); // 现在arr的值为 [4,1,2,3]</div></pre></td></tr></table></figure>
+<h2 id="hasOwnProperty-NaN"><a href="#hasOwnProperty-NaN" class="headerlink" title=".hasOwnProperty()"></a>.hasOwnProperty()</h2><hr>
+<p><strong>检查对象是否有该属性</strong><br><strong>例如:</strong> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var myObj = &#123;</div><div class="line">      top: &quot;hat&quot;,</div><div class="line">      bottom: &quot;pants&quot;</div><div class="line">    &#125;;</div><div class="line">myObj.hasOwnProperty(&quot;top&quot;);    // true</div><div class="line">myObj.hasOwnProperty(&quot;middle&quot;); // false</div></pre></td></tr></table></figure>
+<h2 id="match"><a href="#match" class="headerlink" title=".match()"></a>.match()</h2><hr>
+<p>  <strong>匹配字符使用</strong><br>   <strong>例如:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">   var testString = &quot;Hello World! How are you！Haha&quot;;  //定义一个字符串</div><div class="line"></div><div class="line">//设置要查找的格式 </div><div class="line">/*   / 是这个正则表达式的头部</div><div class="line"> h 是我们想要匹配的模式</div><div class="line"> / 是这个正则表达式的尾部</div><div class="line">g 代表着 global(全局)，意味着返回所有的匹配而不仅仅是第一个。</div><div class="line">i 代表着忽略大小写，意思是当我们寻找匹配的字符串的时候忽略掉字母的大小写。</div><div class="line">*/</div><div class="line">var expressionToGetSoftware = /h/gi;  	</div><div class="line">var softwareCount = testString.match(expressionToGetSoftware).length;//softwareCount为4</div></pre></td></tr></table></figure>
+<h2 id="map"><a href="#map" class="headerlink" title=".map()"></a>.map()</h2><hr>
+<p>   <strong>迭代数组</strong><br>   <strong>例如:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var oldArray = [1,2,3,4,5];</div><div class="line">var newArray = oldArray.map(function(val)&#123;</div><div class="line">  return val+3;</div><div class="line">&#125;);</div><div class="line"> console.log(newArray);  //[4, 5, 6, 7, 8]</div></pre></td></tr></table></figure>
+<h2 id="reduce"><a href="#reduce" class="headerlink" title=".reduce()"></a>.reduce()</h2><hr>
+<p><strong>迭代一个数组，并且把它累积到一个值中</strong><br><strong>例如:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">var array = [4,5,6,7,8];</div><div class="line">var singleVal = 0;</div><div class="line">// 累加器 和当前值</div><div class="line">singleVal = array.reduce(function(qq,ww)&#123;</div><div class="line">	console.log(&quot;qq:&quot;+qq+&quot;,ww:&quot;+ww); //qq:4,ww:5  qq:9,ww:6 qq:15,ww:7 qq:22,ww:8</div><div class="line">  return qq+ww;</div><div class="line">&#125;);</div><div class="line">console.log(singleVal); //30</div></pre></td></tr></table></figure>
+<h2 id="filter"><a href="#filter" class="headerlink" title=".filter()"></a>.filter()</h2><hr>
+<p> <strong>迭代一个数组，并且按给出的条件过滤出符合的元素</strong><br><strong>例如:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">var oldArray = [1,2,3,4,5,6,7,8,9,10];</div><div class="line">var newArray = oldArray.filter (function(val)&#123;</div><div class="line">  return val&lt;6;            //保留小于6的数据</div><div class="line">&#125;);</div><div class="line">console.log(newArray);  //[1, 2, 3, 4, 5]</div><div class="line"></div><div class="line">//删除数组中的所有假值。在JavaScript中，假值有false、null、0、&quot;&quot;、undefined 和 NaN。</div><div class="line">//通过filter方法来过滤掉假值</div><div class="line">function bouncer(arr) &#123;</div><div class="line">   var newarr=arr.filter(function(val)&#123;</div><div class="line">    return !!val;</div><div class="line">   &#125;);</div><div class="line">  return newarr;</div><div class="line">&#125;</div><div class="line">//判断是否是真值,如果不是就过滤掉</div><div class="line">function bouncer(arr) &#123;</div><div class="line">  return arr.filter(Boolean);</div><div class="line">&#125;</div><div class="line"></div><div class="line">console.log(bouncer([7, &quot;ate&quot;, &quot;&quot;, false, 9])); //[7, &quot;ate&quot;, 9]</div><div class="line">console.log(bouncer([false, null, 0, NaN, undefined, &quot;&quot;])); //[]</div><div class="line">console.log(bouncer([1, null, NaN, 2, undefined]));  // [1, 2]</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/javascript/" rel="tag"># javascript</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/09/NIO通讯框架之Mina/" rel="next" title="NIO通讯框架之Mina(转)">
+                <i class="fa fa-chevron-left"></i> NIO通讯框架之Mina(转)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/20/CentOS 通过yum安装web环境/" rel="prev" title="CentOS 通过yum安装web环境">
+                CentOS 通过yum安装web环境 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="xuwujing" />
+          <p class="site-author-name" itemprop="name">xuwujing</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">29</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#splice"><span class="nav-number">1.</span> <span class="nav-text">.splice()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#push"><span class="nav-number">2.</span> <span class="nav-text">.push()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pop"><span class="nav-number">3.</span> <span class="nav-text">.pop()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shift"><span class="nav-number">4.</span> <span class="nav-text">.shift()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#unshift"><span class="nav-number">5.</span> <span class="nav-text">.unshift()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hasOwnProperty-NaN"><span class="nav-number">6.</span> <span class="nav-text">.hasOwnProperty()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#match"><span class="nav-number">7.</span> <span class="nav-text">.match()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#map"><span class="nav-number">8.</span> <span class="nav-text">.map()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#reduce"><span class="nav-number">9.</span> <span class="nav-text">.reduce()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#filter"><span class="nav-number">10.</span> <span class="nav-text">.filter()</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xuwujing</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

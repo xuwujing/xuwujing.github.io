@@ -1,0 +1,755 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="整理以前的笔记，在学习Java时候,经常会用到一些方法。虽然简单但是经常使用。因此做成笔记，方便以后查阅这篇博文先说明构造和使用这些方法。 判断String类型数据是否为空 String类型的数据为空，主要为等于null或””那么只要判断属于这两种之一就行了注: null==data||””.equals(data) 写法防止空指针123456789101112public static bool">
+<meta name="keywords" content="java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java简单实用方法一">
+<meta property="og:url" content="http://yoursite.com/2017/05/07/Java简单实用方法一/index.html">
+<meta property="og:site_name" content="xuwujing&#39;s blog">
+<meta property="og:description" content="整理以前的笔记，在学习Java时候,经常会用到一些方法。虽然简单但是经常使用。因此做成笔记，方便以后查阅这篇博文先说明构造和使用这些方法。 判断String类型数据是否为空 String类型的数据为空，主要为等于null或””那么只要判断属于这两种之一就行了注: null==data||””.equals(data) 写法防止空指针123456789101112public static bool">
+<meta property="og:updated_time" content="2017-06-26T09:05:41.552Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java简单实用方法一">
+<meta name="twitter:description" content="整理以前的笔记，在学习Java时候,经常会用到一些方法。虽然简单但是经常使用。因此做成笔记，方便以后查阅这篇博文先说明构造和使用这些方法。 判断String类型数据是否为空 String类型的数据为空，主要为等于null或””那么只要判断属于这两种之一就行了注: null==data||””.equals(data) 写法防止空指针123456789101112public static bool">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/05/07/Java简单实用方法一/"/>
+
+
+
+
+
+  <title>Java简单实用方法一 | xuwujing's blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xuwujing's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/07/Java简单实用方法一/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xuwujing">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xuwujing's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java简单实用方法一</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-07T11:53:00+08:00">
+                2017-05-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>整理以前的笔记，在学习Java时候,经常会用到一些方法。虽然简单但是经常使用。因此做成笔记，方便以后查阅<br>这篇博文先说明构造和使用这些方法。</p>
+<h2 id="判断String类型数据是否为空"><a href="#判断String类型数据是否为空" class="headerlink" title="判断String类型数据是否为空"></a>判断String类型数据是否为空</h2><hr>
+<p>String类型的数据为空，主要为等于null或””那么只要判断属于这两种之一就行了<br>注: null==data||””.equals(data) 写法防止空指针<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public static boolean isNull(String data)&#123;</div><div class="line">	if(null==data||&quot;&quot;.equals(data))&#123;</div><div class="line">		return true;</div><div class="line">	&#125;</div><div class="line">	return false;</div><div class="line">&#125;</div><div class="line">       String str=&quot;&quot;;</div><div class="line">       String str1=null;</div><div class="line">       String str2=&quot;abc&quot;;</div><div class="line">       System.out.println(isNull(str));//true</div><div class="line">       System.out.println(isNull(str1));//true</div><div class="line">       System.out.println(isNull(str2));//false</div></pre></td></tr></table></figure></p>
+<h2 id="判断List类型是否为空"><a href="#判断List类型是否为空" class="headerlink" title="判断List类型是否为空"></a>判断List类型是否为空</h2><hr>
+<p>List类型的数据为空，主要为等于null或[]那么只要判断属于这两种之一就行了<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">public static boolean isNull(List list)&#123;</div><div class="line">		if(null==list||list.size()==0)&#123;</div><div class="line">			return true;</div><div class="line">		&#125;</div><div class="line">		return false;</div><div class="line">	&#125;</div><div class="line">	    List list=new ArrayList();</div><div class="line">        List list1=null;</div><div class="line">        List list2=new ArrayList();</div><div class="line">        list2.add(&quot;a&quot;);</div><div class="line">        System.out.println(isNull(list));//true</div><div class="line">        System.out.println(isNull(list1));//true</div><div class="line">        System.out.println(isNull(list2));//false</div></pre></td></tr></table></figure></p>
+<h2 id="获取当前String类型的的时间-自定义格式"><a href="#获取当前String类型的的时间-自定义格式" class="headerlink" title="获取当前String类型的的时间(自定义格式)"></a>获取当前String类型的的时间(自定义格式)</h2><hr>
+<p>获取当前系统时间，如果为定义格式就取默认年月日时分秒格式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public static String getNowTime(String format)&#123;</div><div class="line">		if(null==format||&quot;&quot;.equals(format))&#123;//如果没有设置格式使用默认格式</div><div class="line">			format=&quot;yyyy-MM-dd HH:mm:ss&quot;;</div><div class="line">		&#125;</div><div class="line">		return new SimpleDateFormat(format).format(new Date());</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	System.out.println(getNowTime(&quot;&quot;));  //2015-10-01 11:08:44</div><div class="line">   System.out.println(getNowTime(&quot;yyyyMMdd&quot;));//20151001</div></pre></td></tr></table></figure>
+<h2 id="获取的String类型时间加上增加的分钟并自定义时间格式"><a href="#获取的String类型时间加上增加的分钟并自定义时间格式" class="headerlink" title="获取的String类型时间加上增加的分钟并自定义时间格式"></a>获取的String类型时间加上增加的分钟并自定义时间格式</h2><hr>
+<p>时间增加分钟，通过Calendar.add 方法来增加时间,然后通过format来转换时间格式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">public static String getTimeAddmi(int mi,String time,String format) &#123;</div><div class="line">		if(null==format||&quot;&quot;.equals(format))&#123;//如果没有设置格式使用默认格式</div><div class="line">			format=&quot;yyyy-MM-dd HH:mm:ss&quot;;</div><div class="line">		&#125;</div><div class="line">		if(null==time||&quot;&quot;.equals(time))&#123; //如果没有设置时间取当前时间</div><div class="line">			time=new SimpleDateFormat(format).format(new Date());</div><div class="line">		&#125;</div><div class="line">		SimpleDateFormat format1 = new SimpleDateFormat(format);</div><div class="line">		Date d=null;</div><div class="line">		try &#123;</div><div class="line">			d = format1.parse(time);</div><div class="line">		&#125; catch (Exception e) &#123;</div><div class="line">			e.printStackTrace();</div><div class="line">		&#125;    </div><div class="line">		Calendar ca = Calendar.getInstance();  //定义一个Calendar 对象</div><div class="line">		ca.setTime(d);//设置时间</div><div class="line">		ca.add(Calendar.MINUTE, mi);//增加分钟</div><div class="line">		String backTime = format1.format(ca.getTime());  //转化为String 的格式</div><div class="line">		return backTime;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">System.out.println(getNowTime(&quot;&quot;));  //2015-10-01 11:59:24</div><div class="line">     System.out.println(getTimeAddmi(10,null,null));//2015-10-01 12:09:24</div><div class="line">        System.out.println(getTimeAddmi(20,&quot;2015-10-01 11:08:44&quot;,&quot;yyyy-MM-dd HH:mm:ss&quot;));//2015-10-01 11:28:44</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<h2 id="两个日期带时间比较"><a href="#两个日期带时间比较" class="headerlink" title="两个日期带时间比较"></a>两个日期带时间比较</h2><hr>
+<p>通过Date中的 after 方法 来进行比较。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public static boolean compareDay(String time1,String time2,String format) throws Exception &#123;</div><div class="line">  if(null==format||&quot;&quot;.equals(format))&#123;//如果没有设置格式使用默认格式</div><div class="line">		format=&quot;yyyy-MM-dd HH:mm:ss&quot;;</div><div class="line">	&#125;</div><div class="line">    SimpleDateFormat s1 = new SimpleDateFormat(format);</div><div class="line">	Date t1=s1.parse(time1);</div><div class="line">	Date t2=s1.parse(time2);</div><div class="line">	return t2.after(t1);//当 t2 大于 t1 时，为 true，否则为 false</div><div class="line">   &#125;</div><div class="line">  System.out.println(compareDay(&quot;2015-10-01 12:09:24&quot;,&quot;2015-10-01 11:59:24&quot;,null));//false</div><div class="line">      System.out.println(compareDay(&quot;20151001115924&quot;,&quot;20151001120924&quot;,&quot;yyyyMMddHHmmss&quot;));//true  </div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/28/微软云Linux服务器 Mysql、tomcat远程连接错误解决办法/" rel="next" title="微软云Linux服务器 Mysql、tomcat远程连接错误解决办法">
+                <i class="fa fa-chevron-left"></i> 微软云Linux服务器 Mysql、tomcat远程连接错误解决办法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/09/NIO通讯框架之Mina/" rel="prev" title="NIO通讯框架之Mina(转)">
+                NIO通讯框架之Mina(转) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="xuwujing" />
+          <p class="site-author-name" itemprop="name">xuwujing</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">29</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#判断String类型数据是否为空"><span class="nav-number">1.</span> <span class="nav-text">判断String类型数据是否为空</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#判断List类型是否为空"><span class="nav-number">2.</span> <span class="nav-text">判断List类型是否为空</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取当前String类型的的时间-自定义格式"><span class="nav-number">3.</span> <span class="nav-text">获取当前String类型的的时间(自定义格式)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取的String类型时间加上增加的分钟并自定义时间格式"><span class="nav-number">4.</span> <span class="nav-text">获取的String类型时间加上增加的分钟并自定义时间格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#两个日期带时间比较"><span class="nav-number">5.</span> <span class="nav-text">两个日期带时间比较</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xuwujing</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

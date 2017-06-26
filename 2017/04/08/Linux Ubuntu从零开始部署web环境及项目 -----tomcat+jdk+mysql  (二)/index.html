@@ -1,0 +1,787 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="linux,ssh," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="上一篇介绍如何在linux系统下搭建ssh环境 这篇开始将如何搭建web服务器  下载文件    &amp;nbsp;在官网下载好 tomcat、jdk、mysql的linux压缩包 后缀名为.tar.gz    &amp;nbsp;&amp;nbsp;并通过xftp上传到服务器    &amp;nbsp;    &amp;nbsp;&amp;nbsp;或者直接通过linux命令 下在wget文件的下载地址    &amp;nbsp;例如:">
+<meta name="keywords" content="linux,ssh">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux Ubuntu从零开始部署web环境及项目 -----tomcat+jdk+mysql  (二)">
+<meta property="og:url" content="http://yoursite.com/2017/04/08/Linux Ubuntu从零开始部署web环境及项目 -----tomcat+jdk+mysql  (二)/index.html">
+<meta property="og:site_name" content="xuwujing&#39;s blog">
+<meta property="og:description" content="上一篇介绍如何在linux系统下搭建ssh环境 这篇开始将如何搭建web服务器  下载文件    &amp;nbsp;在官网下载好 tomcat、jdk、mysql的linux压缩包 后缀名为.tar.gz    &amp;nbsp;&amp;nbsp;并通过xftp上传到服务器    &amp;nbsp;    &amp;nbsp;&amp;nbsp;或者直接通过linux命令 下在wget文件的下载地址    &amp;nbsp;例如:">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408095148332?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408095210748?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408095224029?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408095241020?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408095331692?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408095355344?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170426180034288?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408095417173?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170515181857310?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408095459158?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408095541114?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408095600207?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408095624114?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408095657083?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408095713630?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408095732834?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408095810148?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170427175641422?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170427175622046?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408095900680?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:updated_time" content="2017-06-26T09:55:38.610Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux Ubuntu从零开始部署web环境及项目 -----tomcat+jdk+mysql  (二)">
+<meta name="twitter:description" content="上一篇介绍如何在linux系统下搭建ssh环境 这篇开始将如何搭建web服务器  下载文件    &amp;nbsp;在官网下载好 tomcat、jdk、mysql的linux压缩包 后缀名为.tar.gz    &amp;nbsp;&amp;nbsp;并通过xftp上传到服务器    &amp;nbsp;    &amp;nbsp;&amp;nbsp;或者直接通过linux命令 下在wget文件的下载地址    &amp;nbsp;例如:">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20170408095148332?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/04/08/Linux Ubuntu从零开始部署web环境及项目 -----tomcat+jdk+mysql  (二)/"/>
+
+
+
+
+
+  <title>Linux Ubuntu从零开始部署web环境及项目 -----tomcat+jdk+mysql  (二) | xuwujing's blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xuwujing's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/08/Linux Ubuntu从零开始部署web环境及项目 -----tomcat+jdk+mysql  (二)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xuwujing">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xuwujing's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux Ubuntu从零开始部署web环境及项目 -----tomcat+jdk+mysql  (二)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-08T09:49:00+08:00">
+                2017-04-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><br>    上一篇介绍如何<a target="_blank" href="http://blog.csdn.net/qazwsxpcm/article/details/69400267">在linux系统下搭建ssh环境</a> 这篇开始将如何搭建web服务器<br></p>
+
+<h2 id="下载文件"><a href="#下载文件" class="headerlink" title="下载文件"></a>下载文件</h2><p><br>    &nbsp;<span style="font-family:宋体">在官网下载好</span> tomcat<span style="font-family:宋体">、</span><span style="font-family:Calibri">jdk</span><span style="font-family:宋体">、</span><span style="font-family:Calibri">mysql</span><span style="font-family:宋体">的</span><span style="font-family:Calibri">linux</span><span style="font-family:宋体">压缩包 后缀名为</span><span style="font-family:Calibri">.tar.gz</span><br></p><br><p><br>    &nbsp;&nbsp;<span style="font-family:宋体">并通过</span>xftp<span style="font-family:宋体">上传到服务器</span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408095148332?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    &nbsp;&nbsp;<span style="font-family:宋体">或者直接通过</span>linux<span style="font-family:宋体">命令 下在</span><span style="font-family:Calibri">wget</span><span style="font-family:宋体">文件的下载地址</span><br></p><br><p><br>    &nbsp;<span style="font-family:宋体">例如</span>:<br></p><br><p><br>    <span style="background:rgb(245,245,245)">wget&nbsp;<a href="http://apache.fayea.com/tomcat/tomcat-7/v7.0.77/bin/apache-tomcat-7.0.77-deployer.tar.gz" target="_blank" rel="external">http://apache.fayea.com/tomcat/tomcat-7/v7.0.77/bin/apache-tomcat-7.0.77-deployer.tar.gz</a> &nbsp;&nbsp;</span><br></p><br><p><br>    <span style="background:rgb(245,245,245)">P</span><span style="background:rgb(245,245,245)">s:后面的下载地址可以从网页下载中的时候查看链接获取</span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408095210748?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408095224029?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    &nbsp;<br></p>
+
+<h2 id="解压文件"><a href="#解压文件" class="headerlink" title="解压文件"></a>解压文件</h2><p><br>    &nbsp;<span style="font-family:宋体">将文件解压到指定目录</span><br></p><br><p><br>    &nbsp;<span style="font-family:宋体">命令</span>: &nbsp;&nbsp;<span style="background:rgb(245,245,245)">tar -zxvf jdk-7u55-linux-x64.tar.gz -C /usr/java</span><br></p><br><p><br>    &nbsp;<br></p>
+
+<h2 id="配置JDK环境变量"><a href="#配置JDK环境变量" class="headerlink" title="配置JDK环境变量"></a>配置JDK环境变量</h2><p><br>    &nbsp;<br></p><br><p><br>    <span style="font-family:宋体">输入</span>: <span style="background:rgb(245,245,245)">vim /etc/profile &nbsp;</span>进入编辑界面并在末尾加上<br></p><br><p><br>    <span style="background:rgb(245,245,245)">export JAVA_HOME=/usr/java/jdk1.7.0_79 &nbsp;</span><br></p><br><p><br>    <span style="background:rgb(245,245,245)">export JRE_HOME=/usr/java/jdk1.7.0_79/jre &nbsp;</span><br></p><br><p><br>    <span style="background:rgb(245,245,245)">exportCLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JRE_HOME/lib &nbsp;</span><br></p><br><p><br>    <span style="background:rgb(245,245,245)">export PATH=$PATH:$JAVA_HOME/bin</span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408095241020?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    <span style="font-family:宋体">完成后输入</span> :wq <span style="font-family:宋体">保存退出</span><br></p><br><p><br>    <span style="font-family:宋体">输入</span> <span style="background:rgb(245,245,245)">source /etc/profile &nbsp;</span>使配置生效<br></p><br><p><br>    <span style="font-family:宋体">输入</span> <span style="background:rgb(245,245,245)">java -version </span>&nbsp;<span style="font-family:宋体">查看版本</span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408095331692?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    &nbsp;<br></p>
+
+<h2 id="tomcat配置"><a href="#tomcat配置" class="headerlink" title="tomcat配置"></a>tomcat配置</h2><p><br>    &nbsp;<span style="font-family:宋体">将</span>tomcat<span style="font-family:宋体">文件解压到一个指定的文件夹</span><br></p><br><p><br>    &nbsp;<span style="font-family:宋体">可以更改端口</span><br></p><br><p><br>    &nbsp;<span style="font-family:宋体">输入</span>: <span style="background:rgb(245,245,245)">vim /opt/tomcat/conf/server.xml</span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408095355344?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    可以更改端口和设置字符编码<br></p>
+
+<h3 id="启动tomcat"><a href="#启动tomcat" class="headerlink" title="启动tomcat"></a>启动tomcat</h3><p><br>    <span style="font-family:宋体">切换到</span> tomcat/bin<span style="font-family:宋体">目录下</span><br></p><br><p><br>    <span style="font-family:宋体"></span><br></p><br><p><br>    <span style="font-family:宋体">输入</span> <span style="background:rgb(245,245,245)">./startup.sh</span><br></p><br><p><br>    <span style="background:rgb(245,245,245)"><span style="font-family:微软雅黑">如果提示权限问题</span><span style="font-family:微软雅黑">就设置权限</span>:</span><br></p><br><p><br>    <span style="background:rgb(245,245,245)">sudo&nbsp;chmod&nbsp;a+rwx&nbsp;-R&nbsp;logs</span><span style="background:rgb(245,245,245)">&nbsp;</span><span style="background:rgb(245,245,245)">&nbsp;&nbsp;&nbsp;</span><span style="color:rgb(192,0,0); background:rgb(245,245,245)">&nbsp;</span><span style="color:rgb(192,0,0); background:rgb(217,217,217)">chmod<span style="font-family:宋体">说明</span><span style="font-family:Verdana">(u:</span><span style="font-family:宋体">与文件属主拥有一样的权限</span><span style="font-family:Verdana">[a:</span><span style="font-family:宋体">所有人</span><span style="font-family:Verdana">]</span><span style="font-family:宋体">；</span><span style="font-family:Verdana">+:</span><span style="font-family:宋体">增加权限</span><span style="font-family:Verdana">;rwx:</span><span style="font-family:宋体">可读可写可执行）</span><span style="font-family:Verdana">&nbsp;</span></span><span style="color:rgb(192,0,0); background:rgb(217,217,217)">-R:<span style="font-family:宋体">递归所有目录和文件</span></span><br></p><br><span style="background:rgb(245,245,245)"></span><br><p><br>    <span style="background:rgb(245,245,245)"><img src="http://img.blog.csdn.net/20170426180034288?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br>    </span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408095417173?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    更改完成后在浏览器输入: ip+<span style="font-family:宋体">端口 出现 &nbsp;</span><span style="font-family:Calibri">Apache Tomcat</span><span style="font-family:宋体">表示启动成功</span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170515181857310?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    &nbsp;<br></p>
+
+<h2 id="mysql配置"><a href="#mysql配置" class="headerlink" title="mysql配置"></a>mysql配置</h2><p><br>    <span style="font-family:宋体">解压</span>mysql<span style="font-family:宋体">文件到 </span><span style="font-family:Calibri">/usr/local </span><br></p><br><p><br>    <span style="font-family:宋体">命令</span>: &nbsp;<span style="background:rgb(245,245,245)">tar -zxvf mysql-5.6.21-linux-glibc2.5-x86_64.tar.gz -C /usr/local</span><br></p><br><p><br>    <span style="font-family:宋体">更改文件名</span> <span style="background:rgb(245,245,245)">mv mysql-5.6.21-linux-glibc2.5-x86_64 mysql</span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408095459158?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    进入mysql<span style="font-family:宋体">目录</span><br></p><br><p><br>    <span style="font-family:宋体">获取权限</span>: <span style="background:rgb(245,245,245)">chown -R mysql:mysql ./</span><br></p><br><p><br>    <span style="font-family:宋体">安装</span>mysql:<span style="background:rgb(245,245,245)">&nbsp;./scripts/mysql_install_db –user=mysql</span><br></p><br><p><br>    <span style="font-family:宋体">提示</span> <span style="color:rgb(255,0,0)">Installing MySQL system tables…./bin/mysqld: error while loading shared libraries: libaio.so.1: cannot open shared object file: No such file or directory</span><br></p><br><p><br>    <span style="font-family:宋体">缺少包</span><br></p><br><p><br>    <span style="font-family:宋体">输入</span>:<span style="background:rgb(245,245,245)">sudo apt-get install libaio-dev &nbsp;</span><span style="font-family:宋体">下载</span><span style="font-family:宋体">然后就可以重新安装了</span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408095541114?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    <span style="font-family:宋体">添加开机启动</span> :<span style="background:rgb(245,245,245)">cp support-files/mysql.server /etc/init.d/mysql</span><br></p><br><p><br>    <span style="font-family:宋体">启动</span>mysql : <span style="background:rgb(245,245,245)">service mysql start &nbsp;或 &nbsp;/etc/init.d/mysql start</span><br></p><br><p><br>    <span style="font-family:宋体">查看是否启动成功</span>:<span style="background:rgb(245,245,245)">&nbsp;ps -ef|grep mysql</span><br></p><br><p><br>    <span style="background:rgb(245,245,245)">&nbsp;<img src="http://img.blog.csdn.net/20170408095600207?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></span><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    <span style="font-family:宋体">设置密码</span><br></p><br><p><br>    <span style="font-family:宋体">输入</span>: .<span style="background:rgb(245,245,245)">/bin/mysqladmin -u root password ‘密码’</span><br></p><br><p><br>    <span style="background:rgb(245,245,245)"><span style="font-family:微软雅黑">设置软链</span><span style="font-family:微软雅黑">：</span>ln -s /usr/local/mysql/bin/mysql /usr/local/bin/mysql</span><br></p><br><p><br>    <span style="font-family:宋体">进入</span>mysql<br></p><br><p><br>    <span style="background:rgb(245,245,245)"><span style="font-family:微软雅黑">输入：</span>mysql -u root -p</span><span style="background:rgb(245,245,245)">‘</span><span style="background:rgb(245,245,245)"><span style="font-family:微软雅黑">密码</span></span><span style="background:rgb(245,245,245)">’</span><br></p><br><p><br>    <span style="background:rgb(245,245,245)">&nbsp;<img src="http://img.blog.csdn.net/20170408095624114?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></span><br></p>
+
+<h3 id="配置mysql环境"><a href="#配置mysql环境" class="headerlink" title="配置mysql环境"></a>配置mysql环境</h3><p><br>    &nbsp;<span style="font-family:宋体">输入：</span><span style="background:rgb(245,245,245)">vim /etc/profile</span><br></p><br><p><br>    &nbsp;<span style="font-family:宋体">末尾加上</span><br></p><br><p><br>    <span style="background:rgb(245,245,245)">PATH=/usr/local/mysql/bin:$PATH</span><span style="background:rgb(245,245,245)"><br><br>    </span><span style="background:rgb(245,245,245)">export PATH</span><br></p><br><p><br>    <span style="background:rgb(245,245,245)"><span style="font-family:微软雅黑">输入</span>:</span><span style="background:rgb(245,245,245)">source /etc/profile</span><span style="background:rgb(245,245,245)">&nbsp;</span><span style="font-family:宋体">使配置生效</span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408095657083?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    &nbsp;<br></p><br><p><br>    再次输入:<span style="background:rgb(245,245,245)">mysql -u root -p</span><br></p><br><p><br>    就可以进入了<br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408095713630?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p>
+
+<h3 id="设置远程连接权限"><a href="#设置远程连接权限" class="headerlink" title="设置远程连接权限"></a>设置远程连接权限</h3><p><br></p><br><p><br>    <span style="font-family:宋体">输入</span>: <span style="background:rgb(245,245,245)">use mysql; &nbsp;</span>&nbsp;//<span style="font-family:宋体">进入</span><span style="font-family:Calibri">mysql</span><br></p><br><p><br>    <span style="font-family:宋体"></span><br></p>
+
+<h4 id="改表法"><a href="#改表法" class="headerlink" title="改表法"></a>改表法</h4><p><br>    <span style="font-family:宋体">输入</span>: <span style="background:rgb(245,245,245)">update user set host=’%’ where user=’root’; &nbsp;</span>//<span style="font-family:宋体">设置权限</span><br></p><br><p><br>    <span style="color:rgb(255,0,0)"><span style="font-family:宋体">注</span>:<span style="font-family:宋体">这种更改权限会使本地登录不上设置好的</span><span style="font-family:Calibri">mysql</span></span><br></p><br><p><br>    <span style="font-family:宋体">输入</span>:<span style="background:rgb(245,245,245)">flush privileges; &nbsp;</span>//<span style="font-family:宋体">刷新</span><br></p><br><p><br>    <span style="color:rgb(255,0,0)">&nbsp;</span><br></p>
+
+<h4 id="授权法"><a href="#授权法" class="headerlink" title="授权法"></a>授权法</h4><p><br>    <span style="font-family:宋体">输入</span>: <span style="background:rgb(245,245,245)">grant all privileges on <em>.</em> to ‘root’@’%’ identified by ‘123’; &nbsp;</span>//<span style="font-family:宋体">第一个</span>’root’<span style="font-family:宋体">是用户名</span>,<span style="font-family:宋体">第二个</span>’%’<span style="font-family:宋体">是所有的</span>ip<span style="font-family:宋体">都可以远程访问</span><span style="font-family:Calibri">,</span><span style="font-family:宋体">第三个</span>’123’<span style="font-family:宋体">表示</span><span style="font-family:宋体">用户密码</span> &nbsp;<span style="font-family:宋体">如果不常用</span><span style="font-family:宋体">就关闭掉</span><br></p><br><p><br>    <span style="font-family:宋体">输入</span>:flush privileges; &nbsp;//<span style="font-family:宋体">刷新</span><br></p><br><p><br>    <span style="font-family:宋体"></span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408095732834?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    然后通过mysql<span style="font-family:宋体">可视化界面连接</span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408095810148?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    &nbsp;<br></p><br><p><br>    &nbsp;<br></p>
+
+<h2 id="MYSQL导入脚本"><a href="#MYSQL导入脚本" class="headerlink" title="MYSQL导入脚本"></a>MYSQL导入脚本</h2><h3 id="导入方式一"><a href="#导入方式一" class="headerlink" title="导入方式一"></a>导入方式一</h3><p>通过SQLyog导入</p>
+<p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170427175641422?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    刷新之后，便可查看表<br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170427175622046?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br>### 导入方式二<br>Linux命令导入<br><br><p><br>    &nbsp;<span style="font-family:宋体">参考</span>: &nbsp;<u><span style="color:rgb(0,0,255)"><a href="http://www.cnblogs.com/sunxiaotao/p/4142798.html" target="_blank" rel="external">http://www.cnblogs.com/sunxiaotao/p/4142798.html</a></span></u><br></p><br><p><br>    <span style="font-family:宋体">通过</span>xftf <span style="font-family:宋体">将导出 </span><span style="font-family:Calibri">.sql</span><span style="font-family:宋体">文件传到</span><span style="font-family:Calibri">linux</span><span style="font-family:宋体">文件中 如</span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408095900680?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    <span style="font-family:宋体">进入</span>mysql<br></p><br><p style="background:rgb(244,244,244)"><br>    mysql&gt;create database newdb;&nbsp;&nbsp;<span style="color:rgb(0,130,0); background:rgb(255,255,255)">//如果已有数据库 就不用建立了</span><br></p><br><p><br>    mysql&gt;use newdb;<br></p><br><p style="background:rgb(244,244,244)"><br>    mysql&gt;set names utf8;<br></p><br><p><br>    mysql&gt;source&nbsp; /home/sq.sql;<span style="color:rgb(0,130,0)">//假设你sql文件所在目录为/home/</span><span style="color:rgb(0,130,0)">sq</span><span style="color:rgb(0,130,0)">.sql</span><br></p><br><p><br>    <br><br><br></p><br><p><br>    <span style="background-color:rgb(255,255,255)">下一篇将介绍</span><span style="color:#ff9900"><a target="_blank" href="http://blog.csdn.net/qazwsxpcm/article/details/69665199">如何在linux部署web项目</a></span><br></p>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+            <a href="/tags/ssh/" rel="tag"># ssh</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/06/Linux Ubuntu从零开始部署web环境及项目-----搭建ssh环境(一)/" rel="next" title="Linux Ubuntu从零开始部署web环境及项目-----搭建ssh环境(一)">
+                <i class="fa fa-chevron-left"></i> Linux Ubuntu从零开始部署web环境及项目-----搭建ssh环境(一)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/08/Linux Ubuntu从零开始部署web环境及项目 -----部署项目 (三)/" rel="prev" title="Linux Ubuntu从零开始部署web环境及项目 -----部署项目 (三)">
+                Linux Ubuntu从零开始部署web环境及项目 -----部署项目 (三) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="xuwujing" />
+          <p class="site-author-name" itemprop="name">xuwujing</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">29</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#下载文件"><span class="nav-number">1.</span> <span class="nav-text">下载文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解压文件"><span class="nav-number">2.</span> <span class="nav-text">解压文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置JDK环境变量"><span class="nav-number">3.</span> <span class="nav-text">配置JDK环境变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tomcat配置"><span class="nav-number">4.</span> <span class="nav-text">tomcat配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#启动tomcat"><span class="nav-number">4.1.</span> <span class="nav-text">启动tomcat</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mysql配置"><span class="nav-number">5.</span> <span class="nav-text">mysql配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置mysql环境"><span class="nav-number">5.1.</span> <span class="nav-text">配置mysql环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置远程连接权限"><span class="nav-number">5.2.</span> <span class="nav-text">设置远程连接权限</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#改表法"><span class="nav-number">5.2.1.</span> <span class="nav-text">改表法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#授权法"><span class="nav-number">5.2.2.</span> <span class="nav-text">授权法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MYSQL导入脚本"><span class="nav-number">6.</span> <span class="nav-text">MYSQL导入脚本</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#导入方式一"><span class="nav-number">6.1.</span> <span class="nav-text">导入方式一</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xuwujing</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

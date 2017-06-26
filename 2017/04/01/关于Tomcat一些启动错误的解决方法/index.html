@@ -1,0 +1,758 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="eclipse,tomcat," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="一、Eclipse tomcat 启动超时: 错误内容: Server JBoss v4.0 at localhost was unable to start within 50 seconds. If the server requires more time, try increasing the timeout in the server editor解决办法: 修改路径进入Eclipse的">
+<meta name="keywords" content="eclipse,tomcat">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于Tomcat一些启动错误的解决方法">
+<meta property="og:url" content="http://yoursite.com/2017/04/01/关于Tomcat一些启动错误的解决方法/index.html">
+<meta property="og:site_name" content="xuwujing&#39;s blog">
+<meta property="og:description" content="一、Eclipse tomcat 启动超时: 错误内容: Server JBoss v4.0 at localhost was unable to start within 50 seconds. If the server requires more time, try increasing the timeout in the server editor解决办法: 修改路径进入Eclipse的">
+<meta property="og:updated_time" content="2017-06-26T07:56:35.009Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于Tomcat一些启动错误的解决方法">
+<meta name="twitter:description" content="一、Eclipse tomcat 启动超时: 错误内容: Server JBoss v4.0 at localhost was unable to start within 50 seconds. If the server requires more time, try increasing the timeout in the server editor解决办法: 修改路径进入Eclipse的">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/04/01/关于Tomcat一些启动错误的解决方法/"/>
+
+
+
+
+
+  <title>关于Tomcat一些启动错误的解决方法 | xuwujing's blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xuwujing's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/01/关于Tomcat一些启动错误的解决方法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xuwujing">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xuwujing's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">关于Tomcat一些启动错误的解决方法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-01T17:21:00+08:00">
+                2017-04-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tomcat/" itemprop="url" rel="index">
+                    <span itemprop="name">tomcat</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="一、Eclipse-tomcat-启动超时"><a href="#一、Eclipse-tomcat-启动超时" class="headerlink" title="一、Eclipse tomcat 启动超时:"></a>一、Eclipse tomcat 启动超时:</h2><hr>
+<p>错误内容: Server JBoss v4.0 at localhost was unable to start within 50 seconds. If the server requires more time, try increasing the timeout in the server editor<br>解决办法: 修改路径<br>进入Eclipse的工作空间 .metadata.plugins\org.eclipse.wst.server.core目录，修改目录内文件server.xml<br>    找到 start-timeout=”45”  并设高 start-timeout=”450”</p>
+<h2 id="二、eclipse无法加载tomcat"><a href="#二、eclipse无法加载tomcat" class="headerlink" title="二、eclipse无法加载tomcat"></a>二、eclipse无法加载tomcat</h2><hr>
+<p>错误内容:删除tomcat后，重新导入tomcat，但无法加载tomcat</p>
+<h3 id="解决方案："><a href="#解决方案：" class="headerlink" title="解决方案："></a>解决方案：</h3><pre><code>1.退出 eclipse
+2.到[工程目录下]/.metadata/.plugins/org.eclipse.core.runtime
+3.把org.eclipse.wst.server.core.prefs和org.eclipse.jst.server.tomcat.core.prefs这两个文件去掉
+4.重启eclipse
+</code></pre><h2 id="三、tomcat运行没有生成class文件"><a href="#三、tomcat运行没有生成class文件" class="headerlink" title="三、tomcat运行没有生成class文件"></a>三、tomcat运行没有生成class文件</h2><hr>
+<p> 错误内容:  项目编译没有生产class文件</p>
+<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案:"></a>解决方案:</h3><p>   1,选择: project-&gt;clean..-&gt;选第2个clean select project, 勾上start build immediatelly<br> 2,如果项目里引了某个不用的jar包，而那个包又被你删了，就会出现不报错但怎么也编译不出来class文件的情况，可  以把所有包都删除,然后一个一个的再引入(需要的),不要一下子把所有包都引入来,没用的可能会引起不良后果.<br>  步骤：选中项目——右键——Properties——选中下面红色区域——选中里面的Jar包——点remover<br> 3,删除现在的项目,提前设置好编译文件输出路径，重新导入源文件，设置MyEclipse为保存时编译，然后在保存的时候就可以自动编译了，步骤：选中项目-&gt;点右键Properties-&gt;java build path-&gt;source-&gt;…/WEB-INF/src的output folder不要默认，编辑让它指向../WEB-INF/classes<br> 4,再就是最重要的要看工程下面是否缺少了work目录,由于CVS控制时不把work加如版本,所以checkout后没有这个目录,要手工加上有的工程就能自动编译,最开始的时候,我只找到了前面7个方法,但是他们都没有解决我的问题.无意中我打开了”Problems”标签,发现里面说缺少work目录,手工加上,然后刷新项目就可以了..classpath这个xml文件要仔细看</p>
+<h2 id="四、tomcat启动-报-PermGen-space"><a href="#四、tomcat启动-报-PermGen-space" class="headerlink" title="四、tomcat启动 报 PermGen space"></a>四、tomcat启动 报 PermGen space</h2><hr>
+<p>错误内容: 内存溢出  </p>
+<h3 id="解决方案1"><a href="#解决方案1" class="headerlink" title="解决方案1:"></a>解决方案1:</h3><p>1,重启tomcat<br>2,先停止运行,双击tomcat，打开Open launch configuration,然后 在Arguments中的VM  arguments的编辑中的上面添加- Xms256M -Xmx1024M -XX:PermSize=64M -XX:MaxPermSize=128M，在重启就好了。</p>
+<h3 id="解决方案2"><a href="#解决方案2" class="headerlink" title="解决方案2:"></a>解决方案2:</h3><p>设置Default VM Arguments，打开myeclipse—&gt;windows —&gt;preferences—&gt;java—installed JREs<br>—&gt;点击正在使用的JDK—&gt;Edit—&gt;Default VM Arguments 输 入-Xms64m -Xmx256m</p>
+<h2 id="五、tomcat启动-报-Address-already-in-use-JVM-Bind”"><a href="#五、tomcat启动-报-Address-already-in-use-JVM-Bind”" class="headerlink" title="五、tomcat启动 报 Address already in use: JVM_Bind”"></a>五、tomcat启动 报 Address already in use: JVM_Bind”</h2><hr>
+<p>错误内容: 8005端口被占用</p>
+<h3 id="解决方案一-推荐-，修改tomcat-conf-server-xml文件"><a href="#解决方案一-推荐-，修改tomcat-conf-server-xml文件" class="headerlink" title="解决方案一(推荐)，修改tomcat/conf/server.xml文件"></a>解决方案一(推荐)，修改tomcat/conf/server.xml文件</h3><p>打开server.xml<br>将<code>&lt;Server port=&quot;8005&quot; shutdown=&quot;SHUTDOWN&quot;&gt;</code>中8005改成不常用的端口号即可，比如9876</p>
+<h3 id="解决方案二，将占用8005的进程强行结束"><a href="#解决方案二，将占用8005的进程强行结束" class="headerlink" title="解决方案二，将占用8005的进程强行结束"></a>解决方案二，将占用8005的进程强行结束</h3><p>(1) 在“运行”中输入CMD<br>(2)在启动的窗口中输入<code>netstat -ano</code>，就可以看到所有端口占用的情况，记下占用8005端口的程序的PID<br>(3)打开“任务管理器”，点击菜单栏的“查看”，再点击“选择列”，选上“PID（进程标识符）”    或者在cmd中输入tasklist命令，回车，查看<br>(4)在进程中找个相应的PID值，结束进程即可</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/eclipse/" rel="tag"># eclipse</a>
+          
+            <a href="/tags/tomcat/" rel="tag"># tomcat</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/01/GitHub新手使用教学(从安装到使用)/" rel="prev" title="GitHub新手使用教学(从安装到使用)">
+                GitHub新手使用教学(从安装到使用) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="xuwujing" />
+          <p class="site-author-name" itemprop="name">xuwujing</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">29</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、Eclipse-tomcat-启动超时"><span class="nav-number">1.</span> <span class="nav-text">一、Eclipse tomcat 启动超时:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、eclipse无法加载tomcat"><span class="nav-number">2.</span> <span class="nav-text">二、eclipse无法加载tomcat</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方案："><span class="nav-number">2.1.</span> <span class="nav-text">解决方案：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、tomcat运行没有生成class文件"><span class="nav-number">3.</span> <span class="nav-text">三、tomcat运行没有生成class文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方案"><span class="nav-number">3.1.</span> <span class="nav-text">解决方案:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、tomcat启动-报-PermGen-space"><span class="nav-number">4.</span> <span class="nav-text">四、tomcat启动 报 PermGen space</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方案1"><span class="nav-number">4.1.</span> <span class="nav-text">解决方案1:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方案2"><span class="nav-number">4.2.</span> <span class="nav-text">解决方案2:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、tomcat启动-报-Address-already-in-use-JVM-Bind”"><span class="nav-number">5.</span> <span class="nav-text">五、tomcat启动 报 Address already in use: JVM_Bind”</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方案一-推荐-，修改tomcat-conf-server-xml文件"><span class="nav-number">5.1.</span> <span class="nav-text">解决方案一(推荐)，修改tomcat/conf/server.xml文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方案二，将占用8005的进程强行结束"><span class="nav-number">5.2.</span> <span class="nav-text">解决方案二，将占用8005的进程强行结束</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xuwujing</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

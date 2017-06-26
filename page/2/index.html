@@ -266,7 +266,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/25/Linux Ubuntu从零开始部署web环境及项目 -----部署项目 (三)/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/23/Spring连接池的常用配置/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="xuwujing">
@@ -285,7 +285,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/06/25/Linux Ubuntu从零开始部署web环境及项目 -----部署项目 (三)/" itemprop="url">Linux Ubuntu从零开始部署web环境及项目 -----部署项目 (三)</a></h1>
+                <a class="post-title-link" href="/2017/05/23/Spring连接池的常用配置/" itemprop="url">Spring连接池的常用配置（转）</a></h1>
         
 
         <div class="post-meta">
@@ -297,8 +297,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-25T14:20:11+08:00">
-                2017-06-25
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-23T14:10:00+08:00">
+                2017-05-23
               </time>
             
 
@@ -307,6 +307,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -334,11 +356,11 @@
       
         
           
-              上一篇讲了如何在linux搭建web环境，这边将如何部署项目。    1，打包项目包    &nbsp;    2，上传项目包    将.war项目包通过xftp上传到tomcat目录wabapps目录下    &nbsp;    &nbsp;    3，启动项目    通过xshell命令
+                          1、连接池概述        　　数据库连接是一种关键的有限的昂贵的资源，这一点在多用户的网页应用程序中体现得尤为突出。对数据库连接的管理能显著影响到整个        应用程序的伸缩性和健壮性，影响到程序的性能指标。数据库连接池正是针对这个问题提出来的。      
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/06/25/Linux Ubuntu从零开始部署web环境及项目 -----部署项目 (三)/#more" rel="contents">
+            <a class="btn" href="/2017/05/23/Spring连接池的常用配置/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -384,7 +406,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/25/Linux Ubuntu从零开始部署web环境及项目 -----tomcat+jdk+mysql  (二)/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/22/Spring c3p0连接池无法释放解决方案/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="xuwujing">
@@ -403,7 +425,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/06/25/Linux Ubuntu从零开始部署web环境及项目 -----tomcat+jdk+mysql  (二)/" itemprop="url">Linux Ubuntu从零开始部署web环境及项目 -----tomcat+jdk+mysql  (二)</a></h1>
+                <a class="post-title-link" href="/2017/05/22/Spring c3p0连接池无法释放解决方案/" itemprop="url">Spring c3p0连接池无法释放解决方案</a></h1>
         
 
         <div class="post-meta">
@@ -415,8 +437,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-25T14:20:11+08:00">
-                2017-06-25
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-22T12:51:00+08:00">
+                2017-05-22
               </time>
             
 
@@ -425,6 +447,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -452,11 +496,11 @@
       
         
           
-              上一篇介绍如何在linux系统下搭建ssh环境 这篇开始将如何搭建web服务器    1，下载文件    &nbsp;在官网下载好 tomcat、jdk、mysql的linux压缩包 后缀名为.tar.gz    &nbsp;&nbsp;并通过xftp上传到服务器    &nbsp;    
+          原因通过c3p0配置连接池的时候，在进行压力测试的时候,日志出现了这样一个错误:Data source rejected establishment of connection,  message from server: “Too many connections”数据库的连接过多。然后查看mys
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/06/25/Linux Ubuntu从零开始部署web环境及项目 -----tomcat+jdk+mysql  (二)/#more" rel="contents">
+            <a class="btn" href="/2017/05/22/Spring c3p0连接池无法释放解决方案/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -502,7 +546,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/25/Linux Ubuntu从零开始部署web环境及项目-----搭建ssh环境(一)/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/22/Windows和Linux查看和更改mysql连接池/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="xuwujing">
@@ -521,7 +565,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/06/25/Linux Ubuntu从零开始部署web环境及项目-----搭建ssh环境(一)/" itemprop="url">Linux Ubuntu从零开始部署web环境及项目-----搭建ssh环境(一)</a></h1>
+                <a class="post-title-link" href="/2017/05/22/Windows和Linux查看和更改mysql连接池/" itemprop="url">Windows和Linux查看和更改mysql连接池</a></h1>
         
 
         <div class="post-meta">
@@ -533,8 +577,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-25T14:20:11+08:00">
-                2017-06-25
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-22T12:28:00+08:00">
+                2017-05-22
               </time>
             
 
@@ -543,6 +587,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -570,11 +636,15 @@
       
         
           
-              linux搭建ssh环境    1，用户登录    &nbsp; &nbsp; 成功输入用户名和密码后    &nbsp;进入Ubuntu界面    &nbsp; &nbsp; &nbsp;    &nbsp;2，配置网络    &nbsp;&nbsp;参考:http://blog.csdn
+          Windows:========
+查看：
+进入mysql输入:show variables like ‘%max_connections%’;
+更改:
+进入MYSQL安装目录 打开MYSQL配置文件 my.ini 或 my.cnf查找 max_connections=100   修改为 max_co
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/06/25/Linux Ubuntu从零开始部署web环境及项目-----搭建ssh环境(一)/#more" rel="contents">
+            <a class="btn" href="/2017/05/22/Windows和Linux查看和更改mysql连接池/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -620,7 +690,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/25/GitHub新手使用教学(从安装到使用)/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/20/Java 简单实用方法二/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="xuwujing">
@@ -639,7 +709,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/06/25/GitHub新手使用教学(从安装到使用)/" itemprop="url">GitHub新手使用教学(从安装到使用)</a></h1>
+                <a class="post-title-link" href="/2017/05/20/Java 简单实用方法二/" itemprop="url">Java 简单实用方法二</a></h1>
         
 
         <div class="post-meta">
@@ -651,8 +721,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-25T14:20:11+08:00">
-                2017-06-25
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-20T17:44:00+08:00">
+                2017-05-20
               </time>
             
 
@@ -661,6 +731,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -688,13 +780,13 @@
       
         
           
-              一、安装Git for Windows（又名msysgit）
-    &nbsp;下载地址:&nbsp;https://git-for-windows.github.io/&nbsp;    
-    &nbsp;&nbsp;在官方下载完后，安装到Windows Explorer integ
+          整理以前的笔记，在学习Java时候,经常会用到一些方法。虽然简单但是经常使用。因此做成笔记，方便以后查阅这篇博文先说明构造和使用这些方法。
+判断String类型数据是否包含中文可以通过正则表达式来判断。
+1234567891011public static boolean isChineseChar
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/06/25/GitHub新手使用教学(从安装到使用)/#more" rel="contents">
+            <a class="btn" href="/2017/05/20/Java 简单实用方法二/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -740,7 +832,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/25/关于Tomcat一些启动错误的解决方法/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/20/Linux 更改ssh 端口/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="xuwujing">
@@ -759,7 +851,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/06/25/关于Tomcat一些启动错误的解决方法/" itemprop="url">关于Tomcat一些启动错误的解决方法</a></h1>
+                <a class="post-title-link" href="/2017/05/20/Linux 更改ssh 端口/" itemprop="url">Linux 更改ssh 端口</a></h1>
         
 
         <div class="post-meta">
@@ -771,8 +863,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-25T14:20:11+08:00">
-                2017-06-25
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-20T16:43:00+08:00">
+                2017-05-20
               </time>
             
 
@@ -781,6 +873,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -808,11 +922,12 @@
       
         
           
-          一、Eclipse tomcat 启动超时:错误内容: Server JBoss v4.0 at localhost was unable to start within 50 seconds. If the server requires more time, try increasing the
+          部署了一个测试服务器之后，在查看linux日志的时候，发现莫名的IP一直在访问服务器，感觉像是某种恶意扫描，来攻击服务器的。因此更改ssh端口。
+输入: vim /etc/ssh/sshd_config找到port 并解除注释，更改端口或者不动注释，新建个port重启 ssh 输入: service
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/06/25/关于Tomcat一些启动错误的解决方法/#more" rel="contents">
+            <a class="btn" href="/2017/05/20/Linux 更改ssh 端口/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -909,7 +1024,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -920,7 +1035,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">24</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

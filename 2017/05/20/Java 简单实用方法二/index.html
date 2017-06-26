@@ -1,0 +1,755 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="整理以前的笔记，在学习Java时候,经常会用到一些方法。虽然简单但是经常使用。因此做成笔记，方便以后查阅这篇博文先说明构造和使用这些方法。 判断String类型数据是否包含中文可以通过正则表达式来判断。 1234567891011public static boolean isChineseChar(String str) &amp;#123;	Pattern p = Pattern.compile(&amp;q">
+<meta name="keywords" content="java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 简单实用方法二">
+<meta property="og:url" content="http://yoursite.com/2017/05/20/Java 简单实用方法二/index.html">
+<meta property="og:site_name" content="xuwujing&#39;s blog">
+<meta property="og:description" content="整理以前的笔记，在学习Java时候,经常会用到一些方法。虽然简单但是经常使用。因此做成笔记，方便以后查阅这篇博文先说明构造和使用这些方法。 判断String类型数据是否包含中文可以通过正则表达式来判断。 1234567891011public static boolean isChineseChar(String str) &amp;#123;	Pattern p = Pattern.compile(&amp;q">
+<meta property="og:updated_time" content="2017-06-26T09:40:41.405Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java 简单实用方法二">
+<meta name="twitter:description" content="整理以前的笔记，在学习Java时候,经常会用到一些方法。虽然简单但是经常使用。因此做成笔记，方便以后查阅这篇博文先说明构造和使用这些方法。 判断String类型数据是否包含中文可以通过正则表达式来判断。 1234567891011public static boolean isChineseChar(String str) &amp;#123;	Pattern p = Pattern.compile(&amp;q">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/05/20/Java 简单实用方法二/"/>
+
+
+
+
+
+  <title>Java 简单实用方法二 | xuwujing's blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xuwujing's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/20/Java 简单实用方法二/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xuwujing">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xuwujing's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java 简单实用方法二</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-20T17:44:00+08:00">
+                2017-05-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>整理以前的笔记，在学习Java时候,经常会用到一些方法。虽然简单但是经常使用。因此做成笔记，方便以后查阅<br>这篇博文先说明构造和使用这些方法。</p>
+<h2 id="判断String类型数据是否包含中文"><a href="#判断String类型数据是否包含中文" class="headerlink" title="判断String类型数据是否包含中文"></a>判断String类型数据是否包含中文</h2><p>可以通过正则表达式来判断。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public static boolean isChineseChar(String str) &#123;</div><div class="line">	Pattern p = Pattern.compile(&quot;[\u4e00-\u9fa5]&quot;);</div><div class="line">	Matcher m = p.matcher(str);</div><div class="line">    return m.find();	</div><div class="line">&#125;</div><div class="line">       String str1=&quot;你好&quot;;</div><div class="line">	String str2=&quot;Hello&quot;;</div><div class="line">       String str3=&quot;你好 ,@￥Hello@…… 世界.\\ &quot;;    </div><div class="line">	System.out.println(isChineseChar(str1)); //true</div><div class="line">	System.out.println(isChineseChar(str2)); //false</div><div class="line">	System.out.println(isChineseChar(str3)); //true</div></pre></td></tr></table></figure>
+<h2 id="获取String类型中文的数据"><a href="#获取String类型中文的数据" class="headerlink" title="获取String类型中文的数据"></a>获取String类型中文的数据</h2><p>那么先通过正则表达式来判断是否包含中文，如果数据包含中问便将中文数据取出来。<br>注:使用StringBuffer累加比String 效率更高。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">public static String getChinese(String paramValue) &#123;</div><div class="line">		String regex = &quot;([\u4e00-\u9fa5]+)&quot;;</div><div class="line">		StringBuffer sb=new StringBuffer();</div><div class="line">		Matcher matcher = Pattern.compile(regex).matcher(paramValue);</div><div class="line">		while (matcher.find()) &#123;</div><div class="line">			sb.append(matcher.group(0));</div><div class="line">		&#125;</div><div class="line">		return sb.toString();		</div><div class="line">	&#125;</div><div class="line">       String str1=&quot;你好&quot;;</div><div class="line">		String str2=&quot;Hello&quot;;</div><div class="line">        String str3=&quot;你好 ,@￥Hello@…… 世界.\\ &quot;; </div><div class="line">       System.out.println(getChinese(str1));  //你好</div><div class="line">		System.out.println(getChinese(str2)); //</div><div class="line">		System.out.println(getChinese(str3)); //你好世界</div></pre></td></tr></table></figure>
+<h2 id="四舍五入取整数"><a href="#四舍五入取整数" class="headerlink" title="四舍五入取整数"></a>四舍五入取整数</h2><p>使用DecimalFormat来格式化十进制数字。<br>注:   0 一个数字<br>　# 一个数字，不包括 0<br>　. 小数的分隔符的占位符</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">public static Double formatDouble(Double db,String format) &#123;</div><div class="line">	if(null==format||&quot;&quot;.equals(format))&#123;</div><div class="line">		return db;</div><div class="line">	&#125;</div><div class="line">	DecimalFormat    df   = new DecimalFormat(format); //定义格式</div><div class="line">    return  Double.parseDouble(df.format(db));</div><div class="line">&#125;</div><div class="line">       double db1=5.6849;   </div><div class="line">       System.out.println(formatDouble(db1,&quot;#.00&quot;)); //5.68</div><div class="line">       System.out.println(formatDouble(db1,&quot;#.000&quot;));//5.685</div><div class="line">       System.out.println(formatDouble(db1,&quot;#&quot;)); //6.0</div><div class="line">       System.out.println(formatDouble(db1,&quot;.00&quot;)); //5.68</div><div class="line">       System.out.println(formatDouble(db1,&quot;00&quot;)); //6.0</div></pre></td></tr></table></figure>
+<h2 id="String数据中插入指定字符"><a href="#String数据中插入指定字符" class="headerlink" title="String数据中插入指定字符"></a>String数据中插入指定字符</h2><h3 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h3><p>使用substring方法拼接起来</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">public static String insertString1(String a,String b,int t)&#123;     </div><div class="line">	  return a.substring(0,t)+b+a.substring(t,a.length());</div><div class="line">&#125; </div><div class="line">    String str4=&quot;abcdef&quot;;</div><div class="line">       System.out.println(insertString1(str4,&quot;p&quot;,2));//abpcdef</div><div class="line">       System.out.println(insertString1(str4,&quot;k&quot;,3));//abckdef</div></pre></td></tr></table></figure>
+<h3 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h3><p>使用StringBuffer中insert方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"> public static String insertString2(String a,String b,int t) &#123;</div><div class="line">	StringBuilder  sb = new StringBuilder(a);  </div><div class="line">	sb.insert(t, b);   </div><div class="line">	return sb.toString();  	</div><div class="line">&#125;</div><div class="line">    String str4=&quot;abcdef&quot;;</div><div class="line">       System.out.println(insertString2(str4,&quot;p&quot;,2));//abpcdef</div><div class="line">       System.out.println(insertString2(str4,&quot;k&quot;,3));//abckdef</div></pre></td></tr></table></figure>
+<h2 id="String数据替换指定字符"><a href="#String数据替换指定字符" class="headerlink" title="String数据替换指定字符"></a>String数据替换指定字符</h2><h3 id="方法一-1"><a href="#方法一-1" class="headerlink" title="方法一"></a>方法一</h3><p>通过在String插入字符可以得出,原该位置的字符回向后偏移，那么在拼接数据的时候去掉插入原位置的字符。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"> public static String repaceString1(String a,String b,int t)&#123;     </div><div class="line">	  return a.substring(0,t)+b+a.substring(t+b.length(),a.length());</div><div class="line">&#125; </div><div class="line">String str4=&quot;abcdef&quot;;</div><div class="line">System.out.println(repaceString1(str4,&quot;pp&quot;,2));//abppef</div><div class="line">   System.out.println(repaceString1(str4,&quot;kk&quot;,3));//abckkf</div></pre></td></tr></table></figure>
+<h3 id="方法二-1"><a href="#方法二-1" class="headerlink" title="方法二"></a>方法二</h3><p>通过StringBuffer中的repace方法替换该字符</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public static String repaceString2(String a,String b,int t)&#123;     </div><div class="line">		StringBuilder  sb = new StringBuilder(a);  </div><div class="line">		sb.replace(t, t+b.length(), b);   </div><div class="line">		return sb.toString();  	</div><div class="line">	&#125; </div><div class="line"></div><div class="line">    String str4=&quot;abcdef&quot;;</div><div class="line">    System.out.println(repaceString2(str4,&quot;pp&quot;,2));//abppef</div><div class="line">    System.out.println(repaceString2(str4,&quot;kk&quot;,3));//abckkf</div></pre></td></tr></table></figure>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/20/Linux 更改ssh 端口/" rel="next" title="Linux 更改ssh 端口">
+                <i class="fa fa-chevron-left"></i> Linux 更改ssh 端口
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/22/Windows和Linux查看和更改mysql连接池/" rel="prev" title="Windows和Linux查看和更改mysql连接池">
+                Windows和Linux查看和更改mysql连接池 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="xuwujing" />
+          <p class="site-author-name" itemprop="name">xuwujing</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">29</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#判断String类型数据是否包含中文"><span class="nav-number">1.</span> <span class="nav-text">判断String类型数据是否包含中文</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取String类型中文的数据"><span class="nav-number">2.</span> <span class="nav-text">获取String类型中文的数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四舍五入取整数"><span class="nav-number">3.</span> <span class="nav-text">四舍五入取整数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#String数据中插入指定字符"><span class="nav-number">4.</span> <span class="nav-text">String数据中插入指定字符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#方法一"><span class="nav-number">4.1.</span> <span class="nav-text">方法一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法二"><span class="nav-number">4.2.</span> <span class="nav-text">方法二</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#String数据替换指定字符"><span class="nav-number">5.</span> <span class="nav-text">String数据替换指定字符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#方法一-1"><span class="nav-number">5.1.</span> <span class="nav-text">方法一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法二-1"><span class="nav-number">5.2.</span> <span class="nav-text">方法二</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xuwujing</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
