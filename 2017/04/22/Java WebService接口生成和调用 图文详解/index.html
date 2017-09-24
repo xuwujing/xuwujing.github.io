@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="java," />
+  <meta name="keywords" content="webservice,java," />
 
 
 
@@ -94,24 +94,24 @@
 
 
 <meta name="description" content="webservice简介:Web Service技术， 能使得运行在不同机器上的不同应用无须借助附加的、专门的第三方软件或硬件， 就可相互交换数据或集成。依据Web Service规范实施的应用之间， 无论它们所使用的语言、 平台或内部协议是什么， 都可以相互交换数据。Web Service是自描述、 自包含的可用网络模块， 可以执行具体的业务功能。Web Service也很容易部署， 因为它们基">
-<meta name="keywords" content="java">
+<meta name="keywords" content="webservice,java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java WebService接口生成和调用 图文详解">
 <meta property="og:url" content="http://yoursite.com/2017/04/22/Java WebService接口生成和调用 图文详解/index.html">
 <meta property="og:site_name" content="xuwujing&#39;s blog">
 <meta property="og:description" content="webservice简介:Web Service技术， 能使得运行在不同机器上的不同应用无须借助附加的、专门的第三方软件或硬件， 就可相互交换数据或集成。依据Web Service规范实施的应用之间， 无论它们所使用的语言、 平台或内部协议是什么， 都可以相互交换数据。Web Service是自描述、 自包含的可用网络模块， 可以执行具体的业务功能。Web Service也很容易部署， 因为它们基">
-<meta property="og:image" content="http://img.blog.csdn.net/20170422103720962?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
-<meta property="og:image" content="http://img.blog.csdn.net/20170422103837877?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
-<meta property="og:image" content="http://img.blog.csdn.net/20170422103901206?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
-<meta property="og:image" content="http://img.blog.csdn.net/20170422104207738?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
-<meta property="og:image" content="http://img.blog.csdn.net/20170422104223250?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
-<meta property="og:image" content="http://img.blog.csdn.net/20170422104439893?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
-<meta property="og:image" content="http://img.blog.csdn.net/20170422104625770?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
-<meta property="og:updated_time" content="2017-06-26T09:40:56.047Z">
+<meta property="og:image" content="http://img.blog.csdn.net/20170914113052960?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170914113257306?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170914113359788?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170914113621207?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170914113638080?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170914113652649?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170914113758614?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2017-09-14T03:44:54.053Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java WebService接口生成和调用 图文详解">
 <meta name="twitter:description" content="webservice简介:Web Service技术， 能使得运行在不同机器上的不同应用无须借助附加的、专门的第三方软件或硬件， 就可相互交换数据或集成。依据Web Service规范实施的应用之间， 无论它们所使用的语言、 平台或内部协议是什么， 都可以相互交换数据。Web Service是自描述、 自包含的可用网络模块， 可以执行具体的业务功能。Web Service也很容易部署， 因为它们基">
-<meta name="twitter:image" content="http://img.blog.csdn.net/20170422103720962?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20170914113052960?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 
 
 
@@ -361,17 +361,15 @@
 
       
         <p><strong>webservice简介:</strong><br>Web Service技术， 能使得运行在不同机器上的不同应用无须借助附加的、专门的第三方软件或硬件， 就可相互交换数据或集成。依据Web Service规范实施的应用之间， 无论它们所使用的语言、 平台或内部协议是什么， 都可以相互交换数据。Web Service是自描述、 自包含的可用网络模块， 可以执行具体的业务功能。Web Service也很容易部署， 因为它们基于一些常规的产业标准以及已有的一些技术，诸如标准通用标记语言下的子集XML、HTTP。Web Service减少了应用接口的花费。Web Service为整个企业甚至多个组织之间的业务流程的集成提供了一个通用机制</p>
-<h2 id="WebService生成"><a href="#WebService生成" class="headerlink" title="WebService生成"></a>WebService生成</h2><hr>
-<p>   1.在eclipse新建Web Service Project这种项目，并命名TheService；<br>  <img src="http://img.blog.csdn.net/20170422103720962?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>   2.创建Class类，命名为ServiceHello，位于com.test.service包下。<br>   3.编写供客户端调用的方法，即编译方法代码;<br>      示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">        @WebService</div><div class="line">public class ServiceHello &#123;</div><div class="line"> </div><div class="line"> /* 供客户端调用方法</div><div class="line">  * @param name  传入参数</div><div class="line">  * @return String 返回结果</div><div class="line">  * */</div><div class="line">public String getValue(String name)&#123;</div><div class="line">return &quot;天天向上&quot;+name;</div><div class="line">&#125;</div><div class="line">  </div><div class="line">/*@param args</div><div class="line"> *</div><div class="line"> * */</div><div class="line">public static void main(String[] args) &#123;</div><div class="line">// TODO Auto-generated method stub</div><div class="line">  Endpoint.publish(&quot;http://192.168.2.112:8080/Service/ServiceHello&quot;, new ServiceHello());</div><div class="line">  System.out.println(&quot;调用成功!&quot;);</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>   4.进行编译运行(注：失败检查jdk版本)<br> <img src="http://img.blog.csdn.net/20170422103837877?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>   5.将所设地址加上?wsdl到浏览器上访问，如出现XML格式代码，则发布成功，反之，则否；(url:<a href="http://192.168.2.112:8082/Service/ServiceHello?wsdl" target="_blank" rel="external">http://192.168.2.112:8082/Service/ServiceHello?wsdl</a>)<br>    <img src="http://img.blog.csdn.net/20170422103901206?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
-<h2 id="WebService调用方法"><a href="#WebService调用方法" class="headerlink" title="WebService调用方法"></a>WebService调用方法</h2><hr>
-<p><strong>生成代码方式一</strong></p>
-<p>   1.新建一个web project项目,在src包上新建Web Service Client 输入地址;(url:<a href="http://192.168.2.112:8082/Service/ServiceHello?wsdl" target="_blank" rel="external">http://192.168.2.112:8082/Service/ServiceHello?wsdl</a>)<br> <img src="http://img.blog.csdn.net/20170422104207738?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br> <img src="http://img.blog.csdn.net/20170422104223250?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br> <img src="http://img.blog.csdn.net/20170422104439893?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>   2.将地址上的文件下载下来(注意和发布JDK一致);<br>   3.写调用方法调用下载下来的WebService中的java类中的方法；<br>      示例：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">package com.test.client;</div><div class="line">import com.test.wsdl.ServiceHello;</div><div class="line">import com.test.wsdl.ServiceHelloService;</div><div class="line">/**</div><div class="line"> * @author ZERO</div><div class="line"> * @version 2017-4-22 上午10:01:01</div><div class="line"> * webserviec 客户端</div><div class="line"> */</div><div class="line">public class ClientHello &#123;</div><div class="line">	    public static void main(String[] args) &#123;</div><div class="line">			//调用webservice</div><div class="line">			ServiceHello hello=new ServiceHelloService().getServiceHelloPort();</div><div class="line">			String name=hello.getValue(&quot;Hello world&quot;);</div><div class="line">			System.out.println(name);</div><div class="line">		   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p><img src="http://img.blog.csdn.net/20170422104625770?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
-<p>  <strong>生成代码方式二</strong><br>   1.创建Web Service Project，命名为TheClient。<br>   2.在dos命令下输入 wsimport -s “src目录” -p “生成类所在包名” -keep “wsdl发布地址”<br>     示例：wsimport -s G:\workspace\webService\TheClient\src -p com.hyan.client -keep <a href="http://localhost:8080/Service/ServiceHello?wsdl" target="_blank" rel="external">http://localhost:8080/Service/ServiceHello?wsdl</a><br>   3.成功则返回 parsing WSDL…<br>generating code…<br>compiling code…<br>        4.刷新TheClient，生成类；<br>   5,写调用方法(同上);</p>
-<h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h2><hr>
-<p>如何发布一个Web服务：<br>a,在类上添加@WebService注解<br>（注：此注解是jdk1.6提供的，位于javax.jws.WebService包中）<br>b,通过EndPoint(端点服务)发布一个WebService<br>（注：EndPoint是jdk提供的一个专门用于发布服务的类，该类的publish方法接收两个参数，一个是本地的服务地址，二是提供服务的类。位于 javax.xml.ws.Endpoint包中）<br>c，注：<br>类上添加注解@WebService，类中所有非静态方法都会被发布；<br>静态方法和final方法不能被发布；<br>方法上加@WebMentod(exclude=true)后，此方法不被发布；</p>
+<h2 id="一、-WebService生成"><a href="#一、-WebService生成" class="headerlink" title="一、 WebService生成"></a>一、 WebService生成</h2><p>   1.在eclipse或myclipse新建一个Web项目，并新建一个class类，用于发布；<br><img src="http://img.blog.csdn.net/20170914113052960?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述">  </p>
+<p>   2.编写供客户端调用的方法，即编译方法代码;<br>      示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line">import javax.jws.WebMethod;</div><div class="line">import javax.jws.WebService;</div><div class="line">import javax.xml.ws.Endpoint;</div><div class="line"></div><div class="line">/**</div><div class="line">* Title: ServiceHello</div><div class="line">* Description: 基于jdk1.6以上的javax.jws 发布webservice接口</div><div class="line"> 				@WebService － 它是一个注解，用在类上指定将此类发布成一个ws。</div><div class="line"> 				Endpoint – 此类为端点服务类，它的方法publish用于将一个已经添加了@WebService注解</div><div class="line"> 				对象绑定到一个地址的端口上。 </div><div class="line">* Version:1.0.0  </div><div class="line">* @author panchengming</div><div class="line"> */</div><div class="line">@WebService  </div><div class="line">public class JwsServiceHello &#123;</div><div class="line"></div><div class="line">	/** 供客户端调用方法  该方法是非静态的，会被发布</div><div class="line">	 * @param name  传入参数</div><div class="line">	 * @return String 返回结果</div><div class="line">	 * */</div><div class="line">	public String getValue(String name)&#123;</div><div class="line">		return &quot;欢迎你！ &quot;+name;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 方法上加@WebMentod(exclude=true)后，此方法不被发布；</div><div class="line">	 * @param name</div><div class="line">	 * @return</div><div class="line">	 */</div><div class="line">	@WebMethod(exclude=true)  </div><div class="line">	public String getHello(String name)&#123;</div><div class="line">		return &quot;你好！ &quot;+name;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/** 静态方法不会被发布</div><div class="line">	 * @param name</div><div class="line">	 * @return</div><div class="line">	 */</div><div class="line">	public static String getString(String name)&#123;</div><div class="line">		return &quot;再见！&quot;+name;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	</div><div class="line">	 //通过EndPoint(端点服务)发布一个WebService</div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">	 /*参数:1,本地的服务地址;</div><div class="line">	 	   2,提供服务的类;</div><div class="line">	  */</div><div class="line">	 Endpoint.publish(&quot;http://192.168.1.105:8080/Service/ServiceHello&quot;, new JwsServiceHello());</div><div class="line">	 System.out.println(&quot;发布成功!&quot;);</div><div class="line">	 //发布成功后 在浏览器输入 http://192.168.1.105:8080/Service/ServiceHello?wsdl</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>   3.进行编译运行(注：失败检查jdk版本)<br><img src="http://img.blog.csdn.net/20170914113257306?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>   4.将所设地址加上?wsdl到浏览器上访问，如出现XML格式代码，则发布成功，反之，则否；(url: <a href="http://192.168.1.105:8080/Service/ServiceHello?wsdl" target="_blank" rel="external">http://192.168.1.105:8080/Service/ServiceHello?wsdl</a>)<br><img src="http://img.blog.csdn.net/20170914113359788?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h2 id="二、WebService调用方法"><a href="#二、WebService调用方法" class="headerlink" title="二、WebService调用方法"></a>二、WebService调用方法</h2><p><strong>生成代码方式一</strong></p>
+<p>   1.新建一个class类，用于调用webservice。右键src，找到Web Service Client，并输入wsdl地址，选择下载代码的路径;(url: <a href="http://192.168.1.105:8080/Service/ServiceHello?wsdl" target="_blank" rel="external">http://192.168.1.105:8080/Service/ServiceHello?wsdl</a>)<br><img src="http://img.blog.csdn.net/20170914113621207?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br><img src="http://img.blog.csdn.net/20170914113638080?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br><img src="http://img.blog.csdn.net/20170914113652649?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>   2.将地址上的文件下载下来(注意和发布JDK一致);<br>   3.写调用方法调用下载下来的WebService中的java类中的方法；<br>      示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">import com.pcm.ws.jms.JwsServiceHello;</div><div class="line">import com.pcm.ws.jms.JwsServiceHelloService;</div><div class="line"></div><div class="line">/**</div><div class="line"> * </div><div class="line">* Title: JwsClientHello</div><div class="line">* Description: webService 客户端调用</div><div class="line">* Version:1.0.0  </div><div class="line">* @author panchengming</div><div class="line"> */</div><div class="line">public class JwsClientHello &#123;</div><div class="line"></div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		 //调用webservice</div><div class="line">		JwsServiceHello hello=new JwsServiceHelloService().getJwsServiceHelloPort();</div><div class="line">        String name=hello.getValue(&quot;panchengming&quot;);</div><div class="line">        System.out.println(name);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20170914113758614?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>  <strong>生成代码方式二</strong><br>   1.创建Web Service Project，命名为TheClient。<br>   2.在dos命令下输入 wsimport -s “src目录” -p “生成类所在包名” -keep “wsdl发布地址”<br>     示例：wsimport -s G:\workspace\webService\TheClient\src -p com.hyan.client -keep <a href="http://192.168.1.105:8080/Service/ServiceHello?wsdl" target="_blank" rel="external">http://192.168.1.105:8080/Service/ServiceHello?wsdl</a><br>   3.成功则返回 parsing WSDL…<br>generating code…<br>compiling code…<br>   4.刷新项目，生成类；<br>   5,写调用方法(同上);</p>
+<h2 id="三、总结："><a href="#三、总结：" class="headerlink" title="三、总结："></a>三、总结：</h2><p>如何发布一个Web服务：<br>a,在类上添加@WebService注解<br>（注：此注解是jdk1.6提供的，位于javax.jws.WebService包中）<br>b,通过EndPoint(端点服务)发布一个WebService<br>（注：EndPoint是jdk提供的一个专门用于发布服务的类，该类的publish方法接收两个参数，一个是本地的服务地址，二是提供服务的类。位于 javax.xml.ws.Endpoint包中）<br>c，注：<br>类上添加注解@WebService，类中所有非静态方法都会被发布；<br>静态方法和final方法不能被发布；<br>方法上加@WebMentod(exclude=true)后，此方法不被发布；</p>
 
       
     </div>
@@ -400,6 +398,8 @@
     <footer class="post-footer">
       
         <div class="post-tags">
+          
+            <a href="/tags/webservice/" rel="tag"># webservice</a>
           
             <a href="/tags/java/" rel="tag"># java</a>
           
@@ -498,7 +498,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-count">41</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -509,7 +509,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">16</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -520,7 +520,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-count">31</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -575,7 +575,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#WebService生成"><span class="nav-number">1.</span> <span class="nav-text">WebService生成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WebService调用方法"><span class="nav-number">2.</span> <span class="nav-text">WebService调用方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结："><span class="nav-number">3.</span> <span class="nav-text">总结：</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、-WebService生成"><span class="nav-number">1.</span> <span class="nav-text">一、 WebService生成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、WebService调用方法"><span class="nav-number">2.</span> <span class="nav-text">二、WebService调用方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、总结："><span class="nav-number">3.</span> <span class="nav-text">三、总结：</span></a></li></ol></div>
             
 
           </div>

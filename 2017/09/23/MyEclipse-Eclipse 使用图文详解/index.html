@@ -1,0 +1,1089 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="eclipse,myeclipse," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="引言 某天在群里看到有小伙伴问MyEclipse/Eclipse的一些使用问题，虽然在我看来，问的问题很简单，但是如果对于刚刚学习的人来说，可能使用就不那么友好了。毕竟我在开始使用MyEclipse/Eclipse 的时候，也是有很多不懂，即使是现在也不敢说将MyEclipse/Eclipse 的功能全部摸透。 因此写下一篇博文，来将自己使用MyEclipse/Eclipse 的经验分享下。如果有">
+<meta name="keywords" content="eclipse,myeclipse">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MyEclipse&#x2F;Eclipse 使用图文详解">
+<meta property="og:url" content="http://yoursite.com/2017/09/23/MyEclipse-Eclipse 使用图文详解/index.html">
+<meta property="og:site_name" content="xuwujing&#39;s blog">
+<meta property="og:description" content="引言 某天在群里看到有小伙伴问MyEclipse/Eclipse的一些使用问题，虽然在我看来，问的问题很简单，但是如果对于刚刚学习的人来说，可能使用就不那么友好了。毕竟我在开始使用MyEclipse/Eclipse 的时候，也是有很多不懂，即使是现在也不敢说将MyEclipse/Eclipse 的功能全部摸透。 因此写下一篇博文，来将自己使用MyEclipse/Eclipse 的经验分享下。如果有">
+<meta property="og:image" content="http://img.blog.csdn.net/20170923101051960?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170923101109113?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170923102220748?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170923102230920?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170923103143459?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170923103330848?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170923104239985?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170923105104980?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170923105623628?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170923105752708?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170923110127696?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170923110501224?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170923123105465?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170923110707626?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170923111712052?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170923111748200?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170923112203449?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170923112503249?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170923113508523?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170923124638363?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170923122259357?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170923122418215?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170923123823041?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170923123850143?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170923124412701?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170923125436827?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170923131030956?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170923131440917?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170923131654450?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2017-09-23T05:45:41.662Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MyEclipse&#x2F;Eclipse 使用图文详解">
+<meta name="twitter:description" content="引言 某天在群里看到有小伙伴问MyEclipse/Eclipse的一些使用问题，虽然在我看来，问的问题很简单，但是如果对于刚刚学习的人来说，可能使用就不那么友好了。毕竟我在开始使用MyEclipse/Eclipse 的时候，也是有很多不懂，即使是现在也不敢说将MyEclipse/Eclipse 的功能全部摸透。 因此写下一篇博文，来将自己使用MyEclipse/Eclipse 的经验分享下。如果有">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20170923101051960?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/09/23/MyEclipse-Eclipse 使用图文详解/"/>
+
+
+
+
+
+  <title>MyEclipse/Eclipse 使用图文详解 | xuwujing's blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xuwujing's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/23/MyEclipse-Eclipse 使用图文详解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xuwujing">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xuwujing's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MyEclipse/Eclipse 使用图文详解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-23T10:22:00+08:00">
+                2017-09-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/eclipse/" itemprop="url" rel="index">
+                    <span itemprop="name">eclipse</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p> 某天在群里看到有小伙伴问MyEclipse/Eclipse的一些使用问题，虽然在我看来，问的问题很简单，但是如果对于刚刚学习的人来说，可能使用就不那么友好了。毕竟我在开始使用MyEclipse/Eclipse 的时候，也是有很多不懂，即使是现在也不敢说将MyEclipse/Eclipse 的功能全部摸透。 因此写下一篇博文，来将自己使用MyEclipse/Eclipse 的经验分享下。如果有的说的不好，欢迎指出！</p>
+<h2 id="Myeclipse-Eclipse相关准备"><a href="#Myeclipse-Eclipse相关准备" class="headerlink" title="Myeclipse/Eclipse相关准备"></a>Myeclipse/Eclipse相关准备</h2><h3 id="相关软件准备"><a href="#相关软件准备" class="headerlink" title="相关软件准备"></a>相关软件准备</h3><p>  在使用开发软件进行开发的时候，首先需要准备安装相关软件。使用Myeclipse/Eclipse 则需要安装JDK。如果需要使用服务器，则需要安装tomcat。关于这些软件，我这里已经都准备好了，Eclipse 、 Myeclipse 破解版(破解说明相关文档已经准备，这里就不细说了)、JDK、Tomcat、MySQL、Maven等一些软件。百度云 链接：<a href="https://pan.baidu.com/s/1nvtATpn" target="_blank" rel="external">https://pan.baidu.com/s/1nvtATpn</a></p>
+<h3 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h3><p>将相关软件下载下来之后，成功安装了 Eclipse /Myeclipse、JDK之后，首先配置java环境，如果使用eclipse则必须配置，不然无法打开。</p>
+<h4 id="Java环境配置"><a href="#Java环境配置" class="headerlink" title="Java环境配置"></a>Java环境配置</h4><p>在“环境变量”的“系统变量”选项新建系统变量：JAVA_HOME，值为：C:\Program Files\Java\jdk1.7.0（填写你的JDK路径即可）。在系统变量中找到变量“PATH”，双击打开，把以下代码加到变量值末尾：“;%JAVA_HOME%\bin;%JAVA_HOME%\jre\bin;”（注意最前的”;”不能少 。<br>说明：<br>    1，.表示当前路径，%JAVA_HOME%就是引用前面指定的JAVA_HOME；<br>    2，JAVA_HOME指明JDK安装路径，此路径下包括lib，bin，jre等文件夹，tomcat，eclipse等的运行都需要依靠此变量。<br>    3，PATH使得系统可以在任何路径下识别java命令。</p>
+<p><img src="http://img.blog.csdn.net/20170923101051960?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>配置成功之后，在dos界面输入 java -version 可以查看信息。<br><img src="http://img.blog.csdn.net/20170923101109113?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h4 id="Tomcat环境配置"><a href="#Tomcat环境配置" class="headerlink" title="Tomcat环境配置"></a>Tomcat环境配置</h4><p>如果使用Tomcat，环境配置和配置JDK几乎一样。顺便也说一下，其它的环境配置大致也是这种模式。<br>新建 TOMCAT_HOME,选择Tomcat的路径 ，如 E:\Program Files (x86)\apache-tomcat-7.0.81。然后将TOMCAT_HOME加入到path变量中。这段代码加入到path中  “;%CATALINA_HOME%\lib;%CATALINA_HOME%\bin;” （注意最前的”;”不能少 )。<br>配置成功后，在tomcat / bin 目录下 双击 startup.bat 启动tomcat ，启动成功后，在浏览器输入: localhost:8080 ,成功出现tomcat界面则成功，失败则检查环境配置。<br><img src="http://img.blog.csdn.net/20170923102220748?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p><img src="http://img.blog.csdn.net/20170923102230920?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>tomcat 默认端口是 8080 ，如需更改，在tomcat / conf目录下 ，编辑server.xml 找到 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;Connector port=&quot;8080&quot; protocol=&quot;HTTP/1.1&quot;</div><div class="line">               connectionTimeout=&quot;20000&quot;</div><div class="line">               redirectPort=&quot;8443&quot; /&gt;</div></pre></td></tr></table></figure>
+<p>这段代码，将8080更改为你想更改的端口，保存重启就更改成功了。</p>
+<h2 id="MyEclipse-Eclipse-使用"><a href="#MyEclipse-Eclipse-使用" class="headerlink" title="MyEclipse/Eclipse 使用"></a>MyEclipse/Eclipse 使用</h2><p>在相关准备做完之后，打开MyEclipse/Eclipse 之后，第一件事是确认工作空间，这点建议选择在非 C盘目录就行。进入之后，首先更改工作空间的编码格式(很重要)。</p>
+<h3 id="设置工作空间编码格式"><a href="#设置工作空间编码格式" class="headerlink" title="设置工作空间编码格式"></a>设置工作空间编码格式</h3><p>点击Windows → preference → WorkSpace<br>或者搜索workspace<br>选择编码格式，默认为GBK，不过选择UTF-8为好。 </p>
+<p><img src="http://img.blog.csdn.net/20170923103143459?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述">。</p>
+<p>成功更改工作空间编码之后，如果对默认字体不适应，可以选择更改字体。</p>
+<h3 id="更改字体"><a href="#更改字体" class="headerlink" title="更改字体"></a>更改字体</h3><p>点击Windows → preference → General →Appearence → Color and Fonts → Basic<br>或者搜索Colors and fonts<br>选择 Text font ，点击Edit编辑，就可以更改字体了，选择合适的就行。</p>
+<p><img src="http://img.blog.csdn.net/20170923103330848?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>字体设置完之后，最好顺便设置下注释模版，注释模版就是在使用/<em>* </em>/这种注释的时候，会自动按照所设置的注释模版注释。注释是个好习惯。</p>
+<h3 id="设置注释模版"><a href="#设置注释模版" class="headerlink" title="设置注释模版"></a>设置注释模版</h3><p>打开Eclipse/MyEclipse工具，点击 Window-&gt;Preferences弹出首选项设置窗口，Java-&gt;Code Style-&gt;Code Template选项列表，点击Types。</p>
+<p><img src="http://img.blog.csdn.net/20170923104239985?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>可以输入/**，然后回车或按shift+alt+j快捷键补齐注释内容。<br><img src="http://img.blog.csdn.net/20170923105104980?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>注释模版代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">* Title: $&#123;type_name&#125;</div><div class="line">* Description: </div><div class="line">* Version:1.0.0  </div><div class="line">* @author $&#123;user&#125;</div><div class="line">* @date $&#123;date&#125;</div><div class="line">*/</div></pre></td></tr></table></figure>
+<p>没有一定非要使用这种模版，使用自己喜欢就行，不过描述和创建者最好保留。</p>
+<p>这些设置完之后，接着设置JDK以及Tomcat。至于其它的，以后再说吧。</p>
+<h3 id="JDK相关配置"><a href="#JDK相关配置" class="headerlink" title="JDK相关配置"></a>JDK相关配置</h3><h4 id="导入JDK"><a href="#导入JDK" class="headerlink" title="导入JDK"></a>导入JDK</h4><p>点击Windows → preference→JAVA→Installed  JREs<br>点击add ，选择JDK的安装路径，然后勾选上就行了。<br><img src="http://img.blog.csdn.net/20170923105623628?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h4 id="设置JDK版本"><a href="#设置JDK版本" class="headerlink" title="设置JDK版本"></a>设置JDK版本</h4><p>点击Windows → preference → Java →Compiler<br>然后选择相应的版本就行。<br><img src="http://img.blog.csdn.net/20170923105752708?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h3 id="添加Tomcat"><a href="#添加Tomcat" class="headerlink" title="添加Tomcat"></a>添加Tomcat</h3><h4 id="Myeclipse"><a href="#Myeclipse" class="headerlink" title="Myeclipse"></a>Myeclipse</h4><p>点击Windows → preference →MyEclipse →Server → Tomcat<br>或者搜索tomcat<br>选择tomcat的版本并导入响应版本的tomcat<br><img src="http://img.blog.csdn.net/20170923110127696?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h4 id="Eclipse"><a href="#Eclipse" class="headerlink" title="Eclipse"></a>Eclipse</h4><p>点击Windows → preference →Server → Runtime<br>点击add 选择tomcat的路径，添加进来就行了<br><img src="http://img.blog.csdn.net/20170923110501224?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>添加来了之后，需要在server窗口新建 ，然后选择添加的tomcat就行。<br><img src="http://img.blog.csdn.net/20170923123105465?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>这些配置完之后，那么简单的说下MyEclipse/Eclipse小图标的作用吧！<br>如图:<br><img src="http://img.blog.csdn.net/20170923110707626?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>这些大致了解之后，那么进行相关的开发以及快捷键的说明吧。</p>
+<h3 id="新建项目"><a href="#新建项目" class="headerlink" title="新建项目"></a>新建项目</h3><p>右键空白处或者点击File。Java开发新建的项目一般含有project，那么开始学习的时候，新建一个web project 吧。<br><img src="http://img.blog.csdn.net/20170923111712052?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>项目成功建立之后，项目的目录结构如图所示:<br><img src="http://img.blog.csdn.net/20170923111748200?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h4 id="新建class"><a href="#新建class" class="headerlink" title="新建class"></a>新建class</h4><p>那么我们先来新建一个包，然后再包中再来新建class类。<br>右键src，先选择Package，输入包名，一般以com.开头，如com.pcm.test 。  然后再新建class类，因为要运行该类，所以勾上main方法。<br><img src="http://img.blog.csdn.net/20170923112203449?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p><img src="http://img.blog.csdn.net/20170923112503249?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>然后点击Finsh，成功创建类。创建之后，首先写注释，描述这个类是干嘛的(养成这个习惯吧！)。 用我们之前设置好的模版，输入/** 然后回车，然后再main方法里面写一个 “Hello Word”。<br>顺便在这里推荐一个非常实用的快捷键 Alt+/ ，该快捷键是对代码进行辅助功能。如: 我要输入 System.out.println(); 代码 输出文本，这样就直接敲打有点费时，我们可以输入 sysout 然后按 Alt+/  就可以快速的编写了。还有调用方法的时候也可以使用。这里就不细说了。<br>编写main方法之后，右键 Run As 选择 Java Application 便可以直接运行。在Console可以看到打印信息。顺便说下代码下面的这些这些窗口可以在windows  → show view 中 添加<br><img src="http://img.blog.csdn.net/20170923113508523?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p> <img src="http://img.blog.csdn.net/20170923124638363?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h3 id="Debug-模式"><a href="#Debug-模式" class="headerlink" title="Debug 模式"></a>Debug 模式</h3><p> 在学习或者工作中，肯定会遇到各种问题，这是就需要调试。在Myeclipse/eclipse 中则就是debug。先来说下class类中直接使用debug模式吧。<br> 在main方法中，直接右键Debug As 运行就好了。如果是在tomcat中运行，tomcat运行选择Debug Server就行了。<br> 对了，在这之前要设置断点。程序运行就好比汽车从起点跑到终点，那么断点可以理解为站点。设置断点的时候，顺便将行号开启吧。</p>
+<h4 id="显示行号"><a href="#显示行号" class="headerlink" title="显示行号"></a>显示行号</h4><p>右键代码最左边，选中Show line Number。<br><img src="http://img.blog.csdn.net/20170923122259357?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p> 设置断点: 双击行号会出现一个小点，就成功设置断点了。<br>  取消断点: 双击设置的断点就取消了。</p>
+<p>  进入debug模式中的相关使用:<br>  F5 进入该方法 ，F6执行下一步，F8跳到下一个设置的断点，没有就直接运行完。<br>  <img src="http://img.blog.csdn.net/20170923122418215?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"> </p>
+<p>虽然使用断点很方便调试，但是在不用的时候记得取消。如果断点过多， 但是又不想取消，可以屏蔽断点。</p>
+<h4 id="屏蔽断点"><a href="#屏蔽断点" class="headerlink" title="屏蔽断点"></a>屏蔽断点</h4><p>直接使用run–&gt;Skip all Breakpoints。就 可                   以取消所有的断点 ，或者点击 运行旁边的小图标。</p>
+<p>如果将项目放到tomcat并且成功运行，可以使用这几种方法。</p>
+<h3 id="Tomcat添加项目"><a href="#Tomcat添加项目" class="headerlink" title="Tomcat添加项目"></a>Tomcat添加项目</h3><h4 id="一、在server窗口中添加"><a href="#一、在server窗口中添加" class="headerlink" title="一、在server窗口中添加"></a>一、在server窗口中添加</h4><p>选择tomcat，右键Add  Deployment，选择要添加的项目，然后点击Finsh就OK了。<br><img src="http://img.blog.csdn.net/20170923123823041?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"> </p>
+<h4 id="二、点击上面的图标添加"><a href="#二、点击上面的图标添加" class="headerlink" title="二、点击上面的图标添加"></a>二、点击上面的图标添加</h4><p><img src="http://img.blog.csdn.net/20170923123850143?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>成功部署项目之后，启动tomcat，然后在浏览器输入 IP+端口+项目名，如:<a href="http://localhost:8080/FirstProject/" target="_blank" rel="external">http://localhost:8080/FirstProject/</a> 。 便可以看到设计的界面。因为新建的web project，会显示index.jsp中的界面。<br> <img src="http://img.blog.csdn.net/20170923124412701?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>好了，基本的运作大致说完了。剩下的说点一些快捷使用的功能。</p>
+<h2 id="MyEclipse-Eclipse快捷使用"><a href="#MyEclipse-Eclipse快捷使用" class="headerlink" title="MyEclipse/Eclipse快捷使用"></a>MyEclipse/Eclipse快捷使用</h2><h3 id="快速生成get和set方法"><a href="#快速生成get和set方法" class="headerlink" title="快速生成get和set方法"></a>快速生成get和set方法</h3><p>在写pojo类的时候，回对外公布get和set方法，这些方法虽然简单，但是繁琐，但是MyEclipse/Eclipse可以帮助我们快速完成。新建一个class类，定义私有的变量。然后右键，source选择Generate Getters and Setters，然后选择要get和set的变量，点击OK就可以了。</p>
+<p><img src="http://img.blog.csdn.net/20170923125436827?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h3 id="注释说明以及快捷使用"><a href="#注释说明以及快捷使用" class="headerlink" title="注释说明以及快捷使用"></a>注释说明以及快捷使用</h3><p>顺便说下注释这块，class类、方法、变量和常量使用 /<em>*  </em>/ 这种注释，可以在鼠标移动该方法的时候看到。逻辑这块使用 // 这种注释，最好写在上面 如: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">/**  数据a */</div><div class="line">private int a=1;</div><div class="line">//判断该数据大小</div><div class="line">if(a&gt;2)&#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>//  行注释可以使用Ctrl+/  来注释，解除该注释的快捷键也是这个。<br>/<em>  </em>/   块注释可以使用 Ctrl+shift+/ ，解除该注释使用使用 Ctrl+shift+\。<br>/<strong>  */  注释可以 先打印 /</strong> 然后再回车就行  (markdomn敏感该注释，可以看面的图片)。 </p>
+<p>感觉说的差不多了，也许还有些还没想起来了吧，最后说下一些快捷键。</p>
+<h3 id="常用快捷建"><a href="#常用快捷建" class="headerlink" title="常用快捷建"></a>常用快捷建</h3><p>Ctrl+H   全局搜索<br>使用如图:<br><img src="http://img.blog.csdn.net/20170923131030956?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>Ctrl+F  本类搜索以及替换<br>使用如图:<br><img src="http://img.blog.csdn.net/20170923131440917?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>Ctrl+shift+R 搜索文件<br>使用如图:<br><img src="http://img.blog.csdn.net/20170923131654450?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>还有一些快捷键就不一一做图了，看着使用就行。<br>以下快捷键来之百度搜索，大家也可以去百度搜索下。</p>
+<p>  1,shift+tab  整体代码向左移<br>    2,ctrl+shift+↓  复制当前代码并向下移一行<br>    3,ctrl+shift+R  搜索文件<br>    4,ctrl+H      搜索所有文件包括代码<br>    5,ctrl+f      搜索当前页面<br>    存盘 Ctrl+s(肯定知道)<br>    注释代码 Ctrl+/<br>    取消注释 Ctrl+(Eclipse3已经都合并到Ctrl+/了)<br>    代码辅助 Alt+/<br>    快速修复 Ctrl+1<br>    代码格式化 Ctrl+Shift+f<br>    整理导入 Ctrl+Shift+o<br>    切换窗口 Ctrl+f6 &lt;可改为ctrl+tab方便&gt;<br>    ctrl+shift+M 导入未引用的包<br>    ctrl+w 关闭单个窗口<br>    F3 跳转到类、变量的声明<br>    F11 运行上次程序<br>    Ctrl + F11 调试上次程序<br>    Alt + 回下一个编辑点<br>    ctrl+shift+T 查找工程中的类 </p>
+<pre><code>最经典的快捷键 
+
+Ctrl+1 快速修复(最经典的快捷键,就不用多说了) 
+
+Ctrl+D: 删除当前行 
+
+Ctrl+Alt+↓ 复制当前行到下一行(复制增加) 
+
+Ctrl+Alt+↑ 复制当前行到上一行(复制增加) 
+
+Alt+↓ 当前行和下面一行交互位置(特别实用,可以省去先剪切,再粘贴了) 
+
+Alt+↑ 当前行和上面一行交互位置(同上) 
+
+Alt+← 前一个编辑的页面 
+
+Alt+→ 下一个编辑的页面(当然是针对上面那条来说了) 
+
+Alt+Enter 显示当前选择资源(工程,or 文件 or文件)的属性 
+
+Shift+Enter 在当前行的下一行插入空行(这时鼠标可以在当前行的任一位置,不一定是最后) 
+
+Shift+Ctrl+Enter 在当前行插入空行(原理同上条) 
+
+Ctrl+Q 定位到最后编辑的地方 
+
+Ctrl+L 定位在某行 (对于程序超过100的人就有福音了) 
+
+Ctrl+M 最大化当前的Edit或View (再按则反之) 
+
+Ctrl+/ 注释当前行,再按则取消注释 
+
+Ctrl+O 快速显示 OutLine 
+
+Ctrl+T 快速显示当前类的继承结构 
+
+Ctrl+W 关闭当前Editer 
+
+Ctrl+K 参照选中的Word快速定位到下一个 
+
+Ctrl+E 快速显示当前Editer的下拉列表(如果当前页面没有显示的用黑体表示) 
+
+Ctrl+/(小键盘) 折叠当前类中的所有代码 
+
+Ctrl+×(小键盘) 展开当前类中的所有代码 
+
+Ctrl+Space 代码助手完成一些代码的插入(但一般和输入法有冲突,可以修改输入法的热键,也可以暂用 
+
+Alt+/来代替) 
+
+Ctrl+Shift+E 显示管理当前打开的所有的View的管理器(可以选择关闭,激活等操作) 
+
+Ctrl+J 正向增量查找(按下Ctrl+J后,你所输入的每个字母编辑器都提供快速匹配定位到某个单词,如果没 
+
+有,则在stutes line中显示没有找到了,查一个单词时,特别实用,这个功能Idea两年前就有了) 
+
+Ctrl+Shift+J 反向增量查找(和上条相同,只不过是从后往前查) 
+
+Ctrl+Shift+F4 关闭所有打开的Editer 
+
+Ctrl+Shift+X 把当前选中的文本全部变为小写 
+
+Ctrl+Shift+Y 把当前选中的文本全部变为小写 
+
+Ctrl+Shift+F 格式化当前代码 
+
+Ctrl+Shift+P 定位到对于的匹配符(譬如{}) (从前面定位后面时,光标要在匹配符里面,后面到前面,则反 
+
+之) 
+
+下面的快捷键是重构里面常用的,本人就自己喜欢且常用的整理一下(注:一般重构的快捷键都是Alt+Shift 
+
+开头的了) 
+
+Alt+Shift+R 重命名 (是我自己最爱用的一个了,尤其是变量和类的Rename,比手工方法能节省很多劳动力 
+
+) 
+
+Alt+Shift+M 抽取方法 (这是重构里面最常用的方法之一了,尤其是对一大堆泥团代码有用) 
+
+Alt+Shift+C 修改函数结构(比较实用,有N个函数调用了这个方法,修改一次搞定) 
+
+Alt+Shift+L 抽取本地变量( 可以直接把一些魔法数字和字符串抽取成一个变量,尤其是多处调用的时候) 
+
+Alt+Shift+F 把Class中的local变量变为field变量 (比较实用的功能) 
+
+Alt+Shift+I 合并变量(可能这样说有点不妥Inline) 
+
+Alt+Shift+V 移动函数和变量(不怎么常用) 
+
+Alt+Shift+Z 重构的后悔药(Undo) 
+
+
+Alt+左箭头,右箭头 以在编辑窗口切换标签 
+Alt+上下箭头, 以自动选择鼠标所在行,并将其上下移动 
+Ctrl+f6 可以弹出菜单,上面列出可以切换的编辑窗口,这样不用鼠标也可 
+
+切换 
+Ctrl+f7 可以在视图之间切换 ,如编辑视图,输出视图,工程视图 
+Ctrl+f8 可以在不同的观察视图中切换,就是在java视图,调试视图,等之间 
+
+切换 
+Ctrl+m 可以在最大化当前窗口和还原当前窗口之间切换 
+Ctrl+e 弹出输入窗口,可以输入你想要编辑的代码窗口,和Ctrl+f6的功 
+
+能相同,只不过一个是选择的方式,一个是输入的方式,切换窗口 
+Ctrl+T 可以直接显示光标所在内容的类图,可以直接输入,并跳到输入内 
+
+容部分 
+按住Ctrl键，然后鼠标指向变量名，方法名，类名 在源代码中快速跳转 
+Ctrl + F11 快速执行程序 
+Ctrl+Shift+F 程序代码自动排版 
+Ctrl+Shift+O 自动加入引用。说明： 假设我们没有Import任何类别时，当我们在程 
+
+序里打入： ResourceAttirbute ra =new ResourceAttribute(); Eclipse会提示说没有引用类别，这时 
+
+我们只要按下Ctrl+Shift+O ，它就会自动帮我们Import这个类别。 非常方便 
+Ctrl+/ 将选取的块注释起来：在Debug时很方便。 
+Alt + / 就是大家都应该最常用的代码辅助了 
+Ctrl+h 搜索,打开搜索对话框 
+Ctrl+Shift+Space 参数提示,如果此时位于方法体中,就会出现方法的参数提示,当前光标所在 
+
+位置的参数会用粗体显示 
+
+
+作用域 功能 快捷键 
+全局 查找并替换 Ctrl+F 
+文本编辑器 查找上一个 Ctrl+Shift+K 
+文本编辑器 查找下一个 Ctrl+K 
+全局 撤销 Ctrl+Z 
+全局 复制 Ctrl+C 
+全局 恢复上一个选择 Alt+Shift+↓ 
+全局 剪切 Ctrl+X 
+全局 快速修正 Ctrl1+1 
+全局 内容辅助 Alt+/ 
+全局 全部选中 Ctrl+A 
+全局 删除 Delete 
+全局 上下文信息 Alt+？ 
+Alt+Shift+? 
+Ctrl+Shift+Space 
+Java编辑器 显示工具提示描述 F2 
+Java编辑器 选择封装元素 Alt+Shift+↑ 
+Java编辑器 选择上一个元素 Alt+Shift+← 
+Java编辑器 选择下一个元素 Alt+Shift+→ 
+文本编辑器 增量查找 Ctrl+J 
+文本编辑器 增量逆向查找 Ctrl+Shift+J 
+全局 粘贴 Ctrl+V 
+全局 重做 Ctrl+Y 
+
+
+查看 
+作用域 功能 快捷键 
+全局 放大 Ctrl+= 
+全局 缩小 Ctrl+- 
+
+
+窗口 
+作用域 功能 快捷键 
+全局 激活编辑器 F12 
+全局 切换编辑器 Ctrl+Shift+W 
+全局 上一个编辑器 Ctrl+Shift+F6 
+全局 上一个视图 Ctrl+Shift+F7 
+全局 上一个透视图 Ctrl+Shift+F8 
+全局 下一个编辑器 Ctrl+F6 
+全局 下一个视图 Ctrl+F7 
+全局 下一个透视图 Ctrl+F8 
+文本编辑器 显示标尺上下文菜单 Ctrl+W 
+全局 显示视图菜单 Ctrl+F10 
+全局 显示系统菜单 Alt+- 
+
+
+导航 
+作用域 功能 快捷键 
+Java编辑器 打开结构 Ctrl+F3 
+全局 打开类型 Ctrl+Shift+T 
+全局 打开类型层次结构 F4 
+全局 打开声明 F3 
+全局 打开外部javadoc Shift+F2 
+全局 打开资源 Ctrl+Shift+R 
+全局 后退历史记录 Alt+← 
+全局 前进历史记录 Alt+→ 
+全局 上一个 Ctrl+, 
+全局 下一个 Ctrl+. 
+Java编辑器 显示大纲 Ctrl+O 
+全局 在层次结构中打开类型 Ctrl+Shift+H 
+全局 转至匹配的括号 Ctrl+Shift+P 
+全局 转至上一个编辑位置 Ctrl+Q 
+Java编辑器 转至上一个成员 Ctrl+Shift+↑ 
+Java编辑器 转至下一个成员 Ctrl+Shift+↓ 
+文本编辑器 转至行 Ctrl+L 
+
+
+搜索 
+作用域 功能 快捷键 
+全局 出现在文件中 Ctrl+Shift+U 
+全局 打开搜索对话框 Ctrl+H 
+全局 工作区中的声明 Ctrl+G 
+全局 工作区中的引用 Ctrl+Shift+G 
+
+
+文本编辑 
+作用域 功能 快捷键 
+文本编辑器 改写切换 Insert 
+文本编辑器 上滚行 Ctrl+↑ 
+文本编辑器 下滚行 Ctrl+↓ 
+
+
+文件 
+作用域 功能 快捷键 
+全局 保存 Ctrl+X 
+Ctrl+S 
+全局 打印 Ctrl+P 
+全局 关闭 Ctrl+F4 
+全局 全部保存 Ctrl+Shift+S 
+全局 全部关闭 Ctrl+Shift+F4 
+全局 属性 Alt+Enter 
+全局 新建 Ctrl+N 
+
+
+项目 
+作用域 功能 快捷键 
+全局 全部构建 Ctrl+B 
+
+
+源代码 
+作用域 功能 快捷键 
+Java编辑器 格式化 Ctrl+Shift+F 
+Java编辑器 取消注释 Ctrl+\ 
+Java编辑器 注释 Ctrl+/ 
+Java编辑器 添加导入 Ctrl+Shift+M 
+Java编辑器 组织导入 Ctrl+Shift+O 
+Java编辑器 使用try/catch块来包围 未设置，太常用了，所以在这里列出,建议自己设置。 
+也可以使用Ctrl+1自动修正。 
+
+
+运行 
+作用域 功能 快捷键 
+全局 单步返回 F7 
+全局 单步跳过 F6 
+全局 单步跳入 F5 
+全局 单步跳入选择 Ctrl+F5 
+全局 调试上次启动 F11 
+全局 继续 F8 
+全局 使用过滤器单步执行 Shift+F5 
+全局 添加/去除断点 Ctrl+Shift+B 
+全局 显示 Ctrl+D 
+全局 运行上次启动 Ctrl+F11 
+全局 运行至行 Ctrl+R 
+全局 执行 Ctrl+U 
+
+
+重构 
+作用域 功能 快捷键 
+全局 撤销重构 Alt+Shift+Z 
+全局 抽取方法 Alt+Shift+M 
+全局 抽取局部变量 Alt+Shift+L 
+全局 内联 Alt+Shift+I 
+全局 移动 Alt+Shift+V 
+全局 重命名 Alt+Shift+R 
+全局 重做 Alt+Shift+Y 
+</code></pre><h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>因为本片博文是边写边测试贴图的，所以顺序上可能有些乱，但是不影响观看。使用了这么久的Myeclipse/Eclipse ，但是还是有许多功能没有使用，这篇博文也只介绍了一小部分而已。如果有什么好用的方法，欢迎提出。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/eclipse/" rel="tag"># eclipse</a>
+          
+            <a href="/tags/myeclipse/" rel="tag"># myeclipse</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/16/Java 使用Axis实现WebService实例/" rel="next" title="Java 使用Axis实现WebService实例">
+                <i class="fa fa-chevron-left"></i> Java 使用Axis实现WebService实例
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="xuwujing" />
+          <p class="site-author-name" itemprop="name">xuwujing</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">41</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Myeclipse-Eclipse相关准备"><span class="nav-number">2.</span> <span class="nav-text">Myeclipse/Eclipse相关准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#相关软件准备"><span class="nav-number">2.1.</span> <span class="nav-text">相关软件准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#环境配置"><span class="nav-number">2.2.</span> <span class="nav-text">环境配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Java环境配置"><span class="nav-number">2.2.1.</span> <span class="nav-text">Java环境配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Tomcat环境配置"><span class="nav-number">2.2.2.</span> <span class="nav-text">Tomcat环境配置</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MyEclipse-Eclipse-使用"><span class="nav-number">3.</span> <span class="nav-text">MyEclipse/Eclipse 使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#设置工作空间编码格式"><span class="nav-number">3.1.</span> <span class="nav-text">设置工作空间编码格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更改字体"><span class="nav-number">3.2.</span> <span class="nav-text">更改字体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置注释模版"><span class="nav-number">3.3.</span> <span class="nav-text">设置注释模版</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JDK相关配置"><span class="nav-number">3.4.</span> <span class="nav-text">JDK相关配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#导入JDK"><span class="nav-number">3.4.1.</span> <span class="nav-text">导入JDK</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设置JDK版本"><span class="nav-number">3.4.2.</span> <span class="nav-text">设置JDK版本</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加Tomcat"><span class="nav-number">3.5.</span> <span class="nav-text">添加Tomcat</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Myeclipse"><span class="nav-number">3.5.1.</span> <span class="nav-text">Myeclipse</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Eclipse"><span class="nav-number">3.5.2.</span> <span class="nav-text">Eclipse</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#新建项目"><span class="nav-number">3.6.</span> <span class="nav-text">新建项目</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#新建class"><span class="nav-number">3.6.1.</span> <span class="nav-text">新建class</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Debug-模式"><span class="nav-number">3.7.</span> <span class="nav-text">Debug 模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#显示行号"><span class="nav-number">3.7.1.</span> <span class="nav-text">显示行号</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#屏蔽断点"><span class="nav-number">3.7.2.</span> <span class="nav-text">屏蔽断点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tomcat添加项目"><span class="nav-number">3.8.</span> <span class="nav-text">Tomcat添加项目</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#一、在server窗口中添加"><span class="nav-number">3.8.1.</span> <span class="nav-text">一、在server窗口中添加</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二、点击上面的图标添加"><span class="nav-number">3.8.2.</span> <span class="nav-text">二、点击上面的图标添加</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MyEclipse-Eclipse快捷使用"><span class="nav-number">4.</span> <span class="nav-text">MyEclipse/Eclipse快捷使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#快速生成get和set方法"><span class="nav-number">4.1.</span> <span class="nav-text">快速生成get和set方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注释说明以及快捷使用"><span class="nav-number">4.2.</span> <span class="nav-text">注释说明以及快捷使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用快捷建"><span class="nav-number">4.3.</span> <span class="nav-text">常用快捷建</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结语"><span class="nav-number">5.</span> <span class="nav-text">结语</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xuwujing</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
