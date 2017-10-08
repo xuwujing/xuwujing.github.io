@@ -1,0 +1,849 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="git,hexo," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言在一次看到别人的博客主页，觉得设计很漂亮。但是由于自己对于前台这块没什么办法，煞是羡慕。偶然中发现这种样式是在Github上面搭建的，使用的是Next主题。于是便想自己也搭建一个，于是便去就去查询相关资料，在经历不少错误之后，终于搭建成功。由于当时搭建的时候，没怎么记载，而且当初用的也不太熟。在使用了3个多月之后，趁着国庆这个时间将本博文写出来。如有不妥，欢迎指教！ 注:其实搭建一个自己域名的">
+<meta name="keywords" content="git,hexo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在Github上面搭建一个自己域名的Hexo博客">
+<meta property="og:url" content="http://yoursite.com/2017/10/05/在Github上面搭建一个自己域名的Hexo博客/index.html">
+<meta property="og:site_name" content="xuwujing&#39;s blog">
+<meta property="og:description" content="前言在一次看到别人的博客主页，觉得设计很漂亮。但是由于自己对于前台这块没什么办法，煞是羡慕。偶然中发现这种样式是在Github上面搭建的，使用的是Next主题。于是便想自己也搭建一个，于是便去就去查询相关资料，在经历不少错误之后，终于搭建成功。由于当时搭建的时候，没怎么记载，而且当初用的也不太熟。在使用了3个多月之后，趁着国庆这个时间将本博文写出来。如有不妥，欢迎指教！ 注:其实搭建一个自己域名的">
+<meta property="og:image" content="http://img.blog.csdn.net/20171005165425836?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171005165554574?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171005165829352?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171005165946054?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171005170009601?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171005170021043?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171005170037382?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171005170210161?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171005170345476?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171005170447577?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171005170544450?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171005170610270?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171005170714447?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171005170728998?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171005170802591?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171005170843647?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171005170913574?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171005170933004?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171005171115223?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171005170941723?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171005171215937?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171005171247439?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171005171329652?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171005171546267?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171005171600823?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171005171642588?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171005171909935?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171005171931239?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171005171946396?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171005172051625?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171005172101431?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171005172138492?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171005172146964?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2017-10-08T05:50:15.958Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在Github上面搭建一个自己域名的Hexo博客">
+<meta name="twitter:description" content="前言在一次看到别人的博客主页，觉得设计很漂亮。但是由于自己对于前台这块没什么办法，煞是羡慕。偶然中发现这种样式是在Github上面搭建的，使用的是Next主题。于是便想自己也搭建一个，于是便去就去查询相关资料，在经历不少错误之后，终于搭建成功。由于当时搭建的时候，没怎么记载，而且当初用的也不太熟。在使用了3个多月之后，趁着国庆这个时间将本博文写出来。如有不妥，欢迎指教！ 注:其实搭建一个自己域名的">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20171005165425836?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/10/05/在Github上面搭建一个自己域名的Hexo博客/"/>
+
+
+
+
+
+  <title>在Github上面搭建一个自己域名的Hexo博客 | xuwujing's blog</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xuwujing's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/05/在Github上面搭建一个自己域名的Hexo博客/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xuwujing">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xuwujing's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">在Github上面搭建一个自己域名的Hexo博客</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-05T17:31:09+08:00">
+                2017-10-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/hexo/" itemprop="url" rel="index">
+                    <span itemprop="name">hexo</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在一次看到别人的博客主页，觉得设计很漂亮。但是由于自己对于前台这块没什么办法，煞是羡慕。偶然中发现这种样式是在Github上面搭建的，使用的是Next主题。于是便想自己也搭建一个，于是便去就去查询相关资料，在经历不少错误之后，终于搭建成功。<br>由于当时搭建的时候，没怎么记载，而且当初用的也不太熟。在使用了3个多月之后，趁着国庆这个时间将本博文写出来。如有不妥，欢迎指教！</p>
+<p>注:其实搭建一个自己域名的博客，最大的作用就是提升了逼格…</p>
+<h2 id="效果图"><a href="#效果图" class="headerlink" title="效果图:"></a>效果图:</h2><p><img src="http://img.blog.csdn.net/20171005165425836?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h2 id="一、配置Hexo环境"><a href="#一、配置Hexo环境" class="headerlink" title="一、配置Hexo环境"></a>一、配置Hexo环境</h2><h3 id="1-下载并安装git"><a href="#1-下载并安装git" class="headerlink" title="1.下载并安装git"></a>1.下载并安装git</h3><p>地址:  <a href="https://git-scm.com/downloads" target="_blank" rel="external">https://git-scm.com/downloads</a><br> 至于32位还是64位则看个人电脑情况选择了。<br>  如果不会使用，可以看下我之前的博文:<a href="http://blog.csdn.net/qazwsxpcm/article/details/68946736" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm/article/details/68946736</a></p>
+<h3 id="2-下载并安装Node-js"><a href="#2-下载并安装Node-js" class="headerlink" title="2. 下载并安装Node.js"></a>2. 下载并安装Node.js</h3><p><a href="http://nodejs.cn/" target="_blank" rel="external">http://nodejs.cn/</a><br>位数也依旧看个人电脑情况，安装成功之后，输入 node -v 和npm -v 可以查看是否安装成功。<br>注意:安装成功后需要重启电脑。<br><img src="http://img.blog.csdn.net/20171005165554574?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h3 id="3-配置hexo"><a href="#3-配置hexo" class="headerlink" title="3. 配置hexo"></a>3. 配置hexo</h3><h4 id="1，新建文件夹，然后右键电脑盘符，点击git-base。如-E-Github-hexo"><a href="#1，新建文件夹，然后右键电脑盘符，点击git-base。如-E-Github-hexo" class="headerlink" title="1，新建文件夹，然后右键电脑盘符，点击git base。如:E:\Github\hexo"></a>1，新建文件夹，然后右键电脑盘符，点击git base。如:E:\Github\hexo</h4><p><img src="http://img.blog.csdn.net/20171005165829352?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h4 id="2，-输入-npm-install-hexo-cli-g-安装hexo"><a href="#2，-输入-npm-install-hexo-cli-g-安装hexo" class="headerlink" title="2， 输入:  npm install hexo-cli -g  安装hexo"></a>2， 输入:  npm install hexo-cli -g  安装hexo</h4><p>  <strong>hexo命令简单介绍</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ hexo g #完整命令为hexo generate，用于生成静态文件</div><div class="line">$ hexo s #完整命令为hexo server，用于启动服务器，主要用来本地预览</div><div class="line">$ hexo d #完整命令为hexo deploy，用于将本地文件发布到github上</div><div class="line">$ hexo n #完整命令为hexo new，用于新建一篇文章</div></pre></td></tr></table></figure>
+<h4 id="3，进入Git-Bash，输入hexo-init-初始化仓库"><a href="#3，进入Git-Bash，输入hexo-init-初始化仓库" class="headerlink" title="3，进入Git Bash，输入hexo init  初始化仓库"></a>3，进入Git Bash，输入hexo init  初始化仓库</h4><h4 id="4，安装依赖包-输入-npm-install-，成功之后输入-hexo-g-和-hexo-s"><a href="#4，安装依赖包-输入-npm-install-，成功之后输入-hexo-g-和-hexo-s" class="headerlink" title="4，安装依赖包 输入: npm install  ，成功之后输入: hexo g   和   hexo s"></a>4，安装依赖包 输入: npm install  ，成功之后输入: hexo g   和   hexo s</h4><p><img src="http://img.blog.csdn.net/20171005165946054?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h4 id="5，在浏览器输入-http-localhost-4000-可以查看本地预览"><a href="#5，在浏览器输入-http-localhost-4000-可以查看本地预览" class="headerlink" title="5，在浏览器输入:http://localhost:4000/     可以查看本地预览"></a>5，在浏览器输入:<a href="http://localhost:4000/" target="_blank" rel="external">http://localhost:4000/</a>     可以查看本地预览</h4><p><img src="http://img.blog.csdn.net/20171005170009601?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br><img src="http://img.blog.csdn.net/20171005170021043?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>注:因为我已经配置好了NexT主题，所以显示的是该主题。正常会显示的Hexo默认的主题，借用了网上的一张贴图作为范例。</p>
+<h2 id="二、Hexo的相关配置"><a href="#二、Hexo的相关配置" class="headerlink" title="二、Hexo的相关配置"></a>二、Hexo的相关配置</h2><h3 id="1-启用NexT主题"><a href="#1-启用NexT主题" class="headerlink" title="1.启用NexT主题"></a>1.启用NexT主题</h3><p> 在成功配置完环境之后，hexo的目录结构如下。<br><img src="http://img.blog.csdn.net/20171005170037382?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>在 Hexo 中有两份主要的配置文件，其名称都是 _config.yml。 其中，一份位于站点根目录下，主要包含 Hexo 本身的配置；另一份位于主题目录下，这份配置由主题作者提供，主要用于配置主题相关的选项。<br>为了描述方便，在以下说明中，将前者称为 <strong>站点配置文件</strong>， 后者称为 <strong>主题配置文件</strong>。</p>
+<p>我们打开<strong>站点配置文件</strong>， 找到 <strong>theme</strong> 字段，并将其值更改为 <strong>next</strong>。<br><img src="http://img.blog.csdn.net/20171005170210161?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>成功配置之后，稍微等一下，然后再次使用 git base 启动hexo，输入hexo g   和   hexo s     便可以看到Next主题以及成功使用。具体可以看我上面的图片，这里还是使用借用的一张图。<br><img src="http://img.blog.csdn.net/20171005170345476?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h3 id="2-NexT相关配置"><a href="#2-NexT相关配置" class="headerlink" title="2.NexT相关配置"></a>2.NexT相关配置</h3><h4 id="外观设置"><a href="#外观设置" class="headerlink" title="外观设置"></a>外观设置</h4><p>打开 <strong>主题配置文件</strong>，然后解除Scheme中的 # 注释，选择适合自己的主题。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Muse - 默认 Scheme，这是 NexT 最初的版本，黑白主调，大量留白</div><div class="line">Mist - Muse 的紧凑版本，整洁有序的单栏外观</div><div class="line">Pisces - 双栏 Scheme，小家碧玉似的清新</div></pre></td></tr></table></figure>
+<p>注意: 设置样式后面需要有一个空格！！！</p>
+<p><img src="http://img.blog.csdn.net/20171005170447577?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h4 id="语言设置"><a href="#语言设置" class="headerlink" title="语言设置"></a>语言设置</h4><p>打开<strong>站点配置文件</strong> ，找到<strong>language</strong>，然后设置语音种类。<br>目前 NexT 支持的语言如以下表格所示：<br>语言    代码    设定示例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">English	en	language: en</div><div class="line">简体中文	zh-Hans	language: zh-Hans</div><div class="line">Français	fr-FR	language: fr-FR</div><div class="line">Português	pt	language: pt or language: pt-BR</div><div class="line">繁體中文	zh-hk 或者 zh-tw	language: zh-hk</div><div class="line">Русский язык	ru	language: ru</div><div class="line">Deutsch	de	language: de</div><div class="line">日本語	ja	language: ja</div><div class="line">Indonesian	id	language: id</div><div class="line">Korean	ko	language: ko</div></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20171005170544450?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h4 id="菜单设置"><a href="#菜单设置" class="headerlink" title="菜单设置"></a>菜单设置</h4><p>打开<strong>主题配置文件</strong>，找到<strong>menu</strong>，然后选择主菜单显示内容。<br><img src="http://img.blog.csdn.net/20171005170610270?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>NexT 默认的菜单项有（标注  的项表示需要手动创建这个页面）：<br>键值    设定值    显示文本（简体中文）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">home	home: /	主页</div><div class="line">archives	archives: /archives	归档页</div><div class="line">categories	categories: /categories	分类页 </div><div class="line">tags	tags: /tags	标签页 </div><div class="line">about	about: /about	关于页面 </div><div class="line">commonweal	commonweal: /404.html	公益 404</div></pre></td></tr></table></figure>
+<p>设置完之后，还需要设置对应菜单的相应的文本，也就是菜单的翻译。<br>找到<strong>languages/{language}.yml</strong> ，然后编辑进行相应的说明就行了。<br>如：设置的是语言是<strong>language: zh-Hans</strong> ,就打开<strong>zh-Hans.yml</strong>。<br><img src="http://img.blog.csdn.net/20171005170714447?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p><img src="http://img.blog.csdn.net/20171005170728998?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h4 id="其它设置"><a href="#其它设置" class="headerlink" title="其它设置"></a>其它设置</h4><h5 id="头像设置"><a href="#头像设置" class="headerlink" title="头像设置"></a>头像设置</h5><p>在<strong>主题配置文件</strong> 中编辑 <strong>avatar</strong> 输入头像路径就行了。<br>images 在hexo/public/images中。<br>如: avatar: /images/xuwujing.png<br><img src="http://img.blog.csdn.net/20171005170802591?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br><img src="http://img.blog.csdn.net/20171005170843647?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>至于<strong>作者呢称</strong>和<strong>作者描述</strong>在我之前的截图上以及说明了，这里就不再多说了。</p>
+<h5 id="百度统计"><a href="#百度统计" class="headerlink" title="百度统计"></a>百度统计</h5><p>地址:<a href="https://tongji.baidu.com/web/welcome/login" target="_blank" rel="external">https://tongji.baidu.com/web/welcome/login</a><br>登录之后（没有则注册）,然后新增网站，输入域名就行，然后会出现一串js代码，复制hm.js? 后面那串统计脚本 id , 然后粘贴到 <strong>主题配置文件</strong> 中的<strong>baidu_analytics</strong> 就行。</p>
+<p><img src="http://img.blog.csdn.net/20171005170913574?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p><img src="http://img.blog.csdn.net/20171005170933004?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p><img src="http://img.blog.csdn.net/20171005171115223?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h5 id="社交链接"><a href="#社交链接" class="headerlink" title="社交链接"></a>社交链接</h5><p>编辑<strong>主题配置文件</strong> 中的 <strong>social</strong> 然后增加链接以及说明就行。<br>例如：csdn: <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm?viewmode=list</a> 。<br><img src="http://img.blog.csdn.net/20171005170941723?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h5 id="标签分类"><a href="#标签分类" class="headerlink" title="标签分类"></a>标签分类</h5><p>在站点目录下，打开git bash，输入 <strong>hexo new page “categories”</strong> 创建分类。<br>输入:hexo new page “tags”   hexo new page “about”  创建标签和关于。<br>创建玩在站点目录下的source文件夹下，会新增一个categories、tags、about的文件夹，里面有一个index.md文件，打开之后更改说明为中文，那么显示的也为中文。<br>comments可以设置为false，含义是打开分类页面，评论插件不显示。<br><img src="http://img.blog.csdn.net/20171005171215937?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br><img src="http://img.blog.csdn.net/20171005171247439?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br><img src="http://img.blog.csdn.net/20171005171329652?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>我的配置，可以从该地址查看：<a href="https://github.com/xuwujing/xuwujing.github.io" target="_blank" rel="external">https://github.com/xuwujing/xuwujing.github.io</a></p>
+<h2 id="三、Hexo关联github以及将本地博客上传"><a href="#三、Hexo关联github以及将本地博客上传" class="headerlink" title="三、Hexo关联github以及将本地博客上传"></a>三、Hexo关联github以及将本地博客上传</h2><h3 id="1-在github上面创建仓库"><a href="#1-在github上面创建仓库" class="headerlink" title="1. 在github上面创建仓库"></a>1. 在github上面创建仓库</h3><p>1，成功登录github后(未创建先行创建)，创建一个仓库，仓库名称格式为 youname.github.io     youname 为用户名 。例如:xuwujing.github.io</p>
+<p>2，创建成功之后，点击该仓库，选择setting，然后拖到GitHub Pages界面来, 然后选择Choose a theme，随便选择一个主题之后。再次点击setting来到GitHub Pages来，可以发现出现了一个路径，访问该路径，便可以访问所设置的仓库的界面了。<br>注: 因为我已经成功设置了。所以使用一个test测试仓库，用于截图和说明。实际仓库名称不要使用这种！！！<br><img src="http://img.blog.csdn.net/20171005171546267?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br><img src="http://img.blog.csdn.net/20171005171600823?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h3 id="2-Hexo关联Github"><a href="#2-Hexo关联Github" class="headerlink" title="2.Hexo关联Github"></a>2.Hexo关联Github</h3><p>这个就和之前关联仓库的步骤差不多。</p>
+<h4 id="设置git身份信息"><a href="#设置git身份信息" class="headerlink" title="设置git身份信息"></a>设置git身份信息</h4><p>在hexo目录右键git base 输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git config --global user.name &quot;你的用户名&quot;</div><div class="line">git config --global user.email &quot;你的邮箱&quot;</div></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20171005171642588?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>  在站点配置文件 中加上仓库地址，注意要加上.git<br>  例如: git@github.com:xuwujing/xuwujing.github.io.git</p>
+<h3 id="3-发布博客"><a href="#3-发布博客" class="headerlink" title="3.发布博客"></a>3.发布博客</h3><p>首先新建一篇博文。<br>如:hexo new post “Hello GitHub”<br>就会在\source\ _posts 将会看到 Hello GitHub.md 文件。<br> 要发布的博客放在在\source_posts路径下。博客推荐使用markdown编辑，后缀名为.md。<br><img src="http://img.blog.csdn.net/20171005171909935?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>在发布之前，先编辑该博客，写点描述。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">---</div><div class="line">title: Hello GitHub</div><div class="line">date: 2017-10-05 14:50:33</div><div class="line">categories: hello</div><div class="line">tags: [hello,haha]</div><div class="line">---</div></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20171005171931239?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>然后输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">hexo g 生成静态文件  </div><div class="line">hexo s  本地预览</div></pre></td></tr></table></figure>
+<p>成功之后如下图:<br><img src="http://img.blog.csdn.net/20171005171946396?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>然后输入:<strong>hexo d</strong>  发布到github上。<br> 成功之后输入youname.github.io路径便可以看到该博文了。</p>
+<h2 id="四、注册域名以及绑定到Github上"><a href="#四、注册域名以及绑定到Github上" class="headerlink" title="四、注册域名以及绑定到Github上"></a>四、注册域名以及绑定到Github上</h2><p>   首先登录阿里云，搜索域名或者在控制台找到域名。进入之后，首先查询你要申请的域名，如果查不到就表示可以注册。域名注册有很多后缀名，如果可以，推荐.com的。<br>  <img src="http://img.blog.csdn.net/20171005172051625?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br><img src="http://img.blog.csdn.net/20171005172101431?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>成功申请域名之后，将域名和Github绑定，Github的IP地址是192.30.252.153或192.30.252.154。所以我们在填写解析的时候，就解析这个地址。至于Github是怎么找到我们的仓库的，这个在CNAME设置。<br>以下来自百度经验<br>进入域名解析之后<br>点击【新增解析】；依次填写相应内容。<br>“记录类型”选择A；”主机记录”填写www；”解析线路”选择默认；<br>“记录值”填写github提供的IP地址，192.30.252.153或192.30.252.154；<br>“TTL”默认10分钟，自己可以另行设置也可；<br>最后点击【保存】。</p>
+<p>域名成功解析之后，在你Github上面的仓库中创建CNAME，然后输入你申请域名的地址。然后你再输入你的域名就可以访问Github博客了。<br><img src="http://img.blog.csdn.net/20171005172138492?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br><img src="http://img.blog.csdn.net/20171005172146964?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h2 id="五、错误问题解决方案"><a href="#五、错误问题解决方案" class="headerlink" title="五、错误问题解决方案"></a>五、错误问题解决方案</h2><h3 id="1-FATAL-can-not-read-a-block-mapping-entry-a-multiline-key-may-not-be-an-implicit-key-at-line-10-column-1"><a href="#1-FATAL-can-not-read-a-block-mapping-entry-a-multiline-key-may-not-be-an-implicit-key-at-line-10-column-1" class="headerlink" title="1. FATAL can not read a block mapping entry; a multiline key may not be an implicit key at line 10, column 1:"></a>1. FATAL can not read a block mapping entry; a multiline key may not be an implicit key at line 10, column 1:</h3><p>检查_config.yml内容，特别注意:后面需要有一个空格。</p>
+<h3 id="2-若出现这个错误-ERROR-Deployer-not-found-github"><a href="#2-若出现这个错误-ERROR-Deployer-not-found-github" class="headerlink" title="2.若出现这个错误:ERROR Deployer not found : github"></a>2.若出现这个错误:ERROR Deployer not found : github</h3><p>则安装hexo git插件<br>输入:npm install hexo-deployer-git –save    </p>
+<h3 id="3-如果使用CNAME绑定域名之后，上传博客的时候，会将CNAME中的地址替换为日志，导致无法通过域名访问。"><a href="#3-如果使用CNAME绑定域名之后，上传博客的时候，会将CNAME中的地址替换为日志，导致无法通过域名访问。" class="headerlink" title="3.如果使用CNAME绑定域名之后，上传博客的时候，会将CNAME中的地址替换为日志，导致无法通过域名访问。"></a>3.如果使用CNAME绑定域名之后，上传博客的时候，会将CNAME中的地址替换为日志，导致无法通过域名访问。</h3><p>解决办法:重新设置CNAME 中的域名地址。<br>        如果有更好的解决办法，请私信我。谢谢！</p>
+<h2 id="六、参考网址"><a href="#六、参考网址" class="headerlink" title="六、参考网址:"></a>六、参考网址:</h2><p>Hexo网站搭建:    <a href="http://opiece.me/2015/04/09/hexo-guide/" target="_blank" rel="external">http://opiece.me/2015/04/09/hexo-guide/</a><br>                            <a href="https://xuanwo.org/2015/03/26/hexo-intor/" target="_blank" rel="external">https://xuanwo.org/2015/03/26/hexo-intor/</a><br>NextT主题使用:   <a href="http://theme-next.iissnan.com/getting-started.html" target="_blank" rel="external">http://theme-next.iissnan.com/getting-started.html</a><br>NextT后续配置:   <a href="http://www.jeyzhang.com/next-theme-personal-settings.html" target="_blank" rel="external">http://www.jeyzhang.com/next-theme-personal-settings.html</a><br>域名绑定博客:    <a href="https://jingyan.baidu.com/article/dca1fa6fa1e403f1a5405262.html" target="_blank" rel="external">https://jingyan.baidu.com/article/dca1fa6fa1e403f1a5405262.html</a><br>Hexo问题解决:    <a href="http://xuanwo.org/2014/08/14/hexo-usual-problem/" target="_blank" rel="external">http://xuanwo.org/2014/08/14/hexo-usual-problem/</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/git/" rel="tag"># git</a>
+          
+            <a href="/tags/hexo/" rel="tag"># hexo</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/29/两年JAVA程序员的面试总结/" rel="next" title="两年JAVA程序员的面试总结">
+                <i class="fa fa-chevron-left"></i> 两年JAVA程序员的面试总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/08/Netty4 学习笔记之二-客户端与服务端心跳 demo/" rel="prev" title="Netty4 学习笔记之二-客户端与服务端心跳 demo">
+                Netty4 学习笔记之二-客户端与服务端心跳 demo <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="xuwujing" />
+          <p class="site-author-name" itemprop="name">xuwujing</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#效果图"><span class="nav-number">2.</span> <span class="nav-text">效果图:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一、配置Hexo环境"><span class="nav-number">3.</span> <span class="nav-text">一、配置Hexo环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-下载并安装git"><span class="nav-number">3.1.</span> <span class="nav-text">1.下载并安装git</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-下载并安装Node-js"><span class="nav-number">3.2.</span> <span class="nav-text">2. 下载并安装Node.js</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-配置hexo"><span class="nav-number">3.3.</span> <span class="nav-text">3. 配置hexo</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1，新建文件夹，然后右键电脑盘符，点击git-base。如-E-Github-hexo"><span class="nav-number">3.3.1.</span> <span class="nav-text">1，新建文件夹，然后右键电脑盘符，点击git base。如:E:\Github\hexo</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2，-输入-npm-install-hexo-cli-g-安装hexo"><span class="nav-number">3.3.2.</span> <span class="nav-text">2， 输入:  npm install hexo-cli -g  安装hexo</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3，进入Git-Bash，输入hexo-init-初始化仓库"><span class="nav-number">3.3.3.</span> <span class="nav-text">3，进入Git Bash，输入hexo init  初始化仓库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4，安装依赖包-输入-npm-install-，成功之后输入-hexo-g-和-hexo-s"><span class="nav-number">3.3.4.</span> <span class="nav-text">4，安装依赖包 输入: npm install  ，成功之后输入: hexo g   和   hexo s</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5，在浏览器输入-http-localhost-4000-可以查看本地预览"><span class="nav-number">3.3.5.</span> <span class="nav-text">5，在浏览器输入:http://localhost:4000/     可以查看本地预览</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、Hexo的相关配置"><span class="nav-number">4.</span> <span class="nav-text">二、Hexo的相关配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-启用NexT主题"><span class="nav-number">4.1.</span> <span class="nav-text">1.启用NexT主题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-NexT相关配置"><span class="nav-number">4.2.</span> <span class="nav-text">2.NexT相关配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#外观设置"><span class="nav-number">4.2.1.</span> <span class="nav-text">外观设置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#语言设置"><span class="nav-number">4.2.2.</span> <span class="nav-text">语言设置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#菜单设置"><span class="nav-number">4.2.3.</span> <span class="nav-text">菜单设置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其它设置"><span class="nav-number">4.2.4.</span> <span class="nav-text">其它设置</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#头像设置"><span class="nav-number">4.2.4.1.</span> <span class="nav-text">头像设置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#百度统计"><span class="nav-number">4.2.4.2.</span> <span class="nav-text">百度统计</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#社交链接"><span class="nav-number">4.2.4.3.</span> <span class="nav-text">社交链接</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#标签分类"><span class="nav-number">4.2.4.4.</span> <span class="nav-text">标签分类</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、Hexo关联github以及将本地博客上传"><span class="nav-number">5.</span> <span class="nav-text">三、Hexo关联github以及将本地博客上传</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-在github上面创建仓库"><span class="nav-number">5.1.</span> <span class="nav-text">1. 在github上面创建仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Hexo关联Github"><span class="nav-number">5.2.</span> <span class="nav-text">2.Hexo关联Github</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#设置git身份信息"><span class="nav-number">5.2.1.</span> <span class="nav-text">设置git身份信息</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-发布博客"><span class="nav-number">5.3.</span> <span class="nav-text">3.发布博客</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、注册域名以及绑定到Github上"><span class="nav-number">6.</span> <span class="nav-text">四、注册域名以及绑定到Github上</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、错误问题解决方案"><span class="nav-number">7.</span> <span class="nav-text">五、错误问题解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-FATAL-can-not-read-a-block-mapping-entry-a-multiline-key-may-not-be-an-implicit-key-at-line-10-column-1"><span class="nav-number">7.1.</span> <span class="nav-text">1. FATAL can not read a block mapping entry; a multiline key may not be an implicit key at line 10, column 1:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-若出现这个错误-ERROR-Deployer-not-found-github"><span class="nav-number">7.2.</span> <span class="nav-text">2.若出现这个错误:ERROR Deployer not found : github</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-如果使用CNAME绑定域名之后，上传博客的时候，会将CNAME中的地址替换为日志，导致无法通过域名访问。"><span class="nav-number">7.3.</span> <span class="nav-text">3.如果使用CNAME绑定域名之后，上传博客的时候，会将CNAME中的地址替换为日志，导致无法通过域名访问。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#六、参考网址"><span class="nav-number">8.</span> <span class="nav-text">六、参考网址:</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xuwujing</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
