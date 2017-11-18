@@ -1,0 +1,810 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,netty," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言在上一篇Netty 心跳 demo 中，了解了Netty中的客户端和服务端之间的心跳。这篇就来讲讲Netty中的粘包和拆包以及相应的处理。 名词解释粘包: 会将消息粘粘起来发送。类似吃米饭，一口吃多个饭粒，而不是一粒一粒的吃。拆包: 会将消息拆开，分为多次接受。类似喝饮料，一口一口的喝，而不是一口气喝完。 简单的来说：多次发送较少内容，会发生粘包现象。单次发送内容过多，会发生拆包现象。 我们使">
+<meta name="keywords" content="java,netty">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Netty4 学习笔记之三-粘包和拆包">
+<meta property="og:url" content="http://yoursite.com/2017/10/17/Netty4 学习笔记之三-粘包和拆包/index.html">
+<meta property="og:site_name" content="xuwujing&#39;s blog">
+<meta property="og:description" content="前言在上一篇Netty 心跳 demo 中，了解了Netty中的客户端和服务端之间的心跳。这篇就来讲讲Netty中的粘包和拆包以及相应的处理。 名词解释粘包: 会将消息粘粘起来发送。类似吃米饭，一口吃多个饭粒，而不是一粒一粒的吃。拆包: 会将消息拆开，分为多次接受。类似喝饮料，一口一口的喝，而不是一口气喝完。 简单的来说：多次发送较少内容，会发生粘包现象。单次发送内容过多，会发生拆包现象。 我们使">
+<meta property="og:image" content="http://img.blog.csdn.net/20171017190734166?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171017190742327?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171017190750476?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171017190827948?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171017190835599?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171017190843518?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171017190904646?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2017-11-18T02:47:49.922Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Netty4 学习笔记之三-粘包和拆包">
+<meta name="twitter:description" content="前言在上一篇Netty 心跳 demo 中，了解了Netty中的客户端和服务端之间的心跳。这篇就来讲讲Netty中的粘包和拆包以及相应的处理。 名词解释粘包: 会将消息粘粘起来发送。类似吃米饭，一口吃多个饭粒，而不是一粒一粒的吃。拆包: 会将消息拆开，分为多次接受。类似喝饮料，一口一口的喝，而不是一口气喝完。 简单的来说：多次发送较少内容，会发生粘包现象。单次发送内容过多，会发生拆包现象。 我们使">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20171017190734166?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/10/17/Netty4 学习笔记之三-粘包和拆包/"/>
+
+
+
+
+
+  <title>Netty4 学习笔记之三-粘包和拆包 | xuwujing's blog</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xuwujing's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/17/Netty4 学习笔记之三-粘包和拆包/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xuwujing">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xuwujing's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Netty4 学习笔记之三-粘包和拆包</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-17T19:32:00+08:00">
+                2017-10-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/netty/" itemprop="url" rel="index">
+                    <span itemprop="name">netty</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在<a href="http://blog.csdn.net/qazwsxpcm/article/details/78174437" target="_blank" rel="external">上一篇Netty 心跳 demo</a> 中，了解了Netty中的客户端和服务端之间的心跳。这篇就来讲讲Netty中的粘包和拆包以及相应的处理。</p>
+<h2 id="名词解释"><a href="#名词解释" class="headerlink" title="名词解释"></a>名词解释</h2><p><strong>粘包: 会将消息粘粘起来发送。类似吃米饭，一口吃多个饭粒，而不是一粒一粒的吃。</strong><br><strong>拆包: 会将消息拆开，分为多次接受。类似喝饮料，一口一口的喝，而不是一口气喝完。</strong></p>
+<p>简单的来说：<br>多次发送较少内容，会发生粘包现象。<br>单次发送内容过多，会发生拆包现象。</p>
+<p>我们使用简单的Netty的服务端和客户端demo用来测试粘包和拆包。<br>将 <strong>Hello Netty</strong> 发送一百次，就会发送粘包现象；<br>将《春江花月夜》和《行路难》发送一次就会发送拆包现象；</p>
+<h3 id="示例图"><a href="#示例图" class="headerlink" title="示例图:"></a>示例图:</h3><h4 id="粘包"><a href="#粘包" class="headerlink" title="粘包:"></a>粘包:</h4><p><img src="http://img.blog.csdn.net/20171017190734166?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h4 id="拆包"><a href="#拆包" class="headerlink" title="拆包:"></a>拆包:</h4><p><img src="http://img.blog.csdn.net/20171017190742327?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h2 id="解决粘包、拆包"><a href="#解决粘包、拆包" class="headerlink" title="解决粘包、拆包"></a>解决粘包、拆包</h2><p>因为Netty已经提供了几个常用的解码器，帮助我们解决这些问题，所以我们不必再去造轮子了，直接拿来用就好了。</p>
+<h3 id="解决粘包"><a href="#解决粘包" class="headerlink" title="解决粘包"></a>解决粘包</h3><p>在Server服务端使用定长数据帧的解码器 <strong>FixedLengthFrameDecoder</strong>之后。<br>可以明显看到数据已经按照我们所设定的大小分割了。<br><img src="http://img.blog.csdn.net/20171017190750476?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h3 id="解决拆包"><a href="#解决拆包" class="headerlink" title="解决拆包"></a>解决拆包</h3><p>在Server服务端使用字节解码器 <strong>LineBasedFrameDecoder</strong> 之后。<br>由于字节已经超过我们设置的最大的字节数，所以报错了。<br><img src="http://img.blog.csdn.net/20171017190827948?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>所以，我们发送的字节在设置的范围内的话，就可以看到拆包现象已经解决。<br><img src="http://img.blog.csdn.net/20171017190835599?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>Netty还提供了一个<strong>HttpObjectAggregator</strong>类用于解决粘包、拆包现象。<br>以下摘自Netty官方文档</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">如果对于单条HTTP消息你不想处理多个消息对象，你可以传入 HttpObjectAggregator 到pipline中。HttpObjectAggregator 会将多个消息对象转变为单个 FullHttpRequest 或者 FullHttpResponse。</div></pre></td></tr></table></figure>
+<p>使用<strong>HttpObjectAggregator</strong> 之后<br><img src="http://img.blog.csdn.net/20171017190843518?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p><img src="http://img.blog.csdn.net/20171017190904646?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>可以看到，粘包和拆包现象得到了改善。</p>
+<p>那么开始贴代码，几乎和之前的demo一样。</p>
+<h3 id="服务端"><a href="#服务端" class="headerlink" title="服务端:"></a>服务端:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">import io.netty.bootstrap.ServerBootstrap;</div><div class="line">import io.netty.channel.ChannelFuture;</div><div class="line">import io.netty.channel.EventLoopGroup;</div><div class="line">import io.netty.channel.nio.NioEventLoopGroup;</div><div class="line">import io.netty.channel.socket.nio.NioServerSocketChannel;</div><div class="line"></div><div class="line">/**</div><div class="line"> * </div><div class="line">* Title: NettyServer</div><div class="line">* Description: Netty服务端</div><div class="line">* Version:1.0.0  </div><div class="line">* @author pancm</div><div class="line">* @date 2017年10月8日</div><div class="line"> */</div><div class="line">public class NettyServer &#123;</div><div class="line">	    private static final int port = 6789; //设置服务端端口</div><div class="line">	    private static  EventLoopGroup group = new NioEventLoopGroup();   // 通过nio方式来接收连接和处理连接   </div><div class="line">	    private static  ServerBootstrap b = new ServerBootstrap();</div><div class="line">	    </div><div class="line">	    /**</div><div class="line">		 * Netty创建全部都是实现自AbstractBootstrap。</div><div class="line">		 * 客户端的是Bootstrap，服务端的则是	ServerBootstrap。</div><div class="line">		 **/</div><div class="line">	    public static void main(String[] args) throws InterruptedException &#123;</div><div class="line">	        try &#123;</div><div class="line">	            b.group(group);</div><div class="line">	            b.channel(NioServerSocketChannel.class);</div><div class="line">	            b.childHandler(new NettyServerFilter()); //设置过滤器</div><div class="line">	            // 服务器绑定端口监听</div><div class="line">	            ChannelFuture f = b.bind(port).sync();</div><div class="line">	            System.out.println(&quot;服务端启动成功,端口是:&quot;+port);</div><div class="line">	            // 监听服务器关闭监听</div><div class="line">	            f.channel().closeFuture().sync();</div><div class="line">	        &#125;catch(Exception e)&#123;</div><div class="line">	        	e.printStackTrace();</div><div class="line">	        &#125;</div><div class="line">	        finally &#123;</div><div class="line">	            group.shutdownGracefully(); //关闭EventLoopGroup，释放掉所有资源包括创建的线程  </div><div class="line">	        &#125;</div><div class="line">	    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">mport io.netty.channel.ChannelInitializer;</div><div class="line">import io.netty.channel.ChannelPipeline;</div><div class="line">import io.netty.channel.socket.SocketChannel;</div><div class="line">import io.netty.handler.codec.FixedLengthFrameDecoder;</div><div class="line">import io.netty.handler.codec.LineBasedFrameDecoder;</div><div class="line">import io.netty.handler.codec.http.HttpObjectAggregator;</div><div class="line">import io.netty.handler.codec.string.StringDecoder;</div><div class="line">import io.netty.handler.codec.string.StringEncoder;</div><div class="line"> </div><div class="line">/**</div><div class="line">  * </div><div class="line"> * Title: HelloServerInitializer</div><div class="line"> * Description: Netty 服务端过滤器</div><div class="line"> * Version:1.0.0  </div><div class="line">* @author pancm</div><div class="line">* @date 2017年10月8日</div><div class="line">  */</div><div class="line">public class NettyServerFilter extends ChannelInitializer&lt;SocketChannel&gt; &#123;</div><div class="line"> </div><div class="line">     @Override</div><div class="line">     protected void initChannel(SocketChannel ch) throws Exception &#123;</div><div class="line">         ChannelPipeline ph = ch.pipeline();</div><div class="line">         // 解码和编码，应和客户端一致</div><div class="line">//       ph.addLast(new FixedLengthFrameDecoder(100));   //定长数据帧的解码器 ，每帧数据100个字节就切分一次。  用于解决粘包问题           </div><div class="line">//         ph.addLast(new LineBasedFrameDecoder(2048));		//字节解码器 ,其中2048是规定一行数据最大的字节数。  用于解决拆包问题</div><div class="line">         ph.addLast(&quot;aggregator&quot;, new HttpObjectAggregator(10*1024*1024)); </div><div class="line">         ph.addLast(&quot;decoder&quot;, new StringDecoder());</div><div class="line">         ph.addLast(&quot;encoder&quot;, new StringEncoder());</div><div class="line">         ph.addLast(&quot;handler&quot;, new NettyServerHandler());// 服务端业务逻辑</div><div class="line">     &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">import io.netty.channel.ChannelHandlerContext;</div><div class="line">import io.netty.channel.ChannelInboundHandlerAdapter;</div><div class="line"></div><div class="line">import java.net.InetAddress;</div><div class="line"></div><div class="line">/**</div><div class="line"> * </div><div class="line">* Title: HelloServerHandler</div><div class="line">* Description:  服务端业务逻辑 粘包、拆包测试</div><div class="line">* Version:1.0.0  </div><div class="line">* @author pancm</div><div class="line">* @date 2017年10月8日</div><div class="line"> */</div><div class="line">public class NettyServerHandler extends ChannelInboundHandlerAdapter &#123;</div><div class="line">	/** 条数 */</div><div class="line">	private int count=0; </div><div class="line">	/**</div><div class="line">     * 业务逻辑处理</div><div class="line">     */</div><div class="line">    @Override  </div><div class="line">    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception &#123;  </div><div class="line">    	   String body = (String)msg;  </div><div class="line">           System.out.println(&quot;接受的数据是: &quot; + body + &quot;;条数是: &quot; + ++count); </div><div class="line">    &#125;  </div><div class="line"></div><div class="line">	/**</div><div class="line">	 * 建立连接时，返回消息</div><div class="line">	 */</div><div class="line">	@Override</div><div class="line">	public void channelActive(ChannelHandlerContext ctx) throws Exception &#123;</div><div class="line">		System.out.println(&quot;连接的客户端地址:&quot; + ctx.channel().remoteAddress());</div><div class="line">		ctx.writeAndFlush(&quot;客户端&quot;+ InetAddress.getLocalHost().getHostName() + &quot;成功与服务端建立连接！ &quot;);</div><div class="line">		super.channelActive(ctx);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div></pre></td><td class="code"><pre><div class="line">import io.netty.bootstrap.Bootstrap;</div><div class="line">import io.netty.buffer.ByteBuf;</div><div class="line">import io.netty.buffer.Unpooled;</div><div class="line">import io.netty.channel.Channel;</div><div class="line">import io.netty.channel.EventLoopGroup;</div><div class="line">import io.netty.channel.nio.NioEventLoopGroup;</div><div class="line">import io.netty.channel.socket.nio.NioSocketChannel;</div><div class="line"></div><div class="line">import java.io.IOException;</div><div class="line">/**</div><div class="line"> * </div><div class="line">* Title: NettyClient</div><div class="line">* Description: Netty客户端  粘包、拆包测试</div><div class="line">* Version:1.0.0  </div><div class="line">* @author pancm</div><div class="line">* @date 2017年10月16日</div><div class="line"> */</div><div class="line">public class NettyClient &#123;</div><div class="line">    </div><div class="line">    public static String host = &quot;127.0.0.1&quot;;  //ip地址</div><div class="line">    public static int port = 6789;			//端口</div><div class="line">    /// 通过nio方式来接收连接和处理连接   </div><div class="line">    private static EventLoopGroup group = new NioEventLoopGroup(); </div><div class="line">    private static  Bootstrap b = new Bootstrap();</div><div class="line">    private static Channel ch;</div><div class="line">    </div><div class="line">    /**</div><div class="line">	 * Netty创建全部都是实现自AbstractBootstrap。</div><div class="line">	 * 客户端的是Bootstrap，服务端的则是	ServerBootstrap。</div><div class="line">	 **/</div><div class="line">    public static void main(String[] args) throws InterruptedException, IOException &#123; </div><div class="line">        	System.out.println(&quot;客户端成功启动...&quot;);</div><div class="line">            b.group(group);</div><div class="line">            b.channel(NioSocketChannel.class);</div><div class="line">            b.handler(new NettyClientFilter()); </div><div class="line">            // 连接服务端</div><div class="line">            ch = b.connect(host, port).sync().channel();</div><div class="line">            star(3);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    public static void star(int i) throws IOException&#123;</div><div class="line">    	String str=&quot;春江潮水连海平，海上明月共潮生。&quot;</div><div class="line">    			+&quot;  滟滟随波千万里，何处春江无月明! &quot;</div><div class="line">    			+&quot;	江流宛转绕芳甸，月照花林皆似霰;&quot;</div><div class="line">    			+&quot;	空里流霜不觉飞，汀上白沙看不见。&quot;</div><div class="line">    			+&quot;	江天一色无纤尘，皎皎空中孤月轮。&quot;</div><div class="line">    			+&quot;  江畔何人初见月？江月何年初照人？&quot;</div><div class="line">    			+&quot;	人生代代无穷已，江月年年望相似。&quot;</div><div class="line">    			+&quot;	不知江月待何人，但见长江送流水。&quot;</div><div class="line">    			+&quot;	白云一片去悠悠，青枫浦上不胜愁。&quot;</div><div class="line">    			+&quot;	谁家今夜扁舟子？何处相思明月楼？&quot;</div><div class="line">    			+&quot;	可怜楼上月徘徊，应照离人妆镜台。&quot;</div><div class="line">    			+&quot;	玉户帘中卷不去，捣衣砧上拂还来。&quot;</div><div class="line">    			+&quot;	此时相望不相闻，愿逐月华流照君。&quot;</div><div class="line">    			+&quot;	鸿雁长飞光不度，鱼龙潜跃水成文。&quot;</div><div class="line">    			+&quot;	昨夜闲潭梦落花，可怜春半不还家。&quot;</div><div class="line">    			+&quot;	江水流春去欲尽，江潭落月复西斜。&quot;</div><div class="line">    			+&quot;	斜月沉沉藏海雾，碣石潇湘无限路。&quot;</div><div class="line">    			+&quot;	不知乘月几人归，落月摇情满江树。&quot; </div><div class="line">    			+&quot; 噫吁嚱，危乎高哉！蜀道之难，难于上青天！蚕丛及鱼凫，开国何茫然！尔来四万八千岁，不与秦塞通人烟。&quot;</div><div class="line">    			+&quot; 西当太白有鸟道，可以横绝峨眉巅。地崩山摧壮士死，然后天梯石栈相钩连。上有六龙回日之高标，下有冲波逆折之回川。&quot;</div><div class="line">    			+&quot; 黄鹤之飞尚不得过，猿猱欲度愁攀援。青泥何盘盘，百步九折萦岩峦。扪参历井仰胁息，以手抚膺坐长叹。&quot;</div><div class="line">    			+&quot; 问君西游何时还？畏途巉岩不可攀。但见悲鸟号古木，雄飞雌从绕林间。又闻子规啼夜月，愁空山。&quot;</div><div class="line">    			+&quot; 蜀道之难，难于上青天，使人听此凋朱颜！连峰去天不盈尺，枯松倒挂倚绝壁。飞湍瀑流争喧豗，砯崖转石万壑雷。&quot;</div><div class="line">    			+&quot; 其险也如此，嗟尔远道之人胡为乎来哉！剑阁峥嵘而崔嵬，一夫当关，万夫莫开。&quot;</div><div class="line">    			+&quot; 所守或匪亲，化为狼与豺。朝避猛虎，夕避长蛇；磨牙吮血，杀人如麻。锦城虽云乐，不如早还家。&quot;</div><div class="line">    			+&quot; 蜀道之难，难于上青天，侧身西望长咨嗟！&quot;;</div><div class="line">    	if(i==1)&#123;</div><div class="line">    		for(int j=0;j&lt;100;j++)&#123;</div><div class="line">    			str=&quot;Hello Netty&quot;;</div><div class="line">    			ch.writeAndFlush(str);</div><div class="line">    		&#125;</div><div class="line">    	&#125;else if(i==2)&#123;</div><div class="line">    		str+=str;</div><div class="line">    		ch.writeAndFlush(str);</div><div class="line">    	&#125;else if(i==3)&#123;</div><div class="line">    		//System.getProperty(&quot;line.separator&quot;) 结束标记</div><div class="line">    		byte [] bt=(str+System.getProperty(&quot;line.separator&quot;)).getBytes();</div><div class="line">    		ByteBuf message = Unpooled.buffer(bt.length);  </div><div class="line">    	    message.writeBytes(bt);  </div><div class="line">    	    ch.writeAndFlush(message);</div><div class="line">    	&#125;</div><div class="line">    	</div><div class="line">    	</div><div class="line">    	System.out.println(&quot;客户端发送数据:&quot;+str+&quot;,发送数据的长度:&quot;+str.length());</div><div class="line">   &#125;</div><div class="line">    	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">import io.netty.channel.ChannelInitializer;</div><div class="line">import io.netty.channel.ChannelPipeline;</div><div class="line">import io.netty.channel.socket.SocketChannel;</div><div class="line">import io.netty.handler.codec.string.StringDecoder;</div><div class="line">import io.netty.handler.codec.string.StringEncoder;</div><div class="line">/**</div><div class="line"> * </div><div class="line">* Title: NettyClientFilter</div><div class="line">* Description: Netty客户端 过滤器</div><div class="line">* Version:1.0.0  </div><div class="line">* @author pancm</div><div class="line">* @date 2017年10月8日</div><div class="line"> */</div><div class="line">public class NettyClientFilter extends ChannelInitializer&lt;SocketChannel&gt; &#123;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    protected void initChannel(SocketChannel ch) throws Exception &#123;</div><div class="line">        ChannelPipeline ph = ch.pipeline();</div><div class="line">        /*</div><div class="line">         * 解码和编码，应和服务端一致</div><div class="line">         * */</div><div class="line">        ph.addLast(&quot;decoder&quot;, new StringDecoder());</div><div class="line">        ph.addLast(&quot;encoder&quot;, new StringEncoder());</div><div class="line">        ph.addLast(&quot;handler&quot;, new NettyClientHandler()); //客户端的逻辑</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">import java.util.Date;</div><div class="line"></div><div class="line">import io.netty.channel.ChannelHandlerContext;</div><div class="line">import io.netty.channel.ChannelInboundHandlerAdapter;</div><div class="line"></div><div class="line">/**</div><div class="line"> * </div><div class="line">* Title: NettyClientHandler</div><div class="line">* Description: 客户端业务逻辑实现</div><div class="line">* Version:1.0.0  </div><div class="line">* @author pancm</div><div class="line">* @date 2017年10月8日</div><div class="line"> */</div><div class="line">public class NettyClientHandler extends ChannelInboundHandlerAdapter &#123;</div><div class="line"></div><div class="line">	 /**</div><div class="line">     * 业务逻辑处理	</div><div class="line">     */</div><div class="line">    @Override  </div><div class="line">    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception &#123;  </div><div class="line">    	System.out.println(&quot;客户端接受的消息:&quot;+msg);</div><div class="line">    &#125;  </div><div class="line">    /**</div><div class="line">     * 建立连接时</div><div class="line">     */</div><div class="line">    @Override  </div><div class="line">    public void channelActive(ChannelHandlerContext ctx) throws Exception &#123;  </div><div class="line">        System.out.println(&quot;建立连接时：&quot;+new Date());  </div><div class="line">        ctx.fireChannelActive();  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">     /**</div><div class="line">      * </div><div class="line">      * 关闭连接时</div><div class="line">      */</div><div class="line">    @Override  </div><div class="line">    public void channelInactive(ChannelHandlerContext ctx) throws Exception &#123;  </div><div class="line">        System.out.println(&quot;关闭连接时：&quot;+new Date());  </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/netty/" rel="tag"># netty</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/08/Netty4 学习笔记之二-客户端与服务端心跳 demo/" rel="next" title="Netty4 学习笔记之二-客户端与服务端心跳 demo">
+                <i class="fa fa-chevron-left"></i> Netty4 学习笔记之二-客户端与服务端心跳 demo
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/21/分享一些JAVA相关资源/" rel="prev" title="分享一些JAVA相关资源">
+                分享一些JAVA相关资源 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="xuwujing" />
+          <p class="site-author-name" itemprop="name">xuwujing</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">53</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#名词解释"><span class="nav-number">2.</span> <span class="nav-text">名词解释</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#示例图"><span class="nav-number">2.1.</span> <span class="nav-text">示例图:</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#粘包"><span class="nav-number">2.1.1.</span> <span class="nav-text">粘包:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#拆包"><span class="nav-number">2.1.2.</span> <span class="nav-text">拆包:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决粘包、拆包"><span class="nav-number">3.</span> <span class="nav-text">解决粘包、拆包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#解决粘包"><span class="nav-number">3.1.</span> <span class="nav-text">解决粘包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决拆包"><span class="nav-number">3.2.</span> <span class="nav-text">解决拆包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务端"><span class="nav-number">3.3.</span> <span class="nav-text">服务端:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#客户端"><span class="nav-number">3.4.</span> <span class="nav-text">客户端</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xuwujing</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

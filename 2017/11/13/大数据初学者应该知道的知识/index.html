@@ -1,0 +1,797 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java，hadoop," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="原文:http://lxw1234.com/archives/2016/11/779.htm导读：  第一章：初识Hadoop 第二章：更高效的WordCount 第三章：把别处的数据搞到Hadoop上 第四章：把Hadoop上的数据搞到别处去 第五章：快一点吧，我的SQL 第六章：一夫多妻制 第七章：越来越多的分析任务 第八章：我的数据要实时 第九章：我的数据要对外 第十章：牛逼高大上的机器学习">
+<meta name="keywords" content="java，hadoop">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大数据初学者应该知道的知识">
+<meta property="og:url" content="http://yoursite.com/2017/11/13/大数据初学者应该知道的知识/index.html">
+<meta property="og:site_name" content="xuwujing&#39;s blog">
+<meta property="og:description" content="原文:http://lxw1234.com/archives/2016/11/779.htm导读：  第一章：初识Hadoop 第二章：更高效的WordCount 第三章：把别处的数据搞到Hadoop上 第四章：把Hadoop上的数据搞到别处去 第五章：快一点吧，我的SQL 第六章：一夫多妻制 第七章：越来越多的分析任务 第八章：我的数据要实时 第九章：我的数据要对外 第十章：牛逼高大上的机器学习">
+<meta property="og:image" content="https://image.evget.com/Content/files/2017/5/11/d3d6e41dc0d04975b3b0dae3bc428443636301098742381469.jpg">
+<meta property="og:image" content="https://image.evget.com/Content/files/2017/5/11/b5171d12bd9b4c7288f53adfe220d359636301100320851752.jpg">
+<meta property="og:image" content="https://image.evget.com/Content/files/2017/5/11/31c612f6ef88470784a59bb5f741cd7a636301100751426380.jpg">
+<meta property="og:image" content="https://image.evget.com/Content/files/2017/5/11/dfcf3e7e736c490199f8677bb56e5a75636301109496776585.jpg">
+<meta property="og:image" content="https://image.evget.com/Content/files/2017/5/11/1669d8687d1d4d428c02e2557e4fe428636301109908210118.jpg">
+<meta property="og:image" content="https://image.evget.com/Content/files/2017/5/11/16ab097ebb6d499da2417529b34e8534636301110220817998.jpg">
+<meta property="og:image" content="https://image.evget.com/Content/files/2017/5/11/57e5a37ff4e94623b017bc61bfea5aba636301110609960255.jpg">
+<meta property="og:image" content="https://image.evget.com/Content/files/2017/5/11/25b3dee50c50472fbbe8f1f37f7b524b636301110955890041.jpg">
+<meta property="og:image" content="https://image.evget.com/Content/files/2017/5/11/42cd64652c64418090f5632bc858f4e4636301111414176254.jpg">
+<meta property="og:updated_time" content="2017-11-18T02:52:59.946Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="大数据初学者应该知道的知识">
+<meta name="twitter:description" content="原文:http://lxw1234.com/archives/2016/11/779.htm导读：  第一章：初识Hadoop 第二章：更高效的WordCount 第三章：把别处的数据搞到Hadoop上 第四章：把Hadoop上的数据搞到别处去 第五章：快一点吧，我的SQL 第六章：一夫多妻制 第七章：越来越多的分析任务 第八章：我的数据要实时 第九章：我的数据要对外 第十章：牛逼高大上的机器学习">
+<meta name="twitter:image" content="https://image.evget.com/Content/files/2017/5/11/d3d6e41dc0d04975b3b0dae3bc428443636301098742381469.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/11/13/大数据初学者应该知道的知识/"/>
+
+
+
+
+
+  <title>大数据初学者应该知道的知识 | xuwujing's blog</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xuwujing's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/13/大数据初学者应该知道的知识/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xuwujing">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xuwujing's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">大数据初学者应该知道的知识</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-13T13:35:00+08:00">
+                2017-11-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>原文:<a href="http://lxw1234.com/archives/2016/11/779.htm" target="_blank" rel="external">http://lxw1234.com/archives/2016/11/779.htm</a><br><strong><span style="color: #009acd;">导读：</span></strong></p><p></p>
+<p><ul></ul></p>
+<p><li>第一章：初识<a href="http://bigdata.evget.com/post/197.html" target="_blank" rel="external">Hadoop</a></li></p>
+<p><li>第二章：更高效的WordCount</li></p>
+<p><li>第三章：把别处的数据搞到Hadoop上</li></p>
+<p><li>第四章：把Hadoop上的数据搞到别处去</li></p>
+<p><li>第五章：快一点吧，我的SQL</li></p>
+<p><li>第六章：一夫多妻制</li></p>
+<p><li>第七章：越来越多的分析任务</li></p>
+<p><li>第八章：我的数据要实时</li></p>
+<p><li>第九章：我的数据要对外</li></p>
+<p><li>第十章：牛逼高大上的机器学习</li><br></p>
+<p><span style="font-size: 14px;">经常有初学者在博客和QQ问我，自己想往<a href="http://bigdata.evget.com/" target="_blank" rel="external">大数据</a>方向发展，该学哪些技术，学习路线是什么样的，觉得大数据很火，就业很好，薪资很高。如果自己很迷茫，为了这些原因想往大数据方向发展，也可以，那么我就想问一下，你的专业是什么，对于计算机/软件，你的兴趣是什么？是计算机专业，对操作系统、硬件、网络、服务器感兴趣？是软件专业，对软件开发、编程、写代码感兴趣？还是数学、统计学专业，对数据和数字特别感兴趣。。</span></p><br><p><span style="font-size: 14px;">其实这就是想告诉你的大数据的三个发展方向，平台搭建/优化/运维/监控、大数据开发/设计/架构、数据分析/挖掘。请不要问我哪个容易，哪个前景好，哪个钱多。</span></p><br><p><span style="color: #000000;"><strong><span style="font-size: 14px;">先扯一下大数据的4V特征：</span></strong></span></p><br><ul><br><li><span style="font-size: 14px;">数据量大，TB-&gt;PB</span></li><br><li><span style="font-size: 14px;">数据类型繁多，结构化、非结构化文本、日志、视频、图片、地理位置等；</span></li><br><li><span style="font-size: 14px;">商业价值高，但是这种价值需要在海量数据之上，通过数据分析与机器学习更快速的挖掘出来；</span></li><br><li><span style="font-size: 14px;">处理时效性高，海量数据的处理需求不再局限在离线计算当中。</span></li><br></ul><br><p><span style="font-size: 14px;">现如今，正式为了应对大数据的这几个特点，开源的<a href="http://bigdata.evget.com/" target="_blank" rel="external">大数据框架</a>越来越多，越来越强，先列举一些常见的：</span></p><br><p><span style="color: #000000;"><strong><span style="font-size: 14px;">文件存储：</span></strong><span style="font-size: 14px;">Hadoop HDFS、Tachyon、KFS<br><br> <strong>离线计算：</strong>Hadoop MapReduce、Spark<br><br> <strong>流式、实时计算：</strong>Storm、Spark Streaming、S4、Heron<br><br> <strong>K-V、NOSQL数据库：</strong>HBase、Redis、MongoDB<br><br> <strong>资源管理：</strong>YARN、Mesos<br><br> <strong>日志收集：</strong>Flume、Scribe、Logstash、Kibana<br><br> <strong>消息系统：</strong>Kafka、StormMQ、ZeroMQ、RabbitMQ<br><br> <strong>查询分析：</strong>Hive、Impala、Pig、Presto、Phoenix、SparkSQL、Drill、Flink、Kylin、Druid<br><br> <strong>分布式协调服务：</strong>Zookeeper<br><br> <strong>集群管理与监控：</strong>Ambari、Ganglia、Nagios、Cloudera Manager<br><br> <strong>数据挖掘、机器学习：</strong>Mahout、Spark MLLib<br><br> <strong>数据同步：</strong>Sqoop<br><br> <strong>任务调度：</strong>Oozie<br><br> ……</span></span></p><br><p><span style="font-size: 14px;">眼花了吧，上面的有30多种吧，别说精通了，全部都会使用的，估计也没几个。</span></p><br><p><span style="font-size: 14px;">就我个人而言，主要经验是在第二个方向（开发/设计/架构），且听听我的建议吧。</span></p><br><h2 style="text-align: center;"><strong><span style="color: #009acd;">第一章：初识Hadoop</span></strong></h2><br><h3><span style="color: #000000;"><strong><span style="font-size: 14px;">1.1 学会百度与Google</span></strong></span></h3><br><p><span style="color: #000000; font-size: 14px;">不论遇到什么问题，先试试搜索并自己解决。</span></p><br><p><span style="color: #000000; font-size: 14px;">Google首选，翻不过去的，就用百度吧。</span></p><br><h3><span style="color: #000000; font-size: 14px;">1.2 参考资料首选官方文档</span></h3><br><p><span style="color: #000000; font-size: 14px;">特别是对于入门来说，官方文档永远是首选文档。</span></p><br><p><span style="color: #000000; font-size: 14px;">相信搞这块的大多是文化人，英文凑合就行，实在看不下去的，请参考第一步。</span></p><br><h3><span style="color: #000000; font-size: 14px;">1.3 先让Hadoop跑起来</span></h3><br><p><span style="color: #000000; font-size: 14px;">Hadoop可以算是大数据存储和计算的开山鼻祖，现在大多开源的大数据框架都依赖Hadoop或者与它能很好的兼容。</span></p><br><p><span style="color: #000000; font-size: 14px;">关于Hadoop,你至少需要搞清楚以下是什么：</span></p><br><ul><br><li><span style="color: #000000; font-size: 14px;">Hadoop 1.0、Hadoop 2.0</span></li><br><li><span style="color: #000000; font-size: 14px;">MapReduce、HDFS</span></li><br><li><span style="color: #000000; font-size: 14px;">NameNode、DataNode</span></li><br><li><span style="color: #000000; font-size: 14px;">JobTracker、TaskTracker</span></li><br><li><span style="color: #000000; font-size: 14px;">Yarn、ResourceManager、NodeManager</span></li><br></ul><br><p><span style="color: #000000; font-size: 14px;">自己搭建Hadoop，请使用第一步和第二步，能让它跑起来就行。</span></p><br><p><span style="color: #000000; font-size: 14px;">建议先使用安装包命令行安装，不要使用管理工具安装。</span></p><br><p><span style="color: #000000; font-size: 14px;">另外：Hadoop1.0知道它就行了，现在都用Hadoop 2.0.</span></p><br><h3><span style="color: #000000;"><strong><span style="font-size: 14px;">1.4 试试使用Hadoop</span></strong></span></h3><br><p><span style="color: #000000; font-size: 14px;">HDFS目录操作命令；<br><br> 上传、下载文件命令；<br><br> 提交运行MapReduce示例程序；</span></p><br><p><span style="color: #000000; font-size: 14px;">打开Hadoop WEB界面，查看Job运行状态，查看Job运行日志。</span></p><br><p><span style="color: #000000; font-size: 14px;">知道Hadoop的系统日志在哪里。</span></p><br><h3><span style="color: #000000;"><strong><span style="font-size: 14px;">1.5 你该了解它们的原理了</span></strong></span></h3><br><p><span style="color: #000000; font-size: 14px;">MapReduce：如何分而治之；<br><br> HDFS：数据到底在哪里，什么是副本；<br><br> Yarn到底是什么，它能干什么；<br><br> NameNode到底在干些什么；<br><br> ResourceManager到底在干些什么；</span></p><br><h3><span style="color: #000000;"><strong><span style="font-size: 14px;">1.6 自己写一个MapReduce程序</span></strong></span></h3><br><p><span style="color: #000000; font-size: 14px;">请仿照WordCount例子，自己写一个（照抄也行）WordCount程序，<br><br> 打包并提交到Hadoop运行。</span></p><br><p><span style="color: #000000; font-size: 14px;">你不会Java？Shell、Python都可以，有个东西叫Hadoop Streaming。</span></p><br><p><span style="color: #000000; font-size: 14px;">如果你认真完成了以上几步，恭喜你，你的一只脚已经进来了。</span></p><br><h2 style="text-align: center;"><strong><span style="color: #009acd;">第二章：更高效的WordCount</span></strong></h2><br><h3><span style="color: #000000;"><strong><span style="font-size: 14px;">2.1 学点SQL吧</span></strong></span></h3><br><p><span style="color: #000000; font-size: 14px;">你知道数据库吗？你会写SQL吗？<br><br> 如果不会，请学点SQL吧。</span></p><br><h3><span style="color: #000000;"><strong><span style="font-size: 14px;">2.2 SQL版WordCount</span></strong></span></h3><br><p><span style="color: #000000; font-size: 14px;">在1.6中，你写（或者抄）的WordCount一共有几行代码？</span></p><br><p><span style="color: #000000; font-size: 14px;">给你看看我的:</span></p><br><p><span style="color: #000000; font-size: 14px;">SELECT word,COUNT(1) FROM wordcount GROUP BY word;</span></p><br><p><span style="color: #000000; font-size: 14px;">这便是SQL的魅力，编程需要几十行，甚至上百行代码，我这一句就搞定；使用SQL处理分析Hadoop上的数据，方便、高效、易上手、更是趋势。不论是离线计算还是实时计算，越来越多的大数据处理框架都在积极提供SQL接口。</span></p><br><h3><span style="color: #000000;"><strong><span style="font-size: 14px;">2.3 SQL On Hadoop之Hive</span></strong></span></h3><br><p><span style="color: #000000; font-size: 14px;">什么是Hive？官方给的解释是：</span></p><br><p><span style="color: #000000; font-size: 14px;">The Apache Hive data warehouse software facilitates reading, writing, and managing large datasets residing in distributed storage and queried using SQL syntax.</span></p><br><p><span style="color: #000000; font-size: 14px;">为什么说Hive是数据仓库工具，而不是数据库工具呢？有的朋友可能不知道数据仓库，数据仓库是逻辑上的概念，底层使用的是数据库，数据仓库中的数据有这两个特点：最全的历史数据（海量）、相对稳定的；所谓相对稳定，指的是数据仓库不同于业务系统数据库，数据经常会被更新，数据一旦进入数据仓库，很少会被更新和删除，只会被大量查询。而Hive，也是具备这两个特点，因此，Hive适合做海量数据的数据仓库工具，而不是数据库工具。</span></p><br><h3><span style="color: #000000;"><strong><span style="font-size: 14px;">2.4 安装配置Hive</span></strong></span></h3><br><p><span style="color: #000000; font-size: 14px;">请参考1.1 和 1.2 完成Hive的安装配置。可以正常进入Hive命令行。</span></p><br><h3><span style="color: #000000;"><strong><span style="font-size: 14px;">2.5 试试使用Hive</span></strong></span></h3><br><p><span style="color: #000000; font-size: 14px;">请参考1.1 和 1.2 ，在Hive中创建wordcount表，并运行2.2中的SQL语句。<br><br> 在Hadoop WEB界面中找到刚才运行的SQL任务。</span></p><br><p><span style="color: #000000; font-size: 14px;">看SQL查询结果是否和1.4中MapReduce中的结果一致。</span></p><br><h3><span style="color: #000000; font-size: 14px;">2.6 Hive是怎么工作的</span></h3><br><p><span style="color: #000000; font-size: 14px;">明明写的是SQL，为什么Hadoop WEB界面中看到的是MapReduce任务？</span></p><br><h3><span style="color: #000000;"><strong><span style="font-size: 14px;">2.7 学会Hive的基本命令</span></strong></span></h3><br><p><span style="color: #000000; font-size: 14px;">创建、删除表；<br><br> 加载数据到表；<br><br> 下载Hive表的数据；</span></p><br><p><span style="color: #000000; font-size: 14px;">请参考1.2，学习更多关于Hive的语法和命令。</span></p><br><p><span style="color: #000000; font-size: 14px;">如果你已经按照《写给大数据开发初学者的话》中第一章和第二章的流程认真完整的走了一遍，那么你应该已经具备以下技能和知识点：</span></p><br><ul><br><li><span style="color: #000000; font-size: 14px;">0和Hadoop2.0的区别；</span></li><br><li><span style="color: #000000; font-size: 14px;">MapReduce的原理（还是那个经典的题目，一个10G大小的文件，给定1G大小的内存，如何使用Java程序统计出现次数最多的10个单词及次数）；</span></li><br><li><span style="color: #000000; font-size: 14px;">HDFS读写数据的流程；向HDFS中PUT数据；从HDFS中下载数据；</span></li><br><li><span style="color: #000000; font-size: 14px;">自己会写简单的MapReduce程序，运行出现问题，知道在哪里查看日志；</span></li><br><li><span style="color: #000000; font-size: 14px;">会写简单的SELECT、WHERE、GROUP BY等SQL语句；</span></li><br><li><span style="color: #000000; font-size: 14px;">Hive SQL转换成MapReduce的大致流程；</span></li><br><li><span style="color: #000000; font-size: 14px;">Hive中常见的语句：创建表、删除表、往表中加载数据、分区、将表中数据下载到本地；</span></li><br></ul><br><p><span style="color: #000000; font-size: 14px;">从上面的学习，你已经了解到，HDFS是Hadoop提供的分布式存储框架，它可以用来存储海量数据，MapReduce是Hadoop提供的分布式计算框架，它可以用来统计和分析HDFS上的海量数据，而Hive则是SQL On Hadoop，Hive提供了SQL接口，开发人员只需要编写简单易上手的SQL语句，Hive负责把SQL翻译成MapReduce，提交运行。</span></p><br><p><span style="color: #000000; font-size: 14px;">此时，你的”大数据平台”是这样的：</span></p><br><p style="text-align: center;"><a href="https://image.evget.com/Content/files/2017/5/11/d3d6e41dc0d04975b3b0dae3bc428443636301098742381469.jpg" class="highslide-image" onclick="return hs.expand(this);" target="_blank" rel="external"><img src="https://image.evget.com/Content/files/2017/5/11/d3d6e41dc0d04975b3b0dae3bc428443636301098742381469.jpg" alt=""></a></p><br><p><span style="color: #000000; font-size: 14px;">那么问题来了，海量数据如何到HDFS上呢？</span></p><br><h2 style="text-align: center;"><strong><span style="color: #009acd;">第三章：把别处的数据搞到Hadoop上</span></strong></h2><br><p><span style="color: #000000; font-size: 14px;">此处也可以叫做数据采集，把各个数据源的数据采集到Hadoop上。</span></p><br><h3><span style="color: #000000;"><strong><span style="font-size: 14px;">3.1 HDFS PUT命令</span></strong></span></h3><br><p><span style="color: #000000; font-size: 14px;">这个在前面你应该已经使用过了。</span></p><br><p><span style="color: #000000; font-size: 14px;">put命令在实际环境中也比较常用，通常配合shell、python等脚本语言来使用。</span></p><br><p><span style="color: #000000; font-size: 14px;">建议熟练掌握。</span></p><br><h3><span style="color: #000000;"><strong><span style="font-size: 14px;">3.2 HDFS API</span></strong></span></h3><br><p><span style="color: #000000; font-size: 14px;">HDFS提供了写数据的API，自己用编程语言将数据写入HDFS，put命令本身也是使用API。</span></p><br><p><span style="color: #000000; font-size: 14px;">实际环境中一般自己较少编写程序使用API来写数据到HDFS，通常都是使用其他框架封装好的方法。比如：Hive中的INSERT语句，Spark中的saveAsTextfile等。</span></p><br><p><span style="color: #000000; font-size: 14px;">建议了解原理，会写Demo。</span></p><br><h3><span style="color: #000000;"><strong><span style="font-size: 14px;">3.3 Sqoop</span></strong></span></h3><br><p><span style="color: #000000; font-size: 14px;">Sqoop是一个主要用于Hadoop/Hive与传统关系型数据库Oracle/MySQL/SQLServer等之间进行数据交换的开源框架。</span></p><br><p><span style="color: #000000; font-size: 14px;">就像Hive把SQL翻译成MapReduce一样，Sqoop把你指定的参数翻译成MapReduce，提交到Hadoop运行，完成Hadoop与其他数据库之间的数据交换。</span></p><br><p><span style="color: #000000; font-size: 14px;">自己下载和配置Sqoop（建议先使用Sqoop1，Sqoop2比较复杂）。</span></p><br><p><span style="color: #000000; font-size: 14px;">了解Sqoop常用的配置参数和方法。</span></p><br><p><span style="color: #000000; font-size: 14px;">使用Sqoop完成从MySQL同步数据到HDFS；<br><br> 使用Sqoop完成从MySQL同步数据到Hive表；</span></p><br><p><span style="color: #000000; font-size: 14px;">PS：如果后续选型确定使用Sqoop作为数据交换工具，那么建议熟练掌握，否则，了解和会用Demo即可。</span></p><br><h3><span style="color: #000000;"><strong><span style="font-size: 14px;">3.4 Flume</span></strong></span></h3><br><p><span style="color: #000000; font-size: 14px;">Flume是一个分布式的海量日志采集和传输框架，因为“采集和传输框架”，所以它并不适合关系型数据库的数据采集和传输。</span></p><br><p><span style="color: #000000; font-size: 14px;">Flume可以实时的从网络协议、消息系统、文件系统采集日志，并传输到HDFS上。</span></p><br><p><span style="color: #000000; font-size: 14px;">因此，如果你的业务有这些数据源的数据，并且需要实时的采集，那么就应该考虑使用Flume。</span></p><br><p><span style="color: #000000; font-size: 14px;">下载和配置Flume。</span></p><br><p><span style="color: #000000; font-size: 14px;">使用Flume监控一个不断追加数据的文件，并将数据传输到HDFS；</span></p><br><p><span style="color: #000000; font-size: 14px;">PS：Flume的配置和使用较为复杂，如果你没有足够的兴趣和耐心，可以先跳过Flume。</span></p><br><h3><span style="color: #000000;"><strong><span style="font-size: 14px;">3.5 阿里开源的DataX</span></strong></span></h3><br><p><span style="color: #000000; font-size: 14px;">之所以介绍这个，是因为我们公司目前使用的Hadoop与关系型数据库数据交换的工具，就是之前基于DataX开发的，非常好用。</span></p><br><p><span style="color: #000000; font-size: 14px;">可以参考我的博文《异构数据源海量数据交换工具-Taobao DataX 下载和使用》。</span></p><br><p><span style="color: #000000; font-size: 14px;">现在DataX已经是3.0版本，支持很多数据源。</span></p><br><p><span style="color: #000000; font-size: 14px;">你也可以在其之上做二次开发。</span></p><br><p><span style="color: #000000; font-size: 14px;">PS：有兴趣的可以研究和使用一下，对比一下它与Sqoop。</span></p><br><p><span style="color: #000000; font-size: 14px;">如果你认真完成了上面的学习和实践，此时，你的”大数据平台”应该是这样的：</span></p><br><p style="text-align: center;"><a href="https://image.evget.com/Content/files/2017/5/11/b5171d12bd9b4c7288f53adfe220d359636301100320851752.jpg" class="highslide-image" onclick="return hs.expand(this);" target="_blank" rel="external"><img src="https://image.evget.com/Content/files/2017/5/11/b5171d12bd9b4c7288f53adfe220d359636301100320851752.jpg" alt=""></a></p><br><h2 style="text-align: center;"><span style="color: #009acd;">第四章：把Hadoop上的数据搞到别处去</span></h2><br><p><span style="color: #000000; font-size: 14px;">前面介绍了如何把数据源的数据采集到Hadoop上，数据到Hadoop上之后，便可以使用Hive和MapReduce进行分析了。那么接下来的问题是，分析完的结果如何从Hadoop上同步到其他系统和应用中去呢？</span></p><br><p><span style="color: #000000; font-size: 14px;">其实，此处的方法和第三章基本一致的。</span></p><br><h3><span style="color: #000000;"><strong><span style="font-size: 14px;">4.1 HDFS GET命令</span></strong></span></h3><br><p><span style="color: #000000; font-size: 14px;">把HDFS上的文件GET到本地。需要熟练掌握。</span></p><br><h3><span style="color: #000000;"><strong><span style="font-size: 14px;">4.2 HDFS API</span></strong></span></h3><br><p><span style="color: #000000; font-size: 14px;">同3.2.</span></p><br><h3><span style="color: #000000;"><strong><span style="font-size: 14px;">4.3 Sqoop</span></strong></span></h3><br><p><span style="color: #000000; font-size: 14px;">同3.3.</span></p><br><p><span style="color: #000000; font-size: 14px;">使用Sqoop完成将HDFS上的文件同步到MySQL；<br><br> 使用Sqoop完成将Hive表中的数据同步到MySQL；</span></p><br><h3><span style="color: #000000;"><strong><span style="font-size: 14px;">4.4 DataX</span></strong></span></h3><br><p><span style="color: #000000; font-size: 14px;">同3.5.</span></p><br><p><span style="color: #000000; font-size: 14px;">如果你认真完成了上面的学习和实践，此时，你的”大数据平台”应该是这样的：</span></p><br><p style="text-align: center;"><a href="https://image.evget.com/Content/files/2017/5/11/31c612f6ef88470784a59bb5f741cd7a636301100751426380.jpg" class="highslide-image" onclick="return hs.expand(this);" target="_blank" rel="external"><img src="https://image.evget.com/Content/files/2017/5/11/31c612f6ef88470784a59bb5f741cd7a636301100751426380.jpg" alt=""></a></p><br><p><span style="color: #000000; font-size: 14px;">如果你已经按照《写给大数据开发初学者的话2》中第三章和第四章的流程认真完整的走了一遍，那么你应该已经具备以下技能和知识点：</span></p><br><p><span style="color: #000000; font-size: 14px;">知道如何把已有的数据采集到HDFS上，包括离线采集和实时采集；</span></p><br><p><span style="color: #000000; font-size: 14px;">你已经知道sqoop（或者还有DataX）是HDFS和其他数据源之间的数据交换工具；</span></p><br><p><span style="color: #000000; font-size: 14px;">你已经知道flume可以用作实时的日志采集。</span></p><br><p><span style="color: #000000;"><span style="font-size: 14px;">从前面的学习，对于大数据平台，你已经掌握的不少的知识和技能，搭建Hadoop集群，</span><span style="font-size: 14px;">把数据采集到Hadoop上，使用Hive和MapReduce来分析数据，把分析结果同步到其他数据源。</span></span></p><br><p><span style="color: #000000;"><span style="font-size: 14px;">接下来的问题来了，Hive使用的越来越多，你会发现很多不爽的地方，特别是速度慢，</span><span style="font-size: 14px;">大多情况下，明明我的数据量很小，它都要申请资源，启动MapReduce来执行。</span></span></p><br><h2 style="text-align: center;"><span style="color: #009acd;">第五章：快一点吧，我的SQL</span></h2><br><p><span style="color: #000000; font-size: 14px;">其实大家都已经发现Hive后台使用MapReduce作为执行引擎，实在是有点慢。</span></p><br><p><span style="color: #000000; font-size: 14px;">因此SQL On Hadoop的框架越来越多，按我的了解，最常用的按照流行度依次为SparkSQL、Impala和Presto.</span></p><br><p><span style="color: #000000; font-size: 14px;">这三种框架基于半内存或者全内存，提供了SQL接口来快速查询分析Hadoop上的数据。关于三者的比较，请参考1.1.</span></p><br><p><span style="color: #000000; font-size: 14px;">我们目前使用的是SparkSQL，至于为什么用SparkSQL，原因大概有以下吧：</span></p><br><p><span style="color: #000000; font-size: 14px;">使用Spark还做了其他事情，不想引入过多的框架；</span></p><br><p><span style="color: #000000; font-size: 14px;">Impala对内存的需求太大，没有过多资源部署；</span></p><br><h3><span style="color: #000000;"><strong><span style="font-size: 14px;">5.1 关于Spark和SparkSQL</span></strong></span></h3><br><p><span style="color: #000000; font-size: 14px;">什么是Spark，什么是SparkSQL。<br><br> Spark有的核心概念及名词解释。<br><br> SparkSQL和Spark是什么关系，SparkSQL和Hive是什么关系。<br><br> SparkSQL为什么比Hive跑的快。</span></p><br><h3><span style="color: #000000;"><strong><span style="font-size: 14px;">5.2 如何部署和运行SparkSQL</span></strong></span></h3><br><p><span style="color: #000000; font-size: 14px;">Spark有哪些部署模式？<br><br> 如何在Yarn上运行SparkSQL？<br><br> 使用SparkSQL查询Hive中的表。</span></p><br><p><span style="color: #000000; font-size: 14px;">PS: Spark不是一门短时间内就能掌握的技术，因此建议在了解了Spark之后，可以先从SparkSQL入手，循序渐进。</span></p><br><p><span style="color: #000000; font-size: 14px;">关于Spark和SparkSQL，可参考&nbsp;<a href="http://lxw1234.com/archives/category/spark" target="_blank" rel="external">http://lxw1234.com/archives/category/spark</a></span></p><br><p><span style="color: #000000; font-size: 14px;">如果你认真完成了上面的学习和实践，此时，你的”大数据平台”应该是这样的：</span></p><br><p style="text-align: center;"><a href="https://image.evget.com/Content/files/2017/5/11/dfcf3e7e736c490199f8677bb56e5a75636301109496776585.jpg" class="highslide-image" onclick="return hs.expand(this);" target="_blank" rel="external"><img src="https://image.evget.com/Content/files/2017/5/11/dfcf3e7e736c490199f8677bb56e5a75636301109496776585.jpg" alt=""></a></p><br><h2 style="text-align: center;"><span style="color: #009acd;">第六章：一夫多妻制</span></h2><br><p><span style="color: #000000; font-size: 14px;">请不要被这个名字所诱惑。其实我想说的是数据的一次采集、多次消费。</span></p><br><p><span style="color: #000000; font-size: 14px;">在实际业务场景下，特别是对于一些监控日志，想即时的从日志中了解一些指标（关于实时计算，后面章节会有介绍），这时候，从HDFS上分析就太慢了，尽管是通过Flume采集的，但Flume也不能间隔很短就往HDFS上滚动文件，这样会导致小文件特别多。</span></p><br><p><span style="color: #000000; font-size: 14px;">为了满足数据的一次采集、多次消费的需求，这里要说的便是Kafka。</span></p><br><h3><span style="color: #000000;"><strong><span style="font-size: 14px;">6.1 关于Kafka</span></strong></span></h3><br><p><span style="color: #000000; font-size: 14px;">什么是Kafka？</span></p><br><p><span style="color: #000000; font-size: 14px;">Kafka的核心概念及名词解释。</span></p><br><h3><span style="color: #000000;"><strong><span style="font-size: 14px;">6.2 如何部署和使用Kafka</span></strong></span></h3><br><p><span style="color: #000000; font-size: 14px;">使用单机部署Kafka，并成功运行自带的生产者和消费者例子。</span></p><br><p><span style="color: #000000; font-size: 14px;">使用Java程序自己编写并运行生产者和消费者程序。</span></p><br><p><span style="color: #000000; font-size: 14px;">Flume和Kafka的集成，使用Flume监控日志，并将日志数据实时发送至Kafka。</span></p><br><p><span style="color: #000000; font-size: 14px;">如果你认真完成了上面的学习和实践，此时，你的”大数据平台”应该是这样的：</span></p><br><p style="text-align: center;"><a href="https://image.evget.com/Content/files/2017/5/11/1669d8687d1d4d428c02e2557e4fe428636301109908210118.jpg" class="highslide-image" onclick="return hs.expand(this);" target="_blank" rel="external"><img src="https://image.evget.com/Content/files/2017/5/11/1669d8687d1d4d428c02e2557e4fe428636301109908210118.jpg" alt=""></a></p><br><p><span style="color: #000000; font-size: 14px;">这时，使用Flume采集的数据，不是直接到HDFS上，而是先到Kafka，Kafka中的数据可以由多个消费者同时消费，其中一个消费者，就是将数据同步到HDFS。</span></p><br><p><span style="color: #000000; font-size: 14px;">如果你已经按照《写给大数据开发初学者的话3》中第五章和第六章的流程认真完整的走了一遍，那么你应该已经具备以下技能和知识点：</span></p><br><ul><br><li><span style="color: #000000; font-size: 14px;">为什么Spark比MapReduce快。</span></li><br><li><span style="color: #000000; font-size: 14px;">使用SparkSQL代替Hive，更快的运行SQL。</span></li><br><li><span style="color: #000000; font-size: 14px;">使用Kafka完成数据的一次收集，多次消费架构。</span></li><br><li><span style="color: #000000; font-size: 14px;">自己可以写程序完成Kafka的生产者和消费者。</span></li><br></ul><br><p><span style="color: #000000; font-size: 14px;">从前面的学习，你已经掌握了大数据平台中的数据采集、数据存储和计算、数据交换等大部分技能，而这其中的每一步，都需要一个任务（程序）来完成，各个任务之间又存在一定的依赖性，比如，必须等数据采集任务成功完成后，数据计算任务才能开始运行。如果一个任务执行失败，需要给开发运维人员发送告警，同时需要提供完整的日志来方便查错。</span></p><br><h2 style="text-align: center;"><span style="color: #009acd;">第七章：越来越多的分析任务</span></h2><br><p><span style="color: #000000; font-size: 14px;">不仅仅是分析任务，数据采集、数据交换同样是一个个的任务。这些任务中，有的是定时触发，有点则需要依赖其他任务来触发。当平台中有几百上千个任务需要维护和运行时候，仅仅靠crontab远远不够了，这时便需要一个调度监控系统来完成这件事。调度监控系统是整个数据平台的中枢系统，类似于AppMaster，负责分配和监控任务。</span></p><br><h3><span style="color: #000000;"><strong><span style="font-size: 14px;">7.1 Apache Oozie</span></strong></span></h3><br><p><span style="color: #000000; font-size: 14px;">1. Oozie是什么？有哪些功能？<br><br> 2. Oozie可以调度哪些类型的任务（程序）？<br><br> 3. Oozie可以支持哪些任务触发方式？<br><br> 4. &nbsp;安装配置Oozie。</span></p><br><h3><span style="color: #000000;"><strong><span style="font-size: 14px;">7.2 其他开源的任务调度系统</span></strong></span></h3><br><p><span style="color: #000000; font-size: 14px;">Azkaban：</span></p><br><p><span style="color: #000000; font-size: 14px;"><a href="https://azkaban.github.io/" target="_blank" rel="external">https://azkaban.github.io/</a></span></p><br><p><span style="color: #000000; font-size: 14px;">light-task-scheduler：</span></p><br><p><span style="color: #000000; font-size: 14px;"><a href="https://github.com/ltsopensource/light-task-scheduler" target="_blank" rel="external">https://github.com/ltsopensource/light-task-scheduler</a></span></p><br><p><span style="color: #000000; font-size: 14px;">Zeus：</span></p><br><p><span style="color: #000000; font-size: 14px;"><a href="https://github.com/alibaba/zeus" target="_blank" rel="external">https://github.com/alibaba/zeus</a></span></p><br><p><span style="color: #000000; font-size: 14px;">等等……</span></p><br><p><span style="color: #000000; font-size: 14px;">另外，我这边是之前单独开发的任务调度与监控系统，具体请参考《大数据平台任务调度与监控系统》.</span></p><br><p><span style="color: #000000; font-size: 14px;">如果你认真完成了上面的学习和实践，此时，你的”大数据平台”应该是这样的：</span></p><br><p style="text-align: center;"><a href="https://image.evget.com/Content/files/2017/5/11/16ab097ebb6d499da2417529b34e8534636301110220817998.jpg" class="highslide-image" onclick="return hs.expand(this);" target="_blank" rel="external"><img src="https://image.evget.com/Content/files/2017/5/11/16ab097ebb6d499da2417529b34e8534636301110220817998.jpg" alt=""></a></p><br><h2 style="text-align: center;"><span style="color: #009acd;">第八章：我的数据要实时</span></h2><br><p><span style="color: #000000; font-size: 14px;">在第六章介绍Kafka的时候提到了一些需要实时指标的业务场景，实时基本可以分为绝对实时和准实时，绝对实时的延迟要求一般在毫秒级，准实时的延迟要求一般在秒、分钟级。对于需要绝对实时的业务场景，用的比较多的是Storm，对于其他准实时的业务场景，可以是Storm，也可以是Spark Streaming。当然，如果可以的话，也可以自己写程序来做。</span></p><br><h3><span style="color: #000000;"><strong><span style="font-size: 14px;">8.1 Storm</span></strong></span></h3><br><p><span style="color: #000000; font-size: 14px;">1. 什么是Storm？有哪些可能的应用场景？<br><br> 2. Storm由哪些核心组件构成，各自担任什么角色？<br><br> 3. Storm的简单安装和部署。<br><br> 4. 自己编写Demo程序，使用Storm完成实时数据流计算。</span></p><br><h3><span style="color: #000000;"><strong><span style="font-size: 14px;">8.2 Spark Streaming</span></strong></span></h3><br><p><span style="font-size: 14px;">1. 什么是Spark Streaming，它和Spark是什么关系？<br><br> 2. Spark Streaming和Storm比较，各有什么优缺点？<br><br> 3. 使用Kafka + Spark Streaming，完成实时计算的Demo程序。</span></p><br><p><span style="font-size: 14px;">如果你认真完成了上面的学习和实践，此时，你的”大数据平台”应该是这样的：</span></p><br><p style="text-align: center;"><a href="https://image.evget.com/Content/files/2017/5/11/57e5a37ff4e94623b017bc61bfea5aba636301110609960255.jpg" class="highslide-image" onclick="return hs.expand(this);" target="_blank" rel="external"><img src="https://image.evget.com/Content/files/2017/5/11/57e5a37ff4e94623b017bc61bfea5aba636301110609960255.jpg" alt=""></a></p><br><p><span style="font-size: 14px;">至此，你的大数据平台底层架构已经成型了，其中包括了数据采集、数据存储与计算（离线和实时）、数据同步、任务调度与监控这几大模块。接下来是时候考虑如何更好的对外提供数据了。</span></p><br><h2 style="text-align: center;"><span style="color: #009acd;">第九章：我的数据要对外</span></h2><br><p><span style="color: #000000; font-size: 14px;">通常对外（业务）提供数据访问，大体上包含以下方面：</span></p><br><p><span style="color: #000000;"><strong><span style="font-size: 14px;">离线：</span></strong><span style="font-size: 14px;">比如，每天将前一天的数据提供到指定的数据源（DB、FILE、FTP）等；</span><span style="font-size: 14px;">离线数据的提供可以采用Sqoop、DataX等离线数据交换工具。</span></span></p><br><p><span style="color: #000000;"><strong><span style="font-size: 14px;">实时：</span></strong><span style="font-size: 14px;">比如，在线网站的推荐系统，需要实时从数据平台中获取给用户的推荐数据，这种要求延时非常低（50毫秒以内）。</span></span></p><br><p><span style="color: #000000; font-size: 14px;">根据延时要求和实时数据的查询需要，可能的方案有：HBase、Redis、MongoDB、ElasticSearch等。</span></p><br><p><span style="color: #000000;"><strong><span style="font-size: 14px;">OLAP分析：</span></strong><span style="font-size: 14px;">OLAP除了要求底层的数据模型比较规范，另外，对查询的响应速度要求也越来越高，可能的方案有：Impala、Presto、SparkSQL、Kylin。如果你的数据模型比较规模，那么Kylin是最好的选择。</span></span></p><br><p><span style="color: #000000;"><strong><span style="font-size: 14px;">即席查询：</span></strong><span style="font-size: 14px;">即席查询的数据比较随意，一般很难建立通用的数据模型，因此可能的方案有：Impala、Presto、SparkSQL。</span></span></p><br><p><span style="color: #000000;"><span style="font-size: 14px;">这么多比较成熟的框架和方案，需要结合自己的业务需求及数据平台技术架构，选择合适</span><span style="font-size: 14px;">的。原则只有一个：越简单越稳定的，就是最好的。</span></span></p><br><p><span style="color: #000000; font-size: 14px;">如果你已经掌握了如何很好的对外（业务）提供数据，那么你的“大数据平台”应该是这样的：</span></p><br><p style="text-align: center;"><a href="https://image.evget.com/Content/files/2017/5/11/25b3dee50c50472fbbe8f1f37f7b524b636301110955890041.jpg" class="highslide-image" onclick="return hs.expand(this);" target="_blank" rel="external"><img src="https://image.evget.com/Content/files/2017/5/11/25b3dee50c50472fbbe8f1f37f7b524b636301110955890041.jpg" alt=""></a></p><br><h2 style="text-align: center;"><span style="color: #009acd;">第十章：牛逼高大上的机器学习</span></h2><br><p><span style="color: #000000; font-size: 14px;">关于这块，我这个门外汉也只能是简单介绍一下了。数学专业毕业的我非常惭愧，很后悔当时没有好好学数学。</span></p><br><p><span style="color: #000000;"><strong><span style="font-size: 14px;">在我们的业务中，遇到的能用机器学习解决的问题大概这么三类：</span></strong></span></p><br><ul><br><li><span style="color: #000000; font-size: 14px;">分类问题：包括二分类和多分类，二分类就是解决了预测的问题，就像预测一封邮件是否垃圾邮件；多分类解决的是文本的分类；</span></li><br><li><span style="color: #000000; font-size: 14px;">聚类问题：从用户搜索过的关键词，对用户进行大概的归类。</span></li><br><li><span style="color: #000000; font-size: 14px;">推荐问题：根据用户的历史浏览和点击行为进行相关推荐。</span></li><br></ul><br><p><span style="color: #000000; font-size: 14px;">大多数行业，使用机器学习解决的，也就是这几类问题。</span></p><br><p><span style="color: #000000; font-size: 14px;">入门学习线路：</span></p><br><p><span style="color: #000000; font-size: 14px;">数学基础；</span></p><br><p><span style="color: #000000; font-size: 14px;">机器学习实战（Machine Learning in Action），懂Python最好；</span></p><br><p><span style="color: #000000; font-size: 14px;">SparkMlLib提供了一些封装好的算法，以及特征处理、特征选择的方法。</span></p><br><p><span style="color: #000000; font-size: 14px;">机器学习确实牛逼高大上，也是我学习的目标。</span></p><br><p><span style="color: #000000; font-size: 14px;">那么，可以把机器学习部分也加进你的“大数据平台”了。</span></p><br><p style="text-align: center;"><a href="https://image.evget.com/Content/files/2017/5/11/42cd64652c64418090f5632bc858f4e4636301111414176254.jpg" class="highslide-image" onclick="return hs.expand(this);" target="_blank" rel="external"><img src="https://image.evget.com/Content/files/2017/5/11/42cd64652c64418090f5632bc858f4e4636301111414176254.jpg" alt=""></a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java，hadoop/" rel="tag"># java，hadoop</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/10/JAVA读取、写入Excel表格(含03版)/" rel="next" title="JAVA读取、写入Excel表格(含03版)">
+                <i class="fa fa-chevron-left"></i> JAVA读取、写入Excel表格(含03版)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="xuwujing" />
+          <p class="site-author-name" itemprop="name">xuwujing</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">53</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">第一章：初识Hadoop</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 学会百度与Google</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 参考资料首选官方文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 先让Hadoop跑起来</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.4.</span> <span class="nav-text">1.4 试试使用Hadoop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.5.</span> <span class="nav-text">1.5 你该了解它们的原理了</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.6.</span> <span class="nav-text">1.6 自己写一个MapReduce程序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">第二章：更高效的WordCount</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 学点SQL吧</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 SQL版WordCount</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 SQL On Hadoop之Hive</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 安装配置Hive</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.5.</span> <span class="nav-text">2.5 试试使用Hive</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.6.</span> <span class="nav-text">2.6 Hive是怎么工作的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.7.</span> <span class="nav-text">2.7 学会Hive的基本命令</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">第三章：把别处的数据搞到Hadoop上</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 HDFS PUT命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 HDFS API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 Sqoop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 Flume</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.5.</span> <span class="nav-text">3.5 阿里开源的DataX</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">第四章：把Hadoop上的数据搞到别处去</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 HDFS GET命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 HDFS API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 Sqoop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">4.4.</span> <span class="nav-text">4.4 DataX</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">第五章：快一点吧，我的SQL</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">5.1.</span> <span class="nav-text">5.1 关于Spark和SparkSQL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">5.2.</span> <span class="nav-text">5.2 如何部署和运行SparkSQL</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">第六章：一夫多妻制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">6.1.</span> <span class="nav-text">6.1 关于Kafka</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">6.2.</span> <span class="nav-text">6.2 如何部署和使用Kafka</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">7.</span> <span class="nav-text">第七章：越来越多的分析任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">7.1.</span> <span class="nav-text">7.1 Apache Oozie</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">7.2.</span> <span class="nav-text">7.2 其他开源的任务调度系统</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">8.</span> <span class="nav-text">第八章：我的数据要实时</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">8.1.</span> <span class="nav-text">8.1 Storm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">8.2.</span> <span class="nav-text">8.2 Spark Streaming</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">9.</span> <span class="nav-text">第九章：我的数据要对外</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">10.</span> <span class="nav-text">第十章：牛逼高大上的机器学习</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xuwujing</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
