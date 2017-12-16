@@ -1,0 +1,890 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="大数据，hive," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="原文:https://www.cnblogs.com/HondaHsu/p/4346354.html 1.先建 表drop table sfmk.xzz_0726_srcarea_desarea;create table sfmk.xzz_0726_srcarea_desarea (srcarea_desarea  string) row format delimited fields term">
+<meta name="keywords" content="大数据，hive">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hive基础sql语法(转)">
+<meta property="og:url" content="http://yoursite.com/2017/12/12/pancm58/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="原文:https://www.cnblogs.com/HondaHsu/p/4346354.html 1.先建 表drop table sfmk.xzz_0726_srcarea_desarea;create table sfmk.xzz_0726_srcarea_desarea (srcarea_desarea  string) row format delimited fields term">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif">
+<meta property="og:image" content="http://common.cnblogs.com/images/copycode.gif">
+<meta property="og:image" content="http://common.cnblogs.com/images/copycode.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif">
+<meta property="og:image" content="http://common.cnblogs.com/images/copycode.gif">
+<meta property="og:image" content="http://common.cnblogs.com/images/copycode.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif">
+<meta property="og:image" content="http://common.cnblogs.com/images/copycode.gif">
+<meta property="og:image" content="http://common.cnblogs.com/images/copycode.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif">
+<meta property="og:image" content="http://common.cnblogs.com/images/copycode.gif">
+<meta property="og:image" content="http://common.cnblogs.com/images/copycode.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif">
+<meta property="og:image" content="http://common.cnblogs.com/images/copycode.gif">
+<meta property="og:image" content="http://common.cnblogs.com/images/copycode.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif">
+<meta property="og:image" content="http://common.cnblogs.com/images/copycode.gif">
+<meta property="og:image" content="http://common.cnblogs.com/images/copycode.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif">
+<meta property="og:image" content="http://common.cnblogs.com/images/copycode.gif">
+<meta property="og:image" content="http://common.cnblogs.com/images/copycode.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif">
+<meta property="og:image" content="http://common.cnblogs.com/images/copycode.gif">
+<meta property="og:image" content="http://common.cnblogs.com/images/copycode.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif">
+<meta property="og:image" content="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif">
+<meta property="og:image" content="http://common.cnblogs.com/images/copycode.gif">
+<meta property="og:image" content="http://common.cnblogs.com/images/copycode.gif">
+<meta property="og:updated_time" content="2017-12-16T11:04:04.887Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hive基础sql语法(转)">
+<meta name="twitter:description" content="原文:https://www.cnblogs.com/HondaHsu/p/4346354.html 1.先建 表drop table sfmk.xzz_0726_srcarea_desarea;create table sfmk.xzz_0726_srcarea_desarea (srcarea_desarea  string) row format delimited fields term">
+<meta name="twitter:image" content="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/12/12/pancm58/"/>
+
+
+
+
+
+
+  <title>Hive基础sql语法(转) | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/12/pancm58/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Hive基础sql语法(转)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-12T14:18:12+08:00">
+                2017-12-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/hive/" itemprop="url" rel="index">
+                    <span itemprop="name">hive</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><p>原文:<a href="https://www.cnblogs.com/HondaHsu/p/4346354.html" target="_blank" rel="external">https://www.cnblogs.com/HondaHsu/p/4346354.html</a></p>
+<div id="cnblogs_post_body" class="blogpost-body"><div class="cnblogs_code" onclick="cnblogs_code_show('01055abf-ba91-432f-a244-c6f26e79c7d1')"><br><div class="cnblogs_code" onclick="cnblogs_code_show('c81c3876-b86f-49c0-acde-def6074b53a9')"><img id="code_img_closed_c81c3876-b86f-49c0-acde-def6074b53a9" class="code_img_closed" src="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" alt="" style="display: inline;"><img id="code_img_opened_c81c3876-b86f-49c0-acde-def6074b53a9" class="code_img_opened" style="display: none;" onclick="cnblogs_code_hide('c81c3876-b86f-49c0-acde-def6074b53a9',event)" src="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" alt=""><br><div id="cnblogs_code_open_c81c3876-b86f-49c0-acde-def6074b53a9" class="cnblogs_code_hide" style="display: none;"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码" target="_blank" rel="external"><img src="//common.cnblogs.com/images/copycode.gif" alt="复制代码"></a></span></div><br><pre><span style="color: #800000; font-weight: bold;">1</span><span style="color: #000000;">.先建 表<br></span><span style="color: #0000ff;">drop</span> <span style="color: #0000ff;">table</span><span style="color: #000000;"> sfmk.xzz_0726_srcarea_desarea;<br></span><span style="color: #0000ff;">create</span> <span style="color: #0000ff;">table</span><span style="color: #000000;"> sfmk.xzz_0726_srcarea_desarea (<br>srcarea_desarea  string<br>) row format delimited fields terminated </span><span style="color: #0000ff;">by</span> <span style="color: #ff0000;">‘</span><span style="color: #ff0000;">,</span><span style="color: #ff0000;">‘</span><span style="color: #000000;">;<br><br></span><span style="color: #800000; font-weight: bold;">2</span><span style="color: #000000;">.将数据上传至hive 服务器<br>如：</span><span style="color: #ff0000;">‘</span><span style="color: #ff0000;">/user/013/upload/<br><br>3.执行 load 命令<br>load data inpath </span><span style="color: #ff0000;">‘</span><span style="color: #808080;">/</span><span style="color: #ff00ff;">user</span><span style="color: #808080;">/</span><span style="color: #800000; font-weight: bold;">013</span><span style="color: #808080;">/</span>upload<span style="color: #808080;">/</span>test_data.csv<span style="color: #ff0000;">‘</span><span style="color: #ff0000;"> into table  mark._srcarea_desarea;</span></pre><br><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码" target="_blank" rel="external"><img src="//common.cnblogs.com/images/copycode.gif" alt="复制代码"></a></span></div></div><br><span class="cnblogs_code_collapse" style="display: inline;">导入数据到表中</span></div><br><p>&nbsp;</p><br><img id="code_img_closed_01055abf-ba91-432f-a244-c6f26e79c7d1" class="code_img_closed" src="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" alt="" style="display: none;"><img id="code_img_opened_01055abf-ba91-432f-a244-c6f26e79c7d1" class="code_img_opened" style="" onclick="cnblogs_code_hide('01055abf-ba91-432f-a244-c6f26e79c7d1',event)" src="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" alt=""><br><div id="cnblogs_code_open_01055abf-ba91-432f-a244-c6f26e79c7d1" class="cnblogs_code_hide" style="display: block;"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码" target="_blank" rel="external"><img src="//common.cnblogs.com/images/copycode.gif" alt="复制代码"></a></span></div><br><pre>1.DDL 操作<br>1.建表<br>2.3.创建简单表<br>4.创建外部表<br>5.建分区表<br>6.建Bucket表<br>7.创建表并创建索引字段ds<br>8.复制一个空表<br>9.显示所有表<br>10.按正条件正则表达式显示表<br>11.修改表结构<br>12.表添加一列<br>13.添加一列并增加列字段注释<br>14.更改表名<br>15.删除列<br>16.增加删除分区<br>17.重命名表<br>18.修改列的名字类型位置注释<br>19.表添加一列<br>20.添加一列并增加列字段注释<br>21.增加更新列<br>22.增加表的元数据信息<br>23.改变表文件格式与组织<br>24.创建删除视图<br>25.创建数据库<br>26.显示命令<br>2.DML 操作元数据存储<br>1.向数据表内加载文件<br>2.3.加载本地数据同时给定分区信息<br>4.OVERWRITE<br>5.将查询结果插入Hive表<br>6.将查询结果写入HDFS文件系统<br>7.INSERTINTO<br>3.DQL 操作数据查询SQL<br>1.1 基本的Select操作<br>2.例如<br>3.按先件查询<br>4.将查询数据输出至目录<br>5.将查询结果输出至本地目录<br>6.选择所有列到本地目录<br>7.将一个表的统计结果插入另一个表中<br>8.将多表数据插入到同一表中<br>9.将文件流直接插入文件<br>10.2 基于Partition的查询<br>11.3 Join<br>4.从SQL到HiveQL应转变的习惯<br>1.Hive不支持等值连接<br>2.分号字符<br>3.IS NOT NULL<br>4.Hive不支持将数据插入现有的表或分区中<br>5.hive不支持INSERT INTO UPDATE DELETE操作<br>6.hive支持嵌入mapreduce程序来处理复杂的逻辑<br>7.hive支持将转换后的数据直接写入不同的表还能写入分区hdfs和本地目录<br>5.实际示例<br>1.创建一个表<br>2.加载数据到表中<br>3.统计数据总量<br>4.现在做一些复杂的数据分析<br>5.生成数据的周信息<br>6.使用映射脚本<br>7.将数据按周进行分割<br>8.处理Apache Weblog 数据</pre><br><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码" target="_blank" rel="external"><img src="//common.cnblogs.com/images/copycode.gif" alt="复制代码"></a></span></div></div><br><span class="cnblogs_code_collapse" style="display: none;">目录</span></div><br><p align="left">　　Hive 是基于Hadoop 构建的一套数据仓库分析系统，它提供了丰富的SQL查询方式来分析存储在Hadoop 分布式文件系统中的数据，可以将结构</p><br><p align="left">化的数据文件映射为一张数据库表，并提供完整的SQL查询功能，可以将SQL语句转换为MapReduce任务进行运行，通过自己的SQL 去查询分析需</p><br><p align="left">要的内容，这套SQL 简称Hive SQL，使不熟悉mapreduce 的用户很方便的利用SQL 语言查询，汇总，分析数据。而mapreduce开发人员可以把</p><br><p align="left">己写的mapper 和reducer 作为插件来支持Hive 做更复杂的数据分析。<br>&nbsp; &nbsp; &nbsp;它与关系型数据库的SQL 略有不同，但支持了绝大多数的语句如DDL、DML 以及常见的聚合函数、连接查询、条件查询。HIVE不适合用于联机</p><br><p align="left">online)事务处理，也不提供实时查询功能。它最适合应用在基于大量不可变数据的批处理作业。<br>&nbsp; &nbsp; HIVE的特点：可伸缩（在Hadoop的集群上动态的添加设备），可扩展，容错，输入格式的松散耦合。</p><br><p align="left">&nbsp; &nbsp; &nbsp;Hive 的官方文档中对查询语言有了很详细的描述，请参考：<a href="http://wiki.apache.org/hadoop/Hive/LanguageManual" target="_blank" rel="external">http://wiki.apache.org/hadoop/Hive/LanguageManual</a> ，本文的内容大部分翻译自该页面，期间加入了一些在使用过程中需要注意到的事项。</p><br><p class="headline-1 bk-sidecatalog-title" style="border-bottom: #dedfe1 1px solid; padding-bottom: 6px; margin-top: 0px; margin-bottom: 10px; clear: both; padding-top: 0px;"><span style="color: #336699;"><span style="line-height: 36px; font-size: 22px;">1. &nbsp;DDL 操作</span></span></p><br><div class="cnblogs_code" onclick="cnblogs_code_show('4cf5f671-aff2-481d-9cf3-b3616b0f5d5b')"><img id="code_img_closed_4cf5f671-aff2-481d-9cf3-b3616b0f5d5b" class="code_img_closed" src="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" alt="" style="display: none;"><img id="code_img_opened_4cf5f671-aff2-481d-9cf3-b3616b0f5d5b" class="code_img_opened" style="" onclick="cnblogs_code_hide('4cf5f671-aff2-481d-9cf3-b3616b0f5d5b',event)" src="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" alt=""><br><div id="cnblogs_code_open_4cf5f671-aff2-481d-9cf3-b3616b0f5d5b" class="cnblogs_code_hide" style="display: block;"><br><pre>•建表<br>•删除表<br>•修改表结构<br>•创建／删除视图<br>•创建数据库<br>•显示命令</pre><br></div><br><span class="cnblogs_code_collapse" style="display: none;">DDL操作类型</span></div><br><p align="left"><strong>1.2 建表：</strong></p><br><div class="cnblogs_code" onclick="cnblogs_code_show('e9f69bb8-f47d-4c27-845e-51293d256674')"><img id="code_img_closed_e9f69bb8-f47d-4c27-845e-51293d256674" class="code_img_closed" src="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" alt="" style="display: none;"><img id="code_img_opened_e9f69bb8-f47d-4c27-845e-51293d256674" class="code_img_opened" style="" onclick="cnblogs_code_hide('e9f69bb8-f47d-4c27-845e-51293d256674',event)" src="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" alt=""><br><div id="cnblogs_code_open_e9f69bb8-f47d-4c27-845e-51293d256674" class="cnblogs_code_hide" style="display: block;"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码" target="_blank" rel="external"><img src="//common.cnblogs.com/images/copycode.gif" alt="复制代码"></a></span></div><br><pre><span style="color: #0000ff;">CREATE</span> <span style="color: #ff0000;">[</span><span style="color: #ff0000;">EXTERNAL</span><span style="color: #ff0000;">]</span> <span style="color: #0000ff;">TABLE</span> <span style="color: #ff0000;">[</span><span style="color: #ff0000;">IF NOT EXISTS</span><span style="color: #ff0000;">]</span><span style="color: #000000;"> table_name<br>  </span><span style="color: #ff0000;">[</span><span style="color: #ff0000;">(col_name data_type [COMMENT col_comment</span><span style="color: #ff0000;">]</span><span style="color: #000000;">, …)]<br>  </span><span style="color: #ff0000;">[</span><span style="color: #ff0000;">COMMENT table_comment</span><span style="color: #ff0000;">]</span><br>  <span style="color: #ff0000;">[</span><span style="color: #ff0000;">PARTITIONED BY (col_name data_type [COMMENT col_comment</span><span style="color: #ff0000;">]</span><span style="color: #000000;">, …)]<br>  </span><span style="color: #ff0000;">[</span><span style="color: #ff0000;">CLUSTERED BY (col_name, col_name, …)<br>  [SORTED BY (col_name [ASC|DESC</span><span style="color: #ff0000;">]</span>, …)] <span style="color: #0000ff;">INTO</span><span style="color: #000000;"> num_buckets BUCKETS]<br>  </span><span style="color: #ff0000;">[</span><span style="color: #ff0000;">ROW FORMAT row_format</span><span style="color: #ff0000;">]</span><br>  <span style="color: #ff0000;">[</span><span style="color: #ff0000;">STORED AS file_format</span><span style="color: #ff0000;">]</span><br>  <span style="color: #ff0000;">[</span><span style="color: #ff0000;">LOCATION hdfs_path</span><span style="color: #ff0000;">]</span></pre><br><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码" target="_blank" rel="external"><img src="//common.cnblogs.com/images/copycode.gif" alt="复制代码"></a></span></div></div><br><span class="cnblogs_code_collapse" style="display: none;">建表</span></div><br><p>•CREATE TABLE 创建一个指定名字的表。如果相同名字的表已经存在，则抛出异常；用户可以用 IF NOT EXIST 选项来忽略这个异常</p><br><p align="left">•EXTERNAL 关键字可以让用户创建一个外部表，在建表的同时指定一个指向实际数据的路径（LOCATION）</p><br><p align="left">•LIKE 允许用户复制现有的表结构，但是不复制数据</p><br><p align="left">•COMMENT可以为表与字段增加描述</p><br><p align="left">&nbsp;</p><br><p align="left">•ROW FORMAT</p><br><p align="left">&nbsp;&nbsp;&nbsp; DELIMITED [FIELDS TERMINATED BY char] [COLLECTION ITEMS TERMINATED BY char]</p><br><p align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [MAP KEYS TERMINATED BY char] [LINES TERMINATED BY char]</p><br><p align="left">&nbsp;&nbsp; | SERDE serde_name [WITH SERDEPROPERTIES (property_name=property_value, property_name=property_value, …)]</p><br><p align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 用户在建表的时候可以自定义 SerDe 或者使用自带的 SerDe。如果没有指定 ROW FORMAT 或者 ROW FORMAT DELIMITED，将会使用自带的 SerDe。在建表的时候，用户还需要为表指定列，用户在指定表的列的同时也会指定自定义的 SerDe，Hive 通过 SerDe 确定表的具体的列的数据。</p><br><p align="left">•STORED AS</p><br><p align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SEQUENCEFILE</p><br><p align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | TEXTFILE</p><br><p align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | RCFILE&nbsp;&nbsp;&nbsp;&nbsp;</p><br><p align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | INPUTFORMAT input_format_classname OUTPUTFORMAT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; output_format_classname</p><br><p align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 如果文件数据是纯文本，可以使用 STORED AS TEXTFILE。如果数据需要压缩，使用 STORED AS SEQUENCE 。</p><br><p align="left">&nbsp;</p><br><p align="left"><strong>1.3 创建简单表：</strong></p><br><p align="left">　　hive&gt; CREATE TABLE pokes (foo INT, bar STRING);</p><br><p align="left"><strong>1.4 创建外部表：</strong></p><br><div class="cnblogs_code" onclick="cnblogs_code_show('2c7d9e5b-9a75-49d5-8a56-d0343e4e4541')"><img id="code_img_closed_2c7d9e5b-9a75-49d5-8a56-d0343e4e4541" class="code_img_closed" src="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" alt="" style="display: none;"><img id="code_img_opened_2c7d9e5b-9a75-49d5-8a56-d0343e4e4541" class="code_img_opened" style="" onclick="cnblogs_code_hide('2c7d9e5b-9a75-49d5-8a56-d0343e4e4541',event)" src="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" alt=""><br><div id="cnblogs_code_open_2c7d9e5b-9a75-49d5-8a56-d0343e4e4541" class="cnblogs_code_hide" style="display: block;"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码" target="_blank" rel="external"><img src="//common.cnblogs.com/images/copycode.gif" alt="复制代码"></a></span></div><br><pre><span style="color: #0000ff;">CREATE</span> EXTERNAL <span style="color: #0000ff;">TABLE</span> page_view(viewTime <span style="color: #0000ff;">INT</span>, userid <span style="color: #0000ff;">BIGINT</span><span style="color: #000000;">,<br><br>     page_url STRING, referrer_url STRING,<br><br>     ip STRING COMMENT </span><span style="color: #ff0000;">‘</span><span style="color: #ff0000;">IP Address of the User</span><span style="color: #ff0000;">‘</span><span style="color: #000000;">,<br><br>     country STRING COMMENT </span><span style="color: #ff0000;">‘</span><span style="color: #ff0000;">country of origination</span><span style="color: #ff0000;">‘</span><span style="color: #000000;">)<br><br> COMMENT </span><span style="color: #ff0000;">‘</span><span style="color: #ff0000;">This is the staging page view table</span><span style="color: #ff0000;">‘</span><span style="color: #000000;"><br><br> ROW FORMAT DELIMITED FIELDS TERMINATED </span><span style="color: #0000ff;">BY</span> <span style="color: #ff0000;">‘</span><span style="color: #ff0000;">\054</span><span style="color: #ff0000;">‘</span><span style="color: #000000;"><br><br> STORED </span><span style="color: #0000ff;">AS</span><span style="color: #000000;"> TEXTFILE<br><br> LOCATION </span><span style="color: #ff0000;">‘</span><span style="color: #ff0000;">&lt;hdfs_location&gt;</span><span style="color: #ff0000;">‘</span>;</pre><br><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码" target="_blank" rel="external"><img src="//common.cnblogs.com/images/copycode.gif" alt="复制代码"></a></span></div></div><br><span class="cnblogs_code_collapse" style="display: none;">创建外部表</span></div><br><p><strong>1.5 建分区表</strong></p><br><div class="cnblogs_code" onclick="cnblogs_code_show('b3c0ef46-b993-4a3f-9449-18841a4bad45')"><img id="code_img_closed_b3c0ef46-b993-4a3f-9449-18841a4bad45" class="code_img_closed" src="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" alt="" style="display: none;"><img id="code_img_opened_b3c0ef46-b993-4a3f-9449-18841a4bad45" class="code_img_opened" style="" onclick="cnblogs_code_hide('b3c0ef46-b993-4a3f-9449-18841a4bad45',event)" src="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" alt=""><br><div id="cnblogs_code_open_b3c0ef46-b993-4a3f-9449-18841a4bad45" class="cnblogs_code_hide" style="display: block;"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码" target="_blank" rel="external"><img src="//common.cnblogs.com/images/copycode.gif" alt="复制代码"></a></span></div><br><pre><span style="color: #0000ff;">CREATE</span> <span style="color: #0000ff;">TABLE</span> par_table(viewTime <span style="color: #0000ff;">INT</span>, userid <span style="color: #0000ff;">BIGINT</span><span style="color: #000000;">,<br><br>     page_url STRING, referrer_url STRING,<br><br>     ip STRING COMMENT </span><span style="color: #ff0000;">‘</span><span style="color: #ff0000;">IP Address of the User</span><span style="color: #ff0000;">‘</span><span style="color: #000000;">)<br><br> COMMENT </span><span style="color: #ff0000;">‘</span><span style="color: #ff0000;">This is the page view table</span><span style="color: #ff0000;">‘</span><span style="color: #000000;"><br><br> PARTITIONED </span><span style="color: #0000ff;">BY</span><span style="color: #000000;">(date STRING, pos STRING)<br><br>ROW FORMAT DELIMITED ‘\t’<br><br>   FIELDS TERMINATED </span><span style="color: #0000ff;">BY</span> <span style="color: #ff0000;">‘</span><span style="color: #ff0000;">\n</span><span style="color: #ff0000;">‘</span><span style="color: #000000;"><br><br>STORED </span><span style="color: #0000ff;">AS</span> SEQUENCEFILE;</pre><br><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码" target="_blank" rel="external"><img src="//common.cnblogs.com/images/copycode.gif" alt="复制代码"></a></span></div></div><br><span class="cnblogs_code_collapse" style="display: none;">分区表</span></div><br><p><strong>1.6 建</strong><strong>Bucket</strong><strong>表</strong></p><br><div class="cnblogs_code" onclick="cnblogs_code_show('871a527a-b4d1-48bd-b02e-6c7a76e2880a')"><img id="code_img_closed_871a527a-b4d1-48bd-b02e-6c7a76e2880a" class="code_img_closed" src="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" alt="" style="display: none;"><img id="code_img_opened_871a527a-b4d1-48bd-b02e-6c7a76e2880a" class="code_img_opened" style="" onclick="cnblogs_code_hide('871a527a-b4d1-48bd-b02e-6c7a76e2880a',event)" src="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" alt=""><br><div id="cnblogs_code_open_871a527a-b4d1-48bd-b02e-6c7a76e2880a" class="cnblogs_code_hide" style="display: block;"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码" target="_blank" rel="external"><img src="//common.cnblogs.com/images/copycode.gif" alt="复制代码"></a></span></div><br><pre><span style="color: #0000ff;">CREATE</span> <span style="color: #0000ff;">TABLE</span> par_table(viewTime <span style="color: #0000ff;">INT</span>, userid <span style="color: #0000ff;">BIGINT</span><span style="color: #000000;">,<br>     page_url STRING, referrer_url STRING,<br>     ip STRING COMMENT </span><span style="color: #ff0000;">‘</span><span style="color: #ff0000;">IP Address of the User</span><span style="color: #ff0000;">‘</span><span style="color: #000000;">)<br> COMMENT </span><span style="color: #ff0000;">‘</span><span style="color: #ff0000;">This is the page view table</span><span style="color: #ff0000;">‘</span><span style="color: #000000;"><br> PARTITIONED </span><span style="color: #0000ff;">BY</span><span style="color: #000000;">(date STRING, pos STRING)<br> </span><span style="color: #0000ff;">CLUSTERED</span> <span style="color: #0000ff;">BY</span>(userid) SORTED <span style="color: #0000ff;">BY</span>(viewTime) <span style="color: #0000ff;">INTO</span> <span style="color: #800000; font-weight: bold;">32</span><span style="color: #000000;"> BUCKETS<br> ROW FORMAT DELIMITED ‘\t’<br>   FIELDS TERMINATED </span><span style="color: #0000ff;">BY</span> <span style="color: #ff0000;">‘</span><span style="color: #ff0000;">\n</span><span style="color: #ff0000;">‘</span><span style="color: #000000;"><br>STORED </span><span style="color: #0000ff;">AS</span> SEQUENCEFILE;</pre><br><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码" target="_blank" rel="external"><img src="//common.cnblogs.com/images/copycode.gif" alt="复制代码"></a></span></div></div><br><span class="cnblogs_code_collapse" style="display: none;">创建Bucket表</span></div><br><p><strong>1.7 创建表并创建索引字段</strong><strong>ds</strong></p><br><p align="left">　　hive&gt; CREATE TABLE invites (foo INT, bar STRING) PARTITIONED BY (ds STRING);</p><br><p align="left"><strong>1.8 复制一个空表</strong></p><br><p align="left">　　CREATE TABLE empty_key_value_store</p><br><p align="left">　　LIKE key_value_store;</p><br><p align="left"><strong>例子</strong></p><br><div class="cnblogs_code" onclick="cnblogs_code_show('b83b4230-de83-4fc4-895d-52da4d21e719')"><img id="code_img_closed_b83b4230-de83-4fc4-895d-52da4d21e719" class="code_img_closed" src="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" alt=""><img id="code_img_opened_b83b4230-de83-4fc4-895d-52da4d21e719" class="code_img_opened" style="display: none;" onclick="cnblogs_code_hide('b83b4230-de83-4fc4-895d-52da4d21e719',event)" src="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" alt=""><br><div id="cnblogs_code_open_b83b4230-de83-4fc4-895d-52da4d21e719" class="cnblogs_code_hide"><br><pre><span style="color: #0000ff;">create</span> <span style="color: #0000ff;">table</span>  user_info (<span style="color: #ff00ff;">user_id</span> <span style="color: #0000ff;">int</span><span style="color: #000000;">, cid string, ckid string, username string)<br>row format delimited<br>fields terminated </span><span style="color: #0000ff;">by</span> <span style="color: #ff0000;">‘</span><span style="color: #ff0000;">\t</span><span style="color: #ff0000;">‘</span><span style="color: #000000;"><br>lines terminated </span><span style="color: #0000ff;">by</span> <span style="color: #ff0000;">‘</span><span style="color: #ff0000;">\n</span><span style="color: #ff0000;">‘</span>;</pre><br></div><br><span class="cnblogs_code_collapse">例子</span></div><br><p>&nbsp;</p><br><p style="margin-left: 30px;" align="left">导入数据表的数据格式是：字段之间是tab键分割，行之间是断行。</p><br><p style="margin-left: 30px;" align="left">及要我们的文件内容格式：</p><br><p style="margin-left: 30px;" align="left">100636 &nbsp;100890 &nbsp;c5c86f4cddc15eb7 &nbsp; &nbsp; &nbsp; &nbsp;yyyvybtvt<br>100612 &nbsp;100865 &nbsp;97cc70d411c18b6f &nbsp; &nbsp; &nbsp; &nbsp;gyvcycy<br>100078 &nbsp;100087 &nbsp;ecd6026a15ffddf5 &nbsp; &nbsp; &nbsp; &nbsp;qa000100</p><br><p align="left">&nbsp;</p><br><p align="left"><strong>1.9 显示所有表：</strong></p><br><p align="left">　　hive&gt; SHOW TABLES;</p><br><p align="left"><strong>1.10 按正条件（正则表达式）显示表，</strong></p><br><p align="left">　　hive&gt; SHOW TABLES ‘.<em>s’;</em></p><br><div class="cnblogs_code" onclick="cnblogs_code_show('0e529711-2545-4138-9a98-132269f5a0f8')"><img id="code_img_closed_0e529711-2545-4138-9a98-132269f5a0f8" class="code_img_closed" src="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" alt="" style="display: none;"><img id="code_img_opened_0e529711-2545-4138-9a98-132269f5a0f8" class="code_img_opened" style="" onclick="cnblogs_code_hide('0e529711-2545-4138-9a98-132269f5a0f8',event)" src="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" alt=""><br><div id="cnblogs_code_open_0e529711-2545-4138-9a98-132269f5a0f8" class="cnblogs_code_hide" style="display: block;"><br><pre><span style="color: #000000;">•增加分区、删除分区<br>•重命名表<br>•修改列的名字、类型、位置、注释<br>•增加</span><span style="color: #808080;">/</span><span style="color: #000000;">更新列<br>•增加表的元数据信息</span></pre><br></div><br><span class="cnblogs_code_collapse" style="display: none;">DDL类型-修改表结构</span></div><br><p align="left"><strong>1.21 </strong><strong>表添加一列</strong><strong>：</strong></p><br><p align="left">　　hive&gt; ALTER TABLE pokes ADD COLUMNS (new_col INT);</p><br><p align="left"><strong>1.22 添加一列并增加列字段注释</strong></p><br><p align="left">　　hive&gt; ALTER TABLE invites ADD COLUMNS (new_col2 INT COMMENT ‘a comment’);</p><br><p align="left"><strong>1.23 更改表名：</strong></p><br><p align="left">　　hive&gt; ALTER TABLE events RENAME TO 3koobecaf;</p><br><p align="left"><strong>1.24 删除列：</strong></p><br><p align="left">　　hive&gt; DROP TABLE pokes;</p><br><p align="left">&nbsp;</p><br><p align="left"><strong>1.25 增加、删除分区</strong></p><br><p align="left">•增加</p><br><p style="margin-left: 30px;" align="left">ALTER TABLE table_name ADD [IF NOT EXISTS] partition_spec [ LOCATION ‘location1’ ] partition_spec [ LOCATION ‘location2’ ] …</p><br><p style="margin-left: 30px;" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; partition_spec:</p><br><p style="margin-left: 30px;" align="left">&nbsp; : PARTITION (partition_col = partition_col_value, partition_col = partiton_col_value, …)</p><br><p align="left">•删除</p><br><p align="left">　　ALTER TABLE table_name DROP partition_spec, partition_spec,…</p><br><p align="left"><strong>1.26 重命名表</strong></p><br><p align="left">　　ALTER TABLE table_name RENAME TO new_table_name&nbsp;</p><br><p align="left"><strong>1.27 修改列的名字、类型、位置、注释：</strong></p><br><p style="margin-left: 30px;" align="left">ALTER TABLE table_name CHANGE [COLUMN] col_old_name col_new_name column_type [COMMENT col_comment] [FIRST|AFTER column_name]</p><br><p align="left">　　这个命令可以允许改变列名、数据类型、注释、列位置或者它们的任意组合</p><br><p align="left"><strong>1.28 表添加一列</strong><strong>：</strong></p><br><p align="left">　　hive&gt; ALTER TABLE pokes ADD COLUMNS (new_col INT);</p><br><p align="left"><strong>1.29 添加一列并增加列字段注释</strong></p><br><p align="left">　　hive&gt; ALTER TABLE invites ADD COLUMNS (new_col2 INT COMMENT ‘a comment’);</p><br><p align="left"><strong>1.30 增加</strong><strong>/</strong><strong>更新列</strong></p><br><p align="left">　　ALTER TABLE table_name ADD|REPLACE COLUMNS (col_name data_type [COMMENT col_comment], …) &nbsp;</p><br><p align="left">&nbsp;&nbsp;&nbsp;&nbsp;</p><br><p style="margin-left: 30px;" align="left">•&nbsp;ADD是代表新增一字段，字段位置在所有列后面(partition列前)</p><br><p style="margin-left: 30px;" align="left">&nbsp;&nbsp;REPLACE则是表示替换表中所有字段。</p><br><p align="left"><strong>1.31 增加表的元数据信息</strong></p><br><p align="left">　　ALTER TABLE table_name SET TBLPROPERTIES table_properties table_properties:</p><br><p align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :[property_name = property_value…..]&nbsp;</p><br><p style="margin-left: 30px;" align="left">•用户可以用这个命令向表中增加metadata</p><br><p align="left"><strong>1.31改变表文件格式与组织</strong></p><br><p align="left">　　ALTER TABLE table_name SET FILEFORMAT file_format</p><br><p align="left">　　ALTER TABLE table_name CLUSTERED BY(userid) SORTED BY(viewTime) INTO num_buckets BUCKETS</p><br><p align="left">　　这个命令修改了表的物理存储属性</p><br><p align="left"><strong>1.4 创建／删除视图</strong></p><br><p style="margin-left: 30px;" align="left">CREATE VIEW [IF NOT EXISTS] view_name [ (column_name [COMMENT column_comment], …) ][COMMENT view_comment][TBLPROPERTIES (property_name = property_value, …)]&nbsp;AS SELECT</p><br><p style="margin-left: 30px;" align="left">•增加视图</p><br><p style="margin-left: 30px;" align="left">•如果没有提供表名，视图列的名字将由定义的SELECT表达式自动生成</p><br><p style="margin-left: 30px;" align="left">•如果修改基本表的属性，视图中不会体现，无效查询将会失败</p><br><p style="margin-left: 30px;" align="left">•视图是只读的，不能用LOAD/INSERT/ALTER</p><br><p style="margin-left: 30px;" align="left">•DROP VIEW view_name</p><br><p style="margin-left: 30px;" align="left">•删除视图</p><br><p align="left"><strong>1.5 创建数据库</strong></p><br><p align="left">　　CREATE DATABASE name</p><br><p align="left"><strong>1.6 显示命令</strong></p><br><div class="cnblogs_code" onclick="cnblogs_code_show('d35e08d2-f327-4ff7-abaf-79ccafb24fcf')"><img id="code_img_closed_d35e08d2-f327-4ff7-abaf-79ccafb24fcf" class="code_img_closed" src="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" alt=""><img id="code_img_opened_d35e08d2-f327-4ff7-abaf-79ccafb24fcf" class="code_img_opened" style="display: none;" onclick="cnblogs_code_hide('d35e08d2-f327-4ff7-abaf-79ccafb24fcf',event)" src="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" alt=""><br><div id="cnblogs_code_open_d35e08d2-f327-4ff7-abaf-79ccafb24fcf" class="cnblogs_code_hide"><br><pre><span style="color: #000000;">•show tables;<br>•show databases;<br>•show partitions ;<br>•show functions<br>•describe extended table_name dot </span><span style="color: #ff00ff;">col_name</span></pre><br></div><br><span class="cnblogs_code_collapse">show</span></div><br><p>&nbsp;</p><br><h2 style="line-height: 26px; margin: 0px; font-family: Arial; color: #333333; padding: 0px;"><a name="t27"></a></h2><br><p class="headline-1 bk-sidecatalog-title" style="border-bottom: #dedfe1 1px solid; padding-bottom: 6px; margin-top: 0px; margin-bottom: 10px; clear: both; padding-top: 0px;"><span style="color: #336699;"><span style="line-height: 36px; font-size: 22px;">2. &nbsp;DML 操作:<span style="line-height: 36px; color: #336699; font-size: 22px;">元数据存储</span></span></span></p><br><p align="left">&nbsp;　　hive不支持用insert语句一条一条的进行插入操作，也不支持update操作。数据是以load的方式加载到建立好的表中。数据一旦导入就不可以修改。</p><br><p style="margin-left: 30px;" align="left">DML包括：INSERT插入、UPDATE更新、DELETE删除</p><br><p style="margin-left: 30px;" align="left">•向数据表内加载文件</p><br><p style="margin-left: 30px;" align="left">•将查询结果插入到Hive表中</p><br><p style="margin-left: 30px;" align="left">•0.8新特性 insert into</p><br><p align="left"><strong>2.1.0 向数据表内加载文件</strong></p><br><p style="margin-left: 30px;" align="left">•LOAD DATA [LOCAL] INPATH ‘filepath’ [OVERWRITE] INTO TABLE tablename [PARTITION (partcol1=val1, partcol2=val2 …)]</p><br><p style="margin-left: 30px;" align="left">•Load 操作只是单纯的复制/移动操作，将数据文件移动到 Hive 表对应的位置。</p><br><p style="margin-left: 30px;" align="left">•filepath</p><br><p style="margin-left: 30px;" align="left">•相对路径，例如：project/data1</p><br><p style="margin-left: 30px;" align="left">•绝对路径，例如： /user/hive/project/data1</p><br><p style="margin-left: 30px;" align="left">•包含模式的完整 URI，例如：hdfs://namenode:9000/user/hive/project/data1</p><br><p style="margin-left: 30px;" align="left">例如：</p><br><p style="margin-left: 30px;" align="left">hive&gt; LOAD DATA LOCAL INPATH ‘./examples/files/kv1.txt’ OVERWRITE INTO TABLE pokes;</p><br><p style="margin-left: 30px;" align="left">&nbsp;</p><br><p style="margin-left: 30px;" align="left">&nbsp;</p><br><p align="left"><strong>&nbsp;</strong></p><br><p align="left"><strong>2.1.1 加载本地数据，同时给定分区信息</strong></p><br><p style="margin-left: 30px;" align="left">•加载的目标可以是一个表或者分区。如果表包含分区，必须指定每一个分区的分区名</p><br><p style="margin-left: 30px;" align="left">•filepath 可以引用一个文件（这种情况下，Hive 会将文件移动到表所对应的目录中）或者是一个目录（在这种情况下，Hive 会将目录中的所有文件移动至表所对应的目录中）</p><br><p align="left"><strong>LOCAL</strong><strong>关键字</strong></p><br><p style="margin-left: 30px;" align="left">•指定了LOCAL，即本地</p><br><p style="margin-left: 30px;" align="left">•load 命令会去查找本地文件系统中的 filepath。如果发现是相对路径，则路径会被解释为相对于当前用户的当前路径。用户也可以为本地文件指定一个完整的 URI，比如：file:///user/hive/project/data1.</p><br><p style="margin-left: 30px;" align="left">•load 命令会将 filepath 中的文件复制到目标文件系统中。目标文件系统由表的位置属性决定。被复制的数据文件移动到表的数据对应的位置</p><br><p align="left">&nbsp;</p><br><p align="left"><strong>例如：加载本地数据，同时给定分区信息：</strong></p><br><p style="margin-left: 30px;" align="left">hive&gt; LOAD DATA LOCAL INPATH ‘./examples/files/kv2.txt’ OVERWRITE INTO TABLE invites PARTITION (ds=’2008-08-15’);</p><br><p align="left">&nbsp;</p><br><p style="margin-left: 30px;" align="left">•&nbsp;没有指定LOCAL</p><br><p style="margin-left: 30px;" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 如果 filepath 指向的是一个完整的 URI，hive 会直接使用这个 URI。 否则</p><br><p style="margin-left: 30px;" align="left">•如果没有指定 schema 或者 authority，Hive 会使用在 hadoop 配置文件中定义的 schema 和 authority，fs.default.name 指定了 Namenode 的 URI</p><br><p style="margin-left: 30px;" align="left">•如果路径不是绝对的，Hive 相对于 /user/ 进行解释。 Hive 会将 filepath 中指定的文件内容移动到 table （或者 partition）所指定的路径中</p><br><p align="left">&nbsp;</p><br><p align="left"><strong>2.1.2 加载</strong><strong>DFS</strong><strong>数据</strong><strong>，同时给定分区信息：</strong></p><br><p style="margin-left: 30px;" align="left">hive&gt; LOAD DATA INPATH ‘/user/myname/kv2.txt’ OVERWRITE INTO TABLE invites PARTITION (ds=’2008-08-15’);<br>The above command will load data from an HDFS file/directory to the table. Note that loading data from HDFS will result in moving the file/directory. As a result, the operation is almost instantaneous.</p><br><p align="left">&nbsp;</p><br><p align="left"><strong>OVERWRITE</strong></p><br><p style="margin-left: 30px;" align="left">•指定了OVERWRITE</p><br><p style="margin-left: 30px;" align="left">•目标表（或者分区）中的内容（如果有）会被删除，然后再将 filepath 指向的文件/目录中的内容添加到表/分区中。</p><br><p style="margin-left: 30px;" align="left">•如果目标表（分区）已经有一个文件，并且文件名和 filepath 中的文件名冲突，那么现有的文件会被新文件所替代。</p><br><p align="left">&nbsp;</p><br><p align="left"><strong>2.1.3 将查询结果插入</strong><strong>Hive</strong><strong>表</strong></p><br><p style="margin-left: 30px;" align="left">•将查询结果插入Hive表</p><br><p style="margin-left: 30px;" align="left">•将查询结果写入HDFS文件系统</p><br><p style="margin-left: 30px;" align="left">•基本模式</p><br><p style="margin-left: 60px;" align="left">INSERT OVERWRITE TABLE tablename1 [PARTITION (partcol1=val1, partcol2=val2 …)] select_statement1 FROM from_statement</p><br><p style="margin-left: 30px;" align="left">•多插入模式</p><br><p style="margin-left: 60px;" align="left">&nbsp;FROM from_statement</p><br><p style="margin-left: 60px;" align="left">INSERT OVERWRITE TABLE tablename1 [PARTITION (partcol1=val1, partcol2=val2 …)] select_statement1</p><br><p style="margin-left: 60px;" align="left">[INSERT OVERWRITE TABLE tablename2 [PARTITION …] select_statement2] …</p><br><p align="left">　　•自动分区模式</p><br><p style="margin-left: 60px;" align="left">INSERT OVERWRITE TABLE tablename PARTITION (partcol1[=val1], partcol2[=val2] …) select_statement FROM from_statement</p><br><p align="left"><strong>2.1.5 将查询结果写入</strong><strong>HDFS</strong><strong>文件系统</strong></p><br><p style="margin-left: 60px;" align="left">INSERT OVERWRITE [LOCAL] DIRECTORY directory1 SELECT … FROM …</p><br><p style="margin-left: 60px;" align="left">FROM from_statement</p><br><p style="margin-left: 60px;" align="left">INSERT OVERWRITE [LOCAL] DIRECTORY directory1 select_statement1</p><br><p style="margin-left: 60px;" align="left">[INSERT OVERWRITE [LOCAL] DIRECTORY directory2 select_statement2]</p><br><p align="left">&nbsp;</p><br><p style="margin-left: 30px;" align="left">•数据写入文件系统时进行文本序列化，且每列用^A 来区分，\n换行</p><br><p align="left"><strong>2.1.6 INSERT&nbsp;INTO&nbsp;</strong></p><br><p style="margin-left: 30px;" align="left">INSERT INTO&nbsp; TABLE tablename1 [PARTITION (partcol1=val1, partcol2=val2 …)] select_statement1 FROM from_statement</p><br><h2 style="line-height: 26px; margin: 0px; font-family: Arial; color: #333333; padding: 0px;"><a name="t35"></a></h2><br><p class="headline-1 bk-sidecatalog-title" style="border-bottom: #dedfe1 1px solid; padding-bottom: 6px; margin-top: 0px; margin-bottom: 10px; clear: both; padding-top: 0px;"><span style="color: #336699;"><span style="line-height: 36px; font-size: 22px;">3. &nbsp;DQL 操作:数据查询SQL</span></span></p><br><div class="cnblogs_code" onclick="cnblogs_code_show('1e4943d2-9fb9-4dc7-9625-c0e1e9579da3')"><img id="code_img_closed_1e4943d2-9fb9-4dc7-9625-c0e1e9579da3" class="code_img_closed" src="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" alt=""><img id="code_img_opened_1e4943d2-9fb9-4dc7-9625-c0e1e9579da3" class="code_img_opened" style="display: none;" onclick="cnblogs_code_hide('1e4943d2-9fb9-4dc7-9625-c0e1e9579da3',event)" src="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" alt=""><br><div id="cnblogs_code_open_1e4943d2-9fb9-4dc7-9625-c0e1e9579da3" class="cnblogs_code_hide"><br><pre><span style="color: #000000;">•基本的Select 操作<br>•基于Partition的查询<br>•</span><span style="color: #808080;">Join</span></pre><br></div><br><span class="cnblogs_code_collapse">SQL操作</span></div><br><p align="left"><strong>3.1 </strong><strong>基本的</strong><strong>Select&nbsp;</strong><strong>操作</strong></p><br><p style="margin-left: 30px;" align="left">SELECT [ALL | DISTINCT] select_expr, select_expr, …</p><br><p style="margin-left: 30px;" align="left">FROM table_reference</p><br><p style="margin-left: 30px;" align="left">[WHERE where_condition]</p><br><p style="margin-left: 30px;" align="left">[GROUP BY col_list [HAVING condition]]</p><br><p style="margin-left: 30px;" align="left">[&nbsp;&nbsp; CLUSTER BY col_list</p><br><p style="margin-left: 30px;" align="left">| [DISTRIBUTE BY col_list] [SORT BY| ORDER BY col_list]</p><br><p style="margin-left: 30px;" align="left">]</p><br><p style="margin-left: 30px;" align="left">[LIMIT number]</p><br><p style="margin-left: 30px;" align="left">•使用ALL和DISTINCT选项区分对重复记录的处理。默认是ALL，表示查询所有记录。DISTINCT表示去掉重复的记录</p><br><p style="margin-left: 30px;" align="left">•Where 条件</p><br><p style="margin-left: 30px;" align="left">•类似我们传统SQL的where 条件</p><br><p style="margin-left: 30px;" align="left">•目前支持 AND,OR ,0.9版本支持between</p><br><p style="margin-left: 30px;" align="left">•IN, NOT IN</p><br><p style="margin-left: 30px;" align="left">•不支持EXIST ,NOT EXIST</p><br><p align="left"><strong>ORDER BY</strong><strong>与</strong><strong>SORT BY</strong><strong>的不同</strong></p><br><p style="margin-left: 30px;" align="left">•ORDER BY 全局排序，只有一个Reduce任务</p><br><p style="margin-left: 30px;" align="left">•SORT BY 只在本机做排序</p><br><p align="left">&nbsp;</p><br><p align="left"><strong>Limit</strong></p><br><p style="margin-left: 30px;" align="left">•Limit 可以限制查询的记录数</p><br><p style="margin-left: 60px;" align="left">SELECT  FROM t1 LIMIT 5</p><br><p style="margin-left: 30px;" align="left">•实现Top k 查询</p><br><p style="margin-left: 30px;" align="left">•下面的查询语句查询销售记录最大的 5 个销售代表。</p><br><p style="margin-left: 30px;" align="left">SET mapred.reduce.tasks = 1&nbsp;<br>SELECT <em> FROM test SORT BY amount DESC LIMIT 5</em></p><br><p style="margin-left: 30px;" align="left">•REGEX Column Specification</p><br><p style="margin-left: 30px;" align="left">SELECT 语句可以使用正则表达式做列选择，下面的语句查询除了 ds 和 hr 之外的所有列：</p><br><p style="margin-left: 30px;" align="left">SELECT <code>(ds|hr)?+.+</code> FROM test</p><br><p align="left">&nbsp;</p><br><p align="left"><strong>例如</strong></p><br><p align="left"><strong>按先件查询</strong></p><br><p align="left">　　hive&gt; SELECT a.foo FROM invites a WHERE a.ds=’&lt;DATE&gt;’;</p><br><p align="left"><strong>将查询数据输出至目录：</strong></p><br><p align="left">　　hive&gt; INSERT OVERWRITE DIRECTORY ‘/tmp/hdfs_out’ SELECT a. FROM invites a WHERE a.ds=’&lt;DATE&gt;’;</p><br><p align="left"><strong>将查询结果输出至本地目录：</strong></p><br><p align="left">　　hive&gt; INSERT OVERWRITE LOCAL DIRECTORY ‘/tmp/local_out’ SELECT a.<em> FROM pokes a;</em></p><br><p align="left"><strong>选择所有列到本地目录</strong><strong>：</strong></p><br><p style="margin-left: 30px;" align="left">hive&gt; INSERT OVERWRITE TABLE events SELECT a. FROM profiles a;<br>hive&gt; INSERT OVERWRITE TABLE events SELECT a.<em> FROM profiles a WHERE a.key &lt; 100;<br>hive&gt; INSERT OVERWRITE LOCAL DIRECTORY ‘/tmp/reg_3’ SELECT a.</em> FROM events a;<br>hive&gt; INSERT OVERWRITE DIRECTORY ‘/tmp/reg_4’ select a.invites, a.pokes FROM profiles a;<br>hive&gt; INSERT OVERWRITE DIRECTORY ‘/tmp/reg_5’ SELECT COUNT(1) FROM invites a WHERE a.ds=’&lt;DATE&gt;’;<br>hive&gt; INSERT OVERWRITE DIRECTORY ‘/tmp/reg_5’ SELECT a.foo, a.bar FROM invites a;<br>hive&gt; INSERT OVERWRITE LOCAL DIRECTORY ‘/tmp/sum’ SELECT SUM(a.pc) FROM pc1 a;</p><br><p align="left"><strong>将一个表的统计结果插入另一个表中：</strong></p><br><p style="margin-left: 30px;" align="left">hive&gt; FROM invites a INSERT OVERWRITE TABLE events SELECT a.bar, count(1) WHERE a.foo &gt; 0 GROUP BY a.bar;<br>hive&gt; INSERT OVERWRITE TABLE events SELECT a.bar, count(1) FROM invites a WHERE a.foo &gt; 0 GROUP BY a.bar;<br>JOIN<br>hive&gt; FROM pokes t1 JOIN invites t2 ON (t1.bar = t2.bar) INSERT OVERWRITE TABLE events SELECT t1.bar, t1.foo, t2.foo;</p><br><p align="left"><strong>将多表数据插入到同一表中：</strong></p><br><p style="margin-left: 30px;" align="left">FROM src<br>INSERT OVERWRITE TABLE dest1 SELECT src.<em> WHERE src.key &lt; 100<br>INSERT OVERWRITE TABLE dest2 SELECT src.key, src.value WHERE src.key &gt;= 100 and src.key &lt; 200<br>INSERT OVERWRITE TABLE dest3 PARTITION(ds=’2008-04-08’, hr=’12’) SELECT src.key WHERE src.key &gt;= 200 and src.key &lt; 300<br>INSERT OVERWRITE LOCAL DIRECTORY ‘/tmp/dest4.out’ SELECT src.value WHERE src.key &gt;= 300;</em></p><br><p align="left"><strong>将文件流直接插入文件：</strong></p><br><p style="margin-left: 30px;" align="left">hive&gt; FROM invites a INSERT OVERWRITE TABLE events SELECT TRANSFORM(a.foo, a.bar) AS (oof, rab) USING ‘/bin/cat’ WHERE a.ds &gt; ‘2008-08-09’;<br>This streams the data in the map phase through the script /bin/cat (like hadoop streaming). Similarly - streaming can be used on the reduce side (please see the Hive Tutorial or examples)</p><br><p align="left">&nbsp;</p><br><p align="left"><strong>3.2 </strong><strong>基于</strong><strong>Partition</strong><strong>的查询</strong></p><br><p align="left">•一般 SELECT 查询会扫描整个表，使用 PARTITIONED BY 子句建表，查询就可以利用分区剪枝（input pruning）的特性</p><br><p align="left">•Hive 当前的实现是，只有分区断言出现在离 FROM 子句最近的那个WHERE 子句中，才会启用分区剪枝</p><br><p align="left">&nbsp;</p><br><p align="left"><strong>3.3 Join</strong></p><br><div class="cnblogs_code" onclick="cnblogs_code_show('de4cf261-d4b0-4b88-9c74-7153813b0040')"><img id="code_img_closed_de4cf261-d4b0-4b88-9c74-7153813b0040" class="code_img_closed" src="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" alt="" style="display: none;"><img id="code_img_opened_de4cf261-d4b0-4b88-9c74-7153813b0040" class="code_img_opened" style="" onclick="cnblogs_code_hide('de4cf261-d4b0-4b88-9c74-7153813b0040',event)" src="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" alt=""><br><div id="cnblogs_code_open_de4cf261-d4b0-4b88-9c74-7153813b0040" class="cnblogs_code_hide" style="display: block;"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码" target="_blank" rel="external"><img src="//common.cnblogs.com/images/copycode.gif" alt="复制代码"></a></span></div><br><pre><span style="color: #000000;">join_table:<br>   table_reference </span><span style="color: #808080;">JOIN</span> table_factor <span style="color: #ff0000;">[</span><span style="color: #ff0000;">join_condition</span><span style="color: #ff0000;">]</span><br>  <span style="color: #808080;">|</span> table_reference {<span style="color: #808080;">LEFT|RIGHT|</span><span style="color: #0000ff;">FULL</span>} <span style="color: #ff0000;">[</span><span style="color: #ff0000;">OUTER</span><span style="color: #ff0000;">]</span> <span style="color: #808080;">JOIN</span><span style="color: #000000;"> table_reference join_condition<br>  </span><span style="color: #808080;">|</span> table_reference <span style="color: #808080;">LEFT</span> SEMI <span style="color: #808080;">JOIN</span><span style="color: #000000;"> table_reference join_condition<br><br>table_reference:<br>    table_factor<br>  </span><span style="color: #808080;">|</span><span style="color: #000000;"> join_table<br><br>table_factor:<br>    tbl_name </span><span style="color: #ff0000;">[</span><span style="color: #ff0000;">alias</span><span style="color: #ff0000;">]</span><br>  <span style="color: #808080;">|</span><span style="color: #000000;"> table_subquery alias<br>  </span><span style="color: #808080;">|</span><span style="color: #000000;"> ( table_references )<br><br>join_condition:<br>    </span><span style="color: #0000ff;">ON</span> equality_expression ( <span style="color: #808080;">AND</span> equality_expression )<span style="color: #808080;"></span><span style="color: #000000;"><br><br>equality_expression:<br>    expression </span><span style="color: #808080;">=</span> expression</pre><br><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码" target="_blank" rel="external"><img src="//common.cnblogs.com/images/copycode.gif" alt="复制代码"></a></span></div></div><br><span class="cnblogs_code_collapse" style="display: none;">Syntax</span></div><br><p style="margin-left: 30px;">•Hive 只支持等值连接（equality joins）、外连接（outer joins）和（left semi joins）。Hive 不支持所有非等值的连接，因为非等值连接非常难转化到 map/reduce 任务</p><br><p style="margin-left: 30px;" align="left">•LEFT，RIGHT和FULL OUTER关键字用于处理join中空记录的情况</p><br><p style="margin-left: 30px;" align="left">•LEFT SEMI JOIN 是 IN/EXISTS 子查询的一种更高效的实现</p><br><p style="margin-left: 30px;" align="left">•join 时，每次 map/reduce 任务的逻辑是这样的：reducer 会缓存 join 序列中除了最后一个表的所有表的记录，再通过最后一个表将结果序列化到文件系统</p><br><p style="margin-left: 30px;" align="left">•实践中，应该把最大的那个表写在最后</p><br><p align="left"><strong>join&nbsp;</strong><strong>查询时，需要注意几个关键点</strong></p><br><p style="margin-left: 30px;" align="left">•只支持等值join</p><br><p style="margin-left: 30px;" align="left">•SELECT a.<em> FROM a JOIN b ON (a.id = b.id)</em></p><br><p style="margin-left: 30px;" align="left">•SELECT a. FROM a JOIN b&nbsp;<br>&nbsp;&nbsp;&nbsp; ON (a.id = b.id AND a.department = b.department)</p><br><p style="margin-left: 30px;" align="left">•可以 join 多于 2 个表，例如</p><br><p style="margin-left: 30px;" align="left">SELECT a.val, b.val, c.val FROM a JOIN b&nbsp;<br>&nbsp;&nbsp;&nbsp; ON (a.key = b.key1) JOIN c ON (c.key = b.key2)</p><br><p align="left">&nbsp;</p><br><p style="margin-left: 30px;" align="left">•如果join中多个表的 join key 是同一个，则 join 会被转化为单个 map/reduce 任务</p><br><p style="margin-left: 30px;" align="left"><strong>LEFT</strong><strong>，</strong><strong>RIGHT</strong><strong>和</strong><strong>FULL OUTER</strong></p><br><p style="margin-left: 30px;" align="left">•例子</p><br><p style="margin-left: 30px;" align="left">　　SELECT a.val, b.val FROM a LEFT OUTER JOIN b ON (a.key=b.key)</p><br><p align="left">&nbsp;</p><br><p style="margin-left: 30px;" align="left">•如果你想限制 join 的输出，应该在 WHERE 子句中写过滤条件——或是在 join 子句中写</p><br><p style="margin-left: 30px;" align="left">•容易混淆的问题是表分区的情况</p><br><p style="margin-left: 30px;" align="left">　SELECT c.val, d.val FROM c LEFT OUTER JOIN d ON (c.key=d.key)&nbsp;<br>&nbsp; WHERE a.ds=’2010-07-07’ AND b.ds=’2010-07-07‘</p><br><p style="margin-left: 30px;" align="left">•如果 d 表中找不到对应 c 表的记录，d 表的所有列都会列出 NULL，包括 ds 列。也就是说，join 会过滤 d 表中不能找到匹配 c 表 join key 的所有记录。这样的话，LEFT OUTER 就使得查询结果与 WHERE 子句无关</p><br><p style="margin-left: 30px;" align="left">•解决办法</p><br><p style="margin-left: 30px;" align="left">　　SELECT c.val, d.val FROM c LEFT OUTER JOIN d&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp; ON (c.key=d.key AND d.ds=’2009-07-07’ AND c.ds=’2009-07-07’)</p><br><p align="left"><strong>LEFT SEMI JOIN</strong></p><br><p style="margin-left: 30px;" align="left">•LEFT SEMI JOIN 的限制是， JOIN 子句中右边的表只能在 ON 子句中设置过滤条件，在 WHERE 子句、SELECT 子句或其他地方过滤都不行</p><br><p style="margin-left: 60px;" align="left">SELECT a.key, a.value&nbsp;<br>&nbsp; FROM a&nbsp;<br>&nbsp; WHERE a.key in&nbsp;<br>&nbsp;&nbsp; (SELECT b.key&nbsp;<br>&nbsp;&nbsp;&nbsp; FROM B);</p><br><p style="margin-left: 60px;" align="left">可以被重写为：</p><br><p style="margin-left: 60px;" align="left">SELECT a.key, a.val&nbsp;<br>&nbsp;&nbsp; FROM a LEFT SEMI JOIN b on (a.key = b.key)</p><br><p align="left"><strong>UNION ALL</strong></p><br><p style="margin-left: 30px;" align="left">•用来合并多个select的查询结果，需要保证select中字段须一致</p><br><p style="margin-left: 30px;" align="left">　　select_statement UNION ALL select_statement UNION ALL select_statement …</p><br><h2 style="line-height: 26px; margin: 0px; font-family: Arial; color: #333333; padding: 0px;"><a name="t47"></a></h2><br><p class="headline-1 bk-sidecatalog-title" style="border-bottom: #dedfe1 1px solid; padding-bottom: 6px; margin-top: 0px; margin-bottom: 10px; clear: both; padding-top: 0px;"><span style="color: #336699;"><span style="line-height: 36px; font-size: 22px;">4. &nbsp;从SQL到HiveQL应转变的习惯</span></span></p><br><p align="left"><strong>4.1</strong><strong>、</strong><strong>Hive</strong><strong>不支持等值连接</strong><strong>&nbsp;</strong></p><br><p style="margin-left: 30px;" align="left">•SQL中对两表内联可以写成：</p><br><p style="margin-left: 60px;" align="left">select <em> from dual a,dual b where a.key = b.key;</em></p><br><p style="margin-left: 30px;" align="left">•Hive中应为</p><br><p style="margin-left: 60px;" align="left">select  from dual a join dual b on a.key = b.key;&nbsp;</p><br><p style="margin-left: 30px;" align="left">而不是传统的格式：</p><br><p style="margin-left: 60px;" align="left">SELECT t1.a1 as c1, t2.b1 as c2FROM t1, t2 WHERE t1.a2 = t2.b2</p><br><p align="left"><strong>4.2</strong><strong>、分号字符</strong></p><br><p style="margin-left: 30px;" align="left">•分号是SQL语句结束标记，在HiveQL中也是，但是在HiveQL中，对分号的识别没有那么智慧，例如：</p><br><p style="margin-left: 30px;" align="left">　　select concat(key,concat(‘;’,key)) from dual;</p><br><p style="margin-left: 30px;" align="left">•但HiveQL在解析语句时提示：</p><br><p style="margin-left: 30px;" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FAILED: Parse Error: line 0:-1 mismatched input ‘&lt;EOF&gt;’ expecting ) in function specification</p><br><p style="margin-left: 30px;" align="left">•解决的办法是，使用分号的八进制的ASCII码进行转义，那么上述语句应写成：</p><br><p style="margin-left: 30px;" align="left">　　select concat(key,concat(‘\073’,key)) from dual;</p><br><p align="left">&nbsp;</p><br><p align="left"><strong>4.3</strong><strong>、</strong><strong>IS [NOT] NULL</strong></p><br><p align="left">　　SQL中null代表空值,&nbsp;值得警惕的是, 在HiveQL中String类型的字段若是空(empty)字符串, 即长度为0, 那么对它进行IS NULL的判断结果是False.</p><br><p align="left"><strong>4.4</strong><strong>、</strong><strong>Hive</strong><strong>不支持将数据</strong><strong>插入</strong><strong>现有的表或分区中，</strong></p><br><p style="margin-left: 30px;" align="left">仅支持覆盖重写整个表，示例如下：</p><br><p style="margin-left: 30px;" align="left">INSERT&nbsp;OVERWRITE&nbsp;TABLE&nbsp;t1&nbsp;&nbsp;</p><br><p style="margin-left: 30px;" align="left">SELECT&nbsp;<em>&nbsp;FROM&nbsp;t2;&nbsp;INSERT OVERWRITE TABLE t1SELECT </em> FROM t2;</p><br><p align="left">&nbsp;</p><br><p align="left"><strong>4.5</strong><strong>、</strong><strong>hive</strong><strong>不支持</strong><strong>INSERT INTO, UPDATE, DELETE</strong><strong>操作</strong></p><br><p align="left">&nbsp;&nbsp;&nbsp;&nbsp; 这样的话，就不要很复杂的锁机制来读写数据。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INSERT INTO syntax is only available starting in version 0.8。INSERT INTO就是在表或分区中追加数据。</p><br><p align="left"><strong>4.6、</strong><strong>hive</strong><strong>支持嵌入</strong><strong>mapreduce</strong><strong>程序，来处理复杂的逻辑</strong></p><br><p align="left">如：</p><br><div class="cnblogs_code" onclick="cnblogs_code_show('587dd89d-6f48-478b-8f5e-f5f55a3d44c2')"><img id="code_img_closed_587dd89d-6f48-478b-8f5e-f5f55a3d44c2" class="code_img_closed" src="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" alt=""><img id="code_img_opened_587dd89d-6f48-478b-8f5e-f5f55a3d44c2" class="code_img_opened" style="display: none;" onclick="cnblogs_code_hide('587dd89d-6f48-478b-8f5e-f5f55a3d44c2',event)" src="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" alt=""><br><div id="cnblogs_code_open_587dd89d-6f48-478b-8f5e-f5f55a3d44c2" class="cnblogs_code_hide"><br><pre><span style="color: #0000ff;">FROM</span><span style="color: #000000;"> (<br><br>MAP doctext USING </span><span style="color: #ff0000;">‘</span><span style="color: #ff0000;">python wc_mapper.py</span><span style="color: #ff0000;">‘</span> <span style="color: #0000ff;">AS</span><span style="color: #000000;"> (word, cnt)<br><br></span><span style="color: #0000ff;">FROM</span><span style="color: #000000;"> docs<br><br>CLUSTER </span><span style="color: #0000ff;">BY</span><span style="color: #000000;"> word<br><br>) a<br><br>REDUCE word, cnt USING </span><span style="color: #ff0000;">‘</span><span style="color: #ff0000;">python wc_reduce.py</span><span style="color: #ff0000;">‘</span>; <span style="color: #0000ff;">FROM</span><span style="color: #000000;"> (<br><br>MAP doctext USING </span><span style="color: #ff0000;">‘</span><span style="color: #ff0000;">python wc_mapper.py</span><span style="color: #ff0000;">‘</span> <span style="color: #0000ff;">AS</span><span style="color: #000000;"> (word, cnt)<br><br></span><span style="color: #0000ff;">FROM</span><span style="color: #000000;"> docs<br><br>CLUSTER </span><span style="color: #0000ff;">BY</span><span style="color: #000000;"> word<br><br>) a<br><br>REDUCE word, cnt USING </span><span style="color: #ff0000;">‘</span><span style="color: #ff0000;">python wc_reduce.py</span><span style="color: #ff0000;">‘</span>;</pre><br></div><br><span class="cnblogs_code_collapse">hive 支持mapreduce</span></div><br><p><br>–doctext: 是输入 </p><br><p align="left">–word, cnt: 是map程序的输出</p><br><p align="left">–CLUSTER BY: 将wordhash后，又作为reduce程序的输入</p><br><p align="left">并且map程序、reduce程序可以单独使用，如：</p><br><div class="cnblogs_code" onclick="cnblogs_code_show('1fc9fcdc-4032-498f-b7f2-fb40ab77d010')"><img id="code_img_closed_1fc9fcdc-4032-498f-b7f2-fb40ab77d010" class="code_img_closed" src="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" alt=""><img id="code_img_opened_1fc9fcdc-4032-498f-b7f2-fb40ab77d010" class="code_img_opened" style="display: none;" onclick="cnblogs_code_hide('1fc9fcdc-4032-498f-b7f2-fb40ab77d010',event)" src="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" alt=""><br><div id="cnblogs_code_open_1fc9fcdc-4032-498f-b7f2-fb40ab77d010" class="cnblogs_code_hide"><br><pre><span style="color: #0000ff;">FROM</span><span style="color: #000000;"> (<br><br></span><span style="color: #0000ff;">FROM</span><span style="color: #000000;"> session_table<br><br></span><span style="color: #0000ff;">SELECT</span><span style="color: #000000;"> sessionid, tstamp, data<br><br>DISTRIBUTE </span><span style="color: #0000ff;">BY</span> sessionid SORT <span style="color: #0000ff;">BY</span><span style="color: #000000;"> tstamp<br><br>) a<br><br>REDUCE sessionid, tstamp, data USING </span><span style="color: #ff0000;">‘</span><span style="color: #ff0000;">session_reducer.sh</span><span style="color: #ff0000;">‘</span><span style="color: #000000;">;<br><br></span><span style="color: #0000ff;">FROM</span><span style="color: #000000;"> (<br><br></span><span style="color: #0000ff;">FROM</span><span style="color: #000000;"> session_table<br><br></span><span style="color: #0000ff;">SELECT</span><span style="color: #000000;"> sessionid, tstamp, data<br><br>DISTRIBUTE </span><span style="color: #0000ff;">BY</span> sessionid SORT <span style="color: #0000ff;">BY</span><span style="color: #000000;"> tstamp<br><br>) a<br><br>REDUCE sessionid, tstamp, data USING </span><span style="color: #ff0000;">‘</span><span style="color: #ff0000;">session_reducer.sh</span><span style="color: #ff0000;">‘</span>;</pre><br></div><br><span class="cnblogs_code_collapse">map</span></div><br><p>&nbsp;</p><br><p align="left">–DISTRIBUTE BY: 用于给reduce程序分配行数据</p><br><p align="left"><strong>4.7、</strong><strong>hive</strong><strong>支持将转换后的数据直接写入不同的表，还能写入分区、</strong><strong>hdfs</strong><strong>和本地目录。</strong></p><br><p align="left">这样能免除多次扫描输入表的开销。</p><br><div class="cnblogs_code" onclick="cnblogs_code_show('0ac0ef4e-79ce-46c8-a4b9-6cbc08a0a513')"><img id="code_img_closed_0ac0ef4e-79ce-46c8-a4b9-6cbc08a0a513" class="code_img_closed" src="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" alt=""><img id="code_img_opened_0ac0ef4e-79ce-46c8-a4b9-6cbc08a0a513" class="code_img_opened" style="display: none;" onclick="cnblogs_code_hide('0ac0ef4e-79ce-46c8-a4b9-6cbc08a0a513',event)" src="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" alt=""><br><div id="cnblogs_code_open_0ac0ef4e-79ce-46c8-a4b9-6cbc08a0a513" class="cnblogs_code_hide"><br><pre><span style="color: #0000ff;">FROM</span><span style="color: #000000;"> t1<br><br></span><span style="color: #0000ff;">INSERT</span> OVERWRITE <span style="color: #0000ff;">TABLE</span><span style="color: #000000;"> t2<br><br></span><span style="color: #0000ff;">SELECT</span> t3.c2, <span style="color: #ff00ff;">count</span>(<span style="color: #800000; font-weight: bold;">1</span><span style="color: #000000;">)<br><br></span><span style="color: #0000ff;">FROM</span><span style="color: #000000;"> t3<br><br></span><span style="color: #0000ff;">WHERE</span> t3.c1 <span style="color: #808080;">&lt;=</span> <span style="color: #800000; font-weight: bold;">20</span><br><br><span style="color: #0000ff;">GROUP</span> <span style="color: #0000ff;">BY</span><span style="color: #000000;"> t3.c2<br><br><br><br></span><span style="color: #0000ff;">INSERT</span> OVERWRITE DIRECTORY <span style="color: #ff0000;">‘</span><span style="color: #ff0000;">/output_dir</span><span style="color: #ff0000;">‘</span><br><br><span style="color: #0000ff;">SELECT</span> t3.c2, <span style="color: #ff00ff;">avg</span><span style="color: #000000;">(t3.c1)<br><br></span><span style="color: #0000ff;">FROM</span><span style="color: #000000;"> t3<br><br></span><span style="color: #0000ff;">WHERE</span> t3.c1 <span style="color: #808080;">&gt;</span> <span style="color: #800000; font-weight: bold;">20</span> <span style="color: #808080;">AND</span> t3.c1 <span style="color: #808080;">&lt;=</span> <span style="color: #800000; font-weight: bold;">30</span><br><br><span style="color: #0000ff;">GROUP</span> <span style="color: #0000ff;">BY</span><span style="color: #000000;"> t3.c2<br><br><br><br></span><span style="color: #0000ff;">INSERT</span> OVERWRITE LOCAL DIRECTORY <span style="color: #ff0000;">‘</span><span style="color: #ff0000;">/home/dir</span><span style="color: #ff0000;">‘</span><br><br><span style="color: #0000ff;">SELECT</span> t3.c2, <span style="color: #ff00ff;">sum</span><span style="color: #000000;">(t3.c1)<br><br></span><span style="color: #0000ff;">FROM</span><span style="color: #000000;"> t3<br><br></span><span style="color: #0000ff;">WHERE</span> t3.c1 <span style="color: #808080;">&gt;</span> <span style="color: #800000; font-weight: bold;">30</span><br><br><span style="color: #0000ff;">GROUP</span> <span style="color: #0000ff;">BY</span> t3.c2;  </pre><br></div><br><span class="cnblogs_code_collapse">insert分区</span></div><br><p><a name="t55"></a></p><br><p class="headline-1 bk-sidecatalog-title" style="border-bottom: #dedfe1 1px solid; padding-bottom: 6px; margin-top: 0px; margin-bottom: 10px; clear: both; padding-top: 0px;"><span style="color: #336699;"><span style="line-height: 36px; font-size: 22px;">5. &nbsp;实际示例</span></span></p><br><p align="left"><strong>5.1 创建一个表</strong></p><br><div class="cnblogs_code" onclick="cnblogs_code_show('0ade7e3a-d96e-4a63-9eca-e29a2879cdbe')"><img id="code_img_closed_0ade7e3a-d96e-4a63-9eca-e29a2879cdbe" class="code_img_closed" src="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" alt=""><img id="code_img_opened_0ade7e3a-d96e-4a63-9eca-e29a2879cdbe" class="code_img_opened" style="display: none;" onclick="cnblogs_code_hide('0ade7e3a-d96e-4a63-9eca-e29a2879cdbe',event)" src="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" alt=""><br><div id="cnblogs_code_open_0ade7e3a-d96e-4a63-9eca-e29a2879cdbe" class="cnblogs_code_hide"><br><pre><span style="color: #0000ff;">CREATE</span> <span style="color: #0000ff;">TABLE</span><span style="color: #000000;"> u_data (<br>userid </span><span style="color: #0000ff;">INT</span><span style="color: #000000;">,<br>movieid </span><span style="color: #0000ff;">INT</span><span style="color: #000000;">,<br>rating </span><span style="color: #0000ff;">INT</span><span style="color: #000000;">,<br>unixtime STRING)<br>ROW FORMAT DELIMITED<br>FIELDS TERMINATED </span><span style="color: #0000ff;">BY</span> <span style="color: #ff0000;">‘</span><span style="color: #ff0000;">/t</span><span style="color: #ff0000;">‘</span><span style="color: #000000;"><br>STORED </span><span style="color: #0000ff;">AS</span> TEXTFILE;</pre><br></div><br><span class="cnblogs_code_collapse">创建表</span></div><br><p>下载示例数据文件，并解压缩<br>wget <a href="http://www.grouplens.org/system/files/ml-data.tar__0.gz" target="_blank">http://www.grouplens.org/system/files/ml-data.tar<strong>0.gz</strong></a><br>tar xvzf ml-data.tar0.gz</p><br><p align="left"><strong>5.2 加载数据到表中</strong><strong>:</strong></p><br><div class="cnblogs_code" onclick="cnblogs_code_show('8033a19c-c39d-402e-afff-8dfa4c1ed3e8')"><img id="code_img_closed_8033a19c-c39d-402e-afff-8dfa4c1ed3e8" class="code_img_closed" src="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" alt=""><img id="code_img_opened_8033a19c-c39d-402e-afff-8dfa4c1ed3e8" class="code_img_opened" style="display: none;" onclick="cnblogs_code_hide('8033a19c-c39d-402e-afff-8dfa4c1ed3e8',event)" src="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" alt=""><br><div id="cnblogs_code_open_8033a19c-c39d-402e-afff-8dfa4c1ed3e8" class="cnblogs_code_hide"><br><pre><span style="color: #0000ff;">LOAD</span> DATA LOCAL INPATH <span style="color: #ff0000;">‘</span><span style="color: #ff0000;">ml-data/u.data</span><span style="color: #ff0000;">‘</span><span style="color: #000000;"><br>OVERWRITE </span><span style="color: #0000ff;">INTO</span> <span style="color: #0000ff;">TABLE</span> u_data;</pre><br></div><br><span class="cnblogs_code_collapse">加载数据</span></div><br><p>&nbsp;</p><br><p align="left"><strong>5.3 统计数据总量</strong><strong>:</strong></p><br><p align="left">　　SELECT COUNT(1) FROM u_data;</p><br><p align="left"><strong>5.4 现在做一些复杂的数据分析</strong><strong>:</strong></p><br><p align="left">　　创建一个 weekday_mapper.py: 文件，作为数据按周进行分割</p><br><div class="cnblogs_code" onclick="cnblogs_code_show('59c28b7b-9a8f-422d-b9a0-85be023d21d4')"><img id="code_img_closed_59c28b7b-9a8f-422d-b9a0-85be023d21d4" class="code_img_closed" src="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" alt=""><img id="code_img_opened_59c28b7b-9a8f-422d-b9a0-85be023d21d4" class="code_img_opened" style="display: none;" onclick="cnblogs_code_hide('59c28b7b-9a8f-422d-b9a0-85be023d21d4',event)" src="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" alt=""><br><div id="cnblogs_code_open_59c28b7b-9a8f-422d-b9a0-85be023d21d4" class="cnblogs_code_hide"><br><pre><span style="color: #000000;">import sys<br>import </span><span style="color: #0000ff;">datetime</span><br><br><span style="color: #0000ff;">for</span> line <span style="color: #808080;">in</span><span style="color: #000000;"> sys.stdin:<br>line </span><span style="color: #808080;">=</span><span style="color: #000000;"> line.strip()<br>userid, movieid, rating, unixtime </span><span style="color: #808080;">=</span> line.split(<span style="color: #ff0000;">‘</span><span style="color: #ff0000;">/t</span><span style="color: #ff0000;">‘</span>)</pre><br></div><br><span class="cnblogs_code_collapse">View Code</span></div><br><p>&nbsp;</p><br><p align="left"><strong>5.5 生成数据的周信息</strong></p><br><div class="cnblogs_code" onclick="cnblogs_code_show('d9947864-40ae-472d-8dfe-6fac4638253b')"><img id="code_img_closed_d9947864-40ae-472d-8dfe-6fac4638253b" class="code_img_closed" src="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" alt=""><img id="code_img_opened_d9947864-40ae-472d-8dfe-6fac4638253b" class="code_img_opened" style="display: none;" onclick="cnblogs_code_hide('d9947864-40ae-472d-8dfe-6fac4638253b',event)" src="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" alt=""><br><div id="cnblogs_code_open_d9947864-40ae-472d-8dfe-6fac4638253b" class="cnblogs_code_hide"><br><pre>weekday <span style="color: #808080;">=</span> <span style="color: #0000ff;">datetime</span>.<span style="color: #0000ff;">datetime</span>.fromtimestamp(<span style="color: #0000ff;">float</span><span style="color: #000000;">(unixtime)).isoweekday()<br></span><span style="color: #0000ff;">print</span> <span style="color: #ff0000;">‘</span><span style="color: #ff0000;">/t</span><span style="color: #ff0000;">‘</span>.<span style="color: #808080;">join</span>(<span style="color: #ff0000;">[</span><span style="color: #ff0000;">userid, movieid, rating, str(weekday)</span><span style="color: #ff0000;">]</span>)</pre><br></div><br><span class="cnblogs_code_collapse">View Code</span></div><br><p>&nbsp;</p><br><p align="left"><strong>5.6 使用映射脚本</strong></p><br><p align="left">//创建表，按分割符分割行中的字段值</p><br><div class="cnblogs_code" onclick="cnblogs_code_show('55b3ecc6-f969-496a-8046-c712d630b070')"><img id="code_img_closed_55b3ecc6-f969-496a-8046-c712d630b070" class="code_img_closed" src="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" alt=""><img id="code_img_opened_55b3ecc6-f969-496a-8046-c712d630b070" class="code_img_opened" style="display: none;" onclick="cnblogs_code_hide('55b3ecc6-f969-496a-8046-c712d630b070',event)" src="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" alt=""><br><div id="cnblogs_code_open_55b3ecc6-f969-496a-8046-c712d630b070" class="cnblogs_code_hide"><br><pre><span style="color: #0000ff;">CREATE</span> <span style="color: #0000ff;">TABLE</span><span style="color: #000000;"> u_data_new (<br>userid </span><span style="color: #0000ff;">INT</span><span style="color: #000000;">,<br>movieid </span><span style="color: #0000ff;">INT</span><span style="color: #000000;">,<br>rating </span><span style="color: #0000ff;">INT</span><span style="color: #000000;">,<br>weekday </span><span style="color: #0000ff;">INT</span><span style="color: #000000;">)<br>ROW FORMAT DELIMITED<br>FIELDS TERMINATED </span><span style="color: #0000ff;">BY</span> <span style="color: #ff0000;">‘</span><span style="color: #ff0000;">/t</span><span style="color: #ff0000;">‘</span>;</pre><br></div><br><span class="cnblogs_code_collapse">View Code</span></div><br><p>&nbsp;</p><br><p align="left">//将python文件加载到系统<br>add FILE weekday_mapper.py;</p><br><p align="left"><strong>5.7 将数据按周进行分割</strong></p><br><div class="cnblogs_code" onclick="cnblogs_code_show('e54a64eb-9d8b-426e-928f-b93f6b47f2c1')"><img id="code_img_closed_e54a64eb-9d8b-426e-928f-b93f6b47f2c1" class="code_img_closed" src="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" alt=""><img id="code_img_opened_e54a64eb-9d8b-426e-928f-b93f6b47f2c1" class="code_img_opened" style="display: none;" onclick="cnblogs_code_hide('e54a64eb-9d8b-426e-928f-b93f6b47f2c1',event)" src="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" alt=""><br><div id="cnblogs_code_open_e54a64eb-9d8b-426e-928f-b93f6b47f2c1" class="cnblogs_code_hide"><br><pre><span style="color: #0000ff;">INSERT</span> OVERWRITE <span style="color: #0000ff;">TABLE</span><span style="color: #000000;"> u_data_new<br></span><span style="color: #0000ff;">SELECT</span><span style="color: #000000;"><br>TRANSFORM (userid, movieid, rating, unixtime)<br>USING </span><span style="color: #ff0000;">‘</span><span style="color: #ff0000;">python weekday_mapper.py</span><span style="color: #ff0000;">‘</span><br><span style="color: #0000ff;">AS</span><span style="color: #000000;"> (userid, movieid, rating, weekday)<br></span><span style="color: #0000ff;">FROM</span><span style="color: #000000;"> u_data;<br><br></span><span style="color: #0000ff;">SELECT</span> weekday, <span style="color: #ff00ff;">COUNT</span>(<span style="color: #800000; font-weight: bold;">1</span><span style="color: #000000;">)<br></span><span style="color: #0000ff;">FROM</span><span style="color: #000000;"> u_data_new<br></span><span style="color: #0000ff;">GROUP</span> <span style="color: #0000ff;">BY</span> weekday;</pre><br></div><br><span class="cnblogs_code_collapse">按周分割</span></div><br><p>&nbsp;</p><br><p align="left"><strong>处理</strong><strong>Apache Weblog </strong><strong>数据</strong></p><br><p align="left">将WEB日志先用正则表达式进行组合，再按需要的条件进行组合输入到表中</p><br><div class="cnblogs_code" onclick="cnblogs_code_show('6965f381-b4b5-4237-b524-6e5ac1810687')"><img id="code_img_closed_6965f381-b4b5-4237-b524-6e5ac1810687" class="code_img_closed" src="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" alt="" style="display: none;"><img id="code_img_opened_6965f381-b4b5-4237-b524-6e5ac1810687" class="code_img_opened" style="" onclick="cnblogs_code_hide('6965f381-b4b5-4237-b524-6e5ac1810687',event)" src="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" alt=""><br><div id="cnblogs_code_open_6965f381-b4b5-4237-b524-6e5ac1810687" class="cnblogs_code_hide" style="display: block;"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码" target="_blank" rel="external"><img src="//common.cnblogs.com/images/copycode.gif" alt="复制代码"></a></span></div><br><pre><span style="color: #0000ff;">add</span> jar ..<span style="color: #808080;">/</span>build<span style="color: #808080;">/</span>contrib<span style="color: #808080;">/</span><span style="color: #000000;">hive_contrib.jar;<br><br></span><span style="color: #0000ff;">CREATE</span> <span style="color: #0000ff;">TABLE</span><span style="color: #000000;"> apachelog (<br>host STRING,<br></span><span style="color: #ff00ff;">identity</span><span style="color: #000000;"> STRING,<br></span><span style="color: #ff00ff;">user</span><span style="color: #000000;"> STRING,<br>time STRING,<br>request STRING,<br>status STRING,<br>size STRING,<br>referer STRING,<br>agent STRING)<br>ROW FORMAT SERDE </span><span style="color: #ff0000;">‘</span><span style="color: #ff0000;">org.apache.hadoop.hive.contrib.serde2.RegexSerDe</span><span style="color: #ff0000;">‘</span><br><span style="color: #0000ff;">WITH</span><span style="color: #000000;"> SERDEPROPERTIES (<br>“input.regex” </span><span style="color: #808080;">=</span> “(<span style="color: #ff0000;">[</span><span style="color: #ff0000;">^ </span><span style="color: #ff0000;">]</span><span style="color: #808080;"><em></em></span>) (<span style="color: #ff0000;">[</span><span style="color: #ff0000;">^ </span><span style="color: #ff0000;">]</span><span style="color: #808080;"></span>) (<span style="color: #ff0000;">[</span><span style="color: #ff0000;">^ </span><span style="color: #ff0000;">]</span><span style="color: #808080;"><em></em></span>) (<span style="color: #808080;">-|//</span><span style="color: #ff0000;">[</span><span style="color: #ff0000;">[^//</span><span style="color: #ff0000;">]</span>]<span style="color: #808080;">//</span>]) (<span style="color: #ff0000;">[</span><span style="color: #ff0000;">^ /“</span><span style="color: #ff0000;">]</span><span style="color: #808080;"><em>|/</em></span>“<span style="color: #ff0000;">[</span><span style="color: #ff0000;">^/“</span><span style="color: #ff0000;">]</span><span style="color: #808080;">/</span>“) (<span style="color: #808080;">-|</span><span style="color: #ff0000;">[</span><span style="color: #ff0000;">0-9</span><span style="color: #ff0000;">]</span><span style="color: #808080;"><em></em></span>) (<span style="color: #808080;">-|</span><span style="color: #ff0000;">[</span><span style="color: #ff0000;">0-9</span><span style="color: #ff0000;">]</span><span style="color: #808080;"></span>)(?: (<span style="color: #ff0000;">[</span><span style="color: #ff0000;">^ /“</span><span style="color: #ff0000;">]</span><span style="color: #808080;"><em>|/</em></span>“<span style="color: #ff0000;">[</span><span style="color: #ff0000;">^/“</span><span style="color: #ff0000;">]</span><span style="color: #808080;">/</span>“) (<span style="color: #ff0000;">[</span><span style="color: #ff0000;">^ /“</span><span style="color: #ff0000;">]</span><span style="color: #808080;"><em>|/</em></span>“<span style="color: #ff0000;">[</span><span style="color: #ff0000;">^/“</span><span style="color: #ff0000;">]</span><span style="color: #808080;">/</span><span style="color: #000000;">“))?”,<br>“output.format.string” </span><span style="color: #808080;">=</span> “<span style="color: #808080;">%</span><span style="color: #800000; font-weight: bold;">1</span>$s <span style="color: #808080;">%</span><span style="color: #800000; font-weight: bold;">2</span>$s <span style="color: #808080;">%</span><span style="color: #800000; font-weight: bold;">3</span>$s <span style="color: #808080;">%</span><span style="color: #800000; font-weight: bold;">4</span>$s <span style="color: #808080;">%</span><span style="color: #800000; font-weight: bold;">5</span>$s <span style="color: #808080;">%</span><span style="color: #800000; font-weight: bold;">6</span>$s <span style="color: #808080;">%</span><span style="color: #800000; font-weight: bold;">7</span>$s <span style="color: #808080;">%</span><span style="color: #800000; font-weight: bold;">8</span>$s <span style="color: #808080;">%</span><span style="color: #800000; font-weight: bold;">9</span><span style="color: #000000;">$s”<br>)<br>STORED </span><span style="color: #0000ff;">AS</span> TEXTFILE;</pre><br><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码" target="_blank" rel="external"><img src="//common.cnblogs.com/images/copycode.gif" alt="复制代码"></a></span></div></div><br><span class="cnblogs_code_collapse" style="display: none;">weblog</span></div><br><p>&nbsp;</p><br><div class="cnblogs_code" onclick="cnblogs_code_show('6f5309ae-75c8-4c88-880c-19525f260bc5')"><img id="code_img_closed_6f5309ae-75c8-4c88-880c-19525f260bc5" class="code_img_closed" src="http://images.cnblogs.com/OutliningIndicators/ContractedBlock.gif" alt="" style="display: none;"><img id="code_img_opened_6f5309ae-75c8-4c88-880c-19525f260bc5" class="code_img_opened" style="" onclick="cnblogs_code_hide('6f5309ae-75c8-4c88-880c-19525f260bc5',event)" src="http://images.cnblogs.com/OutliningIndicators/ExpandedBlockStart.gif" alt=""><br><div id="cnblogs_code_open_6f5309ae-75c8-4c88-880c-19525f260bc5" class="cnblogs_code_hide" style="display: block;"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码" target="_blank" rel="external"><img src="//common.cnblogs.com/images/copycode.gif" alt="复制代码"></a></span></div><br><pre><span style="color: #000000;">背景：<br>一个订号src_order_no对应的waybill_no 数组中有多个waybill_no,需要将多个waybill_no转换成行：<br></span><span style="color: #0000ff;">select</span><span style="color: #000000;"> t.src_order_no,waybill_no1.waybill_no col, waybill_no<br>  </span><span style="color: #0000ff;">from</span><span style="color: #000000;"><br>  (<br>  </span><span style="color: #0000ff;">select</span> <span style="color: #808080;">*</span> <span style="color: #0000ff;">from</span><span style="color: #000000;"> gdl.tt_order_info<br>  </span><span style="color: #0000ff;">where</span>  inc_day <span style="color: #808080;">=</span><span style="color: #ff0000;">‘</span><span style="color: #ff0000;">20170726</span><span style="color: #ff0000;">‘</span><br>  <span style="color: #808080;">and</span> size(waybill_no)<span style="color: #808080;">&gt;</span><span style="color: #800000; font-weight: bold;">1</span><span style="color: #000000;"><br>  )<br>  t lateral </span><span style="color: #0000ff;">view</span> explode(waybill_no) st <span style="color: #0000ff;">as</span><span style="color: #000000;"> waybill_no1<br>  limit </span><span style="color: #800000; font-weight: bold;">100</span></pre><br><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码" target="_blank" rel="external"><img src="//common.cnblogs.com/images/copycode.gif" alt="复制代码"></a></span></div></div><br><span class="cnblogs_code_collapse" style="display: none;">Hive 将array </span></div><br><p>&nbsp;</p></div>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ ���Ľ��� ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">��Ȩ����</span>
+<img src="�˴����Լ���Ȩ����ͼƬ��ַ" >
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">tc9011's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">Cheng Tang</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+��<a href="http://www.panchengming.com/" style="color:#258FC6">���޾�</a>������ά����<a href="http://www.panchengming.com/" style="color:#258FC6">tc9011's Notes</a>���Ͳ���<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">�������ñ�������-����ҵ-��ֹ����4.0�������֤</a>��<br/>
+�����׷���<a href="http://www.panchengming.com/" style="color:#258FC6">tc9011's Notes</a> ���ͣ� <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ������Ȩ���У���Ȩ�ؾ���</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/大数据，hive/" rel="tag"># 大数据，hive</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/09/pancm57/" rel="next" title="大数据学习系列之二 ----- HBase环境搭建(单机)">
+                <i class="fa fa-chevron-left"></i> 大数据学习系列之二 ----- HBase环境搭建(单机)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/14/pancm59/" rel="prev" title="大数据学习系列之三 ----- HBase Java Api 图文详解">
+                大数据学习系列之三 ----- HBase Java Api 图文详解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">60</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"></span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

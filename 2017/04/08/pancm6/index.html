@@ -1,0 +1,850 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="linux,ssh," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="上篇将了如何在linux部署web项目, &amp;nbsp;这篇介绍如何设置常用快捷键  路径快捷键设置临时快捷键设置 &amp;nbsp;执行XShel,输入: alias ‘aa=cd /etc/sysconfig’ &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;aa:快捷键名称     &amp;nbsp;### 永久快捷键设置 首先 输入你想要设置的别名 看这个别名是否存在;或者 输入a">
+<meta name="keywords" content="linux,ssh">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux Ubuntu从零开始部署web环境及项目 -----快捷键设置(四)">
+<meta property="og:url" content="http://yoursite.com/2017/04/08/pancm6/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="上篇将了如何在linux部署web项目, &amp;nbsp;这篇介绍如何设置常用快捷键  路径快捷键设置临时快捷键设置 &amp;nbsp;执行XShel,输入: alias ‘aa=cd /etc/sysconfig’ &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;aa:快捷键名称     &amp;nbsp;### 永久快捷键设置 首先 输入你想要设置的别名 看这个别名是否存在;或者 输入a">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408112958353?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408113010244?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408113052819?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408113103772?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:updated_time" content="2017-12-16T10:37:02.208Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux Ubuntu从零开始部署web环境及项目 -----快捷键设置(四)">
+<meta name="twitter:description" content="上篇将了如何在linux部署web项目, &amp;nbsp;这篇介绍如何设置常用快捷键  路径快捷键设置临时快捷键设置 &amp;nbsp;执行XShel,输入: alias ‘aa=cd /etc/sysconfig’ &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;aa:快捷键名称     &amp;nbsp;### 永久快捷键设置 首先 输入你想要设置的别名 看这个别名是否存在;或者 输入a">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20170408112958353?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/04/08/pancm6/"/>
+
+
+
+
+
+
+  <title>Linux Ubuntu从零开始部署web环境及项目 -----快捷键设置(四) | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/08/pancm6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux Ubuntu从零开始部署web环境及项目 -----快捷键设置(四)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-08T11:28:00+08:00">
+                2017-04-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><p><br>    上篇将了如何<a target="_blank" href="http://blog.csdn.net/qazwsxpcm/article/details/69665199">在linux部署web项目, &nbsp;</a>这篇介绍如何设置常用快捷键<br></p>
+
+<h2 id="路径快捷键设置"><a href="#路径快捷键设置" class="headerlink" title="路径快捷键设置"></a>路径快捷键设置</h2><h3 id="临时快捷键设置"><a href="#临时快捷键设置" class="headerlink" title="临时快捷键设置"></a>临时快捷键设置</h3><p> &nbsp;<span style="font-family:宋体">执行</span><span style="font-family:Calibri">XShel,</span><span style="font-family:宋体">输入</span><span style="font-family:Calibri">: alias ‘aa=cd /etc/sysconfig’ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aa:</span><span style="font-family:宋体">快捷键名称</span></p>
+<p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408112958353?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br>### 永久快捷键设置<br> <span style="font-family:宋体">首先 输入你想要设置的别名 看这个别名是否存在</span><span style="font-family:Calibri">;</span><span style="font-family:宋体">或者 输入</span><span style="font-family:Calibri">alias</span><span style="font-family:宋体">查看</span><br><br><p><br>    设置了那些别名。<br></p><br><p><br>    <span style="font-family:宋体">输入</span> gedit .bashrc <span style="font-family:宋体">或者 </span><span style="font-family:Calibri">vim ~/.bashrc</span>&nbsp;<span style="font-family:宋体">打开</span> .bashrc<span style="font-family:宋体">进入编辑 在</span><span style="font-family:Calibri">#some more ls aliaases &nbsp;&nbsp;&nbsp;&nbsp;</span><span style="font-family:宋体">路径下输入你要设置的别名</span><span style="font-family:宋体">例如</span>:alias ‘aa=cd /etc/sysconfig’ &nbsp;<span style="font-family:宋体">然后保存退出</span><span style="font-family:Calibri">.</span><span style="font-family:宋体">然后输入 &nbsp;</span><span style="font-family:Calibri">source ~/.bashrc &nbsp;</span><span style="font-family:宋体">使其</span>生效<br></p><br><p><br>    &nbsp;<span style="font-family:宋体">就可以使用定义的别名进入这个快捷键了。</span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408113010244?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    &nbsp;<br></p>
+
+<h2 id="设置tomcat快捷启动"><a href="#设置tomcat快捷启动" class="headerlink" title="设置tomcat快捷启动"></a>设置tomcat快捷启动</h2><p><br>    <span style="font-family:宋体">参考</span>:<u><span style="color:rgb(0,0,255)"><a href="http://blog.csdn.net/rankun1/article/details/52816942" target="_blank" rel="external">http://blog.csdn.net/rankun1/article/details/52816942</a></span></u><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    <span style="font-family:宋体">输入</span>: <span style="color:rgb(51,51,51); background:rgb(249,249,249)">vi /etc/init.d/tomcat</span><br></p><br><p><br>    <span style="color:rgb(51,51,51); background:rgb(249,249,249)"><span style="font-family:宋体">进入编辑界面</span></span><br></p><br><p><br>    <span style="color:rgb(51,51,51); background:rgb(249,249,249)"><span style="font-family:宋体">在末尾输入</span> &nbsp;cd /opt/tomcat为你自己的路径</span><br></p><br><p><br>    <span style="color:rgb(51,51,51); background:rgb(249,249,249)"># !/bin/bash &nbsp;&nbsp;&nbsp;</span><br></p><br><p><br>    <span style="color:rgb(51,51,51); background:rgb(249,249,249)"># Description: start or stop the tomcat &nbsp;&nbsp;&nbsp;</span><br></p><br><p><br>    <span style="color:rgb(51,51,51); background:rgb(249,249,249)"># Usage: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tomcat [start|stop|restart] &nbsp;&nbsp;&nbsp;</span><br></p><br><p><br>    <span style="color:rgb(51,51,51); background:rgb(249,249,249)"># &nbsp;&nbsp;&nbsp;</span><br></p><br><p><br>    <span style="color:rgb(51,51,51); background:rgb(249,249,249)">export PATH=$PATH:$HOME/bin &nbsp;</span><br></p><br><p><br>    <span style="color:rgb(51,51,51); background:rgb(249,249,249)">export BASH_ENV=$HOME/.bashrc &nbsp;</span><br></p><br><p><br>    <span style="color:rgb(51,51,51); background:rgb(249,249,249)">export USERNAME=&quot;root&quot; &nbsp;</span><br></p><br><p><br>    <span style="color:rgb(51,51,51); background:rgb(249,249,249)">&nbsp;&nbsp;</span><br></p><br><p><br>    <span style="color:rgb(51,51,51); background:rgb(249,249,249)">case &quot;$1&quot; in &nbsp;</span><br></p><br><p><br>    <span style="color:rgb(51,51,51); background:rgb(249,249,249)">start) &nbsp;</span><br></p><br><p><br>    <span style="color:rgb(51,51,51); background:rgb(249,249,249)">#startup the tomcat &nbsp;&nbsp;&nbsp;</span><br></p><br><p><br>    <span style="color:rgb(51,51,51); background:rgb(249,249,249)">cd /opt/tomcat/bin &nbsp;</span><br></p><br><p><br>    <span style="color:rgb(51,51,51); background:rgb(249,249,249)">./startup.sh &nbsp;</span><br></p><br><p><br>    <span style="color:rgb(51,51,51); background:rgb(249,249,249)">;; &nbsp;</span><br></p><br><p><br>    <span style="color:rgb(51,51,51); background:rgb(249,249,249)">stop) &nbsp;</span><br></p><br><p><br>    <span style="color:rgb(51,51,51); background:rgb(249,249,249)"># stop tomcat &nbsp;&nbsp;&nbsp;</span><br></p><br><p><br>    <span style="color:rgb(51,51,51); background:rgb(249,249,249)">cd /opt/tomcat/bin &nbsp;</span><br></p><br><p><br>    <span style="color:rgb(51,51,51); background:rgb(249,249,249)">./shutdown.sh &nbsp;</span><br></p><br><p><br>    <span style="color:rgb(51,51,51); background:rgb(249,249,249)">echo &quot;Tomcat Stoped&quot; &nbsp;</span><br></p><br><p><br>    <span style="color:rgb(51,51,51); background:rgb(249,249,249)">;; &nbsp;</span><br></p><br><p><br>    <span style="color:rgb(51,51,51); background:rgb(249,249,249)">restart) &nbsp;</span><br></p><br><p><br>    <span style="color:rgb(51,51,51); background:rgb(249,249,249)">$0 stop &nbsp;</span><br></p><br><p><br>    <span style="color:rgb(51,51,51); background:rgb(249,249,249)">$0 start &nbsp;</span><br></p><br><p><br>    <span style="color:rgb(51,51,51); background:rgb(249,249,249)">;; &nbsp;</span><br></p><br><p><br>    <span style="color:rgb(51,51,51); background:rgb(249,249,249)">*) &nbsp;</span><br></p><br><p><br>    <span style="color:rgb(51,51,51); background:rgb(249,249,249)">echo &quot;tomcat: usage: tomcat [start|stop|restart]&quot; &nbsp;</span><br></p><br><p><br>    <span style="color:rgb(51,51,51); background:rgb(249,249,249)">exit 1 &nbsp;</span><br></p><br><p><br>    <span style="color:rgb(51,51,51); background:rgb(249,249,249)">esac &nbsp;</span><br></p><br><p><br>    <span style="color:rgb(51,51,51); background:rgb(249,249,249)">exit 0 </span><br></p><br><p><br>    &nbsp;<img src="http://img.blog.csdn.net/20170408113052819?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br></p><br><p><br>    &nbsp;<br></p><br><p><br>    &nbsp;<br></p>
+
+<h3 id="添加权限"><a href="#添加权限" class="headerlink" title="添加权限"></a>添加权限</h3><p></p><p><br>    输入：<span style="color:rgb(51,51,51); background:rgb(249,249,249)">chmod +x /etc/init.d/tomcat</span><br></p><p></p>
+<h3 id="创建软连接"><a href="#创建软连接" class="headerlink" title="创建软连接"></a>创建软连接</h3><p></p><p></p>
+<p></p><p style="background:rgb(249,249,249)"><br>    <span style="color:rgb(51,51,51)">&nbsp;<span style="font-family:宋体">输入</span>: &nbsp;&nbsp;cd /usr/bin &nbsp; &nbsp;&nbsp;—进入目录</span><br></p><p></p>
+<p></p><p style="background:rgb(249,249,249)"><br>    <span style="color:rgb(51,51,51)">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ln -s /etc/init.d/tomcat . &nbsp;&nbsp;—创建软连接</span><br></p><p></p>
+<p></p><p style="background:rgb(249,249,249)"><br>    <span style="color:rgb(51,51,51)">&nbsp;</span><br></p><p></p>
+<p></p><p style="background:rgb(249,249,249)"><br>    <span style="color:rgb(51,51,51)"><span style="font-family:宋体">成功后输入</span></span><br></p><p></p>
+<p></p><p style="background:rgb(249,249,249)"><br>    <span style="color:rgb(51,51,51)">tomcat start &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;–启动</span><br></p><p></p>
+<p></p><p style="background:rgb(249,249,249)"><br>    <span style="color:rgb(51,51,51)">tomcat stop –停止</span><br></p><p></p>
+<p></p><p style="background:rgb(249,249,249)"><br>    <span style="color:rgb(51,51,51)">tomcat restart –重启</span><br></p><p></p>
+<p></p><p style="background:rgb(249,249,249)"><br>    <span style="color:rgb(51,51,51)">&nbsp;<img src="http://img.blog.csdn.net/20170408113103772?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></span><br></p><p></p>
+<p></p><p><br>    <span style="color:rgb(51,51,51); background:rgb(249,249,249)">&nbsp;</span><br></p><p></p>
+<p></p><p><br>    &nbsp;<br></p><br>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a><br>原创不易，转载请标明出处，谢谢！<p></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ ���Ľ��� ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">��Ȩ����</span>
+<img src="�˴����Լ���Ȩ����ͼƬ��ַ" >
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">tc9011's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">Cheng Tang</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+��<a href="http://www.panchengming.com/" style="color:#258FC6">���޾�</a>������ά����<a href="http://www.panchengming.com/" style="color:#258FC6">tc9011's Notes</a>���Ͳ���<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">�������ñ�������-����ҵ-��ֹ����4.0�������֤</a>��<br/>
+�����׷���<a href="http://www.panchengming.com/" style="color:#258FC6">tc9011's Notes</a> ���ͣ� <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ������Ȩ���У���Ȩ�ؾ���</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+            <a href="/tags/ssh/" rel="tag"># ssh</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/08/pancm5/" rel="next" title="Linux Ubuntu从零开始部署web环境及项目 -----部署项目 (三)">
+                <i class="fa fa-chevron-left"></i> Linux Ubuntu从零开始部署web环境及项目 -----部署项目 (三)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/15/pancm7/" rel="prev" title="Sublime Text 3 全程详细图文教程(转)">
+                Sublime Text 3 全程详细图文教程(转) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">60</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#路径快捷键设置"><span class="nav-number">1.</span> <span class="nav-text">路径快捷键设置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#临时快捷键设置"><span class="nav-number">1.1.</span> <span class="nav-text">临时快捷键设置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置tomcat快捷启动"><span class="nav-number">2.</span> <span class="nav-text">设置tomcat快捷启动</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#添加权限"><span class="nav-number">2.1.</span> <span class="nav-text">添加权限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建软连接"><span class="nav-number">2.2.</span> <span class="nav-text">创建软连接</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

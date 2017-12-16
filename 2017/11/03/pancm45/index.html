@@ -1,0 +1,832 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="引言   说起工具类，大家都不会陌生。常用的工具类有Apache 的Commons、  Google 的Guava、以及处理时间日期的Joda扩展包。那么本文主要来讲这几个工具类中的一些方法以及自己写的工具类。 代码Commons123456789101112131415161718192021222324252627282930313233343536373839404142434445464">
+<meta name="keywords" content="java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JAVA常用工具类">
+<meta property="og:url" content="http://yoursite.com/2017/11/03/pancm45/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="引言   说起工具类，大家都不会陌生。常用的工具类有Apache 的Commons、  Google 的Guava、以及处理时间日期的Joda扩展包。那么本文主要来讲这几个工具类中的一些方法以及自己写的工具类。 代码Commons123456789101112131415161718192021222324252627282930313233343536373839404142434445464">
+<meta property="og:updated_time" content="2017-12-16T10:55:27.159Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JAVA常用工具类">
+<meta name="twitter:description" content="引言   说起工具类，大家都不会陌生。常用的工具类有Apache 的Commons、  Google 的Guava、以及处理时间日期的Joda扩展包。那么本文主要来讲这几个工具类中的一些方法以及自己写的工具类。 代码Commons123456789101112131415161718192021222324252627282930313233343536373839404142434445464">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/11/03/pancm45/"/>
+
+
+
+
+
+
+  <title>JAVA常用工具类 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/03/pancm45/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JAVA常用工具类</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-03T13:48:00+08:00">
+                2017-11-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>   说起工具类，大家都不会陌生。常用的工具类有Apache 的Commons、  Google 的Guava、以及处理时间日期的Joda扩展包。那么本文主要来讲这几个工具类中的一些方法以及自己写的工具类。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><h3 id="Commons"><a href="#Commons" class="headerlink" title="Commons"></a>Commons</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div></pre></td><td class="code"><pre><div class="line">import java.util.ArrayList;</div><div class="line">import java.util.Arrays;</div><div class="line">import java.util.List;</div><div class="line"></div><div class="line">import org.apache.commons.collections.Bag;</div><div class="line">import org.apache.commons.collections.BidiMap;</div><div class="line">import org.apache.commons.collections.Factory;</div><div class="line">import org.apache.commons.collections.HashBag;</div><div class="line">import org.apache.commons.collections.bidimap.TreeBidiMap;</div><div class="line">import org.apache.commons.collections.list.LazyList;</div><div class="line">import org.apache.commons.lang.RandomStringUtils;</div><div class="line">import org.apache.commons.lang.StringUtils;</div><div class="line">import org.apache.commons.lang.WordUtils;</div><div class="line"></div><div class="line">/**</div><div class="line"> * </div><div class="line">* Title: langTest</div><div class="line">* Description: Apache commons工具包测试</div><div class="line">* Version:1.0.0  </div><div class="line">* @author pancm</div><div class="line"> */</div><div class="line">public class test &#123;</div><div class="line"></div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		stringTest();</div><div class="line">		otherTest();</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * StringUtils 相关测试</div><div class="line">	 */</div><div class="line">	private static void stringTest()&#123;</div><div class="line">		/*</div><div class="line">		 * 空指针判断</div><div class="line">		 */</div><div class="line">		String str=&quot;&quot;;</div><div class="line">		String str2=null;</div><div class="line">		String str3=&quot; &quot;;</div><div class="line">		System.out.println(&quot;:&quot;+StringUtils.isEmpty(str));		//:true</div><div class="line">		System.out.println(&quot;null:&quot;+StringUtils.isEmpty(str2));  //null:true</div><div class="line">		System.out.println(&quot; :&quot;+StringUtils.isEmpty(str3));		// :false</div><div class="line">		</div><div class="line">		/*</div><div class="line">		 * 判断是否为数字</div><div class="line">		 */</div><div class="line">		String str4=&quot;123&quot;;</div><div class="line">		String str5=&quot;12 3&quot;;</div><div class="line">		String str6=&quot;123QD#&quot;;</div><div class="line">		System.out.println(&quot;str4:&quot;+StringUtils.isNumeric(str4));//str4:true</div><div class="line">		System.out.println(&quot;str5:&quot;+StringUtils.isNumeric(str5));//str5:false</div><div class="line">		System.out.println(&quot;str6:&quot;+StringUtils.isNumeric(str6));//str6:false</div><div class="line">		</div><div class="line">		/*</div><div class="line">	 	 * 统计子字符串出现的次数</div><div class="line">		 */</div><div class="line">		String str7=&quot;abcdefgfedccfg&quot;;</div><div class="line">		String str8=&quot;ac&quot;;</div><div class="line">		String str9=&quot;c&quot;;</div><div class="line">		System.out.println(&quot;count:&quot;+StringUtils.countMatches(str7, str8));//count:0</div><div class="line">		System.out.println(&quot;count:&quot;+StringUtils.countMatches(str7, str9));//count:3</div><div class="line">		</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 其他的测试</div><div class="line">	 */</div><div class="line">	private static void otherTest()&#123;</div><div class="line">		System.out.println(&quot;十位数字随机数:&quot;+RandomStringUtils.randomNumeric(10)); //0534110685</div><div class="line">		System.out.println(&quot;十位字母随机数:&quot;+RandomStringUtils.randomAlphabetic(10)); //jLWiHdQhHg</div><div class="line">		System.out.println(&quot;十位ASCII随机数:&quot;+RandomStringUtils.randomAscii(10));  //8&amp;[bxy%h_-</div><div class="line">		String str=&quot;hello world,why are you so happy&quot;;</div><div class="line">		System.out.println(&quot;首字符大写:&quot;+WordUtils.capitalize(str));  //:Hello World,why Are You So Happy</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	/**</div><div class="line">	 * Bag 测试</div><div class="line">	 * 主要测试重复元素的统计</div><div class="line">	 */</div><div class="line">	@SuppressWarnings(&quot;deprecation&quot;)</div><div class="line">	private static void bagTest()&#123;</div><div class="line">		//定义4种球</div><div class="line">		Bag box=new HashBag(Arrays.asList(&quot;red&quot;,&quot;blue&quot;,&quot;black&quot;,&quot;green&quot;));</div><div class="line">		System.out.println(&quot;box.getCount():&quot;+box.getCount(&quot;red&quot;));//box.getCount():1</div><div class="line">		box.add(&quot;red&quot;, 5);//红色的球增加五个</div><div class="line">		System.out.println(&quot;box.size():&quot;+box.size());	//box.size():9</div><div class="line">		System.out.println(&quot;box.getCount():&quot;+box.getCount(&quot;red&quot;));//box.getCount():6</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * Lazy测试</div><div class="line">	 * 需要该元素的时候，才会生成</div><div class="line">	 */</div><div class="line">	@SuppressWarnings(&quot;unchecked&quot;)</div><div class="line">	private static void lazyTest()&#123;</div><div class="line">		List&lt;String&gt; lazy=LazyList.decorate(new ArrayList&lt;&gt;(), new Factory() &#123;</div><div class="line">			@Override</div><div class="line">			public Object create() &#123;</div><div class="line">				return &quot;Hello&quot;;</div><div class="line">			&#125;</div><div class="line">		&#125;); </div><div class="line">		//访问了第三个元素，此时0和1位null</div><div class="line">		//get几就增加了几加一 ， 输出依旧是 Hello </div><div class="line">		String str=lazy.get(2);</div><div class="line">		System.out.println(&quot;str:&quot;+str);//str:Hello </div><div class="line">		//加入的第四个元素</div><div class="line">		lazy.add(&quot;world&quot;);</div><div class="line">		//元素总个为4个</div><div class="line">		System.out.println(&quot;lazy.size():&quot;+lazy.size());//lazy.size():4</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 双向Map</div><div class="line">	 * 唯一的key和map，可以通过键或值来操作</div><div class="line">	 * 比如删除、查询等</div><div class="line">	 */</div><div class="line">	private static void bidimapTest()&#123;</div><div class="line">		BidiMap map=new TreeBidiMap();</div><div class="line">		map.put(1, &quot;a&quot;);</div><div class="line">		map.put(2, &quot;b&quot;);</div><div class="line">		map.put(3, &quot;c&quot;);</div><div class="line">		System.out.println(&quot;map:&quot;+map);	//map:&#123;1=a, 2=b, 3=c&#125;</div><div class="line">		System.out.println(&quot;map.get():&quot;+map.get(2)); //map.get():b</div><div class="line">		System.out.println(&quot;map.getKey():&quot;+map.getKey(&quot;a&quot;)); //map.getKey():1</div><div class="line">		System.out.println(&quot;map.removeValue():&quot;+map.removeValue(&quot;c&quot;)); //map.removeValue():3</div><div class="line">		System.out.println(&quot;map:&quot;+map);	//map:&#123;1=a, 2=b&#125;</div><div class="line">	&#125;	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Guava"><a href="#Guava" class="headerlink" title="Guava"></a>Guava</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div></pre></td><td class="code"><pre><div class="line">import java.util.ArrayList;</div><div class="line">import java.util.HashMap;</div><div class="line">import java.util.List;</div><div class="line">import java.util.Map;</div><div class="line"></div><div class="line">import com.google.common.base.Joiner;</div><div class="line">import com.google.common.base.Predicate;</div><div class="line">import com.google.common.base.Splitter;</div><div class="line">import com.google.common.collect.ArrayListMultimap;</div><div class="line">import com.google.common.collect.HashBasedTable;</div><div class="line">import com.google.common.collect.ImmutableList;</div><div class="line">import com.google.common.collect.ImmutableMap;</div><div class="line">import com.google.common.collect.Maps;</div><div class="line">import com.google.common.collect.Multimap;</div><div class="line">import com.google.common.collect.Table;</div><div class="line">import com.google.common.primitives.Ints;</div><div class="line"></div><div class="line">/**</div><div class="line"> * </div><div class="line">* Title: guavaTest</div><div class="line">* Description:谷歌 guava 工具包测试</div><div class="line">* Version:1.0.0  </div><div class="line">* @author pancm</div><div class="line"> */</div><div class="line">public class guavaTest &#123;</div><div class="line"></div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		noChangeList();</div><div class="line">		one2MoreMap();</div><div class="line">		more2One();</div><div class="line">		filtedMap();</div><div class="line">		joiner();</div><div class="line">		splitter();</div><div class="line">		integer();</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 不可变集合测试</div><div class="line">	 */</div><div class="line">	private static void noChangeList()&#123;</div><div class="line">		ImmutableList&lt;String&gt; list=ImmutableList.of(&quot;A&quot;,&quot;B&quot;,&quot;C&quot;);</div><div class="line">		ImmutableMap&lt;Integer,String&gt; map=ImmutableMap.of(1,&quot;壹&quot;,2,&quot;贰&quot;,3,&quot;叁&quot;);</div><div class="line">		System.out.println(&quot;ImmutableList:&quot;+list); //ImmutableList:[A, B, C]</div><div class="line">		System.out.println(&quot;ImmutableMap:&quot;+map); //ImmutableMap:&#123;1=壹, 2=贰, 3=叁&#125;</div><div class="line">		</div><div class="line">		//下面运行直接报错，因为这是不可变集合</div><div class="line">//		list.add(&quot;D&quot;);  </div><div class="line">//		map.put(4, &quot;肆&quot;);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * map中多个键的测试</div><div class="line">	 * 例如:一个人多个电话</div><div class="line">	 */</div><div class="line">	private static void one2MoreMap()&#123;</div><div class="line">		Multimap&lt;String,String&gt; map= ArrayListMultimap.create();</div><div class="line">		map.put(&quot;路人甲&quot;, &quot;123&quot;);</div><div class="line">		map.put(&quot;路人甲&quot;, &quot;234&quot;);</div><div class="line">		map.put(&quot;路人乙&quot;, &quot;567&quot;);</div><div class="line">		map.put(&quot;路人乙&quot;, &quot;890&quot;);</div><div class="line">		System.out.println(&quot;Multimap:&quot;+map); //Multimap:&#123;路人乙=[567, 890], 路人甲=[123, 234]&#125;</div><div class="line">		System.out.println(&quot;get:&quot;+map.get(&quot;路人乙&quot;)); //get:[567, 890]</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 多个键值对一个值</div><div class="line">	 * 例如:坐标</div><div class="line">	 */</div><div class="line">	private static void more2One()&#123;</div><div class="line">		Table&lt;Double, Double, String&gt; table=HashBasedTable.create();</div><div class="line">		table.put(22.54, 114.01, &quot;深圳&quot;);</div><div class="line">		table.put(39.96, 116.40, &quot;北京&quot;);</div><div class="line">		System.out.println(&quot;Table:&quot;+table); //Table:&#123;22.54=&#123;114.01=深圳&#125;, 39.96=&#123;116.4=北京&#125;&#125;</div><div class="line">		System.out.println(&quot;Table.get:&quot;+table.get(22.54, 114.01));//Table.get:深圳</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * Map的过滤</div><div class="line">	 * 例如:查找该集合中大于20岁的人</div><div class="line">	 */</div><div class="line">	private static void filtedMap()&#123;</div><div class="line">		Map&lt;String,Integer&gt; map=new HashMap&lt;String,Integer&gt;();</div><div class="line">		map.put(&quot;张三&quot;, 19);</div><div class="line">		map.put(&quot;李四&quot;, 20);</div><div class="line">		map.put(&quot;王五&quot;, 21);</div><div class="line">		Map&lt;String,Integer&gt; filtedmap =Maps.filterValues(map, </div><div class="line">				new Predicate&lt;Integer&gt;()&#123;</div><div class="line">					@Override</div><div class="line">					public boolean apply(Integer age) &#123;</div><div class="line">						return age&gt;20;</div><div class="line">					&#125;</div><div class="line">		&#125;);</div><div class="line">		System.out.println(&quot;Map:&quot;+map);	//Map:&#123;张三=19, 李四=20, 王五=21&#125;</div><div class="line">		System.out.println(&quot;filtedmap:&quot;+filtedmap);//filtedmap:&#123;王五=21&#125;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * Joiner连接测试</div><div class="line">	 * 不局限于连接String,如果是null，会直接跳过</div><div class="line">	 * </div><div class="line">	 */</div><div class="line">	private static void joiner()&#123;</div><div class="line">		//设置连接符 </div><div class="line">		//如:设置为 &quot;和&quot;,拼接 “你”，“我” 就变成了“你和我”</div><div class="line">		Joiner joiner=Joiner.on(&quot;,&quot;);</div><div class="line">		String str=joiner.skipNulls().join(&quot;你好&quot;,&quot;java&quot;);</div><div class="line">		Map&lt;String,String&gt; map=new HashMap&lt;String,String&gt;();</div><div class="line">		map.put(&quot;张三&quot;, &quot;你好&quot;);</div><div class="line">		map.put(&quot;李四&quot;, &quot;嗨&quot;);</div><div class="line">		//设置键值的连接符以及键与值之间的连接符</div><div class="line">		String str1=Joiner.on(&quot;,&quot;).withKeyValueSeparator(&quot;:&quot;).join(map);</div><div class="line">		System.out.println(&quot;Joiner: &quot;+str); //Joiner: 你好,java</div><div class="line">		System.out.println(&quot;Joiner: &quot;+str1); //Joiner: 张三:你好,李四:嗨</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * Splitter拆分测试</div><div class="line">	 */</div><div class="line">	private static void splitter()&#123;</div><div class="line">		String str=&quot;你好,java&quot;;</div><div class="line">		//按字符分割</div><div class="line">		for(String s:Splitter.on(&quot;,&quot;).split(str))&#123;</div><div class="line">			System.out.println(&quot;s:&quot;+s);</div><div class="line">		&#125;</div><div class="line">		//按固定长度分割</div><div class="line">		for(String d:Splitter.fixedLength(2).split(str))&#123;</div><div class="line">			System.out.println(&quot;d:&quot;+d);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 基本类型测试</div><div class="line">	 */</div><div class="line">	private static void integer()&#123;</div><div class="line">		int []ints=&#123;1,4,3,2&#125;;</div><div class="line">		//找到里面的最大值</div><div class="line">		System.out.println(&quot;max:&quot;+Ints.max(ints)); //max:4</div><div class="line">		</div><div class="line">		List&lt;Integer&gt; list=new ArrayList&lt;Integer&gt;();</div><div class="line">		list.add(1);</div><div class="line">		list.add(3);</div><div class="line">		list.add(6);</div><div class="line">		//包装类型集合转变为基本类型集合</div><div class="line">		int []arr=Ints.toArray(list);</div><div class="line">		for(int i=0,j=arr.length;i&lt;j;i++)&#123;</div><div class="line">			System.out.println(&quot;arr:&quot;+arr[i]);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Joda"><a href="#Joda" class="headerlink" title="Joda"></a>Joda</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div></pre></td><td class="code"><pre><div class="line">import java.util.Date;</div><div class="line">import java.util.Locale;</div><div class="line"></div><div class="line">import org.joda.time.DateTime;</div><div class="line">import org.joda.time.DateTimeZone;</div><div class="line">import org.joda.time.Hours;</div><div class="line">import org.joda.time.MutableDateTime;</div><div class="line">import org.joda.time.format.DateTimeFormat;</div><div class="line"></div><div class="line">/**</div><div class="line"> * </div><div class="line">* Title: jodaTest</div><div class="line">* Description: Joda 时间工具包测试</div><div class="line">* Version:1.0.0  </div><div class="line">* @author pancm</div><div class="line"> */</div><div class="line">public class jodaTest &#123;</div><div class="line"></div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		jodaTest();</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 日期方法</div><div class="line">	 */</div><div class="line">	private static void jodaTest()&#123;</div><div class="line">		//当前时间戳</div><div class="line">		DateTime datetime =new DateTime();</div><div class="line">		//当前的英文星期几</div><div class="line">		System.out.println(&quot;Week:&quot;+datetime.dayOfWeek().getAsText(Locale.ENGLISH));  //Week:Wednesday</div><div class="line">		//本地的日期格式</div><div class="line">		System.out.println(&quot;LocalDate:&quot;+datetime.toLocalDate()); //LocalDate:2017-11-02</div><div class="line">		//本地的当前时间 包含毫秒</div><div class="line">		System.out.println(&quot;LocalDateTime:&quot;+datetime.toLocalDateTime()); //LocalDateTime:2017-11-02T08:40:04.529</div><div class="line">		//格式化日期</div><div class="line">		System.out.println(&quot;时间:&quot;+datetime.toString(DateTimeFormat.forPattern(&quot;yyyy年M月d日&quot;)));//时间:2017年11月2日</div><div class="line">		</div><div class="line">		//加上100小时之后是星期几(中文)</div><div class="line">		System.out.println(&quot;dayOfWeek:&quot;+datetime.plusHours(100).dayOfWeek().getAsText(Locale.CHINA));//dayOfWeek:星期一</div><div class="line">		//加100天的日期</div><div class="line">		System.out.println(&quot;toLocalDate():&quot;+datetime.plusDays(100).toLocalDate()); //toLocalDate():2018-02-10</div><div class="line">		//十年前的今天是星期几(默认中文)</div><div class="line">		System.out.println(&quot;minusYears():&quot;+datetime.minusYears(10).dayOfWeek().getAsText()); //minusYears():星期五</div><div class="line">		</div><div class="line">		//离双11还有多少小时</div><div class="line">		System.out.println(&quot;离双11的时间:&quot;+Hours.hoursBetween(datetime,new DateTime(&quot;2017-11-11&quot;)).getHours()); //离双11的时间:207</div><div class="line">		</div><div class="line">		//伦敦的时间:2017-11-02T01:24:15.139Z</div><div class="line">		System.out.println(&quot;伦敦的时间:&quot;+datetime.withZone(DateTimeZone.forID(&quot;Europe/London&quot;)));//伦敦的时间:2017-11-02T01:24:15.139Z</div><div class="line">		</div><div class="line">		//标准时间</div><div class="line">		System.out.println(&quot;标准时间:&quot;+datetime.withZone(DateTimeZone.UTC));</div><div class="line">		</div><div class="line">		//当前可变的时间</div><div class="line">		MutableDateTime mdt=new MutableDateTime();</div><div class="line">		//10年后的时间</div><div class="line">		DateTime dt=datetime.plusYears(10);</div><div class="line">		</div><div class="line">		System.out.println(&quot;十年之后:&quot;+dt); //2027-11-02T09:06:36.883+08:00</div><div class="line">		</div><div class="line">		while(mdt.isBefore(dt))&#123;</div><div class="line">			//循环一次加一天</div><div class="line">			mdt.addDays(1);</div><div class="line">			//是13号，并且是星期五</div><div class="line">			if(mdt.getDayOfMonth()==13&amp;&amp;mdt.getDayOfWeek()==5)&#123;</div><div class="line">				//打印出十年内所有的黑色星期五</div><div class="line">				System.out.println(&quot;星期五:&quot;+mdt);</div><div class="line">				/*</div><div class="line">				 *  星期五:2018-04-13T09:13:40.551+08:00</div><div class="line">					星期五:2018-07-13T09:13:40.551+08:00</div><div class="line">					星期五:2019-09-13T09:13:40.551+08:00</div><div class="line">					星期五:2019-12-13T09:13:40.551+08:00</div><div class="line">					星期五:2020-03-13T09:13:40.551+08:00</div><div class="line">					星期五:2020-11-13T09:13:40.551+08:00</div><div class="line">					星期五:2021-08-13T09:13:40.551+08:00</div><div class="line">					星期五:2022-05-13T09:13:40.551+08:00</div><div class="line">					星期五:2023-01-13T09:13:40.551+08:00</div><div class="line">					星期五:2023-10-13T09:13:40.551+08:00</div><div class="line">					星期五:2024-09-13T09:13:40.551+08:00</div><div class="line">					星期五:2024-12-13T09:13:40.551+08:00</div><div class="line">					星期五:2025-06-13T09:13:40.551+08:00</div><div class="line">					星期五:2026-02-13T09:13:40.551+08:00</div><div class="line">					星期五:2026-03-13T09:13:40.551+08:00</div><div class="line">					星期五:2026-11-13T09:13:40.551+08:00</div><div class="line">					星期五:2027-08-13T09:13:40.551+08:00</div><div class="line">				 */</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		</div><div class="line">		//转换成jdk的Date格式</div><div class="line">		Date jdkDate=datetime.toDate();</div><div class="line">		System.out.println(&quot;jdkDate:&quot;+jdkDate);  //jdkDate:Thu Nov 02 09:51:13 CST 2017</div><div class="line">		//jdk的Date转换成Joda的Date</div><div class="line">		datetime=new DateTime(jdkDate);</div><div class="line">		System.out.println(&quot;JodaDate:&quot;+datetime);//JodaDate:2017-11-02T09:51:13.691+08:00</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="MyTools"><a href="#MyTools" class="headerlink" title="MyTools"></a>MyTools</h3><p>自己写的工具类以及一些测试示例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div><div class="line">222</div><div class="line">223</div><div class="line">224</div><div class="line">225</div><div class="line">226</div><div class="line">227</div><div class="line">228</div><div class="line">229</div><div class="line">230</div><div class="line">231</div><div class="line">232</div><div class="line">233</div><div class="line">234</div><div class="line">235</div><div class="line">236</div><div class="line">237</div><div class="line">238</div><div class="line">239</div><div class="line">240</div><div class="line">241</div><div class="line">242</div><div class="line">243</div><div class="line">244</div><div class="line">245</div><div class="line">246</div><div class="line">247</div><div class="line">248</div><div class="line">249</div><div class="line">250</div><div class="line">251</div><div class="line">252</div><div class="line">253</div><div class="line">254</div><div class="line">255</div><div class="line">256</div><div class="line">257</div><div class="line">258</div><div class="line">259</div><div class="line">260</div><div class="line">261</div><div class="line">262</div><div class="line">263</div><div class="line">264</div><div class="line">265</div><div class="line">266</div><div class="line">267</div><div class="line">268</div><div class="line">269</div><div class="line">270</div><div class="line">271</div><div class="line">272</div><div class="line">273</div><div class="line">274</div><div class="line">275</div><div class="line">276</div><div class="line">277</div><div class="line">278</div><div class="line">279</div><div class="line">280</div><div class="line">281</div><div class="line">282</div><div class="line">283</div><div class="line">284</div><div class="line">285</div><div class="line">286</div><div class="line">287</div><div class="line">288</div><div class="line">289</div><div class="line">290</div><div class="line">291</div><div class="line">292</div><div class="line">293</div><div class="line">294</div><div class="line">295</div><div class="line">296</div><div class="line">297</div><div class="line">298</div><div class="line">299</div><div class="line">300</div><div class="line">301</div><div class="line">302</div><div class="line">303</div><div class="line">304</div><div class="line">305</div><div class="line">306</div><div class="line">307</div><div class="line">308</div><div class="line">309</div><div class="line">310</div><div class="line">311</div><div class="line">312</div><div class="line">313</div><div class="line">314</div><div class="line">315</div><div class="line">316</div><div class="line">317</div><div class="line">318</div><div class="line">319</div><div class="line">320</div><div class="line">321</div><div class="line">322</div><div class="line">323</div><div class="line">324</div><div class="line">325</div><div class="line">326</div><div class="line">327</div><div class="line">328</div><div class="line">329</div><div class="line">330</div><div class="line">331</div><div class="line">332</div><div class="line">333</div><div class="line">334</div><div class="line">335</div><div class="line">336</div><div class="line">337</div><div class="line">338</div><div class="line">339</div><div class="line">340</div><div class="line">341</div><div class="line">342</div><div class="line">343</div><div class="line">344</div><div class="line">345</div><div class="line">346</div><div class="line">347</div><div class="line">348</div><div class="line">349</div><div class="line">350</div><div class="line">351</div><div class="line">352</div><div class="line">353</div><div class="line">354</div><div class="line">355</div><div class="line">356</div><div class="line">357</div><div class="line">358</div><div class="line">359</div><div class="line">360</div><div class="line">361</div><div class="line">362</div><div class="line">363</div><div class="line">364</div><div class="line">365</div><div class="line">366</div><div class="line">367</div><div class="line">368</div><div class="line">369</div><div class="line">370</div><div class="line">371</div><div class="line">372</div><div class="line">373</div><div class="line">374</div><div class="line">375</div><div class="line">376</div><div class="line">377</div><div class="line">378</div><div class="line">379</div><div class="line">380</div><div class="line">381</div><div class="line">382</div><div class="line">383</div><div class="line">384</div><div class="line">385</div><div class="line">386</div><div class="line">387</div><div class="line">388</div><div class="line">389</div><div class="line">390</div><div class="line">391</div><div class="line">392</div><div class="line">393</div><div class="line">394</div><div class="line">395</div><div class="line">396</div><div class="line">397</div><div class="line">398</div><div class="line">399</div><div class="line">400</div><div class="line">401</div><div class="line">402</div><div class="line">403</div><div class="line">404</div><div class="line">405</div><div class="line">406</div><div class="line">407</div><div class="line">408</div><div class="line">409</div><div class="line">410</div><div class="line">411</div><div class="line">412</div><div class="line">413</div><div class="line">414</div><div class="line">415</div><div class="line">416</div><div class="line">417</div><div class="line">418</div><div class="line">419</div><div class="line">420</div><div class="line">421</div><div class="line">422</div><div class="line">423</div><div class="line">424</div><div class="line">425</div><div class="line">426</div><div class="line">427</div><div class="line">428</div><div class="line">429</div><div class="line">430</div><div class="line">431</div><div class="line">432</div><div class="line">433</div><div class="line">434</div><div class="line">435</div><div class="line">436</div><div class="line">437</div><div class="line">438</div><div class="line">439</div><div class="line">440</div><div class="line">441</div><div class="line">442</div><div class="line">443</div><div class="line">444</div><div class="line">445</div><div class="line">446</div><div class="line">447</div><div class="line">448</div><div class="line">449</div><div class="line">450</div><div class="line">451</div><div class="line">452</div><div class="line">453</div><div class="line">454</div><div class="line">455</div><div class="line">456</div><div class="line">457</div><div class="line">458</div><div class="line">459</div><div class="line">460</div><div class="line">461</div><div class="line">462</div><div class="line">463</div><div class="line">464</div><div class="line">465</div><div class="line">466</div><div class="line">467</div><div class="line">468</div><div class="line">469</div><div class="line">470</div><div class="line">471</div><div class="line">472</div><div class="line">473</div><div class="line">474</div><div class="line">475</div><div class="line">476</div><div class="line">477</div><div class="line">478</div><div class="line">479</div><div class="line">480</div><div class="line">481</div><div class="line">482</div><div class="line">483</div><div class="line">484</div><div class="line">485</div><div class="line">486</div><div class="line">487</div><div class="line">488</div><div class="line">489</div><div class="line">490</div><div class="line">491</div><div class="line">492</div><div class="line">493</div><div class="line">494</div><div class="line">495</div><div class="line">496</div><div class="line">497</div><div class="line">498</div><div class="line">499</div><div class="line">500</div><div class="line">501</div><div class="line">502</div><div class="line">503</div><div class="line">504</div><div class="line">505</div><div class="line">506</div><div class="line">507</div><div class="line">508</div><div class="line">509</div><div class="line">510</div><div class="line">511</div><div class="line">512</div><div class="line">513</div><div class="line">514</div><div class="line">515</div><div class="line">516</div><div class="line">517</div><div class="line">518</div><div class="line">519</div><div class="line">520</div><div class="line">521</div><div class="line">522</div><div class="line">523</div><div class="line">524</div><div class="line">525</div><div class="line">526</div><div class="line">527</div><div class="line">528</div><div class="line">529</div><div class="line">530</div><div class="line">531</div><div class="line">532</div><div class="line">533</div><div class="line">534</div><div class="line">535</div><div class="line">536</div><div class="line">537</div><div class="line">538</div><div class="line">539</div><div class="line">540</div><div class="line">541</div><div class="line">542</div><div class="line">543</div><div class="line">544</div><div class="line">545</div><div class="line">546</div><div class="line">547</div><div class="line">548</div><div class="line">549</div><div class="line">550</div><div class="line">551</div><div class="line">552</div><div class="line">553</div><div class="line">554</div><div class="line">555</div><div class="line">556</div><div class="line">557</div><div class="line">558</div><div class="line">559</div><div class="line">560</div><div class="line">561</div><div class="line">562</div><div class="line">563</div><div class="line">564</div><div class="line">565</div><div class="line">566</div><div class="line">567</div><div class="line">568</div><div class="line">569</div><div class="line">570</div><div class="line">571</div><div class="line">572</div><div class="line">573</div><div class="line">574</div><div class="line">575</div><div class="line">576</div><div class="line">577</div><div class="line">578</div><div class="line">579</div><div class="line">580</div><div class="line">581</div><div class="line">582</div><div class="line">583</div><div class="line">584</div><div class="line">585</div><div class="line">586</div><div class="line">587</div><div class="line">588</div><div class="line">589</div><div class="line">590</div><div class="line">591</div><div class="line">592</div><div class="line">593</div><div class="line">594</div><div class="line">595</div><div class="line">596</div><div class="line">597</div><div class="line">598</div><div class="line">599</div><div class="line">600</div><div class="line">601</div><div class="line">602</div><div class="line">603</div><div class="line">604</div><div class="line">605</div><div class="line">606</div><div class="line">607</div><div class="line">608</div><div class="line">609</div><div class="line">610</div><div class="line">611</div><div class="line">612</div><div class="line">613</div><div class="line">614</div><div class="line">615</div><div class="line">616</div><div class="line">617</div><div class="line">618</div><div class="line">619</div><div class="line">620</div><div class="line">621</div><div class="line">622</div><div class="line">623</div><div class="line">624</div><div class="line">625</div><div class="line">626</div><div class="line">627</div><div class="line">628</div><div class="line">629</div><div class="line">630</div><div class="line">631</div><div class="line">632</div><div class="line">633</div><div class="line">634</div><div class="line">635</div><div class="line">636</div><div class="line">637</div><div class="line">638</div><div class="line">639</div><div class="line">640</div><div class="line">641</div><div class="line">642</div><div class="line">643</div><div class="line">644</div><div class="line">645</div><div class="line">646</div><div class="line">647</div><div class="line">648</div><div class="line">649</div><div class="line">650</div><div class="line">651</div><div class="line">652</div><div class="line">653</div><div class="line">654</div><div class="line">655</div><div class="line">656</div><div class="line">657</div><div class="line">658</div><div class="line">659</div><div class="line">660</div><div class="line">661</div><div class="line">662</div><div class="line">663</div><div class="line">664</div><div class="line">665</div><div class="line">666</div><div class="line">667</div><div class="line">668</div><div class="line">669</div><div class="line">670</div><div class="line">671</div><div class="line">672</div><div class="line">673</div></pre></td><td class="code"><pre><div class="line">import java.io.IOException;</div><div class="line">import java.io.UnsupportedEncodingException;</div><div class="line">import java.math.BigInteger;</div><div class="line">import java.net.InetAddress;</div><div class="line">import java.net.UnknownHostException;</div><div class="line">import java.security.MessageDigest;</div><div class="line">import java.security.NoSuchAlgorithmException;</div><div class="line">import java.sql.ResultSet;</div><div class="line">import java.sql.ResultSetMetaData;</div><div class="line">import java.sql.SQLException;</div><div class="line">import java.sql.Timestamp;</div><div class="line">import java.text.ParseException;</div><div class="line">import java.text.SimpleDateFormat;</div><div class="line">import java.util.ArrayList;</div><div class="line">import java.util.Calendar;</div><div class="line">import java.util.Date;</div><div class="line">import java.util.Enumeration;</div><div class="line">import java.util.HashMap;</div><div class="line">import java.util.Iterator;</div><div class="line">import java.util.List;</div><div class="line">import java.util.Map;</div><div class="line">import java.util.Map.Entry;</div><div class="line">import java.util.Random;</div><div class="line">import java.util.regex.Matcher;</div><div class="line">import java.util.regex.Pattern;</div><div class="line"></div><div class="line">import javax.servlet.http.HttpServletRequest;</div><div class="line"></div><div class="line">import com.alibaba.fastjson.JSON;</div><div class="line">import com.alibaba.fastjson.JSONObject;</div><div class="line">import com.test.pojoTest.User;</div><div class="line"></div><div class="line">/**</div><div class="line"> * </div><div class="line"> * Title: MyTools </div><div class="line"> * Description:常用工具类</div><div class="line"> * Version:1.0.1</div><div class="line"> * 增加JSON相关转换 ,增加HttpServletRequest转换JSON格式</div><div class="line"> * @author pancm</div><div class="line"> */</div><div class="line">public final class MyTools &#123;</div><div class="line">	/** 时间格式包含毫秒 */</div><div class="line">	private static final String sdfm = &quot;yyyy-MM-dd HH:mm:ss SSS&quot;;</div><div class="line">	/** 普通的时间格式 */</div><div class="line">	private static final String sdf = &quot;yyyy-MM-dd HH:mm:ss&quot;;</div><div class="line">	/** 时间戳格式 */</div><div class="line">	private static final String sd = &quot;yyyyMMddHHmmss&quot;;</div><div class="line">	/** 检查是否为整型 */</div><div class="line">	private static  Pattern p=Pattern.compile(&quot;^\\d+$&quot;);</div><div class="line"></div><div class="line">	/**</div><div class="line">	 * 判断String类型的数据是否为空 </div><div class="line">	 * null,&quot;&quot;,&quot; &quot; 为true </div><div class="line">	 * &quot;A&quot;为false</div><div class="line">	 * </div><div class="line">	 * @return boolean</div><div class="line">	 */</div><div class="line">	public static boolean isEmpty(String str) &#123;</div><div class="line">		return (null == str || str.trim().length() == 0);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	/**</div><div class="line">	 * 判断String类型的数据是否为空 </div><div class="line">	 * null,&quot;&quot;, &quot; &quot; 为false </div><div class="line">	 * &quot;A&quot;, 为true</div><div class="line">	 * </div><div class="line">	 * @return boolean</div><div class="line">	 */</div><div class="line">	public static boolean isNotEmpty(String str) &#123;</div><div class="line">		return !isEmpty(str);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	/**</div><div class="line">	 * 判断list类型的数据是否为空 </div><div class="line">	 * null,[] 为 true</div><div class="line">	 * </div><div class="line">	 * @return boolean</div><div class="line">	 */</div><div class="line">	@SuppressWarnings(&quot;rawtypes&quot;)</div><div class="line">	public static boolean isEmpty(List list) &#123;</div><div class="line">		return (null == list || list.size() == 0);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	/**</div><div class="line">	 * 判断list类型的数据是否为空 </div><div class="line">	 * null,[] 为 false</div><div class="line">	 * </div><div class="line">	 * @return boolean</div><div class="line">	 */</div><div class="line">	@SuppressWarnings(&quot;rawtypes&quot;)</div><div class="line">	public static boolean isNotEmpty(List list) &#123;</div><div class="line">		return !isEmpty(list);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	/**</div><div class="line">	 * 判断Map类型的数据是否为空 </div><div class="line">	 * null,[] 为true </div><div class="line">	 * </div><div class="line">	 * @return boolean</div><div class="line">	 */</div><div class="line">	@SuppressWarnings(&quot;rawtypes&quot;)</div><div class="line">	public static boolean isEmpty(Map map) &#123;</div><div class="line">		return (null == map || map.size()==0);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 判断map类型的数据是否为空 </div><div class="line">	 * null,[] 为 false</div><div class="line">	 * </div><div class="line">	 * @return boolean</div><div class="line">	 */</div><div class="line">	@SuppressWarnings(&quot;rawtypes&quot;)</div><div class="line">	public static boolean isNotEmpty(Map map) &#123;</div><div class="line">		return !isEmpty(map);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 判断JSONObject类型的数据是否为空 </div><div class="line">	 * null,[] 为true </div><div class="line">	 * </div><div class="line">	 * @return boolean</div><div class="line">	 */</div><div class="line">	public static boolean isEmpty(JSONObject json) &#123;</div><div class="line">		return (null == json || json.size()==0);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 判断json类型的数据是否为空 </div><div class="line">	 * null,[] 为 false</div><div class="line">	 * </div><div class="line">	 * @return boolean</div><div class="line">	 */</div><div class="line">	public static boolean isNotEmpty(JSONObject json) &#123;</div><div class="line">		return !isEmpty(json);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 字符串反转</div><div class="line">	 * 如:入参为adc，出参则为cba</div><div class="line">	 * @param str </div><div class="line">	 * @return  </div><div class="line">	 */</div><div class="line">	public static String reverse(String str) &#123;</div><div class="line">        if(isEmpty(str))&#123; </div><div class="line">            return str;</div><div class="line">        &#125;</div><div class="line">        return reverse(str.substring(1)) + str.charAt(0);</div><div class="line">    &#125;</div><div class="line">	</div><div class="line">	</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 获取当前long类型的的时间</div><div class="line">	 * </div><div class="line">	 * @return long</div><div class="line">	 */</div><div class="line">	public static long getNowLongTime() &#123;</div><div class="line">		return System.currentTimeMillis();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	/**</div><div class="line">	 * long类型的时间转换成 yyyyMMddHHmmss String类型的时间</div><div class="line">	 * </div><div class="line">	 * @param lo long类型的时间</div><div class="line">	 * @return</div><div class="line">	 */</div><div class="line">	public static String longTime2StringTime(long lo) &#123;</div><div class="line">		return longTime2StringTime(lo, sd);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	/**</div><div class="line">	 * long类型的时间转换成自定义时间格式</div><div class="line">	 * </div><div class="line">	 * @param lo     long类型的时间</div><div class="line">	 * @param format  时间格式</div><div class="line">	 * @return String</div><div class="line">	 */</div><div class="line">	public static String longTime2StringTime(long lo, String format) &#123;</div><div class="line">		return new SimpleDateFormat(format).format(lo);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	/**</div><div class="line">	 * 获取当前String类型的的时间 使用默认格式 yyyy-MM-dd HH:mm:ss</div><div class="line">	 * </div><div class="line">	 * @return String</div><div class="line">	 */</div><div class="line">	public static String getNowTime() &#123;</div><div class="line">		return getNowTime(sdf);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	/**</div><div class="line">	 * 获取当前String类型的的时间(自定义格式)</div><div class="line">	 * @param format  时间格式</div><div class="line">	 * @return String</div><div class="line">	 */</div><div class="line">	public static String getNowTime(String format) &#123;</div><div class="line">		return new SimpleDateFormat(format).format(new Date());</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	/**</div><div class="line">	 * 获取当前Timestamp类型的的时间</div><div class="line">	 * </div><div class="line">	 * @return Timestamp</div><div class="line">	 */</div><div class="line">	public static Timestamp getTNowTime() &#123;</div><div class="line">		return new Timestamp(getNowLongTime());</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 获取的String类型的当前时间并更改时间</div><div class="line">	 * @param number  要更改的的数值</div><div class="line">	 * @param format  更改时间的格式  如yyyy-MM-dd HH:mm:ss</div><div class="line">	 * @param type   更改时间的类型    时:h; 分:m ;秒:s</div><div class="line">	 * @return  String</div><div class="line">	 */</div><div class="line">	public static String changeTime(int number,String format,String type) &#123;</div><div class="line">		return changeTime(number,format,type,&quot;&quot;);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 获取的String类型时间并更改时间</div><div class="line">	 * @param number 要更改的的数值</div><div class="line">     * @param format 更改时间的格式</div><div class="line">	 * @param type   更改时间的类型 。时:h; 分:m ;秒:s </div><div class="line">	 * @param time	  更改的时间       没有则取当前时间</div><div class="line">	 * @return String</div><div class="line">	 */</div><div class="line">	public static String changeTime(int number,String format,String type,String time) &#123;</div><div class="line">		if(isEmpty(time))&#123; //如果没有设置时间则取当前时间</div><div class="line">			time=getNowTime(format);</div><div class="line">		&#125;</div><div class="line">		SimpleDateFormat format1 = new SimpleDateFormat(format);</div><div class="line">		Date d=null;</div><div class="line">		try &#123;</div><div class="line">			d = format1.parse(time);</div><div class="line">		&#125; catch (Exception e) &#123;</div><div class="line">			e.printStackTrace();</div><div class="line">		&#125;    </div><div class="line">		Calendar ca = Calendar.getInstance();  //定义一个Calendar 对象</div><div class="line">		ca.setTime(d);//设置时间</div><div class="line">		if(&quot;h&quot;.equals(type))&#123;</div><div class="line">			ca.add(Calendar.HOUR, number);//改变时</div><div class="line">		&#125;else if(&quot;m&quot;.equals(type))&#123;</div><div class="line">			ca.add(Calendar.MINUTE, number);//改变分</div><div class="line">		&#125;else if(&quot;s&quot;.equals(type))&#123;</div><div class="line">			ca.add(Calendar.SECOND, number);//改变秒</div><div class="line">		&#125;</div><div class="line">		String backTime = format1.format(ca.getTime());  //转化为String 的格式</div><div class="line">		return backTime;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 两个日期带时间比较</div><div class="line">	 * 第二个时间大于第一个则为true，否则为false</div><div class="line">	 * @param String </div><div class="line">	 * @return boolean</div><div class="line">	 * @throws ParseException </div><div class="line">	 */</div><div class="line">    public static boolean compareDay(String time1,String time2,String format) &#123;</div><div class="line">		  if(isEmpty(format))&#123;//如果没有设置格式使用默认格式</div><div class="line">				format=sdf;</div><div class="line">			&#125;</div><div class="line">		    SimpleDateFormat s1 = new SimpleDateFormat(format);</div><div class="line">			Date t1=null;</div><div class="line">			Date t2 =null;</div><div class="line">			try &#123;</div><div class="line">				t1 = s1.parse(time1);</div><div class="line">				t2=s1.parse(time2);</div><div class="line">			&#125; catch (ParseException e) &#123;</div><div class="line">				e.printStackTrace();</div><div class="line">			&#125;</div><div class="line">			</div><div class="line">			return t2.after(t1);//当 t2 大于 t1 时，为 true，否则为 false</div><div class="line">	    &#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">     * 判断是否为整型</div><div class="line">     * @param String           </div><div class="line">     * @return boolean </div><div class="line">     */   </div><div class="line">    public static boolean isInteger(String str) &#123;</div><div class="line">		Matcher m = p.matcher(str);</div><div class="line">		return m.find();</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 自定义位数产生随机数字</div><div class="line">	 * @param int</div><div class="line">	 * @return String</div><div class="line">	 */</div><div class="line">	public static String random(int count) &#123;</div><div class="line">		char start = &apos;0&apos;;</div><div class="line">		char end = &apos;9&apos;;</div><div class="line">		Random rnd = new Random();</div><div class="line">		char[] result = new char[count];</div><div class="line">		int len = end - start + 1;</div><div class="line">		while (count-- &gt; 0) &#123;</div><div class="line">			result[count] = (char) (rnd.nextInt(len) + start);</div><div class="line">		&#125;</div><div class="line">		return new String(result);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	/**   </div><div class="line">    * 获取自定义长度的随机数(含字母)</div><div class="line">    * @param len  长度</div><div class="line">    * @return String</div><div class="line">    */</div><div class="line">    public static String random2(int len)&#123; </div><div class="line">    	int random= Integer.parseInt(random(5));</div><div class="line">        Random rd = new Random(random);  </div><div class="line">        final int  maxNum = 62;  </div><div class="line">        StringBuffer sb = new StringBuffer();  </div><div class="line">        int rdGet;//取得随机数  </div><div class="line">        char[] str = &#123; &apos;a&apos;, &apos;b&apos;, &apos;c&apos;, &apos;d&apos;, &apos;e&apos;, &apos;f&apos;, &apos;g&apos;, &apos;h&apos;, &apos;i&apos;, &apos;j&apos;, &apos;k&apos;,  </div><div class="line">                &apos;l&apos;, &apos;m&apos;, &apos;n&apos;, &apos;o&apos;, &apos;p&apos;, &apos;q&apos;, &apos;r&apos;, &apos;s&apos;, &apos;t&apos;, &apos;u&apos;, &apos;v&apos;, &apos;w&apos;,  </div><div class="line">                &apos;x&apos;, &apos;y&apos;, &apos;z&apos;, &apos;A&apos;,&apos;B&apos;,&apos;C&apos;,&apos;D&apos;,&apos;E&apos;,&apos;F&apos;,&apos;G&apos;,&apos;H&apos;,&apos;I&apos;,&apos;J&apos;,&apos;K&apos;,  </div><div class="line">                &apos;L&apos;, &apos;M&apos;, &apos;N&apos;, &apos;O&apos;, &apos;P&apos;, &apos;Q&apos;, &apos;R&apos;, &apos;S&apos;, &apos;T&apos;, &apos;U&apos;, &apos;V&apos;, &apos;W&apos;,  </div><div class="line">                &apos;X&apos;, &apos;Y&apos; ,&apos;Z&apos;, &apos;0&apos;, &apos;1&apos;, &apos;2&apos;, &apos;3&apos;, &apos;4&apos;, &apos;5&apos;, &apos;6&apos;, &apos;7&apos;, &apos;8&apos;, &apos;9&apos; &#125;;  </div><div class="line">          </div><div class="line">        int count=0;  </div><div class="line">        while(count &lt; len)&#123;  </div><div class="line">            rdGet = Math.abs(rd.nextInt(maxNum));//生成的数最大为62-1  </div><div class="line">            if (rdGet &gt;= 0 &amp;&amp; rdGet &lt; str.length) &#123;  </div><div class="line">                sb.append(str[rdGet]);  </div><div class="line">                count ++;  </div><div class="line">            &#125;  </div><div class="line">        &#125;  </div><div class="line">        return sb.toString();  </div><div class="line">    &#125;</div><div class="line">	</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 获取本机ip</div><div class="line">	 * </div><div class="line">	 * @return String</div><div class="line">	 * @throws UnknownHostException</div><div class="line">	 */</div><div class="line">	public static String getLocalHostIp() throws UnknownHostException &#123;</div><div class="line">		return InetAddress.getLocalHost().getHostAddress();</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 获取客户端ip</div><div class="line">	 * @return String</div><div class="line">	 * @throws UnsupportedEncodingException </div><div class="line">	 */</div><div class="line">	public static String getClientIp(HttpServletRequest request) throws  UnsupportedEncodingException &#123;</div><div class="line">		request.setCharacterEncoding(&quot;utf-8&quot;);</div><div class="line">		return request.getRemoteAddr();</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 获取客户端port</div><div class="line">	 * @return int</div><div class="line">	 * @throws UnsupportedEncodingException </div><div class="line">	 */</div><div class="line">	public static int getClientPort(HttpServletRequest request) throws  UnsupportedEncodingException &#123;</div><div class="line">		request.setCharacterEncoding(&quot;utf-8&quot;);</div><div class="line">		return request.getRemotePort();</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	</div><div class="line">	 /**</div><div class="line">	  * 获取request请求参数并以JSON形式返回</div><div class="line">	  * @param  HttpServletRequest</div><div class="line">	  * @return JSONObject</div><div class="line">	  * @throws IOException</div><div class="line">	  */</div><div class="line">	 @SuppressWarnings(&quot;rawtypes&quot;)</div><div class="line">	 public static JSONObject  getParameterNames(HttpServletRequest request) throws IOException&#123;</div><div class="line">		 JSONObject json=new JSONObject();</div><div class="line">		 Enumeration enu=request.getParameterNames(); </div><div class="line">		 String key=&quot;&quot;,value=&quot;&quot;;</div><div class="line">	     while(enu.hasMoreElements())&#123;  </div><div class="line">	    	 key=(String)enu.nextElement(); </div><div class="line">	    	 value= request.getParameter(key);</div><div class="line">			 json.put(key,value);</div><div class="line">		 &#125;</div><div class="line">		return json;</div><div class="line">	   &#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 *  JSON 转换为 JavaBean</div><div class="line">	 * @param json</div><div class="line">	 * @param t</div><div class="line">	 * @return &lt;T&gt;</div><div class="line">	 */</div><div class="line">	public static &lt;T&gt; T toBean(JSONObject json,Class&lt;T&gt; t)&#123;</div><div class="line">		 return JSON.toJavaObject(json,t);  </div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 *  JSON 字符串转换为 JavaBean</div><div class="line">	 * @param str</div><div class="line">	 * @param t</div><div class="line">	 * @return &lt;T&gt;</div><div class="line">	 */</div><div class="line">	public static &lt;T&gt; T toBean(String str,Class&lt;T&gt; t)&#123;</div><div class="line">		 return JSON.parseObject(str,  t);  </div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * JSON 字符串 转换成JSON格式 </div><div class="line">	 * @param obj</div><div class="line">	 * @return JSONObject</div><div class="line">	 */</div><div class="line">	public static JSONObject toJson(String str)&#123;</div><div class="line">		if(isEmpty(str))&#123;</div><div class="line">			return new JSONObject();</div><div class="line">		&#125;</div><div class="line">		return JSON.parseObject(str);</div><div class="line">			</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 *  JavaBean 转化为JSON</div><div class="line">	 * @param t</div><div class="line">	 * @return</div><div class="line">	 */</div><div class="line">	public static  JSONObject toJson(Object t)&#123;</div><div class="line">		if(null==t||&quot;&quot;.equals(t))&#123;</div><div class="line">			return new JSONObject();</div><div class="line">		&#125;</div><div class="line">		return (JSONObject) JSON.toJSON(t);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * JSON 字符串转换为 HashMap</div><div class="line">	 * </div><div class="line">	 * @param json</div><div class="line">	 *            - String</div><div class="line">	 * @return Map</div><div class="line">	 */</div><div class="line">	@SuppressWarnings(&quot;rawtypes&quot;)</div><div class="line">	public static Map toMap(String json) &#123;</div><div class="line">		if (isEmpty(json)) &#123;</div><div class="line">			return new HashMap();</div><div class="line">		&#125;</div><div class="line">		return JSON.parseObject(json, HashMap.class);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**  </div><div class="line">     * 将map转化为string  </div><div class="line">     * @param m  </div><div class="line">     * @return  </div><div class="line">     */  </div><div class="line">    @SuppressWarnings(&quot;rawtypes&quot;)</div><div class="line">	public static String toString(Map m) &#123;  </div><div class="line">        return JSONObject.toJSONString(m);  </div><div class="line">    &#125;  </div><div class="line">    </div><div class="line">      /**</div><div class="line">       *  String转换为数组 </div><div class="line">       * @param text</div><div class="line">       * @return</div><div class="line">       */</div><div class="line">    public static &lt;T&gt; Object[] toArray(String text) &#123;  </div><div class="line">        return toArray(text, null);  </div><div class="line">    &#125;  </div><div class="line">    </div><div class="line">    /**</div><div class="line">     *  String转换为数组 </div><div class="line">     * @param text</div><div class="line">     * @return</div><div class="line">     */</div><div class="line">    public static &lt;T&gt; Object[] toArray(String text, Class&lt;T&gt; clazz) &#123;  </div><div class="line">        return JSON.parseArray(text, clazz).toArray();  </div><div class="line">    &#125;  </div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * name1=value1&amp;name2=value2格式的数据转换成json数据格式</div><div class="line">	 * @param str</div><div class="line">	 * @return</div><div class="line">	 */</div><div class="line">    public static JSONObject str2Json(String str)&#123;</div><div class="line">    	if(isEmpty(str))&#123;</div><div class="line">    		return new JSONObject();</div><div class="line">    	&#125;</div><div class="line">    	JSONObject json=new JSONObject();</div><div class="line">    	String [] str1=str.split(&quot;&amp;&quot;);</div><div class="line">    	String str3=&quot;&quot;,str4=&quot;&quot;;</div><div class="line">    	if(null==str1||str1.length==0)&#123;</div><div class="line">    		return new JSONObject();</div><div class="line">    	&#125;</div><div class="line">    	for(String str2:str1)&#123;</div><div class="line">    		str3=str2.substring(0, str2.lastIndexOf(&quot;=&quot;));</div><div class="line">    		str4=str2.substring(str2.lastIndexOf(&quot;=&quot;)+1, str2.length());</div><div class="line">    		json.put(str3, str4);</div><div class="line">    	&#125;</div><div class="line">		return json;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    </div><div class="line">    /**</div><div class="line">	 * json数据格式 转换成name1=value1&amp;name2=value2格式</div><div class="line">	 * @param str</div><div class="line">	 * @return</div><div class="line">	 */</div><div class="line">    @SuppressWarnings(&quot;rawtypes&quot;)</div><div class="line">	public static String json2Str(JSONObject json)&#123;</div><div class="line">    	 if(isEmpty(json))&#123;</div><div class="line">    		return null;</div><div class="line">    	 &#125;</div><div class="line">    	  StringBuffer sb=new StringBuffer();</div><div class="line">		  Iterator it=json.entrySet().iterator(); //定义迭代器</div><div class="line">		  while(it.hasNext())&#123;</div><div class="line">			 Map.Entry  er= (Entry) it.next();</div><div class="line">			 sb.append(er.getKey());</div><div class="line">			 sb.append(&quot;=&quot;);</div><div class="line">			 sb.append(er.getValue());</div><div class="line">			 sb.append(&quot;&amp;&quot;);</div><div class="line">		  &#125;</div><div class="line">		  sb.delete(sb.length()-1, sb.length()); //去掉最后的&amp;</div><div class="line">		return sb.toString();</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    </div><div class="line">    /**</div><div class="line">	 * 将JDBC查询的数据转换成List类型</div><div class="line">	 * @param ResultSet</div><div class="line">	 * @return List</div><div class="line">	 * @throws SQLException</div><div class="line">	 */</div><div class="line">	@SuppressWarnings(&#123; &quot;rawtypes&quot;, &quot;unchecked&quot; &#125;)</div><div class="line">	public static List convertList(ResultSet rs) throws SQLException &#123;</div><div class="line">        if(null==rs)&#123;</div><div class="line">        	return new ArrayList&lt;&gt;();</div><div class="line">        &#125;</div><div class="line">		List list = new ArrayList();</div><div class="line">        ResultSetMetaData md = rs.getMetaData();</div><div class="line">        int columnCount = md.getColumnCount();</div><div class="line">        while (rs.next()) &#123;</div><div class="line">            JSONObject rowData = new JSONObject();</div><div class="line">            for (int i = 1; i &lt;= columnCount; i++) &#123;</div><div class="line">                rowData.put(md.getColumnName(i), rs.getObject(i));</div><div class="line">            &#125;</div><div class="line">            list.add(rowData);</div><div class="line">        &#125;</div><div class="line">        return list;</div><div class="line">	&#125;</div><div class="line">    </div><div class="line">    </div><div class="line">	</div><div class="line">	</div><div class="line">	 </div><div class="line">  /**</div><div class="line">     * MD5加密</div><div class="line">     * @param message</div><div class="line">     * @return</div><div class="line">     */</div><div class="line">    public static String encode(String message) &#123;</div><div class="line">        byte[] secretBytes = null;</div><div class="line">        try &#123;</div><div class="line">            secretBytes = MessageDigest.getInstance(&quot;md5&quot;).digest(</div><div class="line">                    message.getBytes());</div><div class="line">        &#125; catch (NoSuchAlgorithmException e) &#123;</div><div class="line">            throw new RuntimeException(&quot;没有md5这个算法！&quot;);</div><div class="line">        &#125;</div><div class="line">        String md5code = new BigInteger(1, secretBytes).toString(16);// 16进制数字</div><div class="line">        // 如果生成数字未满32位，需要前面补0</div><div class="line">        int length=32 - md5code.length();</div><div class="line">        for (int i = 0; i &lt;length ; i++) &#123;</div><div class="line">            md5code = &quot;0&quot; + md5code;</div><div class="line">        &#125;</div><div class="line">        return md5code;</div><div class="line">    &#125;</div><div class="line">	 </div><div class="line">	/**</div><div class="line">	 * 本方法的测试示例</div><div class="line">	 * @param args</div><div class="line">	 */</div><div class="line">	@SuppressWarnings(&#123; &quot;rawtypes&quot;, &quot;unchecked&quot; &#125;)</div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		/*</div><div class="line">		 * String 和List 空数据判断</div><div class="line">		 */</div><div class="line">		String str1=&quot;&quot;;</div><div class="line">		String str2=&quot; &quot;;</div><div class="line">		String str3=null;</div><div class="line">		String str4=&quot;a&quot;;</div><div class="line">		List list=null;</div><div class="line">		List list2=new ArrayList();</div><div class="line">		List list3=new ArrayList();</div><div class="line">		list3.add(&quot;a&quot;);</div><div class="line">		</div><div class="line">		System.out.println(&quot;str1 :&quot;+isEmpty(str1));		//str1 :true</div><div class="line">		System.out.println(&quot;str2 :&quot;+isEmpty(str2));		//str2 :true</div><div class="line">		System.out.println(&quot;str3 :&quot;+isEmpty(str3));		//str3 :true</div><div class="line">		System.out.println(&quot;str4 :&quot;+isEmpty(str4));		//str4 :false</div><div class="line">		System.out.println(&quot;list :&quot;+isEmpty(list));		//list :true</div><div class="line">		System.out.println(&quot;list2 :&quot;+isEmpty(list2));	//list2 :true</div><div class="line">		System.out.println(&quot;list3 :&quot;+isEmpty(list3)); //list3 :false</div><div class="line">		</div><div class="line">		</div><div class="line">		/*</div><div class="line">		 *  时间</div><div class="line">		 */</div><div class="line">		long start=getNowLongTime();</div><div class="line">		System.out.println(&quot;getNowTime():&quot;+getNowTime());		//getNowTime():2017-09-26 17:46:44</div><div class="line">		System.out.println(&quot;getNowLongTime():&quot;+getNowLongTime());  //getNowLongTime():1506419204920</div><div class="line">		System.out.println(&quot;getNowTime(sdfm):&quot;+getNowTime(sdfm)); //getNowTime(sdfm):2017-09-26 17:46:44 920</div><div class="line">		System.out.println(&quot;当时时间向前推移30秒:&quot;+ changeTime(-30,sdf,&quot;s&quot;));            //2017-09-26 17:46:14 </div><div class="line">		System.out.println(&quot;时间比较:&quot;+compareDay(getNowTime(sdfm),changeTime(-30,sdf,&quot;s&quot;),&quot;&quot;)); //时间比较:false</div><div class="line">		System.out.println(&quot;getTNowTime():&quot;+getTNowTime());	//getTNowTime():2017-09-26 17:46:44.921</div><div class="line">		System.out.println(&quot;LongTime2StringTime():&quot;+longTime2StringTime(start, sd)); //LongTime2StringTime():20170926174644</div><div class="line">		</div><div class="line">		</div><div class="line">		</div><div class="line">		/*</div><div class="line">		 * 整型判断</div><div class="line">		 */</div><div class="line">		String st=&quot;258369&quot;;</div><div class="line">		String st2=&quot;258369A!@&quot;;</div><div class="line">		String st3=&quot;258  369 &quot;;</div><div class="line">		System.out.println(&quot;st:&quot;+isInteger(st));  //st:true</div><div class="line">		System.out.println(&quot;st2:&quot;+isInteger(st2)); //st2:false</div><div class="line">		System.out.println(&quot;st3:&quot;+isInteger(st3)); //st3:false</div><div class="line">		</div><div class="line">		/*</div><div class="line">		 * 字符串反转</div><div class="line">		 */</div><div class="line">		String re=&quot;abcdefg&quot;;</div><div class="line">		System.out.println(&quot;字符串反转:&quot;+reverse(re)); //字符串反转:gfedcba</div><div class="line">		</div><div class="line">		</div><div class="line">		/*</div><div class="line">		 * 本机IP</div><div class="line">		 */</div><div class="line">		try &#123;</div><div class="line">			System.out.println(&quot;本机IP:&quot;+getLocalHostIp()); //本机IP:192.168.1.111</div><div class="line">		&#125; catch (UnknownHostException e) &#123;</div><div class="line">			e.printStackTrace();</div><div class="line">		&#125;</div><div class="line">		</div><div class="line">		/*</div><div class="line">		 * 随机数</div><div class="line">		 */</div><div class="line">		</div><div class="line">		System.out.println(&quot;6位随机数:&quot;+random(6));	//6位随机数:222488</div><div class="line">		System.out.println(&quot;10位随机数:&quot;+random2(10));  //10位随机数:ZwW0pmofjW</div><div class="line">		</div><div class="line">		/*</div><div class="line">		 * JSON数据转换</div><div class="line">		 */</div><div class="line">		</div><div class="line">		String value=&quot;name1=value1&amp;name2=value2&amp;name3=value3&quot;;</div><div class="line">		JSONObject json=new JSONObject();</div><div class="line">		json.put(&quot;name1&quot;, &quot;value1&quot;);</div><div class="line">		json.put(&quot;name2&quot;, &quot;value2&quot;);</div><div class="line">		json.put(&quot;name3&quot;, &quot;value3&quot;);</div><div class="line">		System.out.println(&quot;value:&quot;+value);				  //value:name1=value1&amp;name2=value2&amp;name3=value3</div><div class="line">		System.out.println(&quot;str2Json:&quot;+str2Json(value));  //str2Json:&#123;&quot;name1&quot;:&quot;value1&quot;,&quot;name2&quot;:&quot;value2&quot;,&quot;name3&quot;:&quot;value3&quot;&#125;</div><div class="line">		System.out.println(&quot;json:&quot;+json.toJSONString());  //json:&#123;&quot;name1&quot;:&quot;value1&quot;,&quot;name2&quot;:&quot;value2&quot;,&quot;name3&quot;:&quot;value3&quot;&#125;</div><div class="line">		System.out.println(&quot;json2Str:&quot;+json2Str(json));  //json2Str:name3=value3&amp;name1=value1&amp;name2=value2</div><div class="line">		</div><div class="line">		String jsonString=json.toJSONString();</div><div class="line">		System.out.println(&quot;jsonString:&quot;+jsonString);		//&#123;&quot;name1&quot;:&quot;value1&quot;,&quot;name2&quot;:&quot;value2&quot;,&quot;name3&quot;:&quot;value3&quot;&#125;</div><div class="line">		System.out.println(&quot;toJson(jsonString):&quot;+toJson(jsonString)); //toJson(jsonString):&#123;&quot;name1&quot;:&quot;value1&quot;,&quot;name2&quot;:&quot;value2&quot;,&quot;name3&quot;:&quot;value3&quot;&#125;</div><div class="line">		</div><div class="line">	    User user=new User();</div><div class="line">	    JSONObject json2=new JSONObject(); </div><div class="line">	    user.setId(1);</div><div class="line">	    user.setName(&quot;张三&quot;);</div><div class="line">	    json2.put(&quot;id&quot;, 3);</div><div class="line">	    json2.put(&quot;name&quot;, &quot;王五&quot;);</div><div class="line">	    System.out.println(&quot;user:&quot;+user);</div><div class="line">	    System.out.println(&quot;toBean:&quot;+toBean(json2, User.class));</div><div class="line">	    System.out.println(&quot;toJSON:&quot;+toJson(user));</div><div class="line">	</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>代码:<a href="https://github.com/xuwujing/TestMain/blob/master/TestMain/src/com/util/MyTools.java" target="_blank" rel="external">https://github.com/xuwujing/TestMain/blob/master/TestMain/src/com/util/MyTools.java</a><br>工具类的一些方法和测试就是这些了，详细的说明已经在代码的注释中了。如果觉得这些方法使用有不妥之处，欢迎指出！</p>
+<p>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a><br>原创不易，转载请标明出处，谢谢！</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ ���Ľ��� ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">��Ȩ����</span>
+<img src="�˴����Լ���Ȩ����ͼƬ��ַ" >
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">tc9011's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">Cheng Tang</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+��<a href="http://www.panchengming.com/" style="color:#258FC6">���޾�</a>������ά����<a href="http://www.panchengming.com/" style="color:#258FC6">tc9011's Notes</a>���Ͳ���<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">�������ñ�������-����ҵ-��ֹ����4.0�������֤</a>��<br/>
+�����׷���<a href="http://www.panchengming.com/" style="color:#258FC6">tc9011's Notes</a> ���ͣ� <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ������Ȩ���У���Ȩ�ؾ���</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/27/pancm44/" rel="next" title="Netty4 学习笔记之四- Netty HTTP服务的实现">
+                <i class="fa fa-chevron-left"></i> Netty4 学习笔记之四- Netty HTTP服务的实现
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/04/pancm46/" rel="prev" title="Hadoop介绍和环境配置">
+                Hadoop介绍和环境配置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">60</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码"><span class="nav-number">2.</span> <span class="nav-text">代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Commons"><span class="nav-number">2.1.</span> <span class="nav-text">Commons</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Guava"><span class="nav-number">2.2.</span> <span class="nav-text">Guava</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Joda"><span class="nav-number">2.3.</span> <span class="nav-text">Joda</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MyTools"><span class="nav-number">2.4.</span> <span class="nav-text">MyTools</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结语"><span class="nav-number">3.</span> <span class="nav-text">结语</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

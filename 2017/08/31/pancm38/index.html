@@ -1,0 +1,845 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,netty," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言   因为以前在项目中使用过Mina框架，感受到了该框架的强大之处。于是在业余时间也学习了一下Netty。因为Netty的主要版本是Netty3和Netty4(Netty5已经被取消了)，所以我就直接学习Netty4。在本文中演示的就是Netty的一个简单demo。 开发准备Netty4的官方网站是：http://netty.io/ 。本文使用的是Netty4.1。由于Netty4.1版本需">
+<meta name="keywords" content="java,netty">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Netty4 学习笔记之一-客户端与服务端通信 demo">
+<meta property="og:url" content="http://yoursite.com/2017/08/31/pancm38/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言   因为以前在项目中使用过Mina框架，感受到了该框架的强大之处。于是在业余时间也学习了一下Netty。因为Netty的主要版本是Netty3和Netty4(Netty5已经被取消了)，所以我就直接学习Netty4。在本文中演示的就是Netty的一个简单demo。 开发准备Netty4的官方网站是：http://netty.io/ 。本文使用的是Netty4.1。由于Netty4.1版本需">
+<meta property="og:image" content="http://img.blog.csdn.net/20170831182500052?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170831182515841?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2017-12-16T10:53:29.905Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Netty4 学习笔记之一-客户端与服务端通信 demo">
+<meta name="twitter:description" content="前言   因为以前在项目中使用过Mina框架，感受到了该框架的强大之处。于是在业余时间也学习了一下Netty。因为Netty的主要版本是Netty3和Netty4(Netty5已经被取消了)，所以我就直接学习Netty4。在本文中演示的就是Netty的一个简单demo。 开发准备Netty4的官方网站是：http://netty.io/ 。本文使用的是Netty4.1。由于Netty4.1版本需">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20170831182500052?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/08/31/pancm38/"/>
+
+
+
+
+
+
+  <title>Netty4 学习笔记之一-客户端与服务端通信 demo | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/31/pancm38/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Netty4 学习笔记之一-客户端与服务端通信 demo</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-31T18:28:00+08:00">
+                2017-08-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/netty/" itemprop="url" rel="index">
+                    <span itemprop="name">netty</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>   因为以前在项目中使用过<a href="http://blog.csdn.net/qazwsxpcm/article/details/73255909" target="_blank" rel="external">Mina</a>框架，感受到了该框架的强大之处。于是在业余时间也学习了一下Netty。因为Netty的主要版本是Netty3和Netty4(Netty5已经被取消了)，所以我就直接学习Netty4。在本文中演示的就是Netty的一个简单demo。</p>
+<h2 id="开发准备"><a href="#开发准备" class="headerlink" title="开发准备"></a>开发准备</h2><p>Netty4的官方网站是：<a href="http://netty.io/" target="_blank" rel="external">http://netty.io/</a> 。<br>本文使用的是Netty4.1。<br>由于Netty4.1版本需要JDK1.7，在使用JDK1.6时，会有一些bug，所以推荐使用JDK1.7。</p>
+<p>因为Netty和Mina都是Trustin Lee的作品，所以在很多方面都十分相似，他们线程模型也是基本一致，采用了Reactors in threads模型，即Main Reactor + Sub Reactors的模式。</p>
+<p>所以在开发上，很多都可以相互借鉴。</p>
+<h2 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h2><p>首先完成Netty服务端相关开发，和Mina一样。<br>主要由两个部分组成: 配置服务端的基本信息以及实现业务逻辑处理。<br>如果需要，还有filter过滤器。</p>
+<h3 id="服务端代码"><a href="#服务端代码" class="headerlink" title="服务端代码"></a>服务端代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">import io.netty.bootstrap.ServerBootstrap;</div><div class="line">import io.netty.channel.ChannelFuture;</div><div class="line">import io.netty.channel.EventLoopGroup;</div><div class="line">import io.netty.channel.nio.NioEventLoopGroup;</div><div class="line">import io.netty.channel.socket.nio.NioServerSocketChannel;</div><div class="line"></div><div class="line">/**</div><div class="line"> * </div><div class="line">* Title: NettyServer</div><div class="line">* Description: Netty服务端</div><div class="line">* Version:1.0.0  </div><div class="line">* @author Administrator</div><div class="line">* @date 2017-8-31</div><div class="line"> */</div><div class="line">public class NettyServer &#123;</div><div class="line">	    private static final int port = 6789; //设置服务端端口</div><div class="line">	    private static  EventLoopGroup group = new NioEventLoopGroup();   // 通过nio方式来接收连接和处理连接   </div><div class="line">	    private static  ServerBootstrap b = new ServerBootstrap();</div><div class="line">	    </div><div class="line">	    /**</div><div class="line">		 * Netty创建全部都是实现自AbstractBootstrap。</div><div class="line">		 * 客户端的是Bootstrap，服务端的则是	ServerBootstrap。</div><div class="line">		 **/</div><div class="line">	    public static void main(String[] args) throws InterruptedException &#123;</div><div class="line">	        try &#123;</div><div class="line">	            b.group(group);</div><div class="line">	            b.channel(NioServerSocketChannel.class);</div><div class="line">	            b.childHandler(new NettyServerFilter()); //设置过滤器</div><div class="line">	            // 服务器绑定端口监听</div><div class="line">	            ChannelFuture f = b.bind(port).sync();</div><div class="line">	            System.out.println(&quot;服务端启动成功...&quot;);</div><div class="line">	            // 监听服务器关闭监听</div><div class="line">	            f.channel().closeFuture().sync();</div><div class="line">	        &#125; finally &#123;</div><div class="line">	            group.shutdownGracefully(); ////关闭EventLoopGroup，释放掉所有资源包括创建的线程  </div><div class="line">	        &#125;</div><div class="line">	    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="服务端业务逻辑"><a href="#服务端业务逻辑" class="headerlink" title="服务端业务逻辑"></a>服务端业务逻辑</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">import java.net.InetAddress;</div><div class="line">import java.util.Date;</div><div class="line">import io.netty.channel.ChannelHandlerContext;</div><div class="line">import io.netty.channel.SimpleChannelInboundHandler;</div><div class="line"></div><div class="line">/**</div><div class="line"> * </div><div class="line">* Title: HelloServerHandler</div><div class="line">* Description:  服务端业务逻辑</div><div class="line">* Version:1.0.0  </div><div class="line">* @author Administrator</div><div class="line">* @date 2017-8-31</div><div class="line"> */</div><div class="line">public class NettyServerHandler extends SimpleChannelInboundHandler&lt;String&gt; &#123;</div><div class="line">	/*</div><div class="line">	 * 收到消息时，返回信息</div><div class="line">	 */</div><div class="line">	@Override</div><div class="line">	protected void channelRead0(ChannelHandlerContext ctx, String msg)</div><div class="line">			throws Exception &#123;</div><div class="line">		// 收到消息直接打印输出</div><div class="line">		System.out.println(&quot;服务端接受的消息 : &quot; + msg);</div><div class="line">		if(&quot;quit&quot;.equals(msg))&#123;//服务端断开的条件</div><div class="line">			ctx.close();</div><div class="line">		&#125;</div><div class="line">		Date date=new Date();</div><div class="line">		// 返回客户端消息</div><div class="line">		ctx.writeAndFlush(date+&quot;\n&quot;);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	/*</div><div class="line">	 * 建立连接时，返回消息</div><div class="line">	 */</div><div class="line">	@Override</div><div class="line">	public void channelActive(ChannelHandlerContext ctx) throws Exception &#123;</div><div class="line">		System.out.println(&quot;连接的客户端地址:&quot; + ctx.channel().remoteAddress());</div><div class="line">		ctx.writeAndFlush(&quot;客户端&quot;+ InetAddress.getLocalHost().getHostName() + &quot;成功与服务端建立连接！ \n&quot;);</div><div class="line">		super.channelActive(ctx);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="服务端过滤器"><a href="#服务端过滤器" class="headerlink" title="服务端过滤器"></a>服务端过滤器</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">import io.netty.channel.ChannelInitializer;</div><div class="line">import io.netty.channel.ChannelPipeline;</div><div class="line">import io.netty.channel.socket.SocketChannel;</div><div class="line">import io.netty.handler.codec.DelimiterBasedFrameDecoder;</div><div class="line">import io.netty.handler.codec.Delimiters;</div><div class="line">import io.netty.handler.codec.string.StringDecoder;</div><div class="line">import io.netty.handler.codec.string.StringEncoder;</div><div class="line"> </div><div class="line">/**</div><div class="line">  * </div><div class="line"> * Title: HelloServerInitializer</div><div class="line"> * Description: Netty 服务端过滤器</div><div class="line"> * Version:1.0.0  </div><div class="line"> * @author Administrator</div><div class="line"> * @date 2017-8-31</div><div class="line">  */</div><div class="line">public class NettyServerFilter extends ChannelInitializer&lt;SocketChannel&gt; &#123;</div><div class="line"> </div><div class="line">     @Override</div><div class="line">     protected void initChannel(SocketChannel ch) throws Exception &#123;</div><div class="line">         ChannelPipeline ph = ch.pipeline();</div><div class="line">         // 以(&quot;\n&quot;)为结尾分割的 解码器</div><div class="line">         ph.addLast(&quot;framer&quot;, new DelimiterBasedFrameDecoder(8192, Delimiters.lineDelimiter()));</div><div class="line">         // 解码和编码，应和客户端一致</div><div class="line">         ph.addLast(&quot;decoder&quot;, new StringDecoder());</div><div class="line">         ph.addLast(&quot;encoder&quot;, new StringEncoder());</div><div class="line">         ph.addLast(&quot;handler&quot;, new NettyServerHandler());// 服务端业务逻辑</div><div class="line">     &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<h2 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h2><p>客户端的主要工作是<br>1，连接到服务端<br>2，向服务端发送数据数据<br>3，处理服务端返回的数据<br>4，关闭连接<br>而且客户端相关代码也和服务端类似。</p>
+<h3 id="客户端-1"><a href="#客户端-1" class="headerlink" title="客户端"></a>客户端</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">import io.netty.bootstrap.Bootstrap;</div><div class="line">import io.netty.channel.Channel;</div><div class="line">import io.netty.channel.EventLoopGroup;</div><div class="line">import io.netty.channel.nio.NioEventLoopGroup;</div><div class="line">import io.netty.channel.socket.nio.NioSocketChannel;</div><div class="line"></div><div class="line">import java.io.IOException;</div><div class="line">/**</div><div class="line"> * </div><div class="line">* Title: NettyClient</div><div class="line">* Description: Netty客户端 </div><div class="line">* Version:1.0.0  </div><div class="line">* @author Administrator</div><div class="line">* @date 2017-8-31</div><div class="line"> */</div><div class="line">public class NettyClient &#123;</div><div class="line">    </div><div class="line">    public static String host = &quot;127.0.0.1&quot;;  //ip地址</div><div class="line">    public static int port = 6789;			//端口</div><div class="line">    /// 通过nio方式来接收连接和处理连接   </div><div class="line">    private static EventLoopGroup group = new NioEventLoopGroup(); </div><div class="line">    private static  Bootstrap b = new Bootstrap();</div><div class="line">    private static Channel ch;</div><div class="line">    </div><div class="line">    /**</div><div class="line">	 * Netty创建全部都是实现自AbstractBootstrap。</div><div class="line">	 * 客户端的是Bootstrap，服务端的则是	ServerBootstrap。</div><div class="line">	 **/</div><div class="line">    public static void main(String[] args) throws InterruptedException, IOException &#123; </div><div class="line">        	System.out.println(&quot;客户端成功启动...&quot;);</div><div class="line">            b.group(group);</div><div class="line">            b.channel(NioSocketChannel.class);</div><div class="line">            b.handler(new NettyClientFilter());</div><div class="line">            // 连接服务端</div><div class="line">            ch = b.connect(host, port).sync().channel();</div><div class="line">            star();</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    public static void star() throws IOException&#123;</div><div class="line">    	String str=&quot;Hello Netty&quot;;</div><div class="line">    	ch.writeAndFlush(str+ &quot;\r\n&quot;);</div><div class="line">    	System.out.println(&quot;客户端发送数据:&quot;+str);</div><div class="line">   &#125;</div><div class="line">    	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="客户端业务逻辑实现"><a href="#客户端业务逻辑实现" class="headerlink" title="客户端业务逻辑实现"></a>客户端业务逻辑实现</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">import io.netty.channel.ChannelHandlerContext;</div><div class="line">import io.netty.channel.SimpleChannelInboundHandler;</div><div class="line"></div><div class="line">/**</div><div class="line"> * </div><div class="line">* Title: NettyClientHandler</div><div class="line">* Description: 客户端业务逻辑实现</div><div class="line">* Version:1.0.0  </div><div class="line">* @author Administrator</div><div class="line">* @date 2017-8-31</div><div class="line"> */</div><div class="line">public class NettyClientHandler extends SimpleChannelInboundHandler&lt;String&gt; &#123;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    protected void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception &#123;  </div><div class="line">        System.out.println(&quot;客户端接受的消息: &quot; + msg);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    //</div><div class="line">    @Override</div><div class="line">    public void channelActive(ChannelHandlerContext ctx) throws Exception &#123;</div><div class="line">        System.out.println(&quot;正在连接... &quot;);</div><div class="line">        super.channelActive(ctx);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void channelInactive(ChannelHandlerContext ctx) throws Exception &#123;</div><div class="line">        System.out.println(&quot;连接关闭! &quot;);</div><div class="line">        super.channelInactive(ctx);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="客户端过滤器"><a href="#客户端过滤器" class="headerlink" title="客户端过滤器"></a>客户端过滤器</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">import io.netty.channel.ChannelInitializer;</div><div class="line">import io.netty.channel.ChannelPipeline;</div><div class="line">import io.netty.channel.socket.SocketChannel;</div><div class="line">import io.netty.handler.codec.DelimiterBasedFrameDecoder;</div><div class="line">import io.netty.handler.codec.Delimiters;</div><div class="line">import io.netty.handler.codec.string.StringDecoder;</div><div class="line">import io.netty.handler.codec.string.StringEncoder;</div><div class="line">/**</div><div class="line"> * </div><div class="line">* Title: NettyClientFilter</div><div class="line">* Description: Netty客户端 过滤器</div><div class="line">* Version:1.0.0  </div><div class="line">* @author Administrator</div><div class="line">* @date 2017-8-31</div><div class="line"> */</div><div class="line">public class NettyClientFilter extends ChannelInitializer&lt;SocketChannel&gt; &#123;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    protected void initChannel(SocketChannel ch) throws Exception &#123;</div><div class="line">        ChannelPipeline ph = ch.pipeline();</div><div class="line">        /*</div><div class="line">         * 解码和编码，应和服务端一致</div><div class="line">         * */</div><div class="line">        ph.addLast(&quot;framer&quot;, new DelimiterBasedFrameDecoder(8192, Delimiters.lineDelimiter()));</div><div class="line">        ph.addLast(&quot;decoder&quot;, new StringDecoder());</div><div class="line">        ph.addLast(&quot;encoder&quot;, new StringEncoder());</div><div class="line">        ph.addLast(&quot;handler&quot;, new NettyClientHandler()); //客户端的逻辑</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="效果实现图"><a href="#效果实现图" class="headerlink" title="效果实现图"></a>效果实现图</h3><h4 id="服务端-1"><a href="#服务端-1" class="headerlink" title="服务端"></a>服务端</h4><p><img src="http://img.blog.csdn.net/20170831182500052?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h4 id="客户端-2"><a href="#客户端-2" class="headerlink" title="客户端"></a>客户端</h4><p><img src="http://img.blog.csdn.net/20170831182515841?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>demo教程到这里就结束了，如果有什么问题，欢迎提出！</p>
+<p>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a><br>原创不易，转载请标明出处，谢谢！</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ ���Ľ��� ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">��Ȩ����</span>
+<img src="�˴����Լ���Ȩ����ͼƬ��ַ" >
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">tc9011's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">Cheng Tang</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+��<a href="http://www.panchengming.com/" style="color:#258FC6">���޾�</a>������ά����<a href="http://www.panchengming.com/" style="color:#258FC6">tc9011's Notes</a>���Ͳ���<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">�������ñ�������-����ҵ-��ֹ����4.0�������֤</a>��<br/>
+�����׷���<a href="http://www.panchengming.com/" style="color:#258FC6">tc9011's Notes</a> ���ͣ� <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ������Ȩ���У���Ȩ�ؾ���</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/netty/" rel="tag"># netty</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/29/pancm37/" rel="next" title="Linux 常用命令之二">
+                <i class="fa fa-chevron-left"></i> Linux 常用命令之二
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/09/pancm51/" rel="prev" title="tomcat管理界面登录无法进入">
+                tomcat管理界面登录无法进入 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">60</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开发准备"><span class="nav-number">2.</span> <span class="nav-text">开发准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务端"><span class="nav-number">3.</span> <span class="nav-text">服务端</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#服务端代码"><span class="nav-number">3.1.</span> <span class="nav-text">服务端代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务端业务逻辑"><span class="nav-number">3.2.</span> <span class="nav-text">服务端业务逻辑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务端过滤器"><span class="nav-number">3.3.</span> <span class="nav-text">服务端过滤器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#客户端"><span class="nav-number">4.</span> <span class="nav-text">客户端</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#客户端-1"><span class="nav-number">4.1.</span> <span class="nav-text">客户端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#客户端业务逻辑实现"><span class="nav-number">4.2.</span> <span class="nav-text">客户端业务逻辑实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#客户端过滤器"><span class="nav-number">4.3.</span> <span class="nav-text">客户端过滤器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#效果实现图"><span class="nav-number">4.4.</span> <span class="nav-text">效果实现图</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#服务端-1"><span class="nav-number">4.4.1.</span> <span class="nav-text">服务端</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#客户端-2"><span class="nav-number">4.4.2.</span> <span class="nav-text">客户端</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

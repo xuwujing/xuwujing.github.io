@@ -1,0 +1,842 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java，hadoop," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="原文:http://www.cnblogs.com/edisonchou/ 一、Hadoop的发展历史　　说到Hadoop的起源，不得不说到一个传奇的IT公司—全球IT技术的引领者Google。Google（自称）为云计算概念的提出者，在自身多年的搜索引擎业务中构建了突破性的GFS（Google File System），从此文件系统进入分布式时代。除此之外，Google在GFS上如何快速分析和">
+<meta name="keywords" content="java，hadoop">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hadoop介绍和环境配置">
+<meta property="og:url" content="http://yoursite.com/2017/11/04/pancm46/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="原文:http://www.cnblogs.com/edisonchou/ 一、Hadoop的发展历史　　说到Hadoop的起源，不得不说到一个传奇的IT公司—全球IT技术的引领者Google。Google（自称）为云计算概念的提出者，在自身多年的搜索引擎业务中构建了突破性的GFS（Google File System），从此文件系统进入分布式时代。除此之外，Google在GFS上如何快速分析和">
+<meta property="og:image" content="http://images.cnitblog.com/blog/381412/201312/21144230-fe13d88cee3c463ba530f487abb4c8e8.png">
+<meta property="og:image" content="http://images.cnitblog.com/blog/381412/201312/21151725-7913150675af46baa25ae6da7ccf6720.png">
+<meta property="og:image" content="http://images.cnitblog.com/blog/381412/201312/21153046-d2682c52cd6647d8a48c1b95694eb503.png">
+<meta property="og:image" content="http://images.cnitblog.com/blog/381412/201312/21153322-7c36864339d4451c8cc09fc9e6e24d95.png">
+<meta property="og:image" content="http://images.cnitblog.com/blog/381412/201312/21152223-f0f3c271ae9c47079c07af0e47a47836.png">
+<meta property="og:image" content="http://images.cnitblog.com/blog/381412/201312/21153618-3ba9ba17d5f64c6aad7762b8bb6e486c.png">
+<meta property="og:image" content="http://images.cnitblog.com/blog/381412/201312/21154221-09d86b8e276648db95675b4d91914119.png">
+<meta property="og:image" content="http://images.cnitblog.com/blog/381412/201312/21154137-ce339dff13c14cc5985e65671d38c499.png">
+<meta property="og:image" content="http://images.cnitblog.com/blog/381412/201312/21154930-a8557192283247449ce5a4adabc7585d.png">
+<meta property="og:image" content="http://images.cnitblog.com/blog/381412/201312/21155241-4b720c261dc1494e86e469571760732a.png">
+<meta property="og:image" content="http://images.cnitblog.com/blog/381412/201312/22154606-6219afd7875a450eb9d4ab4fd32de016.png">
+<meta property="og:image" content="http://images.cnitblog.com/blog/381412/201312/22154621-5b198959edfb4facb47298adbc39c4ad.png">
+<meta property="og:image" content="http://images.cnitblog.com/blog/381412/201312/22154855-41c62047823447a6aa1a34e5d0913c64.png">
+<meta property="og:image" content="http://images.cnitblog.com/blog/381412/201312/22154937-d7c0762a4a774ec3b6e5dca7b49251ed.png">
+<meta property="og:image" content="http://images.cnitblog.com/blog/381412/201312/22155104-a0a7f0f0750147c2af5a2338c7f9bd5b.png">
+<meta property="og:image" content="http://images.cnitblog.com/blog/381412/201312/22155149-12124878543241a98646fdf8659f8fab.png">
+<meta property="og:updated_time" content="2017-11-18T02:49:30.664Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hadoop介绍和环境配置">
+<meta name="twitter:description" content="原文:http://www.cnblogs.com/edisonchou/ 一、Hadoop的发展历史　　说到Hadoop的起源，不得不说到一个传奇的IT公司—全球IT技术的引领者Google。Google（自称）为云计算概念的提出者，在自身多年的搜索引擎业务中构建了突破性的GFS（Google File System），从此文件系统进入分布式时代。除此之外，Google在GFS上如何快速分析和">
+<meta name="twitter:image" content="http://images.cnitblog.com/blog/381412/201312/21144230-fe13d88cee3c463ba530f487abb4c8e8.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/11/04/pancm46/"/>
+
+
+
+
+
+
+  <title>Hadoop介绍和环境配置 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/04/pancm46/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Hadoop介绍和环境配置</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-04T15:59:00+08:00">
+                2017-11-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><p>原文:<a href="http://www.cnblogs.com/edisonchou/" target="_blank" rel="external">http://www.cnblogs.com/edisonchou/</a></p>
+<div id="cnblogs_post_body"><h1><strong>一、Hadoop的发展历史</strong></h1><br><p><strong><strong><img style="margin-right: auto; margin-left: auto; display: block;" src="http://images.cnitblog.com/blog/381412/201312/21144230-fe13d88cee3c463ba530f487abb4c8e8.png" alt="" width="855" height="225"></strong></strong></p><br><p>　　<span style="font-family: verdana,geneva; font-size: 16px;">说到Hadoop的起源，不得不说到一个传奇的IT公司—全球IT技术的引领者Google。Google（自称）为云计算概念的提出者，在自身多年的搜索引擎业务中构建了突破性的GFS（Google File System），从此文件系统进入分布式时代。除此之外，Google在GFS上如何快速分析和处理数据方面开创了MapReduce并行计算框架，让以往的高端服务器计算变为廉价的x86集群计算，也让许多互联网公司能够从IOE（IBM小型机、Oracle数据库以及EMC存储）中解脱出来，例如：淘宝早就开始了去IOE化的道路。然而，Google之所以伟大就在于独享技术不如共享技术，在2002-2004年间以三大论文的发布向世界推送了其云计算的核心组成部分GFS、MapReduce以及BigTable。Google虽然没有将其核心技术开源，但是这三篇论文已经向开源社区的大牛们指明了方向，一位大牛：Doug Cutting使用Java语言对Google的云计算核心技术（主要是GFS和MapReduce）做了开源的实现。后来，Apache基金会整合Doug Cutting以及其他IT公司（如Facebook等）的贡献成果，开发并推出了<strong>Hadoop生态系统</strong>。Hadoop<span style="line-height: 150%; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA;">是一个搭建在廉价<span lang="EN-US">PC</span>上的分布式集群系统架构，它具有高可用性、高容错性和高可扩展性等优点。由于它提供了一个开放式的平台，用户可以在完全不了解底层实现细节的情形下，开发适合自身应用的分布式程序。</span></span></p><br><h1><strong><span style="line-height: 150%;">二、<span style="font-family: verdana,geneva;">Hadoop</span>的整体框架</span></strong></h1><br><p><span style="font-family: 宋体;"><span style="line-height: 150%; font-family: 宋体; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA;">&nbsp;&nbsp;&nbsp; <span style="font-family: verdana,geneva; font-size: 16px;"><span style="line-height: 150%; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA;" lang="EN-US">Hadoop</span><span style="line-height: 150%; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA;">由<span lang="EN-US">HDFS</span>、<span lang="EN-US">MapReduce</span>、<span lang="EN-US">HBase</span>、<span lang="EN-US">Hive</span>和<span lang="EN-US">ZooKeeper</span>等成员组成，其中最基础最重要的两种组成元素为底层用于存储集群中所有存储节点文件的文件系统<span lang="EN-US">HDFS</span>（<span lang="EN-US">Hadoop Distributed File System</span>）和上层用来执行<span lang="EN-US">MapReduce</span>程序的<span lang="EN-US">MapReduce</span></span><span style="line-height: 150%; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA;">引擎。</span></span><span style="font-size: 15px;"><span style="line-height: 150%; font-family: 宋体; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA;"><img style="width: 847px; height: 329px; margin-right: auto; margin-left: auto; display: block;" src="http://images.cnitblog.com/blog/381412/201312/21151725-7913150675af46baa25ae6da7ccf6720.png" alt="" width="847" height="360"></span></span></span></span></p><br><p>&nbsp;</p><br><div style="margin-left: 30px;"><span style="font-size: 15px;">•<span style="font-size: 16px;"><strong>Pig</strong>是一个基于Hadoop的大规模数据分析平台，Pig为复杂的海量数据并行计算提供了一个简易的操作和编程接口</span></span></div><br><div style="margin-left: 30px;"><span style="font-size: 16px;">•<strong>Chukwa</strong>是基于Hadoop的集群监控系统，由yahoo贡献</span></div><br><div style="margin-left: 30px;"><span style="font-size: 16px;">•<strong>hive</strong>是基于Hadoop的一个工具，提供完整的sql查询功能，可以将sql语句转换为MapReduce任务进行运行</span></div><br><div style="margin-left: 30px;"><span style="font-size: 16px;">•<strong>ZooKeeper</strong>：高效的，可扩展的协调系统,存储和协调关键共享状态</span></div><br><div style="margin-left: 30px;"><span style="font-size: 16px;">•<span style="color: #ff0000;"><strong>HBase</strong></span>是一个开源的，基于列存储模型的分布式数据库</span></div><br><div style="margin-left: 30px;"><span style="font-size: 16px;">•<strong><span style="color: #ff0000;">HDFS</span></strong>是一个分布式文件系统。有着高容错性的特点，并且设计用来部署在低廉的硬件上，适合那些有着超大数据集的应用程序</span></div><br><div style="margin-left: 30px;"><span style="font-size: 16px;">•<strong><span style="color: #ff0000;">MapReduce</span></strong>是一种编程模型，用于大规模数据集（大于1TB）的并行运算</span></div><br><div style="margin-left: 30px;"><span style="font-size: 16px;">下图是一个典型的Hadoop试验集群的部署结构。</span></div><br><div style="margin-left: 30px;"><span style="font-size: 15px;"><img style="width: 661px; height: 566px; margin-right: auto; margin-left: auto; display: block;" src="http://images.cnitblog.com/blog/381412/201312/21153046-d2682c52cd6647d8a48c1b95694eb503.png" alt="" width="661" height="599"></span></div><br><div style="margin-left: 30px;"><span style="font-size: 16px;">Hadoop各组件之间是如何依赖共存的呢？下图为你展示：</span></div><br><div style="margin-left: 30px;"><img style="width: 687px; height: 572px; margin-right: auto; margin-left: auto; display: block;" src="http://images.cnitblog.com/blog/381412/201312/21153322-7c36864339d4451c8cc09fc9e6e24d95.png" alt="" width="686" height="597"></div><br><h1><span style="line-height: 150%;"><span style="line-height: 150%;"><strong>三、<span style="font-family: verdana,geneva;">Hadoop</span>的核心设计</strong></span></span></h1><br><p><span style="font-family: 宋体;"><span style="line-height: 150%; font-family: 宋体; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA;"><span style="line-height: 150%; font-family: 宋体; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA;"><strong><img style="margin-right: auto; margin-left: auto; display: block;" src="http://images.cnitblog.com/blog/381412/201312/21152223-f0f3c271ae9c47079c07af0e47a47836.png" alt="" width="719" height="441"></strong></span></span></span></p><br><h2><span style="font-family: 宋体;"><span style="line-height: 150%; font-family: 宋体; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA;"><span style="line-height: 150%; font-family: 宋体; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA;"><strong>　　<span style="font-family: verdana,geneva;">3.1 HDFS</span></strong></span></span></span></h2><br><p>　　　<span style="font-family: verdana,geneva; font-size: 16px;">HDFS是一个高度容错性的分布式文件系统，<span style="line-height: 150%; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA;">可以被广泛的部署于廉价的<span lang="EN-US">PC</span>之上。它以流式访问模式访问应用程序的数据，这大大提高了整个系统的数据吞吐量，因而非常适合用于具有超大数据集的应用程序中。</span></span></p><br><p><span style="font-family: verdana,geneva; font-size: 16px;"><span style="line-height: 150%; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA;">　　 </span><span style="line-height: 150%; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA;"><span style="line-height: 150%; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA;" lang="EN-US">HDFS</span></span><span style="line-height: 150%; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA;"><span style="line-height: 150%; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA;">的架构如下图所示。<span lang="EN-US">HDFS</span>架构采用主从架构（<span lang="EN-US">master/slave</span>）。一个典型的<span lang="EN-US">HDFS</span>集群包含一个<span lang="EN-US">NameNode</span>节点和多个<span lang="EN-US">DataNode</span>节点。<span lang="EN-US">NameNode</span>节点负责整个<span lang="EN-US">HDFS</span>文件系统中的文件的元数据保管和管理，集群中通常只有一台机器上运行<span lang="EN-US">NameNode</span>实例，<span lang="EN-US">DataNode</span>节点保存文件中的数据，集群中的机器分别运行一个<span lang="EN-US">DataNode</span>实例。在<span lang="EN-US">HDFS</span>中，<span lang="EN-US">NameNode</span>节点被称为名称节点，<span lang="EN-US">DataNode</span>节点被称为数据节点。<span lang="EN-US">DataNode</span>节点通过心跳机制与<span lang="EN-US">NameNode</span>节点进行定时的通信。</span></span></span></p><br><p><span style="font-size: 16px;"><span style="line-height: 150%; font-family: 宋体; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA;"><span style="line-height: 150%; font-family: 宋体; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA;"><img style="margin-right: auto; margin-left: auto; display: block;" src="http://images.cnitblog.com/blog/381412/201312/21153618-3ba9ba17d5f64c6aad7762b8bb6e486c.png" alt=""></span></span></span></p><br><p>&nbsp;　　</p><br><div style="margin-left: 30px;"><span style="font-size: 16px;">•NameNode</span></div><br><p style="margin-left: 30px;"><span style="font-size: 16px;">&nbsp; 可以看作是分布式文件系统中的管理者，存储文件系统的meta-data，主要负责管理文件系统的命名空间，集群配置信息，存储块的复制。</span></p><br><div style="margin-left: 30px;"><span style="font-size: 16px;">•DataNode</span></div><br><p style="margin-left: 30px;"><span style="font-size: 16px;">&nbsp; 是文件存储的基本单元。它存储文件块在本地文件系统中，保存了文件块的meta-data，同时周期性的发送所有存在的文件块的报告给NameNode。</span></p><br><div style="margin-left: 30px;"><span style="font-size: 16px;">•Client</span></div><br><p style="margin-left: 30px;"><span style="font-size: 16px;">&nbsp; 就是需要获取分布式文件系统文件的应用程序。</span></p><br><p style="margin-left: 30px;"><span style="font-size: 16px;">下面来看看在HDFS上如何进行文件的读/写操作：</span></p><br><p style="margin-left: 30px;"><span style="font-size: 16px;"><span style="font-size: 16px;"><img style="margin-right: auto; margin-left: auto; display: block;" src="http://images.cnitblog.com/blog/381412/201312/21154221-09d86b8e276648db95675b4d91914119.png" alt=""></span></span></p><br><p style="margin-left: 30px;"><span style="font-family: 黑体;"><strong><span style="font-size: 16px;">文件写入：</span></strong></span></p><br><p style="margin-left: 30px;"><span style="font-size: 16px;">1. Client向NameNode发起文件写入的请求</span></p><br><p style="margin-left: 30px;"><span style="font-size: 16px;">2. NameNode根据文件大小和文件块配置情况，返回给Client它所管理部分DataNode的信息。</span></p><br><p style="margin-left: 30px;"><span style="font-size: 16px;">3. Client将文件划分为多个文件块，根据DataNode的地址信息，按顺序写入到每一个DataNode块中。</span></p><br><p style="margin-left: 30px;"><span style="font-size: 16px;"><span style="font-size: 16px;"><img style="margin-right: auto; margin-left: auto; display: block;" src="http://images.cnitblog.com/blog/381412/201312/21154137-ce339dff13c14cc5985e65671d38c499.png" alt=""></span></span></p><br><p style="margin-left: 30px;"><span style="font-family: 黑体;"><strong><span style="font-size: 16px;">文件读取：</span></strong></span></p><br><p style="margin-left: 30px;"><span style="font-size: 16px;">1.&nbsp;Client向NameNode发起文件读取的请求</span></p><br><p style="margin-left: 30px;"><span style="font-size: 16px;">2.&nbsp;NameNode返回文件存储的DataNode的信息。</span></p><br><p style="margin-left: 30px;"><span style="font-size: 16px;">3. Client读取文件信息。</span></p><br><h2 style="margin-left: 30px;">3.2 MapReduce</h2><br><p><span style="font-size: 16px;">　　MapReduce是一种编程模型，用于大规模数据集的并行运算。Map（映射）和Reduce（化简），采用分而治之思想，先把任务分发到集群多个节点上，并行计算，然后再把计算结果合并，从而得到最终计算结果。多节点计算，所涉及的任务调度、负载均衡、容错处理等，都由MapReduce框架完成，不需要编程人员关心这些内容。</span></p><br><p>　　<span style="font-size: 16px;">下图是一个MapReduce的处理过程：</span></p><br><p><span style="font-size: 16px;"><img style="width: 735px; height: 386px; margin-right: auto; margin-left: auto; display: block;" src="http://images.cnitblog.com/blog/381412/201312/21154930-a8557192283247449ce5a4adabc7585d.png" alt="" width="734" height="418"></span></p><br><p><span style="font-size: 16px;">　　用户提交任务给JobTracer，JobTracer把对应的用户程序中的Map操作和Reduce操作映射至TaskTracer节点中；输入模块负责把输入数据分成小数据块，然后把它们传给Map节点；Map节点得到每一个key/value对，处理后产生一个或多个key/value对，然后写入文件；Reduce节点获取临时文件中的数据，对带有相同key的数据进行迭代计算，然后把终结果写入文件。</span></p><br><p><span style="font-size: 16px;">　　如果这样解释还是太抽象，可以通过下面一个具体的处理过程来理解：（WordCount实例）</span><span style="font-size: 16px;"><img style="margin-right: auto; margin-left: auto; display: block;" src="http://images.cnitblog.com/blog/381412/201312/21155241-4b720c261dc1494e86e469571760732a.png" alt="" width="809" height="352">　　Hadoop的核心是MapReduce，而MapReduce的核心又在于map和reduce函数。它们是交给用户实现的，这两个函数定义了任务本身。</span></p><br><ul><br><li><span style="font-size: 16px;"><strong>map</strong>函数：接受一个键值对（key-value pair）（例如上图中的Splitting结果），产生一组中间键值对（例如上图中Mapping后的结果）。Map/Reduce框架会将map函数产生的中间键值对里键相同的值传递给一个reduce函数。</span></li><br><li><span style="font-size: 16px;"><strong>reduce</strong>函数：接受一个键，以及相关的一组值（例如上图中Shuffling后的结果），将这组值进行合并产生一组规模更小的值（通常只有一个或零个值）（例如上图中Reduce后的结果）</span></li><br></ul><br><p><span style="font-size: 16px;">　　但是，<span style="color: #ff0000;"><strong>Map/Reduce并不是万能的，适用于Map/Reduce计算有先提条件</strong></span>：</span></p><br><blockquote><br><p><span style="font-size: 16px;"><strong>①</strong>待处理的数据集可以分解成许多小的数据集；</span></p><br><p><span style="font-size: 16px;"><strong>②</strong>而且每一个小数据集都可以完全并行地进行处理；</span></p><br><p><span style="font-size: 16px;">若不满足以上两条中的任意一条，则不适合使用Map/Reduce模式；</span></p><br></blockquote><br><h1><span>四、Hadoop的安装配置</span></h1><br><p><span style="font-size: 14px;">　　Hadoop共有三种部署方式：本地模式，伪分布模式及集群模式；本次安装配置以伪分布模式为主，即在一台服务器上运行Hadoop（如果是分布式模式，则首先要配置Master主节点，其次配置Slave从节点）。以下说明如无特殊说明，默认使用root用户登录主节点，进行以下的一系列配置。</span></p><br><p><span style="font-size: 14px;">　　安装配置前请先准备好以下软件：</span></p><br><ul><br><li><span style="font-size: 14px;">　　vmware workstation 8.0或以上版本</span></li><br><li><span style="font-size: 14px;">　　redhat server 6.x版本或centos 6.x版本</span></li><br><li><span style="font-size: 14px;">　　jdk-6u24-linux-xxx.bin</span></li><br><li><span style="font-size: 14px;"><strong>　&nbsp;&nbsp; </strong>hadoop-1.1.2.tar.gz</span></li><br></ul><br><p><strong>4.1 </strong><strong>设置静态</strong><strong>IP</strong><strong>地址</strong></p><br><p><span style="font-size: 14px;">　　命令模式下可以执行setup命令进入设置界面配置静态IP地址；x-window界面下可以右击网络图标配置；</span></p><br><p><span style="font-size: 14px;">　　配置完成后执行service network restart重新启动网络服务；　　</span></p><br><p><span style="font-size: 14px;">　　验证：执行命令ifconfig</span></p><br><p><strong>4.2 </strong><strong>修改主机名</strong></p><br><p><span style="font-size: 14px;">　　&lt;1&gt;修改当前会话中的主机名（这里我的主机名设为hadoop-master），执行命令hostname hadoop-master</span></p><br><p><span style="font-size: 14px;">　　&lt;2&gt;修改配置文件中的主机名，执行命令vi /etc/sysconfig/network</span></p><br><p><span style="font-size: 14px;">　　验证：重启系统reboot</span></p><br><p><strong>4.3 DNS</strong><strong>绑定</strong></p><br><p><span style="font-size: 14px;">　　执行命令vi /etc/hosts,增加一行内容，如下（这里我的Master节点IP设置的为192.168.80.100）：</span></p><br><p><span style="font-size: 14px;">　　192.168.80.100 hadoop-master</span></p><br><p><span style="font-size: 14px;">　　保存后退出</span></p><br><p><span style="font-size: 14px;">　　验证：ping hadoop-master</span></p><br><p><strong>4.4 </strong><strong>关闭防火墙及其自动运行</strong></p><br><p><span style="font-size: 14px;">　　&lt;1&gt;执行关闭防火墙命令：service iptables stop</span></p><br><p><span style="font-size: 14px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 验证：service iptables stauts</span></p><br><p><span style="font-size: 14px;">　　&lt;2&gt;执行关闭防火墙自动运行命令：chkconfig iptables off</span></p><br><p><span style="font-size: 14px;">　　验证：chkconfig –list | grep iptables</span></p><br><p><strong>4.5 SSH</strong><strong>（</strong><strong>Secure Shell</strong><strong>）的免密码登录</strong></p><br><p><span style="font-size: 14px;">　　&lt;1&gt;执行产生密钥命令：ssh-keygen –t rsa，位于用户目录下的.ssh文件中（.ssh为隐藏文件，可以通过ls –a查看）</span></p><br><p><span style="font-size: 14px;">　　&lt;2&gt;执行产生命令：cp id_rsa.pub authorized_keys</span></p><br><p><span style="font-size: 14px;">　　验证：ssh localhost</span></p><br><p><strong>4.6 </strong><strong>复制</strong><strong>JDK</strong><strong>和</strong><strong>Hadoop-1.1.2.tar.gz</strong><strong>至</strong><strong>Linux</strong><strong>中</strong></p><br><p>　　&lt;1&gt;使用WinScp或CuteFTP等工具将jdk和hadoop.tar.gz复制到Linux中（假设复制到了Downloads文件夹中）；</p><br><p>　　&lt;2&gt;执行命令：rm –rf /usr/local/<em> 删除该文件夹下所有文件</em></p><br><p><span style="font-size: 14px;">　　&lt;3&gt;执行命令：cp /root/Downloads/ /usr/local/ 将其复制到/usr/local/文件夹中</span></p><br><p><strong>4.7 </strong><strong>安装</strong><strong>JDK</strong></p><br><p>　　&lt;1&gt;在/usr/local下解压jdk安装文件：./jdk-6u24-linux-i586.bin<strong>（如果报权限不足的提示，请先为当前用户对此</strong><strong>jdk</strong><strong>增加执行权限：</strong><strong>chmod u+x jdk-6u24-linux-i586.bin</strong><strong>）</strong></p><br><p>　　&lt;2&gt;重命名解压后的jdk文件夹：mv jdk1.6.0_24 jdk<strong>（此步凑非必要，只是建议）</strong></p><br><p>　　&lt;3&gt;配置Linux环境变量：vi /etc/profile，在其中增加几行：</p><br><p>　　export JAVA_HOME=/usr/local/jdk</p><br><p>　　export PATH=.:<strong>$JAVA_HOME/bin:</strong>$PATH</p><br><p>　　&lt;4&gt;生效环境变量配置：source /etc/profile</p><br><p><span style="font-size: 14px;">　　验证：java –version</span></p><br><p><strong>4.8 </strong><strong>安装</strong><strong>Hadoop</strong></p><br><p>　　&lt;1&gt;在/usr/local下解压hadoop安装文件:tar –zvxf hadoop-1.1.2.tar.gz</p><br><p>　　&lt;2&gt;解压后重命名hadoop-1.1.2文件夹：mv hadoop-1.1.2 hadoop<strong>（此步凑非必要，只是建议）</strong></p><br><p><strong>　　</strong>&lt;3&gt;配置Hadoop相关环境变量：vi /etc/profile，在其中增加一行：</p><br><p>　　export HADOOP_HOME=/usr/local/hadoop</p><br><p>　　然后修改一行：</p><br><p>　　export PATH=.:$JAVA_HOME/bin:<strong>$HADOOP_HOME:</strong>$PATH</p><br><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;4&gt;生效环境变量：source /etc/profile</p><br><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;5&gt;修改Hadoop的配置文件，它们位于$HADOOP_HOME/conf目录下。</p><br><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; 分别修改四个配置文件：hadoop-env.sh、core-site.xml、hdfs-site.xml、mapred-site.xml；</p><br><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 具体下修改内容如下：（由于修改内容较多，建议使用WinScp进入相关目录下进行编辑和保存，可以节省较多时间和精力）</p><br><p>　　　　5.1【hadoop-env.sh】 修改第九行：</p><br><p><strong>　　　　export JAVA_HOME=/usr/local/jdk/</strong></p><br><p>　　　　如果虚拟机内存低于1G，还需要修改HADOOP_HEAPSIZE（默认为1000）的值：</p><br><p><span style="font-size: 14px;"><strong>　　　　export </strong><strong>HADOOP_HEAPSIZE=100</strong></span></p><br><p>　　　　5.2【core-site.xml】 在configuration中增加以下内容（其中的hadoop-master为你配置的主机名）：</p><br><p>　　　　&lt;property&gt;</p><br><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 　　&lt;name&gt;fs.default.name&lt;/name&gt;</p><br><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 　　&lt;value&gt;hdfs://hadoop-master:9000&lt;/value&gt;</p><br><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 　　&lt;description&gt;change your own hostname&lt;/description&gt;</p><br><p>&nbsp;&nbsp;&nbsp; 　　&lt;/property&gt;</p><br><p>&nbsp;&nbsp;&nbsp; 　　&lt;property&gt;</p><br><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 　　&lt;name&gt;hadoop.tmp.dir&lt;/name&gt;</p><br><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 　　&lt;value&gt;/usr/local/hadoop/tmp&lt;/value&gt;</p><br><p>&nbsp;&nbsp;&nbsp; 　　&lt;/property&gt;</p><br><p>　　　　5.3 【hdfs-site.xml】 在configuration中增加以下内容：</p><br><p>　　　　&lt;property&gt;</p><br><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 　　&lt;name&gt;dfs.replication&lt;/name&gt;</p><br><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 　　&lt;value&gt;1&lt;/value&gt;</p><br><p>&nbsp;&nbsp;&nbsp; 　　&nbsp; &lt;/property&gt;</p><br><p>&nbsp;&nbsp;&nbsp; 　　&nbsp; &lt;property&gt;</p><br><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 　　&lt;name&gt;dfs.permissions&lt;/name&gt;</p><br><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 　　&lt;value&gt;false&lt;/value&gt;</p><br><p>&nbsp;&nbsp;&nbsp; 　　&nbsp; &lt;/property&gt;</p><br><p>　　　　5.4 【mapred-site.xml】 在configuration中增加以下内容（其中的hadoop-master为你配置的主机名）：</p><br><p>　　　　&lt;property&gt;</p><br><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 　　&lt;name&gt;mapred.job.tracker&lt;/name&gt;</p><br><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 　　&lt;value&gt;hadoop-master:9001&lt;/value&gt;</p><br><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 　　&lt;description&gt;change your own hostname&lt;/description&gt;</p><br><p>&nbsp;&nbsp;&nbsp; 　　&lt;/property&gt;</p><br><p><span style="font-family: 'Times New Roman','serif'; font-size: 12pt; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-fareast-font-family: 宋体;" lang="EN-US">　　&lt;6&gt;</span><span style="font-family: 宋体; font-size: 12pt; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">执行命令对</span><span style="font-family: 'Times New Roman','serif'; font-size: 12pt; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-fareast-font-family: 宋体;" lang="EN-US">Hadoop</span><span style="font-family: 宋体; font-size: 12pt; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">进行初始格式化：</span><span style="font-family: 'Times New Roman','serif'; font-size: 12pt; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-fareast-font-family: 宋体;" lang="EN-US">hadoop namenode –format</span></p><br><p><span style="font-family: 'Times New Roman','serif'; font-size: 12pt; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-fareast-font-family: 宋体;" lang="EN-US"><img style="margin-right: auto; margin-left: auto; display: block;" src="http://images.cnitblog.com/blog/381412/201312/22154606-6219afd7875a450eb9d4ab4fd32de016.png" alt=""></span></p><br><p><span style="font-family: 'Times New Roman','serif'; font-size: 12pt; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-fareast-font-family: 宋体;" lang="EN-US"><span style="font-family: 'Times New Roman','serif'; font-size: 12pt; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-fareast-font-family: 宋体;" lang="EN-US">　　&lt;7&gt;</span><span style="font-family: 宋体; font-size: 12pt; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">执行命令启动</span><span style="font-family: 'Times New Roman','serif'; font-size: 12pt; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-fareast-font-family: 宋体;" lang="EN-US">Hadoop</span><span style="font-family: 宋体; font-size: 12pt; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">：</span><span style="font-family: 'Times New Roman','serif'; font-size: 12pt; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-fareast-font-family: 宋体;" lang="EN-US">start-all.sh</span><span style="font-family: 宋体; font-size: 12pt; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">（一次性启动所有进程）</span></span></p><br><p><span style="font-family: 'Times New Roman','serif'; font-size: 12pt; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-fareast-font-family: 宋体;" lang="EN-US"><span style="font-family: 宋体; font-size: 12pt; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">　　<img style="margin-right: auto; margin-left: auto; display: block;" src="http://images.cnitblog.com/blog/381412/201312/22154621-5b198959edfb4facb47298adbc39c4ad.png" alt=""></span></span></p><br><p>　　<span style="font-size: 14px;">第二种方式：通过执行如下方式命令单独启动HDFS和MapReduce：start-dfs.sh和start-mapred.sh启动，stop-dfs.sh和stop-mapred.sh关闭；</span></p><br><p><span style="font-size: 14px;">　　第三种方式：通过执行如下方式命令分别启动各个进程：</span></p><br><p><span style="font-size: 14px;">　　hadoop-daemon.sh start namenode</span></p><br><p><span style="font-size: 14px;">　　hadoop-daemon.sh start datanode</span></p><br><p><span style="font-size: 14px;">　　hadoop-daemon.sh start secondarynamenode</span></p><br><p><span style="font-size: 14px;">　　hadoop-daemon.sh start jobtracker</span></p><br><p><span style="font-size: 14px;">　　hadoop-daemon.sh start tasktracker</span></p><br><p><span style="font-size: 14px;">　　这种方式的执行命令是hadoop-daemon.sh start [进程名称]，这种启动方式适合于单独增加、删除节点的情况，在安装集群环境的时候会看到。</span></p><br><p><span style="font-size: 14px;">　　验证：</span></p><br><p><span style="font-size: 14px;">　　① 执行jps命令查看java进程信息，如果是start-all.sh则一共显示5个java进程。</span></p><br><p><span style="font-size: 14px;"><strong>　　</strong>②在浏览器中浏览Hadoop，输入URL：hadoop-master:50070和hadoop-master:50030。如果想在宿主机Windows中浏览，可以直接通过ip地址加端口号访问，也可以配置C盘中System32/drivers/etc/中的hosts文件，增加DNS主机名映射，例如：192.168.80.100 hadoop-master。</span></p><br><p><span style="font-size: 14px;">　　访问效果如下图：</span></p><br><p style="text-align: center;"><span style="font-size: 14px;">　　<img style="margin-right: auto; margin-left: auto; display: block;" src="http://images.cnitblog.com/blog/381412/201312/22154855-41c62047823447a6aa1a34e5d0913c64.png" alt=""></span>namenode</p><br><p style="text-align: center;"><span style="font-size: 14px;"><img src="http://images.cnitblog.com/blog/381412/201312/22154937-d7c0762a4a774ec3b6e5dca7b49251ed.png" alt=""></span></p><br><p style="text-align: center;"><span style="font-size: 14px;">jobtracker</span></p><br><p align="left">　　&lt;8&gt;NameNode进程没有启动成功？可以从以下几个方面检查：</p><br><p align="left">　　没有对NameNode进行格式化操作：hadoop namenode –format（PS：多次格式化也会出错，保险操作是先删除/usr/local/hadoop/tmp文件夹再重新格式化）</p><br><p align="left">　　Hadoop配置文件只复制没修改： 修改四个配置文件需要改的参数</p><br><p align="left">　　DNS没有设置IP和hostname的绑定：vi /etc/hosts</p><br><p style="text-align: left;">　　SSH的免密码登录没有配置成功：重新生成rsa密钥</p><br><p style="text-align: left;">　　<span style="font-family: 'Times New Roman','serif'; font-size: 12pt; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-fareast-font-family: 宋体;" lang="EN-US">&lt;9&gt;Hadoop</span><span style="font-family: 宋体; font-size: 12pt; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">启动过程中出现以下警告？</span></p><br><p style="text-align: left;"><span style="font-family: 宋体; font-size: 12pt; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">　　<img src="http://images.cnitblog.com/blog/381412/201312/22155104-a0a7f0f0750147c2af5a2338c7f9bd5b.png" alt=""></span></p><br><p align="left">　　可以通过以下步凑去除该警告信息：</p><br><p style="text-align: left;">　　①首先执行命令查看shell脚本：vi start-all.sh（在bin目录下执行），可以看到如下图所示的脚本</p><br><p style="text-align: left;">　　<img src="http://images.cnitblog.com/blog/381412/201312/22155149-12124878543241a98646fdf8659f8fab.png" alt=""></p><br><p style="text-align: left;"><span style="font-family: 宋体; font-size: 12pt; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">　　虽然我们看不懂</span><span style="font-family: 'Times New Roman','serif'; font-size: 12pt; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-fareast-font-family: 宋体;" lang="EN-US">shell</span><span style="font-family: 宋体; font-size: 12pt; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">脚本的语法，但是可以猜到可能和文件</span><span style="font-family: 'Times New Roman','serif'; font-size: 12pt; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-fareast-font-family: 宋体;" lang="EN-US">hadoop-config.sh</span><span style="font-family: 宋体; font-size: 12pt; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">有关，我们再看一下这个文件的源码。执行命令：</span><span style="font-family: 'Times New Roman','serif'; font-size: 12pt; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-fareast-font-family: 宋体;" lang="EN-US">vi hadoop-config.sh</span><span style="font-family: 宋体; font-size: 12pt; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">（在</span><span style="font-family: 'Times New Roman','serif'; font-size: 12pt; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-fareast-font-family: 宋体;" lang="EN-US">bin</span><span style="font-family: 宋体; font-size: 12pt; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">目录下执行），由于该文件特大，我们只截取最后一部分，见下图。</span></p><br><p align="left">　　从图中的红色框框中可以看到，脚本判断环境变量HADOOP_HOME和HADOOP_HOME_WARN_SUPPRESS的值，如果前者为空，后者不为空，则显示警告信息“Warning„„”。</p><br><p align="left">　　我们在前面的安装过程中已经配置了HADOOP_HOME这个环境变量，因此，只需要给HADOOP_HOME_WARN_SUPPRESS配置一个值就可以了。所以，执行命令：vi /etc/profile，增加一行内容（值随便设置一个即可，这里设为0）：</p><br><p align="left">　　export HADOOP_HOME_WARN_SUPPRESS=0</p><br><p align="left">　　保存退出后执行重新生效命令：source /etc/profile，生效后重新启动hadoop进程则不会提示警告信息了。</p><br><p style="text-align: left;"><span style="font-family: 宋体; font-size: 12pt; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">　&nbsp; <span style="font-family: verdana,geneva; font-size: 14px;">至此，一个Hadoop的Master节点的安装配置结束，接下来我们要进行从节点的配置。</span></span></p><br><p style="text-align: left;"><span style="font-family: 宋体; font-size: 12pt; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-family: verdana,geneva; font-size: 14px;">————————————————————————————————————————–</span></span></p><br><p style="text-align: left;"><span style="font-family: 宋体; font-size: 12pt; mso-bidi-font-family: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-family: verdana,geneva; font-size: 14px;">　　<br><div id="Copyright"><br><p><span style="font-size: 14px;">作者：<a href="http://www.cnblogs.com/edisonchou/" target="_blank" rel="external">周旭龙</a></span></p><br><p><span style="font-size: 14px;">出处：<a href="http://www.cnblogs.com/edisonchou/" target="_blank">http://www.cnblogs.com/edisonchou/</a></span></p><br><p><span style="font-size: 14px;">本文版权归作者和博客园共有，欢迎转载，但未经作者同意必须保留此段声明，且在文章页面明显位置给出原文链接。</span></p><br></div></span></span></p></div>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ ���Ľ��� ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">��Ȩ����</span>
+<img src="�˴����Լ���Ȩ����ͼƬ��ַ" >
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">tc9011's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">Cheng Tang</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+��<a href="http://www.panchengming.com/" style="color:#258FC6">���޾�</a>������ά����<a href="http://www.panchengming.com/" style="color:#258FC6">tc9011's Notes</a>���Ͳ���<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">�������ñ�������-����ҵ-��ֹ����4.0�������֤</a>��<br/>
+�����׷���<a href="http://www.panchengming.com/" style="color:#258FC6">tc9011's Notes</a> ���ͣ� <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ������Ȩ���У���Ȩ�ؾ���</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java，hadoop/" rel="tag"># java，hadoop</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/03/pancm45/" rel="next" title="JAVA常用工具类">
+                <i class="fa fa-chevron-left"></i> JAVA常用工具类
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/06/pancm47/" rel="prev" title="零基础学习Hadoop">
+                零基础学习Hadoop <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">60</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">一、Hadoop的发展历史</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">二、Hadoop的整体框架</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">三、Hadoop的核心设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.1.</span> <span class="nav-text">　　3.1 HDFS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 MapReduce</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">四、Hadoop的安装配置</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,907 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,mina,nio," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="在两三年前,阿堂在技术博客(http://blog.sina.com.cn/heyitang)上曾经写过&amp;quot;JAVA新I/O学习系列笔记(1)&amp;quot;和&amp;quot;JAVA新I/O学习系列笔记(2)&amp;quot;两篇学习笔记和网友们分享过。事实上，阿堂现在和网友们分享这篇学习笔记中Mina(还有Netty、Grizzly等)实际上都是将NIO作为底层框架后再封装的一个开发高性能和高可用">
+<meta name="keywords" content="java,mina,nio">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NIO通讯框架之Mina(转)">
+<meta property="og:url" content="http://yoursite.com/2017/05/09/pancm17/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="在两三年前,阿堂在技术博客(http://blog.sina.com.cn/heyitang)上曾经写过&amp;quot;JAVA新I/O学习系列笔记(1)&amp;quot;和&amp;quot;JAVA新I/O学习系列笔记(2)&amp;quot;两篇学习笔记和网友们分享过。事实上，阿堂现在和网友们分享这篇学习笔记中Mina(还有Netty、Grizzly等)实际上都是将NIO作为底层框架后再封装的一个开发高性能和高可用">
+<meta property="og:updated_time" content="2017-06-26T08:47:12.565Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="NIO通讯框架之Mina(转)">
+<meta name="twitter:description" content="在两三年前,阿堂在技术博客(http://blog.sina.com.cn/heyitang)上曾经写过&amp;quot;JAVA新I/O学习系列笔记(1)&amp;quot;和&amp;quot;JAVA新I/O学习系列笔记(2)&amp;quot;两篇学习笔记和网友们分享过。事实上，阿堂现在和网友们分享这篇学习笔记中Mina(还有Netty、Grizzly等)实际上都是将NIO作为底层框架后再封装的一个开发高性能和高可用">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/05/09/pancm17/"/>
+
+
+
+
+
+
+  <title>NIO通讯框架之Mina(转) | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/09/pancm17/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">NIO通讯框架之Mina(转)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-09T08:46:00+08:00">
+                2017-05-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><p>在两三年前,阿堂在技术博客(<a href="http://blog.sina.com.cn/heyitang)上曾经写过&quot;JAVA新I/O学习系列笔记(1)&quot;和&quot;JAVA新I/O学习系列笔记(2)&quot;两篇学习笔记和网友们分享过。事实上，阿堂现在和网友们分享这篇学习笔记中Mina(还有Netty、Grizzly等)实际上都是将NIO作为底层框架后再封装的一个开发高性能和高可用性的网络应用程序的框架。Apachemina也称为" target="_blank" rel="external">http://blog.sina.com.cn/heyitang)上曾经写过&quot;JAVA新I/O学习系列笔记(1)&quot;和&quot;JAVA新I/O学习系列笔记(2)&quot;两篇学习笔记和网友们分享过。事实上，阿堂现在和网友们分享这篇学习笔记中Mina(还有Netty、Grizzly等)实际上都是将NIO作为底层框架后再封装的一个开发高性能和高可用性的网络应用程序的框架。Apachemina也称为</a> NIO框架 或 客户端/服务端框架（典型的C/S架构）或网络套接字（networkingsocket）类库。关于它更多的介绍，在网上有很多，阿堂就不再说明了，想了解其更多介绍的网友可以在网上去查阅。</p>
+<pre><code>     阿堂下面要分享的是mina 2.0在tcp/ip 协议下的应用开发的一个入门demo,希望能借此抛砖引玉，希望对想了解mina的朋友有所帮助。
+
+第一步 下载使用的Jar包
+</code></pre><p>a. 登录<a href="http://mina.apache.org/downloads.html下载" target="_blank" rel="external">http://mina.apache.org/downloads.html下载</a> mina2.0.7.zip，解压获得mina-core-2.0.7-M1.jar<br>b. 登录 <a href="http://www.slf4j.org/download.html下载slf4j1.7.2.zip，解压获得slf4j-api-1.7.2.jar" target="_blank" rel="external">http://www.slf4j.org/download.html下载slf4j1.7.2.zip，解压获得slf4j-api-1.7.2.jar</a> 与slf4j-log4j12-1.7.2.jar<br>c.添加Log4j的jar包，注意如果使用slf4j-log4j12-XXX.jar，就需要添加log4j1.2.X。我这里使用的是log4j-1.2.15.jar（Logger配置详情参见<a href="http://mina.apache.org/first-steps.html）" target="_blank" rel="external">http://mina.apache.org/first-steps.html）</a><br>如图所示(阿堂本地的截图)</p>
+<pre><code>第二步创建工程及log4j.properties文件
+</code></pre><p> log4j.rootLogger=DEBUG,MINA,file<br>log4j.appender.MINA=org.apache.log4j.ConsoleAppender<br>log4j.appender.MINA.layout=org.apache.log4j.PatternLayout<br>log4j.appender.MINA.layout.ConversionPattern=%d{yyyy-MM-ddHH\:mm\:ss,SSS} %-5p %c{1} %x - %m%n<br>log4j.appender.file=org.apache.log4j.RollingFileAppender<br>log4j.appender.file.File=D:/logs/minademos.log<br>log4j.appender.file.MaxFileSize=5120KB<br>log4j.appender.file.MaxBackupIndex=10<br>log4j.appender.file.layout=org.apache.log4j.PatternLayout<br>log4j.appender.file.layout.ConversionPattern=[VAMS][%d] %p | %m |[%t] %C.%M(%L)%n</p>
+<pre><code>第三步 创建服务端程序
+</code></pre><p>public classMinaServer {<br>    //记录日志<br>    privatestatic Logger logger = Logger.getLogger(MinaServer.class);<br>    privatestatic int PORT = 3005;</p>
+<pre><code>publicstatic void main(String[] args) {
+   IoAcceptoracceptor = null;
+   try {
+      //创建一个非阻塞的server端的Socket
+      acceptor =new NioSocketAcceptor();
+      //设置过滤器（使用Mina提供的文本换行符编解码器）
+     acceptor.getFilterChain().addLast(
+           &quot;codec&quot;,
+            newProtocolCodecFilter(new TextLineCodecFactory(Charset
+                 .forName(&quot;UTF-8&quot;),
+                 LineDelimiter.WINDOWS.getValue(),
+                 LineDelimiter.WINDOWS.getValue())));
+      //设置读取数据的缓冲区大小
+     acceptor.getSessionConfig().setReadBufferSize(2048);
+      //读写通道10秒内无操作进入空闲状态
+     acceptor.getSessionConfig().setIdleTime(IdleStatus.BOTH_IDLE,10);
+      //绑定逻辑处理器
+      acceptor.setHandler(newMinaServerHandler());
+      //绑定端口
+     acceptor.bind(new InetSocketAddress(PORT));
+     logger.info(&quot;服务端启动成功... 端口号为：&quot; + PORT);
+
+   } catch(Exception e) {
+     logger.error(&quot;服务端启动异常&quot;, e);
+     e.printStackTrace();
+   }
+}
+</code></pre><p>}</p>
+<p>注意：创建服务端最主要的就是绑定服务端的消息编码解码过滤器和业务逻辑处理器</p>
+<p> 解码:网络传输的数据都是二进制数据，而我们的程序不可能直接去操作二进制数据；这时候我们就需要来把接收到的字节数组转换为字符串，当然完全可以转换为任何一个java基本数据类型或对象。<br> 编码 :传输的字符串转换为字节。</p>
+<pre><code>比如上面使用的Mina自带的根据文本换行符编解码的TextLineCodec过滤器------指定参数为根据windows的换行符编解码，遇到客户端发送来的消息，看到windows换行符（\r\n）就认为是一个消息了，而发送给客户端的消息，都会在消息末尾添加上\r\n文本换行符；
+</code></pre><p>业务逻辑处理器是MinaServerHandler—看它的具体实现</p>
+<p> public class MinaServerHandler extendsIoHandlerAdapter {<br>    publicstatic Logger logger =Logger.getLogger(MinaServerHandler.class);</p>
+<p>   @Override<br>    public voidsessionCreated(IoSession session) throws Exception {<br>      logger.info(“服务端与客户端创建连接…”);<br>    }</p>
+<p>   @Override<br>    public voidsessionOpened(IoSession session) throws Exception {<br>      logger.info(“服务端与客户端连接打开…”);<br>    }</p>
+<p>   @Override<br>    public voidmessageReceived(IoSession session, Object message)<br>          throwsException {<br>       String msg =message.toString();<br>      logger.info(“服务端接收到的数据为：” + msg);<br>       if(“bye”.equals(msg)) { // 服务端断开连接的条件<br>         session.close();<br>       }<br>       Date date =new Date();<br>      session.write(date);<br>    }</p>
+<p>   @Override<br>    public voidmessageSent(IoSession session, Object message) throws Exception{<br>//      session.close(); //发送成功后主动断开与客户端的连接<br>      logger.info(“服务端发送信息成功…”);<br>    }</p>
+<p>   @Override<br>    public voidsessionClosed(IoSession session) throws Exception {<br>    }</p>
+<p>   @Override<br>    public voidsessionIdle(IoSession session, IdleStatus status)<br>          throwsException {<br>      logger.info(“服务端进入空闲状态…”);<br>    }</p>
+<p>   @Override<br>    public voidexceptionCaught(IoSession session, Throwable cause)<br>          throwsException {<br>      logger.error(“服务端发送异常…”, cause);<br>    }<br>}</p>
+<pre><code>   自定义的业务逻辑处理器继承了IoHandlerAdapter类，它默认覆盖了父类的7个方法，其实我们最关心最常用的只有一个方法：messageReceived()---- 服务端接收到一个消息后进行业务处理的方法；看代码
+public void messageReceived(IoSession session, Objectmessage)
+      throwsException {
+   String msg =message.toString();
+  logger.info(&quot;服务端接收到的数据为：&quot; + msg);
+   if(&quot;bye&quot;.equals(msg)) { // 服务端断开连接的条件
+     session.close();
+   }
+   Date date =new Date();
+  session.write(date);
+}
+
+  接受到客户端信息，并返回给客户端一个日期；如果客户端传递的消息为“bye”，就是客户端告诉服务端，可以终止通话了，关闭与客户端的连接。使用命令行的telnet来测试下服务端程序！
+
+先使用命令行的telnet来测试下服务端程序！
+</code></pre><p>   1)启动服务端</p>
+<p>2) telnet 127.0.0.13005</p>
+<p>注意： 不要输入中文字符，windows不会把中文字符用utf-8编码再发送给服务端的。</p>
+<p> 第四步创建客户端程序<br> Mina能做服务端程序，自然也可以做客户端程度啦。最重要的是，客户端程序和服务端程序写法基本一致，很简单的。<br>客户端代码：<br> public class MinaClient {<br>    privatestatic Logger logger = Logger.getLogger(MinaClient.class);<br>    privatestatic String HOST = “127.0.0.1”;<br>    privatestatic int PORT = 3005;</p>
+<pre><code>publicstatic void main(String[] args) {
+   //创建一个非阻塞的客户端程序
+   IoConnectorconnector = new NioSocketConnector();
+   //设置链接超时时间
+  connector.setConnectTimeout(30000);
+   //添加过滤器
+  connector.getFilterChain().addLast(
+        &quot;codec&quot;,
+         newProtocolCodecFilter(new TextLineCodecFactory(Charset
+              .forName(&quot;UTF-8&quot;), LineDelimiter.WINDOWS.getValue(),
+              LineDelimiter.WINDOWS.getValue())));
+   //添加业务逻辑处理器类
+  connector.setHandler(new MinaClientHandler());
+   IoSessionsession = null;
+   try {
+     ConnectFuture future = connector.connect(newInetSocketAddress(
+            HOST,PORT));// 创建连接
+     future.awaitUninterruptibly();// 等待连接创建完成
+      session =future.getSession();// 获得session
+     session.write(&quot;网络时空 爱你 mina&quot;);// 发送消息
+   } catch(Exception e) {
+     logger.error(&quot;客户端链接异常...&quot;, e);
+   }
+  session.getCloseFuture().awaitUninterruptibly();// 等待连接断开
+  connector.dispose();
+}
+</code></pre><p>}</p>
+<pre><code>和服务端代码极其相似，不同的是服务端是创建NioSocketAcceptor对象，而客户端是创建NioSocketConnector对象；同样需要添加编码解码过滤器和业务逻辑过滤器；
+业务逻辑过滤器代码
+</code></pre><p> public class MinaClientHandlerextends IoHandlerAdapter {<br>    privatestatic Logger logger =Logger.getLogger(MinaClientHandler.class);</p>
+<p>   @Override<br>    public voidmessageReceived(IoSession session, Object message)<br>          throwsException {<br>       String msg =message.toString();<br>      logger.info(“客户端接收到的信息为：” + msg);<br>    }</p>
+<p>   @Override<br>    public voidexceptionCaught(IoSession session, Throwable cause)<br>          throwsException {<br>      logger.error(“客户端发生异常…”, cause);<br>    }<br>}<br>       它和服务端的业务逻辑处理类一样，继承了IoHandlerAdapter类，因此同样可以覆盖父类的7个方法，同样最关心messageReceived方法，这里的处理是接收打印了服务端返回的信息；另一个覆盖的方法是异常信息捕获的方法；<br>测试服务端与客户端程序！<br>a. 启动服务端，然后再启动客户端（客户端发送的消息是“网络时空 爱你 mina”）<br>b. 服务端接收消息并处理成功；</p>
+<p>测试结果详见log4j.properties文件中minademos.log文件</p>
+<p>到此为止，我们已经可以运行一个完整的基于TCP/IP协议的应用程序啦！</p>
+<p>总结：服务端程序或客户端程序创建过程：创建连接—.添加消息过滤器(编码解码等)——&gt;添加业务处理</p>
+<p>原文链接：<a href="http://blog.sina.com.cn/s/blog_4c925dca01019i3l.html" target="_blank" rel="external">http://blog.sina.com.cn/s/blog_4c925dca01019i3l.html</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ ���Ľ��� ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">��Ȩ����</span>
+<img src="�˴����Լ���Ȩ����ͼƬ��ַ" >
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">tc9011's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">Cheng Tang</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+��<a href="http://www.panchengming.com/" style="color:#258FC6">���޾�</a>������ά����<a href="http://www.panchengming.com/" style="color:#258FC6">tc9011's Notes</a>���Ͳ���<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">�������ñ�������-����ҵ-��ֹ����4.0�������֤</a>��<br/>
+�����׷���<a href="http://www.panchengming.com/" style="color:#258FC6">tc9011's Notes</a> ���ͣ� <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ������Ȩ���У���Ȩ�ؾ���</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/mina/" rel="tag"># mina</a>
+          
+            <a href="/tags/nio/" rel="tag"># nio</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/07/pancm16/" rel="next" title="Java简单实用方法一">
+                <i class="fa fa-chevron-left"></i> Java简单实用方法一
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/13/pancm18/" rel="prev" title="JavaScript一些常用方法一">
+                JavaScript一些常用方法一 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">60</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
