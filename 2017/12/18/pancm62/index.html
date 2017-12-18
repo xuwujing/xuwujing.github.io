@@ -1,0 +1,957 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="大数据,hbase,hive,hadoop," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="引言在上一篇 大数据学习系列之四 —– Hadoop+Hive环境搭建图文详解(单机) 和之前的大数据学习系列之二 —– HBase环境搭建(单机)  中成功搭建了Hive和HBase的环境，并进行了相应的测试。本文主要讲的是如何将Hive和HBase进行整合。 Hive和HBase的通信意图Hive与HBase整合的实现是利用两者本身对外的API接口互相通信来完成的，其具体工作交由Hive的l">
+<meta name="keywords" content="大数据,hbase,hive,hadoop">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大数据学习系列之五 ----- Hive整合HBase图文详解">
+<meta property="og:url" content="http://yoursite.com/2017/12/18/pancm62/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="引言在上一篇 大数据学习系列之四 —– Hadoop+Hive环境搭建图文详解(单机) 和之前的大数据学习系列之二 —– HBase环境搭建(单机)  中成功搭建了Hive和HBase的环境，并进行了相应的测试。本文主要讲的是如何将Hive和HBase进行整合。 Hive和HBase的通信意图Hive与HBase整合的实现是利用两者本身对外的API接口互相通信来完成的，其具体工作交由Hive的l">
+<meta property="og:image" content="http://img.blog.csdn.net/20171218181539512?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171218182335894?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171216092323706?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171216092332426?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171216092358071?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171218183724094?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171218183832950?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171218183855444?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171218183918611?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171218183931544?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171218184133272?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171218184155642?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171218184225337?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171218184240901?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171218184434573?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171218184443608?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171218184454815?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2017-12-18T12:34:47.629Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="大数据学习系列之五 ----- Hive整合HBase图文详解">
+<meta name="twitter:description" content="引言在上一篇 大数据学习系列之四 —– Hadoop+Hive环境搭建图文详解(单机) 和之前的大数据学习系列之二 —– HBase环境搭建(单机)  中成功搭建了Hive和HBase的环境，并进行了相应的测试。本文主要讲的是如何将Hive和HBase进行整合。 Hive和HBase的通信意图Hive与HBase整合的实现是利用两者本身对外的API接口互相通信来完成的，其具体工作交由Hive的l">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20171218181539512?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/12/18/pancm62/"/>
+
+
+
+
+
+
+  <title>大数据学习系列之五 ----- Hive整合HBase图文详解 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/18/pancm62/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">大数据学习系列之五 ----- Hive整合HBase图文详解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-18T18:47:41+08:00">
+                2017-12-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/hadoop-hive-hbase/" itemprop="url" rel="index">
+                    <span itemprop="name">hadoop,hive,hbase</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>在上一篇 <a href="http://www.panchengming.com/2017/12/16/pancm61/" target="_blank" rel="external">大数据学习系列之四 —– Hadoop+Hive环境搭建图文详解(单机)</a> 和之前的<a href="http://www.panchengming.com/2017/12/09/pancm57/" target="_blank" rel="external">大数据学习系列之二 —– HBase环境搭建(单机)</a>  中成功搭建了Hive和HBase的环境，并进行了相应的测试。本文主要讲的是如何将Hive和HBase进行整合。</p>
+<h3 id="Hive和HBase的通信意图"><a href="#Hive和HBase的通信意图" class="headerlink" title="Hive和HBase的通信意图"></a>Hive和HBase的通信意图</h3><p>Hive与HBase整合的实现是利用两者本身对外的API接口互相通信来完成的，其具体工作交由Hive的lib目录中的hive-hbase-handler-*.jar工具类来实现，通信原理如下图所示。<br><img src="http://img.blog.csdn.net/20171218181539512?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h3 id="Hive整合HBase后的使用场景："><a href="#Hive整合HBase后的使用场景：" class="headerlink" title="Hive整合HBase后的使用场景："></a>Hive整合HBase后的使用场景：</h3><p>（一）通过Hive把数据加载到HBase中，数据源可以是文件也可以是Hive中的表。<br>（二）通过整合，让HBase支持JOIN、GROUP等SQL查询语法。<br>（三）通过整合，不仅可完成HBase的数据实时查询，也可以使用Hive查询HBase中的数据完成复杂的数据分析。</p>
+<h2 id="一、环境选择"><a href="#一、环境选择" class="headerlink" title="一、环境选择"></a>一、环境选择</h2><h3 id="1，服务器选择"><a href="#1，服务器选择" class="headerlink" title="1，服务器选择"></a>1，服务器选择</h3><p>本地虚拟机<br>操作系统:linux  CentOS 7<br>Cpu：2核<br>内存：2G<br>硬盘:40G</p>
+<h3 id="2，配置选择"><a href="#2，配置选择" class="headerlink" title="2，配置选择"></a>2，配置选择</h3><p>JDK:1.8          （jdk-8u144-linux-x64.tar.gz）<br>Hadoop:2.8.2  (hadoop-2.8.2.tar.gz)<br>Hive： 2.1   (apache-hive-2.1.1-bin.tar.gz)<br>HBase:1.6.2   (hbase-1.2.6-bin.tar.gz) </p>
+<h3 id="3，下载地址"><a href="#3，下载地址" class="headerlink" title="3，下载地址"></a>3，下载地址</h3><p><strong>官网地址</strong><br>JDK：<br><a href="http://www.oracle.com/technetwork/java/javase/downloads" target="_blank" rel="external">http://www.oracle.com/technetwork/java/javase/downloads</a><br>Hadopp:<br><a href="http://www.apache.org/dyn/closer.cgi/hadoop/common" target="_blank" rel="external">http://www.apache.org/dyn/closer.cgi/hadoop/common</a><br> Hive<br><a href="http://mirror.bit.edu.cn/apache/hive/" target="_blank" rel="external">http://mirror.bit.edu.cn/apache/hive/</a><br>HBase:<br><a href="http://mirror.bit.edu.cn/apache/hbase/" target="_blank" rel="external">http://mirror.bit.edu.cn/apache/hbase/</a></p>
+<p>百度云盘<br>链接：<a href="https://pan.baidu.com/s/1jIemIDC" target="_blank" rel="external">https://pan.baidu.com/s/1jIemIDC</a> 密码：uycu</p>
+<h2 id="二、服务器的相关配置"><a href="#二、服务器的相关配置" class="headerlink" title="二、服务器的相关配置"></a>二、服务器的相关配置</h2><p>   在配置Hadoop+Hive+HBase之前，应该先做一下配置。<br>  做这些配置为了方便，使用root权限。</p>
+<h3 id="1，更改主机名"><a href="#1，更改主机名" class="headerlink" title="1，更改主机名"></a>1，更改主机名</h3><p>首先更改主机名，目的是为了方便管理。<br>输入: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hostname</div></pre></td></tr></table></figure>
+<p>查看本机的名称<br>然后更改主机名为master<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hostnamectl set-hostname master</div></pre></td></tr></table></figure>
+<p><strong>注:主机名称更改之后，要重启(reboot)才会生效。</strong></p>
+<h3 id="2，做IP和主机名的映射"><a href="#2，做IP和主机名的映射" class="headerlink" title="2，做IP和主机名的映射"></a>2，做IP和主机名的映射</h3><p>修改hosts文件，做关系映射<br>输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim /etc/hosts</div></pre></td></tr></table></figure>
+<p>添加<br>主机的ip 和 主机名称</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">192.168.238.128 master</div></pre></td></tr></table></figure>
+<h3 id="3，关闭防火墙"><a href="#3，关闭防火墙" class="headerlink" title="3，关闭防火墙"></a>3，关闭防火墙</h3><p>关闭防火墙，方便访问。<br><strong>CentOS 7版本以下输入:</strong><br>关闭防火墙</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service   iptables stop</div></pre></td></tr></table></figure>
+<p><strong>CentOS 7 以上的版本输入：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">systemctl stop firewalld.service</div></pre></td></tr></table></figure>
+<h3 id="4，时间设置"><a href="#4，时间设置" class="headerlink" title="4，时间设置"></a>4，时间设置</h3><p>查看当前时间<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">date</div></pre></td></tr></table></figure>
+<p>查看服务器时间是否一致，若不一致则更改<br>更改时间命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">date -s ‘MMDDhhmmYYYY.ss’</div></pre></td></tr></table></figure>
+<h3 id="5，整体的环境配置"><a href="#5，整体的环境配置" class="headerlink" title="5，整体的环境配置"></a>5，整体的环境配置</h3><p>/etc/profile 的整体配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">#Java Config</div><div class="line">export JAVA_HOME=/opt/java/jdk1.8</div><div class="line">export JRE_HOME=/opt/java/jdk1.8/jre</div><div class="line">export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JRE_HOME/lib</div><div class="line"></div><div class="line"># Scala Config</div><div class="line">export SCALA_HOME=/opt/scala/scala-2.12.2</div><div class="line"></div><div class="line"></div><div class="line"># Spark Config</div><div class="line">export  SPARK_HOME=/opt/spark/spark1.6-hadoop2.4-hive</div><div class="line"></div><div class="line"># Zookeeper Config</div><div class="line">export ZK_HOME=/opt/zookeeper/zookeeper3.4</div><div class="line"></div><div class="line"># HBase Config</div><div class="line">export HBASE_HOME=/opt/hbase/hbase1.2</div><div class="line"></div><div class="line"># Hadoop Config </div><div class="line">export HADOOP_HOME=/opt/hadoop/hadoop2.8</div><div class="line">export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native</div><div class="line">export HADOOP_OPTS=&quot;-Djava.library.path=$HADOOP_HOME/lib&quot;</div><div class="line"></div><div class="line"># Hive Config</div><div class="line">export HIVE_HOME=/opt/hive/hive2.1</div><div class="line">export HIVE_CONF_DIR=$&#123;HIVE_HOME&#125;/conf</div><div class="line"></div><div class="line">export PATH=.:$&#123;JAVA_HOME&#125;/bin:$&#123;SCALA_HOME&#125;/bin:$&#123;SPARK_HOME&#125;/bin:$&#123;HADOOP_HOME&#125;/bin:$&#123;HADOOP_HOME&#125;/sbin:$&#123;ZK_HOME&#125;/bin:$&#123;HBASE_HOME&#125;/bin:$&#123;HIVE_HOME&#125;/bin:$PATH</div></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20171218182335894?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p><strong>注:具体的配置以自己的为准，没有的不用配置。</strong></p>
+<h2 id="三、Hadoop的环境配置"><a href="#三、Hadoop的环境配置" class="headerlink" title="三、Hadoop的环境配置"></a>三、Hadoop的环境配置</h2><p>Hadoop的具体配置在<a href="http://www.panchengming.com/2017/11/26/pancm55/" target="_blank" rel="external">大数据学习系列之一 —– Hadoop环境搭建(单机)</a> 中介绍得很详细了。所以本文就大体介绍一下。<br><strong>注:具体配置以自己的为准。</strong></p>
+<h3 id="1，环境变量设置"><a href="#1，环境变量设置" class="headerlink" title="1，环境变量设置"></a>1，环境变量设置</h3><p>编辑 /etc/profile 文件 :<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim /etc/profile</div></pre></td></tr></table></figure></p>
+<p>配置文件:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">export HADOOP_HOME=/opt/hadoop/hadoop2.8</div><div class="line">export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native</div><div class="line">export HADOOP_OPTS=&quot;-Djava.library.path=$HADOOP_HOME/lib&quot;</div><div class="line">export PATH=.:$&#123;JAVA_HOME&#125;/bin:$&#123;HADOOP_HOME&#125;/bin:$PATH</div></pre></td></tr></table></figure>
+<h3 id="2，配置文件更改"><a href="#2，配置文件更改" class="headerlink" title="2，配置文件更改"></a>2，配置文件更改</h3><p>先切换到 /home/hadoop/hadoop2.8/etc/hadoop/ 目录下</p>
+<h4 id="3-2-1-修改-core-site-xml"><a href="#3-2-1-修改-core-site-xml" class="headerlink" title="3.2.1 修改 core-site.xml"></a>3.2.1 修改 core-site.xml</h4><p>输入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim core-site.xml</div></pre></td></tr></table></figure></p>
+<p>在<configuration>添加:</configuration></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&lt;configuration&gt;</div><div class="line">&lt;property&gt;</div><div class="line">        &lt;name&gt;hadoop.tmp.dir&lt;/name&gt;</div><div class="line">        &lt;value&gt;/root/hadoop/tmp&lt;/value&gt;</div><div class="line">        &lt;description&gt;Abase for other temporary directories.&lt;/description&gt;</div><div class="line">   &lt;/property&gt;</div><div class="line">   &lt;property&gt;</div><div class="line">        &lt;name&gt;fs.default.name&lt;/name&gt;</div><div class="line">        &lt;value&gt;hdfs://master:9000&lt;/value&gt;</div><div class="line">   &lt;/property&gt;</div><div class="line">&lt;/configuration&gt;</div></pre></td></tr></table></figure>
+<h4 id="3-2-2修改-hadoop-env-sh"><a href="#3-2-2修改-hadoop-env-sh" class="headerlink" title="3.2.2修改 hadoop-env.sh"></a>3.2.2修改 hadoop-env.sh</h4><p>输入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim hadoop-env.sh</div></pre></td></tr></table></figure></p>
+<p>将${JAVA_HOME} 修改为自己的JDK路径<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">export   JAVA_HOME=$&#123;JAVA_HOME&#125;</div></pre></td></tr></table></figure></p>
+<p>修改为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">export   JAVA_HOME=/home/java/jdk1.8</div></pre></td></tr></table></figure>
+<h4 id="3-2-3修改-hdfs-site-xml"><a href="#3-2-3修改-hdfs-site-xml" class="headerlink" title="3.2.3修改 hdfs-site.xml"></a>3.2.3修改 hdfs-site.xml</h4><p>输入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim hdfs-site.xml</div></pre></td></tr></table></figure></p>
+<p>在<configuration>添加:</configuration></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">&lt;property&gt;</div><div class="line">   &lt;name&gt;dfs.name.dir&lt;/name&gt;</div><div class="line">   &lt;value&gt;/root/hadoop/dfs/name&lt;/value&gt;</div><div class="line">   &lt;description&gt;Path on the local filesystem where theNameNode stores the namespace and transactions logs persistently.&lt;/description&gt;</div><div class="line">&lt;/property&gt;</div><div class="line">&lt;property&gt;</div><div class="line">   &lt;name&gt;dfs.data.dir&lt;/name&gt;</div><div class="line">   &lt;value&gt;/root/hadoop/dfs/data&lt;/value&gt;</div><div class="line">   &lt;description&gt;Comma separated list of paths on the localfilesystem of a DataNode where it should store its blocks.&lt;/description&gt;</div><div class="line">&lt;/property&gt;</div><div class="line">&lt;property&gt;</div><div class="line">   &lt;name&gt;dfs.replication&lt;/name&gt;</div><div class="line">   &lt;value&gt;2&lt;/value&gt;</div><div class="line">&lt;/property&gt;</div><div class="line">&lt;property&gt;</div><div class="line">      &lt;name&gt;dfs.permissions&lt;/name&gt;</div><div class="line">      &lt;value&gt;false&lt;/value&gt;</div><div class="line">      &lt;description&gt;need not permissions&lt;/description&gt;</div><div class="line">&lt;/property&gt;</div></pre></td></tr></table></figure>
+<h4 id="3-2-4-修改mapred-site-xml"><a href="#3-2-4-修改mapred-site-xml" class="headerlink" title="3.2.4 修改mapred-site.xml"></a>3.2.4 修改mapred-site.xml</h4><p>如果没有 mapred-site.xml 该文件，就复制mapred-site.xml.template文件并重命名为mapred-site.xml。<br>输入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim mapred-site.xml</div></pre></td></tr></table></figure></p>
+<p>修改这个新建的mapred-site.xml文件，在<configuration>节点内加入配置:</configuration></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;property&gt;</div><div class="line">    &lt;name&gt;mapred.job.tracker&lt;/name&gt;</div><div class="line">    &lt;value&gt;master:9001&lt;/value&gt;</div><div class="line">&lt;/property&gt;</div><div class="line">&lt;property&gt;</div><div class="line">      &lt;name&gt;mapred.local.dir&lt;/name&gt;</div><div class="line">       &lt;value&gt;/root/hadoop/var&lt;/value&gt;</div><div class="line">&lt;/property&gt;</div><div class="line">&lt;property&gt;</div><div class="line">       &lt;name&gt;mapreduce.framework.name&lt;/name&gt;</div><div class="line">       &lt;value&gt;yarn&lt;/value&gt;</div><div class="line">&lt;/property&gt;</div></pre></td></tr></table></figure>
+<h3 id="3，Hadoop启动"><a href="#3，Hadoop启动" class="headerlink" title="3，Hadoop启动"></a>3，Hadoop启动</h3><p>启动之前需要先格式化<br>切换到/home/hadoop/hadoop2.8/bin目录下<br>输入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./hadoop  namenode  -format</div></pre></td></tr></table></figure></p>
+<p>格式化成功后，再切换到/home/hadoop/hadoop2.8/sbin目录下<br>启动hdfs和yarn<br>输入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">start-dfs.sh</div><div class="line">start-yarn.sh</div></pre></td></tr></table></figure></p>
+<p>启动成功后，输入jsp查看是否启动成功<br>在浏览器输入 ip+8088 和ip +50070 界面查看是否能访问<br>能正确访问则启动成功</p>
+<h2 id="四、Hive的环境配置"><a href="#四、Hive的环境配置" class="headerlink" title="四、Hive的环境配置"></a>四、Hive的环境配置</h2><p>Hive环境的具体配置在我的这篇<a href="http://www.panchengming.com/2017/12/16/pancm61/" target="_blank" rel="external">大数据学习系列之四 —– Hadoop+Hive环境搭建图文详解(单机)</a> 以及介绍得很详细了。本篇就大概介绍下。</p>
+<h3 id="修改hive-site-xml"><a href="#修改hive-site-xml" class="headerlink" title="修改hive-site.xml"></a>修改hive-site.xml</h3><p>切换到 /opt/hive/hive2.1/conf 目录下<br>将hive-default.xml.template 拷贝一份，并重命名为hive-site.xml<br>然后编辑hive-site.xml文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cp hive-default.xml.template hive-site.xml</div><div class="line">vim hive-site.xml</div></pre></td></tr></table></figure>
+<p>编辑hive-site.xml文件，在 <configuration> 中添加:</configuration></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">&lt;!-- 指定HDFS中的hive仓库地址 --&gt;  </div><div class="line">  &lt;property&gt;  </div><div class="line">    &lt;name&gt;hive.metastore.warehouse.dir&lt;/name&gt;  </div><div class="line">    &lt;value&gt;/root/hive/warehouse&lt;/value&gt;  </div><div class="line">  &lt;/property&gt;  </div><div class="line"></div><div class="line">&lt;property&gt;</div><div class="line">    &lt;name&gt;hive.exec.scratchdir&lt;/name&gt;</div><div class="line">    &lt;value&gt;/root/hive&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line"></div><div class="line">  &lt;!-- 该属性为空表示嵌入模式或本地模式，否则为远程模式 --&gt;  </div><div class="line">  &lt;property&gt;  </div><div class="line">    &lt;name&gt;hive.metastore.uris&lt;/name&gt;  </div><div class="line">    &lt;value&gt;&lt;/value&gt;  </div><div class="line">  &lt;/property&gt;  </div><div class="line"></div><div class="line">&lt;!-- 指定mysql的连接 --&gt;</div><div class="line"> &lt;property&gt;</div><div class="line">        &lt;name&gt;javax.jdo.option.ConnectionURL&lt;/name&gt;</div><div class="line">        &lt;value&gt;jdbc:mysql://master:3306/hive?createDatabaseIfNotExist=true&lt;/value&gt;</div><div class="line">    &lt;/property&gt;</div><div class="line">&lt;!-- 指定驱动类 --&gt;</div><div class="line">    &lt;property&gt;</div><div class="line">        &lt;name&gt;javax.jdo.option.ConnectionDriverName&lt;/name&gt;</div><div class="line">        &lt;value&gt;com.mysql.jdbc.Driver&lt;/value&gt;</div><div class="line">    &lt;/property&gt;</div><div class="line">   &lt;!-- 指定用户名 --&gt;</div><div class="line">    &lt;property&gt;</div><div class="line">        &lt;name&gt;javax.jdo.option.ConnectionUserName&lt;/name&gt;</div><div class="line">        &lt;value&gt;root&lt;/value&gt;</div><div class="line">    &lt;/property&gt;</div><div class="line">    &lt;!-- 指定密码 --&gt;</div><div class="line">    &lt;property&gt;</div><div class="line">        &lt;name&gt;javax.jdo.option.ConnectionPassword&lt;/name&gt;</div><div class="line">        &lt;value&gt;123456&lt;/value&gt;</div><div class="line">    &lt;/property&gt;</div><div class="line">    &lt;property&gt;</div><div class="line">   &lt;name&gt;hive.metastore.schema.verification&lt;/name&gt;</div><div class="line">   &lt;value&gt;false&lt;/value&gt;</div><div class="line">    &lt;description&gt;</div><div class="line">    &lt;/description&gt;</div><div class="line"> &lt;/property&gt;</div></pre></td></tr></table></figure>
+<p>然后将配置文件中所有的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$&#123;system:java.io.tmpdir&#125;</div></pre></td></tr></table></figure></p>
+<p> 更改为 /opt/hive/tmp  (如果没有该文件则创建)，<br>  并将此文件夹赋予读写权限，将<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$&#123;system:user.name&#125;</div></pre></td></tr></table></figure></p>
+<p>   更改为 root</p>
+<p>例如:<br>更改之前的:<br><img src="http://img.blog.csdn.net/20171216092323706?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>更改之后:<br><img src="http://img.blog.csdn.net/20171216092332426?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>配置图:<br><img src="http://img.blog.csdn.net/20171216092358071?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p><strong>注: 由于hive-site.xml 文件中的配置过多，可以通过FTP将它下载下来进行编辑。也可以直接配置自己所需的，其他的可以删除。 MySQL的连接地址中的master是主机的别名，可以换成ip。</strong></p>
+<h3 id="修改-hive-env-sh"><a href="#修改-hive-env-sh" class="headerlink" title="修改 hive-env.sh"></a>修改 hive-env.sh</h3><p>修改hive-env.sh 文件，没有就复制 hive-env.sh.template ，并重命名为hive-env.sh</p>
+<p>在这个配置文件中添加</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">export  HADOOP_HOME=/opt/hadoop/hadoop2.8</div><div class="line">export  HIVE_CONF_DIR=/opt/hive/hive2.1/conf</div><div class="line">export  HIVE_AUX_JARS_PATH=/opt/hive/hive2.1/lib</div></pre></td></tr></table></figure>
+<h3 id="添加-数据驱动包"><a href="#添加-数据驱动包" class="headerlink" title="添加 数据驱动包"></a>添加 数据驱动包</h3><p>由于Hive 默认自带的数据库是使用mysql，所以这块就是用mysql<br>将mysql 的驱动包 上传到 /opt/hive/hive2.1/lib</p>
+<h2 id="五、HBase的环境配置"><a href="#五、HBase的环境配置" class="headerlink" title="五、HBase的环境配置"></a>五、HBase的环境配置</h2><p>HBase环境的具体配置在我的这篇<a href="http://www.panchengming.com/2017/12/09/pancm57/" target="_blank" rel="external">大数据学习系列之二 —– HBase环境搭建(单机)</a> 以及介绍得很详细了。本篇就大概介绍下。</p>
+<h3 id="修改-hbase-env-sh"><a href="#修改-hbase-env-sh" class="headerlink" title="修改 hbase-env.sh"></a>修改 hbase-env.sh</h3><p>编辑 hbase-env.sh 文件，添加以下配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">export JAVA_HOME=/opt/java/jdk1.8</div><div class="line">export HADOOP_HOME=/opt/hadoop/hadoop2.8</div><div class="line">export HBASE_HOME=/opt/hbase/hbase1.2</div><div class="line">export HBASE_CLASSPATH=/opt/hadoop/hadoop2.8/etc/hadoop</div><div class="line">export HBASE_PID_DIR=/root/hbase/pids</div><div class="line">export HBASE_MANAGES_ZK=false</div></pre></td></tr></table></figure>
+<p>说明:配置的路径以自己的为准。HBASE_MANAGES_ZK=false 是不启用HBase自带的Zookeeper集群。</p>
+<h3 id="修改-hbase-site-xml"><a href="#修改-hbase-site-xml" class="headerlink" title="修改 hbase-site.xml"></a>修改 hbase-site.xml</h3><p>编辑hbase-site.xml 文件，在<configuration>添加如下配置</configuration></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">&lt;!-- 存储目录 --&gt;</div><div class="line">&lt;property&gt;  </div><div class="line"> &lt;name&gt;hbase.rootdir&lt;/name&gt;  </div><div class="line"> &lt;value&gt;hdfs://test1:9000/hbase&lt;/value&gt;  </div><div class="line"> &lt;description&gt;The directory shared byregion servers.&lt;/description&gt;  </div><div class="line">&lt;/property&gt;  </div><div class="line">&lt;!-- hbase的端口 --&gt;</div><div class="line">&lt;property&gt;  </div><div class="line"> &lt;name&gt;hbase.zookeeper.property.clientPort&lt;/name&gt;  </div><div class="line"> &lt;value&gt;2181&lt;/value&gt;  </div><div class="line"> &lt;description&gt;Property from ZooKeeper&apos;sconfig zoo.cfg. The port at which the clients will connect.  </div><div class="line"> &lt;/description&gt;  </div><div class="line">&lt;/property&gt;  </div><div class="line">&lt;!--  超时时间 --&gt;</div><div class="line">&lt;property&gt;  </div><div class="line"> &lt;name&gt;zookeeper.session.timeout&lt;/name&gt;  </div><div class="line"> &lt;value&gt;120000&lt;/value&gt;  </div><div class="line">&lt;/property&gt;  </div><div class="line">&lt;!--  zookeeper 集群配置。如果是集群，则添加其它的主机地址 --&gt;</div><div class="line">&lt;property&gt;  </div><div class="line"> &lt;name&gt;hbase.zookeeper.quorum&lt;/name&gt;  </div><div class="line"> &lt;value&gt;test1&lt;/value&gt;  </div><div class="line">&lt;/property&gt;  </div><div class="line">&lt;property&gt;  </div><div class="line"> &lt;name&gt;hbase.tmp.dir&lt;/name&gt;  </div><div class="line"> &lt;value&gt;/root/hbase/tmp&lt;/value&gt;  </div><div class="line">&lt;/property&gt;  </div><div class="line">&lt;!-- false是单机模式，true是分布式模式  --&gt;</div><div class="line">&lt;property&gt;  </div><div class="line"> &lt;name&gt;hbase.cluster.distributed&lt;/name&gt;  </div><div class="line"> &lt;value&gt;false&lt;/value&gt;  </div><div class="line">&lt;/property&gt;</div></pre></td></tr></table></figure>
+<p>说明:hbase.rootdir：这个目录是region server的共享目录，用来持久化Hbase 。hbase.cluster.distributed ：Hbase的运行模式。false是单机模式，true是分布式模式。若为false,Hbase和Zookeeper会运行在同一个JVM里面。</p>
+<h2 id="六、Hive整合HBase的环境配置以及测试"><a href="#六、Hive整合HBase的环境配置以及测试" class="headerlink" title="六、Hive整合HBase的环境配置以及测试"></a>六、Hive整合HBase的环境配置以及测试</h2><h3 id="1，环境配置"><a href="#1，环境配置" class="headerlink" title="1，环境配置"></a>1，环境配置</h3><p> 因为Hive与HBase整合的实现是利用两者本身对外的API接口互相通信来完成的，其具体工作交由Hive的lib目录中的hive-hbase-handler-<em>.jar工具类来实现。所以只需要将hive的 hive-hbase-handler-</em>.jar 复制到hbase/lib中就可以了。<br> 切换到hive/lib目录下<br>输入: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cp hive-hbase-handler-*.jar /opt/hbase/hbase1.2/lib</div></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20171218183724094?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>注: 如果在hive整合hbase中，出现版本之类的问题，那么以hbase的版本为主，将hbase中的jar包覆盖hive的jar包。</p>
+<h3 id="2，hive和hbase测试"><a href="#2，hive和hbase测试" class="headerlink" title="2，hive和hbase测试"></a>2，hive和hbase测试</h3><p>在进行测试的时候，确保hadoop、hbase、hive环境已经成功搭建好，并且都成功启动了。<br>打开xshell的两个命令窗口<br>一个进入hive，一个进入hbase</p>
+<h4 id="6-2-1在hive中创建映射hbase的表"><a href="#6-2-1在hive中创建映射hbase的表" class="headerlink" title="6.2.1在hive中创建映射hbase的表"></a>6.2.1在hive中创建映射hbase的表</h4><p>在hive中创建一个映射hbase的表，为了方便，设置两边的表名都为t_student，存储的表也是这个。<br>在hive中输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">create table t_student(id int,name string) stored by &apos;org.apache.hadoop.hive.hbase.HBaseStorageHandler&apos; with serdeproperties(&quot;hbase.columns.mapping&quot;=&quot;:key,st1:name&quot;) tblproperties(&quot;hbase.table.name&quot;=&quot;t_student&quot;,&quot;hbase.mapred.output.outputtable&quot; = &quot;t_student&quot;);</div></pre></td></tr></table></figure>
+<p><strong>说明：第一个t_student 是hive表中的名称，第二个t_student是定义在hbase的table名称 ，第三个t_student 是存储数据表的名称(“hbase.mapred.output.outputtable” = “t_student”这个可以不要，表数据就存储在第二个表中了) 。<br>(id int,name string) 这个是hive表结构。如果要增加字段，就以这种格式增加。如果要增加字段的注释，那么在字段后面添加comment ‘你要描述的’。<br>例如:<br>create table t_student(id int comment ‘StudentId’,name string comment ‘StudentName’)<br>org.apache.hadoop.hive.hbase.HBaseStorageHandler 这个是指定的存储器。<br>hbase.columns.mapping 是定义在hbase的列族。<br>例如:st1就是列族，name就是列。在hive中创建表t_student，这个表包括两个字段（int型的id和string型的name）。 映射为hbase中的表t_student，key对应hbase的rowkey，value对应hbase的st1:name列。</strong></p>
+<p>表成功创建之后<br>在hive、hbase分别中查看表和表结构<br>hive中输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">show tables；</div><div class="line">describe t_student;</div></pre></td></tr></table></figure>
+<p>hbase输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">list</div><div class="line">describe ‘t_student’</div></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20171218183832950?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p><img src="http://img.blog.csdn.net/20171218183855444?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>可以看到表已经成功的创建了</p>
+<h4 id="6-2-2数据同步测试"><a href="#6-2-2数据同步测试" class="headerlink" title="6.2.2数据同步测试"></a>6.2.2数据同步测试</h4><p>进入hbase之后<br>在t_student中添加两条数据 然后查询该表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">put &apos;t_student&apos;,&apos;1001&apos;,&apos;st1:name&apos;,&apos;zhangsan&apos;</div><div class="line">put &apos;t_student&apos;,&apos;1002&apos;,&apos;st1:name&apos;,&apos;lisi&apos;</div><div class="line">scan &apos;t_student&apos;</div></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20171218183918611?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>然后切换到hive中<br>查询该表<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select * from t_student;</div></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20171218183931544?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>然后在hive中删除该表<br><strong>注:因为做测试要看结果，所以将表删除了。如果同学们要做测试的话，是没有必要删除该表的，因为在后面还会使用该表。</strong></p>
+<p>然后查看hive和hbase中的表是否删除了<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">drop table t_student;</div></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20171218184133272?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p><img src="http://img.blog.csdn.net/20171218184155642?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>通过这些可以看到hive和hbase之间的数据成功同步！</p>
+<h4 id="6-2-3关联查询测试"><a href="#6-2-3关联查询测试" class="headerlink" title="6.2.3关联查询测试"></a>6.2.3关联查询测试</h4><h5 id="hive外部表测试"><a href="#hive外部表测试" class="headerlink" title="hive外部表测试"></a>hive外部表测试</h5><p>先在hbase中建一张t_student_info表，添加两个列族<br>然后查看表结构<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">create &apos;t_student_info&apos;,&apos;st1&apos;,&apos;st2&apos;</div><div class="line">describe &apos;t_student_info&apos;</div></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20171218184225337?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>然后在hive中创建外部表<br><strong>说明:创建外部表要使用EXTERNAL 关键字</strong><br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">create external table t_student_info(id int,age int,sex string) stored by &apos;org.apache.hadoop.hive.hbase.HBaseStorageHandler&apos; with serdeproperties(&quot;hbase.columns.mapping&quot;=&quot;:key,st1:age,st2:sex&quot;) tblproperties(&quot;hbase.table.name&quot;=&quot;t_student_info&quot;);</div></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20171218184240901?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>然后在t_student_info 中添加数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">put &apos;t_student_info&apos;,&apos;1001&apos;,&apos;st2:sex&apos;,&apos;man&apos;</div><div class="line">put &apos;t_student_info&apos;,&apos;1001&apos;,&apos;st1:age&apos;,&apos;20&apos;</div><div class="line">put &apos;t_student_info&apos;,&apos;1002&apos;,&apos;st1:age&apos;,&apos;18&apos;</div><div class="line">put &apos;t_student_info&apos;,&apos;1002&apos;,&apos;st2:sex&apos;,&apos;woman&apos;</div></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20171218184434573?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>然后在hive中查询该表<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select * from t_student_info;</div></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20171218184443608?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>查询到数据之后，然后将t_student 和t_student_info进行关联查询。<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select * from t_student t join t_student ti where t.id=ti.id ;</div></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20171218184454815?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br><strong>说明:通过关联查询，可以得出表之间是可以关联查询的。但是明显看到hive 使用默认的mapreduce 作为引擎是多么的慢。。。</strong> </p>
+<p><strong>其他说明:<br>由于自己的虚拟机配置实在太渣，即使调大reduce内存，限制每个reduce处理的数据量，还是不行，最后没办法使用公司的测试服务进行测试。<br>在查询一张表的时候，hive没有使用引擎，因此相对比较快，如果是进行了关联查询之类的，就会使用引擎，由于hive默认的引擎是mr，所以会很慢，也和配置有一定关系，hive2.x以后官方就不建议使用mr了。</strong></p>
+<p>本文到此结束，谢谢阅读！<br>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a><br>原创不易，转载请标明出处，谢谢！</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/大数据/" rel="tag"># 大数据</a>
+          
+            <a href="/tags/hbase/" rel="tag"># hbase</a>
+          
+            <a href="/tags/hive/" rel="tag"># hive</a>
+          
+            <a href="/tags/hadoop/" rel="tag"># hadoop</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/16/pancm61/" rel="next" title="大数据学习系列之四 ----- Hadoop+Hive环境搭建图文详解(单机)">
+                <i class="fa fa-chevron-left"></i> 大数据学习系列之四 ----- Hadoop+Hive环境搭建图文详解(单机)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">61</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Hive和HBase的通信意图"><span class="nav-number">1.1.</span> <span class="nav-text">Hive和HBase的通信意图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hive整合HBase后的使用场景："><span class="nav-number">1.2.</span> <span class="nav-text">Hive整合HBase后的使用场景：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一、环境选择"><span class="nav-number">2.</span> <span class="nav-text">一、环境选择</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1，服务器选择"><span class="nav-number">2.1.</span> <span class="nav-text">1，服务器选择</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2，配置选择"><span class="nav-number">2.2.</span> <span class="nav-text">2，配置选择</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3，下载地址"><span class="nav-number">2.3.</span> <span class="nav-text">3，下载地址</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、服务器的相关配置"><span class="nav-number">3.</span> <span class="nav-text">二、服务器的相关配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1，更改主机名"><span class="nav-number">3.1.</span> <span class="nav-text">1，更改主机名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2，做IP和主机名的映射"><span class="nav-number">3.2.</span> <span class="nav-text">2，做IP和主机名的映射</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3，关闭防火墙"><span class="nav-number">3.3.</span> <span class="nav-text">3，关闭防火墙</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4，时间设置"><span class="nav-number">3.4.</span> <span class="nav-text">4，时间设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5，整体的环境配置"><span class="nav-number">3.5.</span> <span class="nav-text">5，整体的环境配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、Hadoop的环境配置"><span class="nav-number">4.</span> <span class="nav-text">三、Hadoop的环境配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1，环境变量设置"><span class="nav-number">4.1.</span> <span class="nav-text">1，环境变量设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2，配置文件更改"><span class="nav-number">4.2.</span> <span class="nav-text">2，配置文件更改</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-1-修改-core-site-xml"><span class="nav-number">4.2.1.</span> <span class="nav-text">3.2.1 修改 core-site.xml</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-2修改-hadoop-env-sh"><span class="nav-number">4.2.2.</span> <span class="nav-text">3.2.2修改 hadoop-env.sh</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-3修改-hdfs-site-xml"><span class="nav-number">4.2.3.</span> <span class="nav-text">3.2.3修改 hdfs-site.xml</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-4-修改mapred-site-xml"><span class="nav-number">4.2.4.</span> <span class="nav-text">3.2.4 修改mapred-site.xml</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3，Hadoop启动"><span class="nav-number">4.3.</span> <span class="nav-text">3，Hadoop启动</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、Hive的环境配置"><span class="nav-number">5.</span> <span class="nav-text">四、Hive的环境配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#修改hive-site-xml"><span class="nav-number">5.1.</span> <span class="nav-text">修改hive-site.xml</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改-hive-env-sh"><span class="nav-number">5.2.</span> <span class="nav-text">修改 hive-env.sh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加-数据驱动包"><span class="nav-number">5.3.</span> <span class="nav-text">添加 数据驱动包</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、HBase的环境配置"><span class="nav-number">6.</span> <span class="nav-text">五、HBase的环境配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#修改-hbase-env-sh"><span class="nav-number">6.1.</span> <span class="nav-text">修改 hbase-env.sh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改-hbase-site-xml"><span class="nav-number">6.2.</span> <span class="nav-text">修改 hbase-site.xml</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#六、Hive整合HBase的环境配置以及测试"><span class="nav-number">7.</span> <span class="nav-text">六、Hive整合HBase的环境配置以及测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1，环境配置"><span class="nav-number">7.1.</span> <span class="nav-text">1，环境配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2，hive和hbase测试"><span class="nav-number">7.2.</span> <span class="nav-text">2，hive和hbase测试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#6-2-1在hive中创建映射hbase的表"><span class="nav-number">7.2.1.</span> <span class="nav-text">6.2.1在hive中创建映射hbase的表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-2-2数据同步测试"><span class="nav-number">7.2.2.</span> <span class="nav-text">6.2.2数据同步测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-2-3关联查询测试"><span class="nav-number">7.2.3.</span> <span class="nav-text">6.2.3关联查询测试</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#hive外部表测试"><span class="nav-number">7.2.3.1.</span> <span class="nav-text">hive外部表测试</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

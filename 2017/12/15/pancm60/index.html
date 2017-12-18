@@ -93,13 +93,13 @@
 
 
 
-<meta name="description" content="前言使用VMware安装虚拟机这个一般都知道，操作简单。而本文主要讲使用虚拟机的后续相关配置。并记录使用过程中遇到的问题以及一些技巧。本篇文章以后回持续更新的。。。 安装包准备VM:12Linux:CentOS 7.0百度云盘:链接：https://pan.baidu.com/s/1geEAtpx 密码：r503 一、CentOS 使用1，安装CentOS 下载VMware Workstatio">
+<meta name="description" content="版权声明:作者：虚无境博客园出处：http://www.cnblogs.com/xuwujingCSDN出处：http://blog.csdn.net/qazwsxpcm　　　　个人博客出处：http://www.panchengming.com原创不易，转载请标明出处，谢谢！ 前言使用VMware安装虚拟机这个一般都知道，操作简单。而本文主要讲使用虚拟机的后续相关配置。并记录使用过程中遇到的问">
 <meta name="keywords" content="linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用VMware安装linux虚拟机以及相关配置">
 <meta property="og:url" content="http://yoursite.com/2017/12/15/pancm60/index.html">
 <meta property="og:site_name" content="虚无境的博客">
-<meta property="og:description" content="前言使用VMware安装虚拟机这个一般都知道，操作简单。而本文主要讲使用虚拟机的后续相关配置。并记录使用过程中遇到的问题以及一些技巧。本篇文章以后回持续更新的。。。 安装包准备VM:12Linux:CentOS 7.0百度云盘:链接：https://pan.baidu.com/s/1geEAtpx 密码：r503 一、CentOS 使用1，安装CentOS 下载VMware Workstatio">
+<meta property="og:description" content="版权声明:作者：虚无境博客园出处：http://www.cnblogs.com/xuwujingCSDN出处：http://blog.csdn.net/qazwsxpcm　　　　个人博客出处：http://www.panchengming.com原创不易，转载请标明出处，谢谢！ 前言使用VMware安装虚拟机这个一般都知道，操作简单。而本文主要讲使用虚拟机的后续相关配置。并记录使用过程中遇到的问">
 <meta property="og:image" content="http://img.blog.csdn.net/20171215191040484?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 <meta property="og:image" content="http://img.blog.csdn.net/20171215191047752?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 <meta property="og:image" content="http://img.blog.csdn.net/20171215191053824?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
@@ -114,10 +114,10 @@
 <meta property="og:image" content="http://img.blog.csdn.net/20171215194022119?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 <meta property="og:image" content="http://img.blog.csdn.net/20171215194037293?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 <meta property="og:image" content="http://img.blog.csdn.net/20171215194052408?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
-<meta property="og:updated_time" content="2017-12-16T11:53:53.083Z">
+<meta property="og:updated_time" content="2017-12-16T11:05:48.762Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用VMware安装linux虚拟机以及相关配置">
-<meta name="twitter:description" content="前言使用VMware安装虚拟机这个一般都知道，操作简单。而本文主要讲使用虚拟机的后续相关配置。并记录使用过程中遇到的问题以及一些技巧。本篇文章以后回持续更新的。。。 安装包准备VM:12Linux:CentOS 7.0百度云盘:链接：https://pan.baidu.com/s/1geEAtpx 密码：r503 一、CentOS 使用1，安装CentOS 下载VMware Workstatio">
+<meta name="twitter:description" content="版权声明:作者：虚无境博客园出处：http://www.cnblogs.com/xuwujingCSDN出处：http://blog.csdn.net/qazwsxpcm　　　　个人博客出处：http://www.panchengming.com原创不易，转载请标明出处，谢谢！ 前言使用VMware安装虚拟机这个一般都知道，操作简单。而本文主要讲使用虚拟机的后续相关配置。并记录使用过程中遇到的问">
 <meta name="twitter:image" content="http://img.blog.csdn.net/20171215191040484?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 
 
@@ -388,7 +388,8 @@
       
 
       
-        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>使用VMware安装虚拟机这个一般都知道，操作简单。而本文主要讲使用虚拟机的后续相关配置。并记录使用过程中遇到的问题以及一些技巧。本篇文章以后回持续更新的。。。</p>
+        <script src="\assets\js\APlayer.min.js"> </script><p>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a><br>原创不易，转载请标明出处，谢谢！</p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>使用VMware安装虚拟机这个一般都知道，操作简单。而本文主要讲使用虚拟机的后续相关配置。并记录使用过程中遇到的问题以及一些技巧。本篇文章以后回持续更新的。。。</p>
 <h2 id="安装包准备"><a href="#安装包准备" class="headerlink" title="安装包准备"></a>安装包准备</h2><p>VM:12<br>Linux:CentOS 7.0<br>百度云盘:<br>链接：<a href="https://pan.baidu.com/s/1geEAtpx" target="_blank" rel="external">https://pan.baidu.com/s/1geEAtpx</a> 密码：r503</p>
 <h2 id="一、CentOS-使用"><a href="#一、CentOS-使用" class="headerlink" title="一、CentOS 使用"></a>一、CentOS 使用</h2><h3 id="1，安装CentOS"><a href="#1，安装CentOS" class="headerlink" title="1，安装CentOS"></a>1，安装CentOS</h3><p> 下载VMware Workstation Pro 和CentOS 系统。<br>成功安装之虚拟机软件后，点击新建虚拟机，安装已经下载好的CentOS。</p>
 <p><img src="http://img.blog.csdn.net/20171215191040484?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br><img src="http://img.blog.csdn.net/20171215191047752?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br><img src="http://img.blog.csdn.net/20171215191053824?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br><img src="http://img.blog.csdn.net/20171215191102021?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>然后一直点击下一步就可以了(虚拟机的配置参数可以根据自己的电脑配置来更改)</p>
@@ -425,7 +426,6 @@
 <p>安装，后面就直接输入y就行了<br><img src="http://img.blog.csdn.net/20171215194006660?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
 <p>安装成功后，输入ifconfig查看ip，然后在电脑上使用xshell连接，输入ip和端口，然后输入用户名和密码，查看是否连接成功。<br><img src="http://img.blog.csdn.net/20171215194022119?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
 <p><img src="http://img.blog.csdn.net/20171215194037293?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br><img src="http://img.blog.csdn.net/20171215194052408?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
-<p>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a><br>原创不易，转载请标明出处，谢谢！</p>
 
       
     </div>
@@ -572,7 +572,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">60</span>
+                <span class="site-state-item-count">61</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -583,7 +583,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-count">22</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -594,7 +594,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-count">39</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
