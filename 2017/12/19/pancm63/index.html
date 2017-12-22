@@ -1,0 +1,912 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="hadoop,大数据,spark," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="引言在上一篇中 大数据学习系列之五 —– Hive整合HBase图文详解  ： http://www.panchengming.com/2017/12/18/pancm62/ 中使用Hive整合HBase，并且测试成功了。在之前的大数据学习系列之一 —– Hadoop环境搭建(单机) : http://www.panchengming.com/2017/11/26/pancm55/ 中成功的搭建">
+<meta name="keywords" content="hadoop,大数据,spark">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大数据学习系列之六 ----- Hadoop+Spark环境搭建">
+<meta property="og:url" content="http://yoursite.com/2017/12/19/pancm63/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="引言在上一篇中 大数据学习系列之五 —– Hive整合HBase图文详解  ： http://www.panchengming.com/2017/12/18/pancm62/ 中使用Hive整合HBase，并且测试成功了。在之前的大数据学习系列之一 —– Hadoop环境搭建(单机) : http://www.panchengming.com/2017/11/26/pancm55/ 中成功的搭建">
+<meta property="og:image" content="http://img.blog.csdn.net/20171219185847807?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171219190042047?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171219190001671?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171219190443184?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171219190414049?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171219190357126?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2017-12-22T10:59:44.398Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="大数据学习系列之六 ----- Hadoop+Spark环境搭建">
+<meta name="twitter:description" content="引言在上一篇中 大数据学习系列之五 —– Hive整合HBase图文详解  ： http://www.panchengming.com/2017/12/18/pancm62/ 中使用Hive整合HBase，并且测试成功了。在之前的大数据学习系列之一 —– Hadoop环境搭建(单机) : http://www.panchengming.com/2017/11/26/pancm55/ 中成功的搭建">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20171219185847807?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/12/19/pancm63/"/>
+
+
+
+
+
+
+  <title>大数据学习系列之六 ----- Hadoop+Spark环境搭建 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/19/pancm63/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">大数据学习系列之六 ----- Hadoop+Spark环境搭建</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-19T19:13:05+08:00">
+                2017-12-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/spark/" itemprop="url" rel="index">
+                    <span itemprop="name">spark</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>在上一篇中 <a href="http://www.panchengming.com/2017/12/18/pancm62/" target="_blank" rel="external">大数据学习系列之五 —– Hive整合HBase图文详解</a>  ： <a href="http://www.panchengming.com/2017/12/18/pancm62/" target="_blank" rel="external">http://www.panchengming.com/2017/12/18/pancm62/</a> 中使用Hive整合HBase，并且测试成功了。在之前的<a href="http://www.panchengming.com/2017/11/26/pancm55/" target="_blank" rel="external">大数据学习系列之一 —– Hadoop环境搭建(单机)</a> : <a href="http://www.panchengming.com/2017/11/26/pancm55/" target="_blank" rel="external">http://www.panchengming.com/2017/11/26/pancm55/</a> 中成功的搭建了Hadoop的环境，本文主要讲的是Hadoop+Spark 的环境。虽然搭建的是单机版，但是改成集群版的也相当容易，这点以后会写关于Hadoop+Spark+HBase+Hive+Zookeeper 等集群的相关说明的。</p>
+<h2 id="一、环境选择"><a href="#一、环境选择" class="headerlink" title="一、环境选择"></a>一、环境选择</h2><h3 id="1-服务器选择"><a href="#1-服务器选择" class="headerlink" title="1,服务器选择"></a>1,服务器选择</h3><p>本地虚拟机<br>操作系统:linux  CentOS 7<br>Cpu：2核<br>内存：2G<br>硬盘:40G</p>
+<h3 id="2-配置选择"><a href="#2-配置选择" class="headerlink" title="2,配置选择"></a>2,配置选择</h3><p>JDK:1.8          （jdk-8u144-linux-x64.tar.gz）<br>Hadoop:2.8.2  (hadoop-2.8.2.tar.gz)<br>Scala：2.12.2        (scala-2.12.2.tgz)<br>Spark: 1.6  (spark-1.6.3-bin-hadoop2.4-without-hive.tgz)  </p>
+<h3 id="3-下载地址"><a href="#3-下载地址" class="headerlink" title="3,下载地址"></a>3,下载地址</h3><p><strong>官网地址:</strong><br>JDK：<br><a href="http://www.oracle.com/technetwork/java/javase/downloads" target="_blank" rel="external">http://www.oracle.com/technetwork/java/javase/downloads</a><br>Hadopp:<br><a href="http://www.apache.org/dyn/closer.cgi/hadoop/common" target="_blank" rel="external">http://www.apache.org/dyn/closer.cgi/hadoop/common</a><br>Spark：<br><a href="http://spark.apache.org/downloads.html" target="_blank" rel="external">http://spark.apache.org/downloads.html</a><br>Hive on Spark  (spark集成hive的版本)<br><a href="http://mirror.bit.edu.cn/apache/spark/" target="_blank" rel="external">http://mirror.bit.edu.cn/apache/spark/</a><br>Scala:<br><a href="http://www.scala-lang.org/download" target="_blank" rel="external">http://www.scala-lang.org/download</a></p>
+<p><strong>百度云:</strong><br>链接：<a href="https://pan.baidu.com/s/1geT3A8N" target="_blank" rel="external">https://pan.baidu.com/s/1geT3A8N</a> 密码：f7jb</p>
+<h2 id="二、服务器的相关配置"><a href="#二、服务器的相关配置" class="headerlink" title="二、服务器的相关配置"></a>二、服务器的相关配置</h2><p>   在配置Hadoop+Spark整合之前，应该先做一下配置。<br>  做这些配置为了方便，使用root权限。</p>
+<h3 id="1-更改主机名"><a href="#1-更改主机名" class="headerlink" title="1,更改主机名"></a>1,更改主机名</h3><p>首先更改主机名，目的是为了方便管理。<br>查看本机的名称<br>输入: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hostname</div></pre></td></tr></table></figure>
+<p>更改本机名称<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hostnamectl set-hostname master</div></pre></td></tr></table></figure>
+<p>注:主机名称更改之后，要重启(reboot)才会生效。</p>
+<h3 id="2-主机和IP做关系映射"><a href="#2-主机和IP做关系映射" class="headerlink" title="2,主机和IP做关系映射"></a>2,主机和IP做关系映射</h3><p>修改hosts文件，做关系映射<br>输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim /etc/hosts</div></pre></td></tr></table></figure>
+<p>添加<br>主机的ip 和 主机名称</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">192.168.219.128 master</div></pre></td></tr></table></figure>
+<h3 id="3-关闭防火墙"><a href="#3-关闭防火墙" class="headerlink" title="3,关闭防火墙"></a>3,关闭防火墙</h3><p>关闭防火墙，方便外部访问。<br>CentOS 7版本以下输入:<br>关闭防火墙</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service   iptables stop</div></pre></td></tr></table></figure>
+<p>CentOS 7 以上的版本输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">systemctl stop firewalld.service</div></pre></td></tr></table></figure>
+<h3 id="4-时间设置"><a href="#4-时间设置" class="headerlink" title="4,时间设置"></a>4,时间设置</h3><p>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">date</div></pre></td></tr></table></figure>
+<p>查看服务器时间是否一致，若不一致则更改<br>更改时间命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">date -s ‘MMDDhhmmYYYY.ss’</div></pre></td></tr></table></figure>
+<h2 id="三、Scala环境配置"><a href="#三、Scala环境配置" class="headerlink" title="三、Scala环境配置"></a>三、Scala环境配置</h2><p>   因为Spark的配置依赖与Scala，所以先要配置Scala。<br>   Scala的配置</p>
+<h3 id="1-文件准备"><a href="#1-文件准备" class="headerlink" title="1, 文件准备"></a>1, 文件准备</h3><p>将下载好的Scala文件解压<br>输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar -xvf scala-2.12.2.tgz</div></pre></td></tr></table></figure>
+<p>然后移动到/opt/scala 里面<br>并且重命名为scala2.1<br>输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mv  scala-2.12.2  /opt/scala</div><div class="line">mv scala-2.12.2 scala2.1</div></pre></td></tr></table></figure>
+<h3 id="2，环境配置"><a href="#2，环境配置" class="headerlink" title="2，环境配置"></a>2，环境配置</h3><p>编辑 /etc/profile 文件<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">export SCALA_HOME=/opt/scala/scala2.1</div><div class="line">export PATH=.:$&#123;JAVA_HOME&#125;/bin:$&#123;SCALA_HOME&#125;/bin:$PATH</div></pre></td></tr></table></figure>
+<p>输入: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">source  /etc/profile</div></pre></td></tr></table></figure>
+<p>使配置生效<br>输入 scala -version 查看是否安装成功</p>
+<p><img src="http://img.blog.csdn.net/20171219185847807?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h2 id="三、Spark的环境配置"><a href="#三、Spark的环境配置" class="headerlink" title="三、Spark的环境配置"></a>三、Spark的环境配置</h2><h3 id="1，文件准备"><a href="#1，文件准备" class="headerlink" title="1，文件准备"></a>1，文件准备</h3><p>Spark有两种，下载的地址都给了，一种是纯净版的spark，一种是集成了hadoop以及hive的版本。本文使用的是第二种<br>将下载好的Spark文件解压<br>输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar -xvf spark-1.6.3-bin-hadoop2.4-without-hive.tgz</div></pre></td></tr></table></figure>
+<p>然后移动到/opt/spark 里面，并重命名<br>输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mv  spark-1.6.3-bin-hadoop2.4-without-hive  /opt/spark</div><div class="line">mv  spark-1.6.3-bin-hadoop2.4-without-hive  spark1.6-hadoop2.4-hive</div></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20171219190042047?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h3 id="2，环境配置-1"><a href="#2，环境配置-1" class="headerlink" title="2，环境配置"></a>2，环境配置</h3><p>编辑 /etc/profile 文件<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">export  SPARK_HOME=/opt/spark/spark1.6-hadoop2.4-hive </div><div class="line">export PATH=.:$&#123;JAVA_HOME&#125;/bin:$&#123;SCALA_HOME&#125;/bin:$&#123;SPARK_HOME&#125;/bin:$PATH</div></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20171219190001671?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>输入: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">source  /etc/profile</div></pre></td></tr></table></figure>
+<p>使配置生效 </p>
+<h3 id="3，更改配置文件"><a href="#3，更改配置文件" class="headerlink" title="3，更改配置文件"></a>3，更改配置文件</h3><p>切换目录<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cd /opt/spark/spark1.6-hadoop2.4-hive/conf</div></pre></td></tr></table></figure>
+<h4 id="4-3-1-修改-spark-env-sh"><a href="#4-3-1-修改-spark-env-sh" class="headerlink" title="4.3.1 修改 spark-env.sh"></a>4.3.1 修改 spark-env.sh</h4><p>在conf目录下，修改spark-env.sh文件，如果没有 spark-env.sh 该文件，就复制spark-env.sh.template文件并重命名为spark-env.sh。<br>修改这个新建的spark-env.sh文件，加入配置:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">export SCALA_HOME=/opt/scala/scala2.1    </div><div class="line">export JAVA_HOME=/opt/java/jdk1.8</div><div class="line">export HADOOP_HOME=/opt/hadoop/hadoop2.8    </div><div class="line">export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop  </div><div class="line">export SPARK_HOME=/opt/spark/spark1.6-hadoop2.4-hive</div><div class="line">export SPARK_MASTER_IP=master    </div><div class="line">export SPARK_EXECUTOR_MEMORY=1G</div></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20171219190443184?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br><strong>注:上面的路径以自己的为准，SPARK_MASTER_IP为主机，SPARK_EXECUTOR_MEMORY为设置的运行内存。</strong></p>
+<h2 id="五、Hadoop环境配置"><a href="#五、Hadoop环境配置" class="headerlink" title="五、Hadoop环境配置"></a>五、Hadoop环境配置</h2><p>Hadoop的具体配置在<a href="http://www.panchengming.com/2017/11/26/pancm55/" target="_blank" rel="external">大数据学习系列之一 —– Hadoop环境搭建(单机)</a>  ： <a href="http://www.panchengming.com/2017/11/26/pancm55" target="_blank" rel="external">http://www.panchengming.com/2017/11/26/pancm55</a> 中介绍得很详细了。所以本文就大体介绍一下。<br><strong>注:具体配置以自己的为准。</strong></p>
+<h3 id="1，环境变量设置"><a href="#1，环境变量设置" class="headerlink" title="1，环境变量设置"></a>1，环境变量设置</h3><p>编辑 /etc/profile 文件 :<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim /etc/profile</div></pre></td></tr></table></figure></p>
+<p>配置文件:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">export HADOOP_HOME=/opt/hadoop/hadoop2.8</div><div class="line">export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native</div><div class="line">export HADOOP_OPTS=&quot;-Djava.library.path=$HADOOP_HOME/lib&quot;</div><div class="line">export PATH=.:$&#123;JAVA_HOME&#125;/bin:$&#123;HADOOP_HOME&#125;/bin:$PATH</div></pre></td></tr></table></figure>
+<h3 id="2，配置文件更改"><a href="#2，配置文件更改" class="headerlink" title="2，配置文件更改"></a>2，配置文件更改</h3><p>先切换到 /home/hadoop/hadoop2.8/etc/hadoop/ 目录下</p>
+<h4 id="5-2-1-修改-core-site-xml"><a href="#5-2-1-修改-core-site-xml" class="headerlink" title="5.2.1 修改 core-site.xml"></a>5.2.1 修改 core-site.xml</h4><p>输入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim core-site.xml</div></pre></td></tr></table></figure></p>
+<p>在<configuration>添加:</configuration></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&lt;configuration&gt;</div><div class="line">&lt;property&gt;</div><div class="line">        &lt;name&gt;hadoop.tmp.dir&lt;/name&gt;</div><div class="line">        &lt;value&gt;/root/hadoop/tmp&lt;/value&gt;</div><div class="line">        &lt;description&gt;Abase for other temporary directories.&lt;/description&gt;</div><div class="line">   &lt;/property&gt;</div><div class="line">   &lt;property&gt;</div><div class="line">        &lt;name&gt;fs.default.name&lt;/name&gt;</div><div class="line">        &lt;value&gt;hdfs://master:9000&lt;/value&gt;</div><div class="line">   &lt;/property&gt;</div><div class="line">&lt;/configuration&gt;</div></pre></td></tr></table></figure>
+<h4 id="5-2-2修改-hadoop-env-sh"><a href="#5-2-2修改-hadoop-env-sh" class="headerlink" title="5.2.2修改 hadoop-env.sh"></a>5.2.2修改 hadoop-env.sh</h4><p>输入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim hadoop-env.sh</div></pre></td></tr></table></figure></p>
+<p>将${JAVA_HOME} 修改为自己的JDK路径<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">export   JAVA_HOME=$&#123;JAVA_HOME&#125;</div></pre></td></tr></table></figure></p>
+<p>修改为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">export   JAVA_HOME=/home/java/jdk1.8</div></pre></td></tr></table></figure>
+<h4 id="5-2-3修改-hdfs-site-xml"><a href="#5-2-3修改-hdfs-site-xml" class="headerlink" title="5.2.3修改 hdfs-site.xml"></a>5.2.3修改 hdfs-site.xml</h4><p>输入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim hdfs-site.xml</div></pre></td></tr></table></figure></p>
+<p>在<configuration>添加:</configuration></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">&lt;property&gt;</div><div class="line">   &lt;name&gt;dfs.name.dir&lt;/name&gt;</div><div class="line">   &lt;value&gt;/root/hadoop/dfs/name&lt;/value&gt;</div><div class="line">   &lt;description&gt;Path on the local filesystem where theNameNode stores the namespace and transactions logs persistently.&lt;/description&gt;</div><div class="line">&lt;/property&gt;</div><div class="line">&lt;property&gt;</div><div class="line">   &lt;name&gt;dfs.data.dir&lt;/name&gt;</div><div class="line">   &lt;value&gt;/root/hadoop/dfs/data&lt;/value&gt;</div><div class="line">   &lt;description&gt;Comma separated list of paths on the localfilesystem of a DataNode where it should store its blocks.&lt;/description&gt;</div><div class="line">&lt;/property&gt;</div><div class="line">&lt;property&gt;</div><div class="line">   &lt;name&gt;dfs.replication&lt;/name&gt;</div><div class="line">   &lt;value&gt;2&lt;/value&gt;</div><div class="line">&lt;/property&gt;</div><div class="line">&lt;property&gt;</div><div class="line">      &lt;name&gt;dfs.permissions&lt;/name&gt;</div><div class="line">      &lt;value&gt;false&lt;/value&gt;</div><div class="line">      &lt;description&gt;need not permissions&lt;/description&gt;</div><div class="line">&lt;/property&gt;</div></pre></td></tr></table></figure>
+<h4 id="5-2-4-修改mapred-site-xml"><a href="#5-2-4-修改mapred-site-xml" class="headerlink" title="5.2.4 修改mapred-site.xml"></a>5.2.4 修改mapred-site.xml</h4><p>如果没有 mapred-site.xml 该文件，就复制mapred-site.xml.template文件并重命名为mapred-site.xml。<br>输入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim mapred-site.xml</div></pre></td></tr></table></figure></p>
+<p>修改这个新建的mapred-site.xml文件，在<configuration>节点内加入配置:</configuration></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;property&gt;</div><div class="line">    &lt;name&gt;mapred.job.tracker&lt;/name&gt;</div><div class="line">    &lt;value&gt;master:9001&lt;/value&gt;</div><div class="line">&lt;/property&gt;</div><div class="line">&lt;property&gt;</div><div class="line">      &lt;name&gt;mapred.local.dir&lt;/name&gt;</div><div class="line">       &lt;value&gt;/root/hadoop/var&lt;/value&gt;</div><div class="line">&lt;/property&gt;</div><div class="line">&lt;property&gt;</div><div class="line">       &lt;name&gt;mapreduce.framework.name&lt;/name&gt;</div><div class="line">       &lt;value&gt;yarn&lt;/value&gt;</div><div class="line">&lt;/property&gt;</div></pre></td></tr></table></figure>
+<h3 id="3，Hadoop启动"><a href="#3，Hadoop启动" class="headerlink" title="3，Hadoop启动"></a>3，Hadoop启动</h3><p><strong>注:如果已经成功配置了就不用了</strong><br>启动之前需要先格式化<br>切换到/home/hadoop/hadoop2.8/bin目录下<br>输入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./hadoop  namenode  -format</div></pre></td></tr></table></figure></p>
+<p>格式化成功后，再切换到/home/hadoop/hadoop2.8/sbin目录下<br>启动hdfs和yarn<br>输入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">start-dfs.sh</div><div class="line">start-yarn.sh</div></pre></td></tr></table></figure></p>
+<p>启动成功后，输入jsp查看是否启动成功<br>在浏览器输入 ip+8088 和ip +50070 界面查看是否能访问<br>能正确访问则启动成功</p>
+<h2 id="六、Spark启动"><a href="#六、Spark启动" class="headerlink" title="六、Spark启动"></a>六、Spark启动</h2><p>启动spark要确保hadoop已经成功启动<br>首先使用jps命令查看启动的程序<br>在成功启动spark之后，再使用jps命令查看<br> 切换到Spark目录下<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cd /opt/spark/spark1.6-hadoop2.4-hive/sbin</div></pre></td></tr></table></figure>
+<p>然后启动Spark<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">start-all.sh</div></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20171219190414049?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>然后在浏览器输入<br><a href="http://192.168.219.128:8080/" target="_blank" rel="external">http://192.168.219.128:8080/</a></p>
+<p>正确显示该界面，则启动成功<br><img src="http://img.blog.csdn.net/20171219190357126?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p><strong>注:如果spark成功启动，但是无法访问界面，首先检查防火墙是否关闭，然后在使用jps查看进程，如果都没问题的，一般就可以访问界面。如果还是不行，那么检查hadoop、scala、spark的配置。</strong></p>
+<p>那么本文到此结束，谢谢阅读！<br>如果觉得不错，可以点击一下赞或推荐。</p>
+<p>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a><br>原创不易，转载请标明出处，谢谢！</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/hadoop/" rel="tag"># hadoop</a>
+          
+            <a href="/tags/大数据/" rel="tag"># 大数据</a>
+          
+            <a href="/tags/spark/" rel="tag"># spark</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/18/pancm62/" rel="next" title="大数据学习系列之五 ----- Hive整合HBase图文详解">
+                <i class="fa fa-chevron-left"></i> 大数据学习系列之五 ----- Hive整合HBase图文详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">62</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">40</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一、环境选择"><span class="nav-number">2.</span> <span class="nav-text">一、环境选择</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-服务器选择"><span class="nav-number">2.1.</span> <span class="nav-text">1,服务器选择</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-配置选择"><span class="nav-number">2.2.</span> <span class="nav-text">2,配置选择</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-下载地址"><span class="nav-number">2.3.</span> <span class="nav-text">3,下载地址</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、服务器的相关配置"><span class="nav-number">3.</span> <span class="nav-text">二、服务器的相关配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-更改主机名"><span class="nav-number">3.1.</span> <span class="nav-text">1,更改主机名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-主机和IP做关系映射"><span class="nav-number">3.2.</span> <span class="nav-text">2,主机和IP做关系映射</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-关闭防火墙"><span class="nav-number">3.3.</span> <span class="nav-text">3,关闭防火墙</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-时间设置"><span class="nav-number">3.4.</span> <span class="nav-text">4,时间设置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、Scala环境配置"><span class="nav-number">4.</span> <span class="nav-text">三、Scala环境配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-文件准备"><span class="nav-number">4.1.</span> <span class="nav-text">1, 文件准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2，环境配置"><span class="nav-number">4.2.</span> <span class="nav-text">2，环境配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、Spark的环境配置"><span class="nav-number">5.</span> <span class="nav-text">三、Spark的环境配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1，文件准备"><span class="nav-number">5.1.</span> <span class="nav-text">1，文件准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2，环境配置-1"><span class="nav-number">5.2.</span> <span class="nav-text">2，环境配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3，更改配置文件"><span class="nav-number">5.3.</span> <span class="nav-text">3，更改配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-3-1-修改-spark-env-sh"><span class="nav-number">5.3.1.</span> <span class="nav-text">4.3.1 修改 spark-env.sh</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、Hadoop环境配置"><span class="nav-number">6.</span> <span class="nav-text">五、Hadoop环境配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1，环境变量设置"><span class="nav-number">6.1.</span> <span class="nav-text">1，环境变量设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2，配置文件更改"><span class="nav-number">6.2.</span> <span class="nav-text">2，配置文件更改</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-1-修改-core-site-xml"><span class="nav-number">6.2.1.</span> <span class="nav-text">5.2.1 修改 core-site.xml</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-2修改-hadoop-env-sh"><span class="nav-number">6.2.2.</span> <span class="nav-text">5.2.2修改 hadoop-env.sh</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-3修改-hdfs-site-xml"><span class="nav-number">6.2.3.</span> <span class="nav-text">5.2.3修改 hdfs-site.xml</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-4-修改mapred-site-xml"><span class="nav-number">6.2.4.</span> <span class="nav-text">5.2.4 修改mapred-site.xml</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3，Hadoop启动"><span class="nav-number">6.3.</span> <span class="nav-text">3，Hadoop启动</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#六、Spark启动"><span class="nav-number">7.</span> <span class="nav-text">六、Spark启动</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
