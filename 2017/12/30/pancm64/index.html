@@ -1,0 +1,1079 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="大数据,hive,hadoop,spark,hbase," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="引言在之前的大数据学习系列中，搭建了Hadoop+Spark+HBase+Hive 环境以及一些测试。其实要说的话，我开始学习大数据的时候，搭建的就是集群，并不是单机模式和伪分布式。至于为什么先写单机的搭建，是因为作为个人学习的话，单机已足以，好吧，说实话是自己的电脑不行，使用虚拟机实在太卡了。。。  整个的集群搭建是在公司的测试服务搭建的，在搭建的时候遇到各种各样的坑，当然也收获颇多。在成功搭">
+<meta name="keywords" content="大数据,hive,hadoop,spark,hbase">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大数据学习系列之七 ----- Hadoop+Spark+Zookeeper+HBase+Hive集群搭建  图文详解">
+<meta property="og:url" content="http://yoursite.com/2017/12/30/pancm64/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="引言在之前的大数据学习系列中，搭建了Hadoop+Spark+HBase+Hive 环境以及一些测试。其实要说的话，我开始学习大数据的时候，搭建的就是集群，并不是单机模式和伪分布式。至于为什么先写单机的搭建，是因为作为个人学习的话，单机已足以，好吧，说实话是自己的电脑不行，使用虚拟机实在太卡了。。。  整个的集群搭建是在公司的测试服务搭建的，在搭建的时候遇到各种各样的坑，当然也收获颇多。在成功搭">
+<meta property="og:image" content="http://img.blog.csdn.net/20171230150312124?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171230150713728?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171230150752948?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171230150759515?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171230150806124?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171230150814048?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171230150849765?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171230150946950?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171230151037761?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171230151047319?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171230151054538?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171230151323402?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171230151339066?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171230151426874?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171230151526356?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171230151629304?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171230151640979?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171230152549017?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171230152536678?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171230152800716?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171230152823369?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171230152908262?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171230152936414?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171230153001178?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171230153023312?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171230153049290?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2017-12-31T11:26:15.680Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="大数据学习系列之七 ----- Hadoop+Spark+Zookeeper+HBase+Hive集群搭建  图文详解">
+<meta name="twitter:description" content="引言在之前的大数据学习系列中，搭建了Hadoop+Spark+HBase+Hive 环境以及一些测试。其实要说的话，我开始学习大数据的时候，搭建的就是集群，并不是单机模式和伪分布式。至于为什么先写单机的搭建，是因为作为个人学习的话，单机已足以，好吧，说实话是自己的电脑不行，使用虚拟机实在太卡了。。。  整个的集群搭建是在公司的测试服务搭建的，在搭建的时候遇到各种各样的坑，当然也收获颇多。在成功搭">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20171230150312124?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/12/30/pancm64/"/>
+
+
+
+
+
+
+  <title>大数据学习系列之七 ----- Hadoop+Spark+Zookeeper+HBase+Hive集群搭建  图文详解 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/30/pancm64/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">大数据学习系列之七 ----- Hadoop+Spark+Zookeeper+HBase+Hive集群搭建  图文详解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-30T15:48:03+08:00">
+                2017-12-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/hadoop/" itemprop="url" rel="index">
+                    <span itemprop="name">hadoop</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><pre><code>在之前的大数据学习系列中，搭建了Hadoop+Spark+HBase+Hive 环境以及一些测试。其实要说的话，我开始学习大数据的时候，搭建的就是集群，并不是单机模式和伪分布式。至于为什么先写单机的搭建，是因为作为个人学习的话，单机已足以，好吧，说实话是自己的电脑不行，使用虚拟机实在太卡了。。。 
+整个的集群搭建是在公司的测试服务搭建的，在搭建的时候遇到各种各样的坑，当然也收获颇多。在成功搭建大数据集群之后，零零散散的做了写笔记，然后重新将这些笔记整理了下来。于是就有了本篇博文。
+其实我在搭建的时候，并不是按部就班的搭建，中间或多或少都更改过不少，试验出来了目前没啥问题的集群搭建。在写本文的时候，开始准备将环境在一台机器上搭建，然后全部传输到其他机器上。但是想了想，这样或许在搭建环境的时候快速，但是对于阅读者来说，不太友好。于是便拆分出来了，单独搭建一个也是可以的。好了，废话就少说了，教程如下。
+</code></pre><h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><p>[TOC]</p>
+<h2 id="一、环境选择"><a href="#一、环境选择" class="headerlink" title="一、环境选择"></a>一、环境选择</h2><h3 id="1，集群机器安装图"><a href="#1，集群机器安装图" class="headerlink" title="1，集群机器安装图"></a>1，集群机器安装图</h3><p>这次因为是集群搭建，所以在环境配置方面，我使用一张表格来大致描述。集群使用了3台机器，分别是master、slave1、slave2，通过名称命名就可以知道主从关系了。使用的操作系统是CentOS6.8，具体各个机器安装的配置如下表格:<br><img src="http://img.blog.csdn.net/20171230150312124?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>具体每个机器的配置就如上图了。需要补充的是，spark这块我没有使用官方自带的spark，而是使用的已经编译好的spark和hive的版本。因为后面在使用hive查询的时候，不想使用hive默认的mr，在hive2.x之后，官方也不建议了。因为使用mr效率实在太低，所以在后面我会将hive的引擎换成spark，而自己又不想重新编译spark ，所以就用这个版本了。如果各位想自行编译，或者出现更高的版本，就没必要一定按照上面的来。还有存放路径这块，没必要一定要使用上面的，可以先在机器上使用 df -h 查看相应的磁盘空间，再来进行部署。</p>
+<h3 id="2，配置说明"><a href="#2，配置说明" class="headerlink" title="2，配置说明"></a>2，配置说明</h3><ul>
+<li>JDK ：Hadoop和Spark 依赖的配置，官方建议JDK版本在1.7以上！！！</li>
+<li>Scala：Spark依赖的配置，建议版本不低于spark的版本。</li>
+<li>Hadoop: 是一个分布式系统基础架构。</li>
+<li>Spark: 分布式存储的大数据进行处理的工具。</li>
+<li>zookeeper:分布式应用程序协调服务，HBase集群需要。</li>
+<li>HBase: 一个结构化数据的分布式存储系统。</li>
+<li>Hive: 基于Hadoop的一个数据仓库工具，目前的默认元数据库是mysql。</li>
+</ul>
+<h3 id="3，下载地址"><a href="#3，下载地址" class="headerlink" title="3，下载地址"></a>3，下载地址</h3><p><strong>官方地址:</strong><br> Hadoop:<br><a href="http://www.apache.org/dyn/closer.cgi/hadoop/common" target="_blank" rel="external">http://www.apache.org/dyn/closer.cgi/hadoop/common</a></p>
+<p>Spark：<br><a href="http://spark.apache.org/downloads.html" target="_blank" rel="external">http://spark.apache.org/downloads.html</a></p>
+<p>Spark Sql on Hive<br><a href="http://mirror.bit.edu.cn/apache/spark" target="_blank" rel="external">http://mirror.bit.edu.cn/apache/spark</a></p>
+<p>Scala:<br><a href="http://www.scala-lang.org/download" target="_blank" rel="external">http://www.scala-lang.org/download</a></p>
+<p>JDK:<br><a href="http://www.oracle.com/technetwork/java/javase/downloads" target="_blank" rel="external">http://www.oracle.com/technetwork/java/javase/downloads</a></p>
+<p>HBase<br><a href="http://mirror.bit.edu.cn/apache/hbase/" target="_blank" rel="external">http://mirror.bit.edu.cn/apache/hbase/</a></p>
+<p>Zookeeper<br><a href="http://mirror.bit.edu.cn/apache/zookeeper/" target="_blank" rel="external">http://mirror.bit.edu.cn/apache/zookeeper/</a></p>
+<p>Hive<br><a href="http://mirror.bit.edu.cn/apache/hive/" target="_blank" rel="external">http://mirror.bit.edu.cn/apache/hive/</a></p>
+<p><strong>百度云:</strong><br>链接：<a href="https://pan.baidu.com/s/1kUYfDaf" target="_blank" rel="external">https://pan.baidu.com/s/1kUYfDaf</a> 密码：o1ov</p>
+<h2 id="二、集群的相关配置"><a href="#二、集群的相关配置" class="headerlink" title="二、集群的相关配置"></a>二、集群的相关配置</h2><h3 id="1，主机名更改以及主机和IP做相关映射"><a href="#1，主机名更改以及主机和IP做相关映射" class="headerlink" title="1，主机名更改以及主机和IP做相关映射"></a>1，主机名更改以及主机和IP做相关映射</h3><h4 id="1-更改主机名"><a href="#1-更改主机名" class="headerlink" title="1. 更改主机名"></a>1. 更改主机名</h4><p><strong>说明</strong>:更改主机名是为了方便集群管理，不然每个机器的名称都叫localhost也不太好吧！ 集群所有的机器都要做这个操作。</p>
+<p>输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim /etc/sysconfig/network</div></pre></td></tr></table></figure>
+<p>将localhost.localdomain修改为你要更改的名称，每台名称都不一样<br>例如:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">HOSTNAME=master</div></pre></td></tr></table></figure>
+<pre><code>注: 名称更改了之后输入reboot重启才会生效。
+</code></pre><h4 id="2-做主机和IP的关系映射"><a href="#2-做主机和IP的关系映射" class="headerlink" title="2.做主机和IP的关系映射"></a>2.做主机和IP的关系映射</h4><p>修改hosts文件，做关系映射<br>说明:这个每台机器都做这个配置，具体ip和主机名称以自己的为准。<br>输入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim /etc/hosts</div></pre></td></tr></table></figure></p>
+<p>添加<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">192.169.0.23 master</div><div class="line">192.169.0.24 slave1</div><div class="line">192.169.0.25 slave2</div></pre></td></tr></table></figure></p>
+<p><img src="http://img.blog.csdn.net/20171230150713728?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br><strong>说明</strong>:可以在一台机器添加了之后可以使用scp 命令或使用ftp将这个文件copy到        其他机器中。<br>scp命令示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scp -r /etc/hosts root@192.169.0.24:/etc</div></pre></td></tr></table></figure></p>
+<h3 id="2，ssh免登录"><a href="#2，ssh免登录" class="headerlink" title="2，ssh免登录"></a>2，ssh免登录</h3><p>设置ssh免密码登录是为了操作方便<br>生成秘钥文件<br>在每台机器上都执行一遍<br>   首先输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh-keygen -t rsa -P &apos;&apos;</div></pre></td></tr></table></figure>
+<p>生成秘钥之后，然后将每台机器/root/.ssh 都存入内容相同的文件，文件名称叫authorized_keys，文件内容是我们刚才为3台机器生成的公钥。可以在一台机器上生成，然后复制到其它的机器上。</p>
+<p>新建authorized_keys文件<br>输入 :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">touch  /root/.ssh/authorized_keys</div></pre></td></tr></table></figure>
+<p>编辑 authorized_keys  并将其他机器上的秘钥拷贝过来</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cat /root/.ssh/id_rsa.pub</div><div class="line">vim /root/.ssh/authorized_keys</div></pre></td></tr></table></figure>
+<p>将其它机器上的 id_rsa.pub 的内容拷贝到  authorized_keys这个文件中。<br>第一个机器:<br><img src="http://img.blog.csdn.net/20171230150752948?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>第二个机器:<br><img src="http://img.blog.csdn.net/20171230150759515?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>第三个机器:<br>   <img src="http://img.blog.csdn.net/20171230150806124?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>最终authorized_keys文件的内容<br><img src="http://img.blog.csdn.net/20171230150814048?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>将这个最终的authorized_keys文件copy到其他机器的 /root/.ssh 目录下。使用scp或者ftp都可以。<br>scp命令示例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scp -r /root/.ssh/authorized_keys root@192.169.0.24:/root/.ssh</div></pre></td></tr></table></figure>
+<p>测试免密码登录<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ssh slave1</div><div class="line">ssh slave2</div></pre></td></tr></table></figure>
+<p>输入 exit 退出<br><img src="http://img.blog.csdn.net/20171230150849765?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h3 id="3，防火墙关闭"><a href="#3，防火墙关闭" class="headerlink" title="3，防火墙关闭"></a>3，防火墙关闭</h3><p><strong>说明</strong>:其实可以不关闭防火墙，进行权限设置，但是为了方便访问，于是便关闭了防火墙。每个机器都做！！！</p>
+<p>  关闭防火墙的命令<br>停止防火墙:<br>service   iptables stop<br>启动防火墙:<br> service   iptables start<br>重启防火墙:<br> service   iptables restart<br>永久关闭防火墙:<br> chkconfig   iptables off</p>
+<h3 id="4，时间配置"><a href="#4，时间配置" class="headerlink" title="4，时间配置"></a>4，时间配置</h3><p>   集群上的机器时间要同步，因为我这边的是虚拟机，所以就不用了。<br>设置集群时间同步可以使用NTP服务。<br>具体可以参考: <a href="http://blog.csdn.net/to_baidu/article/details/52562574" target="_blank" rel="external">http://blog.csdn.net/to_baidu/article/details/52562574</a>  </p>
+<h3 id="5，快捷键设置-可选"><a href="#5，快捷键设置-可选" class="headerlink" title="5，快捷键设置(可选)"></a>5，快捷键设置(可选)</h3><p> 说明:因为要经常切换各个目录之间，所以为了偷懒，就设置别名了。只需要在linux输入别名，就可以执行别名后面的命令，相当的方便。 例如:我们常用的ll就是 ls -l 的别名。关于别名这块各位可以自行摸索。<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim ~/.bashrc</div></pre></td></tr></table></figure>
+<p>添加下面的内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"># Some more ailases</div><div class="line">alias chd=&apos;cd /opt/hadoop/hadoop2.8&apos;</div><div class="line">alias chb=&apos;cd /opt/hbase/hbase1.2&apos;</div><div class="line">alias chi=&apos;cd /opt/hive/hive2.1&apos;</div><div class="line">alias czk=&apos;cd /opt/zookeeper/zookeeper3.4&apos;</div><div class="line">alias csp=&apos;cd /opt/spark/spark2.0-hadoop2.4-hive&apos;</div><div class="line"></div><div class="line">alias fhadoop=&apos;/opt/hadoop/hadoop2.8/bin/hdfs namenode -format&apos;</div><div class="line">alias starthadoop=&apos;/opt/hadoop/hadoop2.8/sbin/start-all.sh&apos;</div><div class="line">alias stophadoop=&apos;/opt/hadoop/hadoop2.8/sbin/stop-all.sh&apos;</div><div class="line"></div><div class="line">alias starthbase=&apos;/opt/hbase/hbase1.2/bin/start-hbase.sh&apos;</div><div class="line">alias stophbase=&apos;/opt/hbase/hbase1.2/bin/stop-hbase.sh&apos;</div><div class="line"></div><div class="line">alias startzk=&apos;/opt/zookeeper/zookeeper3.4/bin/zkServer.sh start&apos;</div><div class="line">alias stopzk=&apos;/opt/zookeeper/zookeeper3.4/bin/zkServer.sh stop&apos;</div><div class="line">alias statuszk=&apos;/opt/zookeeper/zookeeper3.4/bin/zkServer.sh status&apos;</div><div class="line"></div><div class="line">alias startsp=&apos;/opt/spark/spark1.6-hadoop2.4-hive/sbin/start-all.sh&apos;</div><div class="line">alias stopsp=&apos;/opt/spark/spark1.6-hadoop2.4-hive/sbin/stop-all.sh&apos;</div></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20171230150946950?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>成功添加之后输入 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">source ~/.bashrc</div></pre></td></tr></table></figure>
+<p>然后输入设置的别名就可以执行你所设置的内容了。别名的设置不一定非要按照上面的，如果有更好方式就请使用</p>
+<h3 id="6，整体环境变量设置"><a href="#6，整体环境变量设置" class="headerlink" title="6，整体环境变量设置"></a>6，整体环境变量设置</h3><p>   在 /etc/profile 这个配置文件要添加很多的环境配置，这里就先将整体的环境配置列举出来，各位在配置环境变量的以自己的为准！！！ 可以先配置好环境变量之后，在传输到其他机器上去。<br> 我这里先将这些配置都传输到其他的机器上了，并且都source了，所以下文中这个配置文件的操作实际是没做的。具体情况以自己的为准。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">#Java Config</div><div class="line">export JAVA_HOME=/opt/java/jdk1.8</div><div class="line">export JRE_HOME=/opt/java/jdk1.8/jre</div><div class="line">export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JRE_HOME/lib</div><div class="line"># Scala Config</div><div class="line">export SCALA_HOME=/opt/scala/scala2.12</div><div class="line"># Spark Config</div><div class="line">export  SPARK_HOME=/opt/spark/spark1.6-hadoop2.4-hive</div><div class="line"># Zookeeper Config</div><div class="line">export ZK_HOME=/opt/zookeeper/zookeeper3.4</div><div class="line"># HBase Config</div><div class="line">export HBASE_HOME=/opt/hbase/hbase1.2</div><div class="line"># Hadoop Config </div><div class="line">export HADOOP_HOME=/opt/hadoop/hadoop2.8</div><div class="line">export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native</div><div class="line">export HADOOP_OPTS=&quot;-Djava.library.path=$HADOOP_HOME/lib&quot;</div><div class="line"># Hive Config</div><div class="line">export HIVE_HOME=/opt/hive/hive2.1</div><div class="line">export HIVE_CONF_DIR=$&#123;HIVE_HOME&#125;/conf</div><div class="line"></div><div class="line">export PATH=.:$&#123;JAVA_HOME&#125;/bin:$&#123;SCALA_HOME&#125;/bin:$&#123;SPARK_HOME&#125;/bin:$&#123;HADOOP_HOME&#125;/bin:$&#123;HADOOP_HOME&#125;/sbin:$&#123;ZK_HOME&#125;/bin:$&#123;HBASE_HOME&#125;/bin:$&#123;HIVE_HOME&#125;/bin:$PATH</div></pre></td></tr></table></figure>
+<h2 id="二、Hadoop的环境搭建"><a href="#二、Hadoop的环境搭建" class="headerlink" title="二、Hadoop的环境搭建"></a>二、Hadoop的环境搭建</h2><p>事先说明，这些配置可以在一台机器上配置，然后复制到其他机器上就行了。复制之后注意使这些配置文件生效。</p>
+<h3 id="1，JDK配置"><a href="#1，JDK配置" class="headerlink" title="1，JDK配置"></a>1，JDK配置</h3><p>   <strong>说明</strong>: 一般CentOS自带了openjdk，但是hadoop集群使用的是oracle官方的jdk，所以先行卸载CentOS的jdk，然后再安装在oracle下载好的JDK。<br>首先输入 java -version<br>查看是否安装了JDK，如果安装了，但版本不适合的话，就卸载<br><img src="http://img.blog.csdn.net/20171230151037761?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>输入<br>rpm -qa | grep java<br>查看信息<br><img src="http://img.blog.csdn.net/20171230151047319?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>然后输入:<br>rpm -e –nodeps “你要卸载JDK的信息”<br>如: rpm -e –nodeps java-1.7.0-openjdk-1.7.0.99-2.6.5.1.el6.x86_64<br><img src="http://img.blog.csdn.net/20171230151054538?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>确认没有了之后，解压下载下来的JDK</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar  -xvf   jdk-8u144-linux-x64.tar.gz</div></pre></td></tr></table></figure>
+<p>移动到opt/java文件夹中，没有就新建，然后将文件夹重命名为jdk1.8。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mv  jdk1.8.0_144 /opt/java</div><div class="line">mv  jdk1.8.0_144  jdk1.8</div></pre></td></tr></table></figure>
+<p>然后编辑 profile 文件，添加如下配置<br> 输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim /etc/profile</div></pre></td></tr></table></figure>
+<p>添加:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">export JAVA_HOME=/opt/java/jdk1.8</div><div class="line">export JRE_HOME=/opt/java/jdk1.8/jre</div><div class="line">export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JRE_HOME/lib</div><div class="line">export PATH=.:$&#123;JAVA_HOME&#125;/bin:$PATH</div></pre></td></tr></table></figure>
+<p>添加成功之后，输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">source /etc/profile</div><div class="line">java  -version</div></pre></td></tr></table></figure>
+<p>查看是否配置成功</p>
+<h3 id="2，hadoop配置"><a href="#2，hadoop配置" class="headerlink" title="2，hadoop配置"></a>2，hadoop配置</h3><h4 id="3-2-1-文件准备"><a href="#3-2-1-文件准备" class="headerlink" title="3.2.1 文件准备"></a>3.2.1 文件准备</h4><p>将下载下来的Hadoop的配置文件进行解压<br>在linux上输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar  -xvf   hadoop-2.8.2.tar.gz</div></pre></td></tr></table></figure>
+<p>然后将解压之后的文件夹移动到opt/hadoop文件夹下，没有该文件夹就新建，然后将文件夹重命名为hadoop2.8。<br>在linux上输入移动文件夹命令:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mv  hadoop-2.8.2 /opt/hadoop</div><div class="line">mv  hadoop-2.8.2 hadoop2.8</div></pre></td></tr></table></figure>
+<h4 id="3-2-2-环境配置"><a href="#3-2-2-环境配置" class="headerlink" title="3.2.2 环境配置"></a>3.2.2 环境配置</h4><p>编辑 /etc/profile 文件<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim /etc/profile</div></pre></td></tr></table></figure>
+<p>添加:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">export HADOOP_HOME=/opt/hadoop/hadoop2.8 </div><div class="line">export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native</div><div class="line">export HADOOP_OPTS=&quot;-Djava.library.path=$HADOOP_HOME/lib&quot;</div><div class="line">export PATH=.:$&#123;JAVA_HOME&#125;/bin:$&#123;HADOOP_HOME&#125;/bin:$PATH</div></pre></td></tr></table></figure>
+<p>输入: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">source  /etc/profile</div></pre></td></tr></table></figure>
+<p>使配置生效 </p>
+<h4 id="3-2-3-修改配置文件"><a href="#3-2-3-修改配置文件" class="headerlink" title="3.2.3  修改配置文件"></a>3.2.3  修改配置文件</h4><p>修改 core-site.xml、hadoop-env.sh、hdfs-site.xml、mapred-site.xml 等这些配置文件<br>在linux输入进入该目录的命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cd /opt/hadoop/hadoop2.8/etc/hadoop</div></pre></td></tr></table></figure>
+<h5 id="3-2-3-1-修改-core-site-xml"><a href="#3-2-3-1-修改-core-site-xml" class="headerlink" title="3.2.3.1 修改 core-site.xml"></a>3.2.3.1 修改 core-site.xml</h5><p>hadoop的存放路径可以自行更改。开始我以为这些文件夹需要手动创建，后来实践了，如果不手动创建，会自动创建的，所以就去掉了手动创建目录的步骤。<br>输入: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim core-site.xml</div></pre></td></tr></table></figure>
+<p> 在<code>&lt;configuration&gt;</code>节点内加入配置:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"> &lt;configuration&gt;</div><div class="line">&lt;property&gt;</div><div class="line">    &lt;name&gt;hadoop.temp.dir&lt;/name&gt;</div><div class="line">    &lt;value&gt;file:/root/hadoop/tmp&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;fs.defaultFS&lt;/name&gt;</div><div class="line">    &lt;value&gt;hdfs://master:9000&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line">&lt;!-- eclipse连接hive 的配置--&gt;</div><div class="line">&lt;property&gt;</div><div class="line">  &lt;name&gt;hadoop.proxyuser.root.hosts&lt;/name&gt;</div><div class="line">  &lt;value&gt;*&lt;/value&gt;</div><div class="line"> &lt;/property&gt;</div><div class="line"> &lt;property&gt;</div><div class="line">  &lt;name&gt;hadoop.proxyuser.root.groups&lt;/name&gt;</div><div class="line">  &lt;value&gt;*&lt;/value&gt;</div><div class="line">&lt;/property&gt;</div><div class="line">&lt;/configuration&gt;</div></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20171230151323402?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p><strong>说明</strong>: fs.defaultFS 是缺省文件的名称， 最早使用的是 fs.default.name，后来在最新官方文档中查到该方法已经弃用了。于是边改成这个了。ps：感觉也没啥区别。</p>
+<h5 id="3-2-3-2-修改-hadoop-env-sh"><a href="#3-2-3-2-修改-hadoop-env-sh" class="headerlink" title="3.2.3.2 修改 hadoop-env.sh"></a>3.2.3.2 修改 hadoop-env.sh</h5><p>这个要做，不知道为什么相对路径不识别，于是就使用绝对路径。<br>将<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">export   JAVA_HOME=$&#123;JAVA_HOME&#125;</div></pre></td></tr></table></figure></p>
+<p>修改为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">export   JAVA_HOME=/opt/java/jdk1.8</div></pre></td></tr></table></figure>
+<p>注:修改为自己JDK的路径<br><img src="http://img.blog.csdn.net/20171230151339066?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h5 id="3-2-2-3-修改-hdfs-site-xml"><a href="#3-2-2-3-修改-hdfs-site-xml" class="headerlink" title="3.2.2.3 修改 hdfs-site.xml"></a>3.2.2.3 修改 hdfs-site.xml</h5><p>下面的hdfs的存放路径，可以根据自己机器更改。<br>在<code>&lt;configuration&gt;</code>节点内加入配置:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;property&gt;</div><div class="line">   &lt;name&gt;dfs:replication&lt;/name&gt;</div><div class="line">   &lt;value&gt;2&lt;/value&gt;</div><div class="line"> &lt;/property&gt;</div><div class="line"> &lt;property&gt;</div><div class="line">   &lt;name&gt;dfs.namenode.name.dir&lt;/name&gt;</div><div class="line">   &lt;value&gt;file:/root/hadoop/name&lt;/value&gt;</div><div class="line"> &lt;/property&gt;</div><div class="line"> &lt;property&gt;</div><div class="line">   &lt;name&gt;dfs.datanode.data.dir&lt;/name&gt;</div><div class="line">   &lt;value&gt;file:/root/hadoop/data&lt;/value&gt;</div><div class="line"> &lt;/property&gt;</div></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20171230151426874?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h5 id="3-5-2-4-修改mapred-site-xml"><a href="#3-5-2-4-修改mapred-site-xml" class="headerlink" title="3.5.2.4 修改mapred-site.xml"></a>3.5.2.4 修改mapred-site.xml</h5><p>执行mapreduce的运行框架配置。ps:感觉这个配置没啥用，可能我没用mr吧。<br>如果没有 mapred-site.xml 该文件，就复制mapred-site.xml.template文件并重命名为mapred-site.xml。<br>修改这个新建的mapred-site.xml文件，在<code>&lt;configuration&gt;</code>节点内加入配置:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;property&gt;</div><div class="line">       &lt;name&gt;mapreduce.framework.name&lt;/name&gt;</div><div class="line">       &lt;value&gt;yarn&lt;/value&gt;</div><div class="line">&lt;/property&gt;</div></pre></td></tr></table></figure>
+<h5 id="3-5-2-5-修改yarn-site-xml文件"><a href="#3-5-2-5-修改yarn-site-xml文件" class="headerlink" title="3.5.2.5 修改yarn-site.xml文件"></a>3.5.2.5 修改yarn-site.xml文件</h5><p>yarn 资源调度的配置，集群的话这个配置是必须的。<br>修改/opt/hadoop/hadoop2.8/etc/hadoop/yarn-site.xml文件，<br>         在<code>&lt;configuration&gt;</code>节点内加入配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line">&lt;property&gt;</div><div class="line">        &lt;name&gt;yarn.resourcemanager.hostname&lt;/name&gt;</div><div class="line">        &lt;value&gt;master&lt;/value&gt;</div><div class="line">   &lt;/property&gt;</div><div class="line">   &lt;property&gt;</div><div class="line">        &lt;name&gt;yarn.resourcemanager.address&lt;/name&gt;</div><div class="line">        &lt;value&gt;$&#123;yarn.resourcemanager.hostname&#125;:8032&lt;/value&gt;</div><div class="line">   &lt;/property&gt;</div><div class="line">   &lt;property&gt;</div><div class="line">        &lt;description&gt;The address of the scheduler interface.&lt;/description&gt;</div><div class="line">        &lt;name&gt;yarn.resourcemanager.scheduler.address&lt;/name&gt;</div><div class="line">        &lt;value&gt;$&#123;yarn.resourcemanager.hostname&#125;:8030&lt;/value&gt;</div><div class="line">   &lt;/property&gt;</div><div class="line">   &lt;property&gt;</div><div class="line">        &lt;description&gt;The http address of the RM web application.&lt;/description&gt;</div><div class="line">        &lt;name&gt;yarn.resourcemanager.webapp.address&lt;/name&gt;</div><div class="line">        &lt;value&gt;$&#123;yarn.resourcemanager.hostname&#125;:8088&lt;/value&gt;</div><div class="line">   &lt;/property&gt;</div><div class="line">   &lt;property&gt;</div><div class="line">        &lt;description&gt;The https adddress of the RM web application.&lt;/description&gt;</div><div class="line">        &lt;name&gt;yarn.resourcemanager.webapp.https.address&lt;/name&gt;</div><div class="line">        &lt;value&gt;$&#123;yarn.resourcemanager.hostname&#125;:8090&lt;/value&gt;</div><div class="line">   &lt;/property&gt;</div><div class="line">   &lt;property&gt;</div><div class="line">        &lt;name&gt;yarn.resourcemanager.resource-tracker.address&lt;/name&gt;</div><div class="line">        &lt;value&gt;$&#123;yarn.resourcemanager.hostname&#125;:8031&lt;/value&gt;</div><div class="line">   &lt;/property&gt;</div><div class="line">   &lt;property&gt;</div><div class="line">        &lt;description&gt;The address of the RM admin interface.&lt;/description&gt;</div><div class="line">        &lt;name&gt;yarn.resourcemanager.admin.address&lt;/name&gt;</div><div class="line">        &lt;value&gt;$&#123;yarn.resourcemanager.hostname&#125;:8033&lt;/value&gt;</div><div class="line">   &lt;/property&gt;</div><div class="line">   &lt;property&gt;</div><div class="line">        &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;</div><div class="line">        &lt;value&gt;mapreduce_shuffle&lt;/value&gt;</div><div class="line">   &lt;/property&gt;</div><div class="line">   &lt;property&gt;</div><div class="line">        &lt;name&gt;yarn.scheduler.maximum-allocation-mb&lt;/name&gt;</div><div class="line">        &lt;value&gt;8182&lt;/value&gt;</div><div class="line">        &lt;discription&gt;每个节点可用内存,单位MB,默认8182MB&lt;/discription&gt;</div><div class="line">   &lt;/property&gt;</div><div class="line">   &lt;property&gt;</div><div class="line">        &lt;name&gt;yarn.nodemanager.vmem-pmem-ratio&lt;/name&gt;</div><div class="line">        &lt;value&gt;2.1&lt;/value&gt;</div><div class="line">   &lt;/property&gt;</div><div class="line">   &lt;property&gt;</div><div class="line">        &lt;name&gt;yarn.nodemanager.resource.memory-mb&lt;/name&gt;</div><div class="line">        &lt;value&gt;2048&lt;/value&gt;</div><div class="line">&lt;/property&gt;</div><div class="line">   &lt;property&gt;</div><div class="line">        &lt;name&gt;yarn.nodemanager.vmem-check-enabled&lt;/name&gt;</div><div class="line">        &lt;value&gt;false&lt;/value&gt;</div><div class="line">&lt;/property&gt;</div></pre></td></tr></table></figure></p>
+<p><img src="http://img.blog.csdn.net/20171230151526356?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>说明：yarn.nodemanager.vmem-check-enabled这个的意思是忽略虚拟内存的检查，如果你是安装在虚拟机上，这个配置很有用，配上去之后后续操作不容易出问题。如果是实体机上，并且内存够多，可以将这个配置去掉。</p>
+<h5 id="3-5-2-6-修改slaves"><a href="#3-5-2-6-修改slaves" class="headerlink" title="3.5.2.6 修改slaves"></a>3.5.2.6 修改slaves</h5><p>设置主从的配置。如果不设置这个，集群就无法得知主从了。如果是单机模式，就没必要配置了。<br>修改/opt/hadoop/hadoop2.8/etc/hadoop/slaves文件<br>更改为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">slave1 </div><div class="line">slave2</div></pre></td></tr></table></figure>
+<p>这些配置参考Hadoop官方文档。<br> Hadoop官方配置文件具体说明: <a href="http://hadoop.apache.org/docs/r2.8.3/" target="_blank" rel="external">http://hadoop.apache.org/docs/r2.8.3/</a></p>
+<p>在一台机器上(最好是master)做完这些配置之后，我们使用scp命令将这些配置传输到其他机器上。<br>输入:<br>jdk环境传输</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">scp -r /opt/java root@slave1:/opt</div><div class="line">scp -r /opt/java root@slave2:/opt</div></pre></td></tr></table></figure>
+<p>hadoop环境传输</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">scp -r /opt/hadoop root@slave1:/opt</div><div class="line">scp -r /opt/hadoop root@slave2:/opt</div></pre></td></tr></table></figure>
+<p>传输之后，便在主节点启动集群。<br>在启动hadoop之前，需要初始化，这个只需要在master上初始化就可以了。</p>
+<h3 id="3，hadoop启动"><a href="#3，hadoop启动" class="headerlink" title="3，hadoop启动"></a>3，hadoop启动</h3><p><strong>注</strong>:启动hadoop之前确保防火墙关闭，各个机器时间通过，ssh免登录都没问题。<br>初始化hadoop<br>切换到/opt/hadoop/hadoop2.8/bin目录下输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./hdfs  namenode  -format</div></pre></td></tr></table></figure>
+<p>初始化成功之后，切换到/opt/hadoop/hadoop2.8/sbin<br>启动hadoop 的hdfs和yarn<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">start-dfs.sh</div><div class="line">start-yarn.sh</div></pre></td></tr></table></figure>
+<p>第一次登录会询问是否连接，输入yes ，然后输入密码就可以了<br>启动成功之后，可以使用jps命令在各个机器上查看是否成功<br>可以在浏览器输入: ip+50070 和8088端口查看<br><img src="http://img.blog.csdn.net/20171230151629304?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p><img src="http://img.blog.csdn.net/20171230151640979?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>若如图显示，则启动成功。<br>若失败，检查jps是否成功启动，防火墙是否都关闭。都确认没问题之后，还是无法打开界面，请查看日志，再来找原因。</p>
+<h2 id="四、Spark的环境配置"><a href="#四、Spark的环境配置" class="headerlink" title="四、Spark的环境配置"></a>四、Spark的环境配置</h2><p><strong>说明</strong>:其实spark的相关配置，我在<a href="http://www.panchengming.com/2017/12/19/pancm63" target="_blank" rel="external">大数据学习系列之六 —– Hadoop+Spark环境搭建</a> <a href="http://www.panchengming.com/2017/12/19/pancm63/" target="_blank" rel="external">http://www.panchengming.com/2017/12/19/pancm63/</a>  应该已经说的很详细了，虽然是单机环境。其实集群也就增加个slave配置，其他的暂时好像没什么了。所以就简单的贴下配置。</p>
+<h3 id="1，Scala配置"><a href="#1，Scala配置" class="headerlink" title="1，Scala配置"></a>1，Scala配置</h3><p>和JDK配置几乎一样</p>
+<h4 id="4-1-1-文件准备"><a href="#4-1-1-文件准备" class="headerlink" title="4.1.1 文件准备"></a>4.1.1 文件准备</h4><p>将下载好的Scala文件解压<br>输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar -xvf scala-2.12.2.tgz</div></pre></td></tr></table></figure>
+<p>然后移动到/opt/scala 里面<br>并且重命名为scala2.1<br>输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mv  scala-2.12.2  /opt/scala</div><div class="line">mv scala-2.12.2 scala2.12</div></pre></td></tr></table></figure>
+<h4 id="4-1-2-环境配置"><a href="#4-1-2-环境配置" class="headerlink" title="4.1.2 环境配置"></a>4.1.2 环境配置</h4><p>编辑 /etc/profile 文件<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">export SCALA_HOME=/opt/scala/scala2.12</div><div class="line">export PATH=.:$&#123;JAVA_HOME&#125;/bin:$&#123;SCALA_HOME&#125;/bin:$PATH</div></pre></td></tr></table></figure>
+<p>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">source  /etc/profile</div></pre></td></tr></table></figure>
+<p>使配置生效<br>输入 scala -version 查看是否安装成功</p>
+<h3 id="2，Spark配置"><a href="#2，Spark配置" class="headerlink" title="2，Spark配置"></a>2，Spark配置</h3><h4 id="4-2-1，文件准备"><a href="#4-2-1，文件准备" class="headerlink" title="4.2.1，文件准备"></a>4.2.1，文件准备</h4><p>将下载好的Spark文件解压<br>输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar -xvf spark-1.6.3-bin-hadoop2.4-without-hive.tgz</div></pre></td></tr></table></figure>
+<p>然后移动到/opt/spark 里面，并重命名<br>输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mv  spark-1.6.3-bin-hadoop2.4-without-hive  /opt/spark</div><div class="line">mv  spark-1.6.3-bin-hadoop2.4-without-hive  spark1.6-hadoop2.4-hive</div></pre></td></tr></table></figure>
+<h4 id="4-2-2，环境配置"><a href="#4-2-2，环境配置" class="headerlink" title="4.2.2，环境配置"></a>4.2.2，环境配置</h4><p>编辑 /etc/profile 文件<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">export  SPARK_HOME=/opt/spark/spark1.6-hadoop2.4-hive </div><div class="line">export PATH=.:$&#123;JAVA_HOME&#125;/bin:$&#123;SCALA_HOME&#125;/bin:$&#123;SPARK_HOME&#125;/bin:$PATH</div></pre></td></tr></table></figure>
+<p>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">source  /etc/profile</div></pre></td></tr></table></figure>
+<p>使配置生效</p>
+<h4 id="4-2-3，更改配置文件"><a href="#4-2-3，更改配置文件" class="headerlink" title="4.2.3，更改配置文件"></a>4.2.3，更改配置文件</h4><p>切换目录<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cd /opt/spark/spark1.6-hadoop2.4-hive/conf</div></pre></td></tr></table></figure>
+<h5 id="4-2-3-1-修改-spark-env-sh"><a href="#4-2-3-1-修改-spark-env-sh" class="headerlink" title="4.2.3.1 修改 spark-env.sh"></a>4.2.3.1 修改 spark-env.sh</h5><p>在conf目录下，修改spark-env.sh文件，如果没有 spark-env.sh 该文件，就复制spark-env.sh.template文件并重命名为spark-env.sh。<br>修改这个新建的spark-env.sh文件，加入配置:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">export SCALA_HOME=/opt/scala/scala2.1    </div><div class="line">export JAVA_HOME=/opt/java/jdk1.8</div><div class="line">export HADOOP_HOME=/opt/hadoop/hadoop2.8    </div><div class="line">export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop  </div><div class="line">export SPARK_HOME=/opt/spark/spark1.6-hadoop2.4-hive</div><div class="line">export SPARK_MASTER_IP=master    </div><div class="line">export SPARK_EXECUTOR_MEMORY=4G</div></pre></td></tr></table></figure>
+<p><strong>注</strong>:上面的路径以自己的为准，SPARK_MASTER_IP为主机，SPARK_EXECUTOR_MEMORY为设置的运行内存。</p>
+<h5 id="4-2-3-2-修改slaves"><a href="#4-2-3-2-修改slaves" class="headerlink" title="4.2.3.2 修改slaves"></a>4.2.3.2 修改slaves</h5><p>slaves 分布式文件<br>在conf目录下，修改slaves文件，如果没有 slaves 该文件，就复制slaves .template文件并重命名为slaves 。<br>修改这个新建的slaves 文件，加入配置:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">slave1 </div><div class="line">slave2</div></pre></td></tr></table></figure>
+<p>在一台机器上(最好是master)做完这些配置之后，我们使用scp命令将这些配置传输到其他机器上。<br>输入:<br>scala环境传输</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">scp -r /opt/scala root@slave1:/opt</div><div class="line">scp -r /opt/scala root@slave2:/opt</div></pre></td></tr></table></figure>
+<p>spark环境传输</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">scp -r /opt/spark root@slave1:/opt</div><div class="line">scp -r /opt/spark root@slave2:/opt</div></pre></td></tr></table></figure>
+<p>传输之后，便在主节点启动集群。</p>
+<h3 id="3，spark启动"><a href="#3，spark启动" class="headerlink" title="3，spark启动"></a>3，spark启动</h3><p>说明:要先启动Hadoop<br> 切换到Spark目录下<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cd /opt/spark/spark2.2/sbin</div></pre></td></tr></table></figure>
+<p>然后启动Spark<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">start-all.sh</div></pre></td></tr></table></figure>
+<p>启动成功之后，可以使用jps命令在各个机器上查看是否成功。<br>可以在浏览器输入: ip+8080 端口查看</p>
+<p><img src="http://img.blog.csdn.net/20171230152549017?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>若成功显示这个界面，则表示Spark成功启动。</p>
+<h2 id="五、Zookeeper的环境配置"><a href="#五、Zookeeper的环境配置" class="headerlink" title="五、Zookeeper的环境配置"></a>五、Zookeeper的环境配置</h2><p>因为HBase做集群，所以就需要zookeeper了。<br>zookeeper 在很多环境搭建上，都会有他的身影，如kafka、storm等，这里就不多说了。</p>
+<h3 id="1，文件准备"><a href="#1，文件准备" class="headerlink" title="1，文件准备"></a>1，文件准备</h3><p>将下载下来的Zookeeper 的配置文件进行解压<br>在linux上输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar  -xvf   zookeeper-3.4.10.tar.gz</div></pre></td></tr></table></figure>
+<p>然后移动到/opt/zookeeper里面，没有就新建，然后将文件夹重命名为zookeeper3.4<br>输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mv  zookeeper-3.4.10  /opt/zookeeper</div><div class="line">mv  zookeeper-3.4.10  zookeeper3.4</div></pre></td></tr></table></figure>
+<h3 id="2，环境配置"><a href="#2，环境配置" class="headerlink" title="2，环境配置"></a>2，环境配置</h3><p>编辑 /etc/profile 文件<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">export  ZK_HOME=/opt/zookeeper/zookeeper3.4 </div><div class="line">export PATH=.:$&#123;JAVA_HOME&#125;/bin:$&#123;SCALA_HOME&#125;/bin:$&#123;SPARK_HOME&#125;/bin:$&#123;ZK_HOME&#125;/bin:$PATH</div></pre></td></tr></table></figure>
+<p>输入: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">source  /etc/profile</div></pre></td></tr></table></figure>
+<p>使配置生效 </p>
+<h3 id="3，修改配置文件"><a href="#3，修改配置文件" class="headerlink" title="3，修改配置文件"></a>3，修改配置文件</h3><h4 id="5-3-1-创建文件和目录"><a href="#5-3-1-创建文件和目录" class="headerlink" title="5.3.1 创建文件和目录"></a>5.3.1 创建文件和目录</h4><p> 在集群的服务器上都创建这些目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir   /opt/zookeeper/data  </div><div class="line">mkdir   /opt/zookeeper/dataLog</div></pre></td></tr></table></figure>
+<p>并且在/opt/zookeeper/data目录下创建myid文件<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">touch  myid</div></pre></td></tr></table></figure>
+<p>创建成功之后，更改myid文件。<br>我这边为了方便，将master、slave1、slave2的myid文件内容改为1,2,3<br><img src="http://img.blog.csdn.net/20171230152536678?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h4 id="5-3-2-新建zoo-cfg"><a href="#5-3-2-新建zoo-cfg" class="headerlink" title="5.3.2 新建zoo.cfg"></a>5.3.2 新建zoo.cfg</h4><p>切换到/opt/zookeeper/zookeeper3.4/conf 目录下<br>如果没有 zoo.cfg 该文件，就复制zoo_sample.cfg文件并重命名为zoo.cfg。<br>修改这个新建的zoo.cfg文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">dataDir=/opt/zookeeper/data</div><div class="line">dataLogDir=/opt/zookeeper/dataLog</div><div class="line">server.1=master:2888:3888</div><div class="line">server.2=slave1:2888:3888</div><div class="line">server.3=slave2:2888:3888</div></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20171230152800716?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>  <strong>说明</strong>：client port，顾名思义，就是客户端连接zookeeper服务的端口。这是一个TCP port。dataLogDir里是放到的顺序日志(WAL)。而dataDir里放的是内存数据结构的snapshot，便于快速恢复。为了达到性能最大化，一般建议把dataDir和dataLogDir分到不同的磁盘上，这样就可以充分利用磁盘顺序写的特性。dataDir和dataLogDir需要自己创建，目录可以自己制定，对应即可。server.1中的这个1需要和master这个机器上的dataDir目录中的myid文件中的数值对应。server.2中的这个2需要和slave1这个机器上的dataDir目录中的myid文件中的数值对应。server.3中的这个3需要和slave2这个机器上的dataDir目录中的myid文件中的数值对应。当然，数值你可以随便用，只要对应即可。2888和3888的端口号也可以随便用，因为在不同机器上，用成一样也无所谓。<br>1.tickTime：CS通信心跳数<br>Zookeeper 服务器之间或客户端与服务器之间维持心跳的时间间隔，也就是每个 tickTime 时间就会发送一个心跳。tickTime以毫秒为单位。<br>    tickTime=2000<br>2.initLimit：LF初始通信时限<br>集群中的follower服务器(F)与leader服务器(L)之间初始连接时能容忍的最多心跳数（tickTime的数量）。<br>    initLimit=10<br>3.syncLimit：LF同步通信时限<br>集群中的follower服务器与leader服务器之间请求和应答之间能容忍的最多心跳数（tickTime的数量）。<br>    syncLimit=5 </p>
+<p>依旧将zookeeper传输到其他的机器上，记得更改 /opt/zookeeper/data 下的myid，这个不能一致。<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">scp -r /opt/zookeeper root@slave1:/opt</div><div class="line">scp -r /opt/zookeeper root@slave2:/opt</div></pre></td></tr></table></figure>
+<h3 id="4，启动zookeeper"><a href="#4，启动zookeeper" class="headerlink" title="4，启动zookeeper"></a>4，启动zookeeper</h3><p>   因为zookeeper是选举制，它的主从关系并不是像hadoop那样指定的，具体可以看官方的文档说明。<br>  成功配置zookeeper之后，在每台机器上启动zookeeper。<br> 切换到zookeeper目录下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cd /opt/zookeeper/zookeeper3.4/bin</div></pre></td></tr></table></figure>
+<p>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">zkServer.sh start</div></pre></td></tr></table></figure>
+<p>成功启动之后<br>查看状态输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">zkServer.sh status</div></pre></td></tr></table></figure>
+<p>可以查看各个机器上zookeeper的leader和follower<br><img src="http://img.blog.csdn.net/20171230152823369?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h2 id="六、HBase的环境配置"><a href="#六、HBase的环境配置" class="headerlink" title="六、HBase的环境配置"></a>六、HBase的环境配置</h2><h3 id="1，文件准备-1"><a href="#1，文件准备-1" class="headerlink" title="1，文件准备"></a>1，文件准备</h3><p>将下载下来的HBase的配置文件进行解压<br>在linux上输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar  -xvf   hbase-1.2.6-bin.tar.gz</div></pre></td></tr></table></figure>
+<p>然后移动到/opt/hbase 文件夹里面，并重命名为 hbase1.2<br>输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mv  hbase-1.2.6  /opt/hbase</div><div class="line">mv  hbase1.2  /opt/hbase</div></pre></td></tr></table></figure>
+<h3 id="2，环境配置-1"><a href="#2，环境配置-1" class="headerlink" title="2，环境配置"></a>2，环境配置</h3><p>编辑 /etc/profile 文件<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">export HBASE_HOME=/opt/hbase/hbase1.2</div><div class="line">export PATH=.:$&#123;JAVA_HOME&#125;/bin:$&#123;SCALA_HOME&#125;/bin:$&#123;SPARK_HOME&#125;/bin:$PATH</div></pre></td></tr></table></figure>
+<p>输入: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">source  /etc/profile</div></pre></td></tr></table></figure>
+<p>使配置生效<br>输入<br>hbase version<br>查看版本<br><img src="http://img.blog.csdn.net/20171230152908262?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h3 id="3，修改配置文件-1"><a href="#3，修改配置文件-1" class="headerlink" title="3，修改配置文件"></a>3，修改配置文件</h3><p>切换到  /opt/hbase/hbase-1.2.6/conf 下</p>
+<h4 id="6-3-1-修改hbase-env-sh"><a href="#6-3-1-修改hbase-env-sh" class="headerlink" title="6.3.1 修改hbase-env.sh"></a>6.3.1 修改hbase-env.sh</h4><p>编辑 hbase-env.sh 文件，添加以下配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">export JAVA_HOME=/opt/java/jdk1.8</div><div class="line">export HADOOP_HOME=/opt/hadoop/hadoop2.8</div><div class="line">export HBASE_HOME=/opt/hbase/hbase1.2</div><div class="line">export HBASE_CLASSPATH=/opt/hadoop/hadoop2.8/etc/hadoop</div><div class="line">export HBASE_PID_DIR=/root/hbase/pids</div><div class="line">export HBASE_MANAGES_ZK=false</div></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20171230152936414?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br><strong>说明</strong>:配置的路径以自己的为准。HBASE_MANAGES_ZK=false 是不启用HBase自带的Zookeeper集群。</p>
+<h4 id="6-3-2-修改-hbase-site-xml"><a href="#6-3-2-修改-hbase-site-xml" class="headerlink" title="6.3.2 修改 hbase-site.xml"></a>6.3.2 修改 hbase-site.xml</h4><p>编辑hbase-site.xml 文件，在<code>&lt;configuration&gt;</code>添加如下配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">&lt;property&gt;</div><div class="line"> &lt;name&gt;hbase.rootdir&lt;/name&gt;</div><div class="line"> &lt;value&gt;hdfs://master:9000/hbase&lt;/value&gt;</div><div class="line"> &lt;description&gt;The directory shared byregion servers.&lt;/description&gt;</div><div class="line">&lt;/property&gt;</div><div class="line"> &lt;!-- hbase端口 --&gt;</div><div class="line">&lt;property&gt;</div><div class="line"> &lt;name&gt;hbase.zookeeper.property.clientPort&lt;/name&gt;</div><div class="line"> &lt;value&gt;2181&lt;/value&gt;</div><div class="line">&lt;/property&gt;</div><div class="line">&lt;!-- 超时时间 --&gt;</div><div class="line">&lt;property&gt;</div><div class="line"> &lt;name&gt;zookeeper.session.timeout&lt;/name&gt;</div><div class="line"> &lt;value&gt;120000&lt;/value&gt;</div><div class="line">&lt;/property&gt;</div><div class="line">&lt;!--防止服务器时间不同步出错 --&gt;</div><div class="line">&lt;property&gt;</div><div class="line">&lt;name&gt;hbase.master.maxclockskew&lt;/name&gt;</div><div class="line">&lt;value&gt;150000&lt;/value&gt;</div><div class="line">&lt;/property&gt;</div><div class="line">&lt;!-- 集群主机配置 --&gt;</div><div class="line">&lt;property&gt;</div><div class="line"> &lt;name&gt;hbase.zookeeper.quorum&lt;/name&gt;</div><div class="line"> &lt;value&gt;master,slave1,slave2&lt;/value&gt;</div><div class="line">&lt;/property&gt;</div><div class="line">&lt;!--   路径存放 --&gt;</div><div class="line">&lt;property&gt;</div><div class="line"> &lt;name&gt;hbase.tmp.dir&lt;/name&gt;</div><div class="line"> &lt;value&gt;/root/hbase/tmp&lt;/value&gt;</div><div class="line">&lt;/property&gt;</div><div class="line">&lt;!-- true表示分布式 --&gt;</div><div class="line">&lt;property&gt;</div><div class="line"> &lt;name&gt;hbase.cluster.distributed&lt;/name&gt;</div><div class="line"> &lt;value&gt;true&lt;/value&gt;</div><div class="line">&lt;/property&gt;</div><div class="line">  &lt;!-- 指定master --&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;hbase.master&lt;/name&gt;</div><div class="line">    &lt;value&gt;master:60000&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line"></div><div class="line">&lt;/configuration&gt;</div></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20171230153001178?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br><strong>说明</strong>:hbase.rootdir：这个目录是region server的共享目录，用来持久化Hbase 。hbase.cluster.distributed ：Hbase的运行模式。false是单机模式，true是分布式模式。若为false,Hbase和Zookeeper会运行在同一个JVM里面。</p>
+<h4 id="6-3-3-修改regionservers"><a href="#6-3-3-修改regionservers" class="headerlink" title="6.3.3  修改regionservers"></a>6.3.3  修改regionservers</h4><p> 指定hbase的主从，和hadoop的slaves文件配置一样<br>将文件修改为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">slave1 </div><div class="line">slave2</div></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20171230153023312?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br><strong>注</strong>:上面的为集群的主机名称 </p>
+<p>在一台机器上(最好是master)做完这些配置之后，我们使用scp命令将这些配置传输到其他机器上。<br>输入:<br>hbase环境传输</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">scp -r /opt/hbaseroot@slave1:/opt</div><div class="line">scp -r /opt/hbase root@slave2:/opt</div></pre></td></tr></table></figure>
+<p>传输之后，便在主节点启动集群。</p>
+<h3 id="4，启动hbase"><a href="#4，启动hbase" class="headerlink" title="4，启动hbase"></a>4，启动hbase</h3><p>在成功启动Hadoop、zookeeper之后<br>切换到HBase目录下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cd /opt/hbase/hbase1.2/bin</div></pre></td></tr></table></figure>
+<p>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">start-hbase.sh</div></pre></td></tr></table></figure>
+<p>启动成功之后，可以使用jps命令在各个机器上查看是否成功<br>可以在浏览器输入: ip+16010 端口查看<br><img src="http://img.blog.csdn.net/20171230153049290?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>若成功显示该界面，则启动成功。</p>
+<h2 id="七、Hive的环境安装配置"><a href="#七、Hive的环境安装配置" class="headerlink" title="七、Hive的环境安装配置"></a>七、Hive的环境安装配置</h2><p> 因为hive安装使用不需要集群，只需在一台机器上安装使用就可以了，之前在我的<br><a href="http://www.panchengming.com/2017/12/16/pancm61/" target="_blank" rel="external">大数据学习系列之四 —– Hadoop+Hive环境搭建图文详解(单机)</a> <a href="http://www.panchengming.com/2017/12/16/pancm61/" target="_blank" rel="external">http://www.panchengming.com/2017/12/16/pancm61/</a> 里面已经讲解的很详细，所以本文就不在描述了。</p>
+<h2 id="八、其他"><a href="#八、其他" class="headerlink" title="八、其他"></a>八、其他</h2><p>环境搭建参考: <a href="http://blog.csdn.net/pucao_cug/article/details/72773564" target="_blank" rel="external">http://blog.csdn.net/pucao_cug/article/details/72773564</a><br>环境配置参考的官方文档。</p>
+<p>到此，本教程就结束了，谢谢阅读！</p>
+<p>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a><br>原创不易，转载请标明出处，谢谢！</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/大数据/" rel="tag"># 大数据</a>
+          
+            <a href="/tags/hive/" rel="tag"># hive</a>
+          
+            <a href="/tags/hadoop/" rel="tag"># hadoop</a>
+          
+            <a href="/tags/spark/" rel="tag"># spark</a>
+          
+            <a href="/tags/hbase/" rel="tag"># hbase</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/19/pancm63/" rel="next" title="大数据学习系列之六 ----- Hadoop+Spark环境搭建">
+                <i class="fa fa-chevron-left"></i> 大数据学习系列之六 ----- Hadoop+Spark环境搭建
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/31/pancm65/" rel="prev" title="一个两年java程序猿的2017个人总结">
+                一个两年java程序猿的2017个人总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">64</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">40</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#目录"><span class="nav-number">2.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一、环境选择"><span class="nav-number">3.</span> <span class="nav-text">一、环境选择</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1，集群机器安装图"><span class="nav-number">3.1.</span> <span class="nav-text">1，集群机器安装图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2，配置说明"><span class="nav-number">3.2.</span> <span class="nav-text">2，配置说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3，下载地址"><span class="nav-number">3.3.</span> <span class="nav-text">3，下载地址</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、集群的相关配置"><span class="nav-number">4.</span> <span class="nav-text">二、集群的相关配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1，主机名更改以及主机和IP做相关映射"><span class="nav-number">4.1.</span> <span class="nav-text">1，主机名更改以及主机和IP做相关映射</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-更改主机名"><span class="nav-number">4.1.1.</span> <span class="nav-text">1. 更改主机名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-做主机和IP的关系映射"><span class="nav-number">4.1.2.</span> <span class="nav-text">2.做主机和IP的关系映射</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2，ssh免登录"><span class="nav-number">4.2.</span> <span class="nav-text">2，ssh免登录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3，防火墙关闭"><span class="nav-number">4.3.</span> <span class="nav-text">3，防火墙关闭</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4，时间配置"><span class="nav-number">4.4.</span> <span class="nav-text">4，时间配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5，快捷键设置-可选"><span class="nav-number">4.5.</span> <span class="nav-text">5，快捷键设置(可选)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6，整体环境变量设置"><span class="nav-number">4.6.</span> <span class="nav-text">6，整体环境变量设置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、Hadoop的环境搭建"><span class="nav-number">5.</span> <span class="nav-text">二、Hadoop的环境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1，JDK配置"><span class="nav-number">5.1.</span> <span class="nav-text">1，JDK配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2，hadoop配置"><span class="nav-number">5.2.</span> <span class="nav-text">2，hadoop配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-1-文件准备"><span class="nav-number">5.2.1.</span> <span class="nav-text">3.2.1 文件准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-2-环境配置"><span class="nav-number">5.2.2.</span> <span class="nav-text">3.2.2 环境配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-3-修改配置文件"><span class="nav-number">5.2.3.</span> <span class="nav-text">3.2.3  修改配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#3-2-3-1-修改-core-site-xml"><span class="nav-number">5.2.3.1.</span> <span class="nav-text">3.2.3.1 修改 core-site.xml</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-2-3-2-修改-hadoop-env-sh"><span class="nav-number">5.2.3.2.</span> <span class="nav-text">3.2.3.2 修改 hadoop-env.sh</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-2-2-3-修改-hdfs-site-xml"><span class="nav-number">5.2.3.3.</span> <span class="nav-text">3.2.2.3 修改 hdfs-site.xml</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-5-2-4-修改mapred-site-xml"><span class="nav-number">5.2.3.4.</span> <span class="nav-text">3.5.2.4 修改mapred-site.xml</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-5-2-5-修改yarn-site-xml文件"><span class="nav-number">5.2.3.5.</span> <span class="nav-text">3.5.2.5 修改yarn-site.xml文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-5-2-6-修改slaves"><span class="nav-number">5.2.3.6.</span> <span class="nav-text">3.5.2.6 修改slaves</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3，hadoop启动"><span class="nav-number">5.3.</span> <span class="nav-text">3，hadoop启动</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、Spark的环境配置"><span class="nav-number">6.</span> <span class="nav-text">四、Spark的环境配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1，Scala配置"><span class="nav-number">6.1.</span> <span class="nav-text">1，Scala配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-1-文件准备"><span class="nav-number">6.1.1.</span> <span class="nav-text">4.1.1 文件准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-2-环境配置"><span class="nav-number">6.1.2.</span> <span class="nav-text">4.1.2 环境配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2，Spark配置"><span class="nav-number">6.2.</span> <span class="nav-text">2，Spark配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-1，文件准备"><span class="nav-number">6.2.1.</span> <span class="nav-text">4.2.1，文件准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-2，环境配置"><span class="nav-number">6.2.2.</span> <span class="nav-text">4.2.2，环境配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-3，更改配置文件"><span class="nav-number">6.2.3.</span> <span class="nav-text">4.2.3，更改配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#4-2-3-1-修改-spark-env-sh"><span class="nav-number">6.2.3.1.</span> <span class="nav-text">4.2.3.1 修改 spark-env.sh</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-2-3-2-修改slaves"><span class="nav-number">6.2.3.2.</span> <span class="nav-text">4.2.3.2 修改slaves</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3，spark启动"><span class="nav-number">6.3.</span> <span class="nav-text">3，spark启动</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、Zookeeper的环境配置"><span class="nav-number">7.</span> <span class="nav-text">五、Zookeeper的环境配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1，文件准备"><span class="nav-number">7.1.</span> <span class="nav-text">1，文件准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2，环境配置"><span class="nav-number">7.2.</span> <span class="nav-text">2，环境配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3，修改配置文件"><span class="nav-number">7.3.</span> <span class="nav-text">3，修改配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-3-1-创建文件和目录"><span class="nav-number">7.3.1.</span> <span class="nav-text">5.3.1 创建文件和目录</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-3-2-新建zoo-cfg"><span class="nav-number">7.3.2.</span> <span class="nav-text">5.3.2 新建zoo.cfg</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4，启动zookeeper"><span class="nav-number">7.4.</span> <span class="nav-text">4，启动zookeeper</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#六、HBase的环境配置"><span class="nav-number">8.</span> <span class="nav-text">六、HBase的环境配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1，文件准备-1"><span class="nav-number">8.1.</span> <span class="nav-text">1，文件准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2，环境配置-1"><span class="nav-number">8.2.</span> <span class="nav-text">2，环境配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3，修改配置文件-1"><span class="nav-number">8.3.</span> <span class="nav-text">3，修改配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#6-3-1-修改hbase-env-sh"><span class="nav-number">8.3.1.</span> <span class="nav-text">6.3.1 修改hbase-env.sh</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-3-2-修改-hbase-site-xml"><span class="nav-number">8.3.2.</span> <span class="nav-text">6.3.2 修改 hbase-site.xml</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-3-3-修改regionservers"><span class="nav-number">8.3.3.</span> <span class="nav-text">6.3.3  修改regionservers</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4，启动hbase"><span class="nav-number">8.4.</span> <span class="nav-text">4，启动hbase</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#七、Hive的环境安装配置"><span class="nav-number">9.</span> <span class="nav-text">七、Hive的环境安装配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#八、其他"><span class="nav-number">10.</span> <span class="nav-text">八、其他</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

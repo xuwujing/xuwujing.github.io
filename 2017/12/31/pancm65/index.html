@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="java,spring,c3p0," />
+  <meta name="keywords" content="程序人生," />
 
 
 
@@ -93,19 +93,17 @@
 
 
 
-<meta name="description" content="原因通过c3p0配置连接池的时候，在进行压力测试的时候,日志出现了这样一个错误:Data source rejected establishment of connection,  message from server: “Too many connections”数据库的连接过多。然后查看mysql的最大连接数，为100。于是便更改最大连接池。由于MySQL默认的最大连接数为100，MySQ">
-<meta name="keywords" content="java,spring,c3p0">
+<meta name="description" content="前言 又到了一年中最后的日子了，相信有不少公司要求员工写年度总结了，我也不例外。不过个人感觉在公司的写个年度总结来说，过于模板化了。其实很多没有必要。总之，本篇的个人总结，是按照个人的想法写的。简而言之，就是放开了说，放开的写！  今年事件先做个列表，然后再对该列表的事件进行说明。为了使事件的说明有趣点，所以采取自问自答。主要事件  换工作了，工作地点从武汉到深圳； 开始写起了博客； 学习了ss">
+<meta name="keywords" content="程序人生">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Spring c3p0连接池无法释放解决方案">
-<meta property="og:url" content="http://yoursite.com/2017/05/22/pancm23/index.html">
+<meta property="og:title" content="一个两年java程序猿的2017个人总结">
+<meta property="og:url" content="http://yoursite.com/2017/12/31/pancm65/index.html">
 <meta property="og:site_name" content="虚无境的博客">
-<meta property="og:description" content="原因通过c3p0配置连接池的时候，在进行压力测试的时候,日志出现了这样一个错误:Data source rejected establishment of connection,  message from server: “Too many connections”数据库的连接过多。然后查看mysql的最大连接数，为100。于是便更改最大连接池。由于MySQL默认的最大连接数为100，MySQ">
-<meta property="og:image" content="http://img.blog.csdn.net/20170522123031083?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
-<meta property="og:updated_time" content="2017-12-16T10:46:23.952Z">
+<meta property="og:description" content="前言 又到了一年中最后的日子了，相信有不少公司要求员工写年度总结了，我也不例外。不过个人感觉在公司的写个年度总结来说，过于模板化了。其实很多没有必要。总之，本篇的个人总结，是按照个人的想法写的。简而言之，就是放开了说，放开的写！  今年事件先做个列表，然后再对该列表的事件进行说明。为了使事件的说明有趣点，所以采取自问自答。主要事件  换工作了，工作地点从武汉到深圳； 开始写起了博客； 学习了ss">
+<meta property="og:updated_time" content="2017-12-31T11:27:14.986Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Spring c3p0连接池无法释放解决方案">
-<meta name="twitter:description" content="原因通过c3p0配置连接池的时候，在进行压力测试的时候,日志出现了这样一个错误:Data source rejected establishment of connection,  message from server: “Too many connections”数据库的连接过多。然后查看mysql的最大连接数，为100。于是便更改最大连接池。由于MySQL默认的最大连接数为100，MySQ">
-<meta name="twitter:image" content="http://img.blog.csdn.net/20170522123031083?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta name="twitter:title" content="一个两年java程序猿的2017个人总结">
+<meta name="twitter:description" content="前言 又到了一年中最后的日子了，相信有不少公司要求员工写年度总结了，我也不例外。不过个人感觉在公司的写个年度总结来说，过于模板化了。其实很多没有必要。总之，本篇的个人总结，是按照个人的想法写的。简而言之，就是放开了说，放开的写！  今年事件先做个列表，然后再对该列表的事件进行说明。为了使事件的说明有趣点，所以采取自问自答。主要事件  换工作了，工作地点从武汉到深圳； 开始写起了博客； 学习了ss">
 
 
 
@@ -133,14 +131,14 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/05/22/pancm23/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/12/31/pancm65/"/>
 
 
 
 
 
 
-  <title>Spring c3p0连接池无法释放解决方案 | 虚无境的博客</title>
+  <title>一个两年java程序猿的2017个人总结 | 虚无境的博客</title>
   
 
 
@@ -289,7 +287,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/22/pancm23/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/31/pancm65/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="虚无境">
@@ -306,7 +304,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Spring c3p0连接池无法释放解决方案</h1>
+          <h1 class="post-title" itemprop="name headline">一个两年java程序猿的2017个人总结</h1>
         
 
         <div class="post-meta">
@@ -318,8 +316,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-22T12:51:00+08:00">
-                2017-05-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-31T19:19:00+08:00">
+                2017-12-31
               </time>
             
 
@@ -341,8 +339,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
+                  <a href="/categories/程序人生/" itemprop="url" rel="index">
+                    <span itemprop="name">程序人生</span>
                   </a>
                 </span>
 
@@ -375,16 +373,50 @@
       
 
       
-        <script src="\assets\js\APlayer.min.js"> </script><h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>通过c3p0配置连接池的时候，在进行压力测试的时候,日志出现了这样一个错误:Data source rejected establishment of connection,  message from server: “Too many connections”<br>数据库的连接过多。<br>然后查看mysql的最大连接数，为100。<br><img src="http://img.blog.csdn.net/20170522123031083?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>于是便更改最大连接池。<br>由于MySQL默认的最大连接数为100，MySQL允许的最大连接数16384。Windows下由于线程数限制MySQL最大连接数为2048。<br>于是更改为2000。但是数据库连接池最大只有这多，如果建立连接数过多，依旧会超载。<br>所以要从根本上解决，那么就要释放连接池。<br>参考博客:<a href="http://blog.csdn.net/yonglelaoren/article/details/28886593" target="_blank" rel="external">http://blog.csdn.net/yonglelaoren/article/details/28886593</a></p>
-<h2 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法:"></a>解决办法:</h2><p> 将getSessionFactory().OpenSession()更改为getSessionFactory().getCurrentSession()。<br>getSessionFactory().OpenSession() 这种方法从spring管理的sessionFactory中创建一个session，此session不是线程绑定的。当执行完一个实务的时候自动关闭session.这种方法不用手动管理实务，但是同一个线程多次的开启和关闭session,浪费系统资源和影响执行效率。而且通过这种方式打开的session不会自动关闭，现象时查询多次之后连接池满了，不会再继续查询了。</p>
-<font color="#000" size="4">getSessionFactory().getCurrentSession()方法从spring管理的sessionFactory中创建一个绑定线程的session.spring会根据该线程的执行情况来自动判断是关闭session还是延迟关闭。这样做可以避免手动的管理实务，同时一个线程最多开启和关闭一次session又可以提高程序的性能。</font>
-
-<font color="#000" size="4"><br>还有一种原因可能是每次查询都会初始化连接数:<code>&lt;property name=&quot;initialPoolSize&quot; value=&quot;3&quot; /&gt;</code>。导致查询多次就会造成too many connects错误。因此删除掉，应该在c3p0的文件配置里面配置。</font>
-
-<font color="#000" size="4"><br>通过更改session方法后，又出现这种错误:No Hibernate Session bound to thread 。<br>解决办法:<br> 感觉是事务的问题，检查了下Spring配置，的确配置了事务，但是为什么会报这个错呢。于是便在网上找到方法，在dao层加上@Transactional ，于是问题就解决了。<br>参考:<a href="http://www.cnblogs.com/hanxirensheng/archive/2012/03/28/2422433.html" target="_blank" rel="external">http://www.cnblogs.com/hanxirensheng/archive/2012/03/28/2422433.html</a> 。</font>
-
-<p>还有可能的原因是没有在service没有在 spring管理而报的错。添加这句:<code>&lt;tx:annotation-driven transactionmanager=&quot;transactionManager&quot;/&gt;</code> </p>
-<p>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a><br>原创不易，转载请标明出处，谢谢！</p>
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
+<p>又到了一年中最后的日子了，相信有不少公司要求员工写年度总结了，我也不例外。不过个人感觉在公司的写个年度总结来说，过于模板化了。其实很多没有必要。总之，本篇的个人总结，是按照个人的想法写的。简而言之，就是放开了说，放开的写！</p>
+</blockquote>
+<h2 id="今年事件"><a href="#今年事件" class="headerlink" title="今年事件"></a>今年事件</h2><p>先做个列表，然后再对该列表的事件进行说明。为了使事件的说明有趣点，所以采取自问自答。<br><strong>主要事件</strong></p>
+<ol>
+<li>换工作了，工作地点从武汉到深圳；</li>
+<li>开始写起了博客；</li>
+<li>学习了ssm这类基本使用框架之外的技术；</li>
+<li><p>开始有意识的锻炼身体了；</p>
+<p><strong>事件说明</strong></p>
+</li>
+</ol>
+<ol>
+<li><p><strong>问</strong>：为什么换工作？为什么来到深圳？<br><strong>答</strong>: 第一份工作地点是在武汉，在该公司工作了一年多，学习了不少的知识，但是由于该公司是属于传统行业的公司，在技术方面对个人提升而言，过于缓慢， 我对自己也比较有自知之明， 并不是那种天才或者刻苦努力的人，当然也不是那种混吃等死的那种。所以在考虑了很久之后，觉得自己在这么下去，感觉就要荒废了，于是决定离职。</p>
+<pre><code>至于为什么来深圳？第一， 世界那么大，我想出来走走；第二，深圳这边无论是技术氛围还是城市环境而言在中国的城市之中也是属于前列的。
+</code></pre></li>
+<li><p><strong>问</strong>:为什么写起了博客？想过放弃吗?<br><strong>答</strong>：至于为什么写博客？以前在网上找资料的时候，很多答案都是从别人的博客中得到(感谢这些无私奉献的网友)，而自己比较喜欢做笔记，其中有不少是自己碰到的问题和解决方案，于是便有了写博客的想法，但是还是担心自己能力不足，写得不够好。真正下定决心的是 因为看了一篇博文<a href="http://blog.csdn.net/zuoxiaolong8810/article/details/51482550" target="_blank" rel="external">(回答阿里社招面试如何准备，顺便谈谈对于Java程序猿学习当中各个阶段的建议</a>)之后，下定决心开始写的。最早其实要说写博客，但是根本不知道怎么写，写些什么 至于博文界面排版之类的，压根就不会。不过，既然要写，就不能因为这些退缩，于是开始了我的<a href="http://blog.csdn.net/qazwsxpcm/article/details/68946458" target="_blank" rel="external">第一篇博文</a>，与其说是博文，倒不如说是笔记。ps:其实一直到现在，看自己的博客，大部分也是像做的笔记，过于生硬，不够灵动。。。 </p>
+<pre><code>至于放弃写博客? 当我写了第一篇博客之后，到现在就没想过放弃写博客。如果我还在这个行业进行工作，如果我还有精力，如果我写的博客能够帮助别人。。。 那么我就回一直写下去。即使写得太差，更新不稳定，写得没人看。。。 我还是会写下去。因为我是个程序员，而且恰好喜欢分享，所以在目前来说，我会一直 写下去。
+</code></pre></li>
+<li><p><strong>问</strong>: 学习了哪些技术?在工作中对这些技术运用熟练吗?<br><strong>答</strong>:在这一年中，其实在个人能力方面来说，广度明显得到提升了，但是深度而言，几乎没多大长进。具体表现为，学会了mina框架，并且在项目中运用了；对Netty、Redis相关技术有一定的了解，能够进行简单的使用；了解了Hadoop、Spark、Hive、HBase、Storm、kafka相关技术，目前还属于摸索阶段。<br>其实学习这些技术，基本是因为在工作中使用或即将要使用中才学习的，觉得是被动学习的。主动学习的就Netty和Redis，但是没有实际的在项目中熟练的运用。在工作中对很多技术，其实都只是会用，知其然而不知其所以然，有的用都用不熟练。</p>
+</li>
+<li><p><strong>问</strong>: 为什么是有意识的锻炼身体?锻炼的如何?<br><strong>答</strong>：为什么要锻炼身体呢?其实在参加工作之后很久，都没有这个意识。直到去年的某一天去爬山，断断续续的休息，虽然最终爬完了，但是回来之后感觉自己实在是累坏了，很多年都没这么累了，这时才意识到自己身体太差了。于是在那之后，就开始锻炼，但是却都不持久。感觉这样下去，身体还是无法得到锻炼。 所以之后，便开始了有意识的锻炼。不求一次能做多少，而是贵在坚持。</p>
+<pre><code>就目前来说，每天一万步已经坚持了5多月了，身体已经感觉好多了，在深圳这边的爬上和徒步旅行虽然还是回感觉到累，但是已经是可以属于接受的范围之类的了。
+</code></pre></li>
+</ol>
+<h2 id="明年目标"><a href="#明年目标" class="headerlink" title="明年目标"></a>明年目标</h2><p>主要罗列明年要做那些事情，每件事情后面添加一个标记，表示达成的状态，分为未做、做了未达标、达标、超越 这四个等级，明年的这个时候再来看看，并作相应的评估。</p>
+<ol>
+<li>阅读2本以上的技术相关书籍，并作出相应的实践；</li>
+<li>阅读5本以上国内外有意思的书籍；</li>
+<li>阅读jdk常用类的源码，能够理解其中的涵义；</li>
+<li>能够熟练掌握3个常用的技术框架；</li>
+<li>继续坚持每天一万步，一年中最少要达到250天；</li>
+<li>每月至少一次户外运动；</li>
+<li>每天睡眠时间不低于7小时，不高于9小时，一年至少要达到300天；</li>
+<li>每个月坚持写4以上篇博客，一年所写的博客不低于40篇；</li>
+</ol>
+<h2 id="感悟"><a href="#感悟" class="headerlink" title="感悟"></a>感悟</h2><p>写到这里差不多该写的都写了，应该没忘啥吧(⊙﹏⊙b汗)。  其实写本篇博文，主要的目的还是让自己有个清晰的认识，并且好对未来做些规划，至于我现在说的那些能够做多少，其实自己心里没底，毕竟人都是善变的，未来也是很难掌握的，我们能够掌握的只有当前的这刻而已。好了，说了这么多，说点自己在这一年得到的真正的感悟吧！</p>
+<ol>
+<li>你要相信你自己！今天的你能做的没有去做，那么明天的你也不会做的！</li>
+<li>努力不难，难的是努力坚持！ 所以，首先做到坚持，再来谈努力！</li>
+<li>在想做某件事的时候，那么现在就去做吧！即使做的不好、做得很差，但是你只要做了，就不会去在意这些了。</li>
+<li>一件事情的好坏，不在与这件事情的结果，而在于对这件事情的看法。</li>
+<li>人类是喜欢被赞美的生物！很多时候，赞美远远比批评能够达到更好的效果。</li>
+</ol>
 
       
     </div>
@@ -434,11 +466,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/java/" rel="tag"># java</a>
-          
-            <a href="/tags/spring/" rel="tag"># spring</a>
-          
-            <a href="/tags/c3p0/" rel="tag"># c3p0</a>
+            <a href="/tags/程序人生/" rel="tag"># 程序人生</a>
           
         </div>
       
@@ -451,8 +479,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/05/22/pancm22/" rel="next" title="Windows和Linux查看和更改mysql连接池">
-                <i class="fa fa-chevron-left"></i> Windows和Linux查看和更改mysql连接池
+              <a href="/2017/12/30/pancm64/" rel="next" title="大数据学习系列之七 ----- Hadoop+Spark+Zookeeper+HBase+Hive集群搭建  图文详解">
+                <i class="fa fa-chevron-left"></i> 大数据学习系列之七 ----- Hadoop+Spark+Zookeeper+HBase+Hive集群搭建  图文详解
               </a>
             
           </div>
@@ -460,10 +488,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/05/23/pancm24/" rel="prev" title="Spring连接池的常用配置（转）">
-                Spring连接池的常用配置（转） <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -639,7 +663,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#原因"><span class="nav-number">1.</span> <span class="nav-text">原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决办法"><span class="nav-number">2.</span> <span class="nav-text">解决办法:</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#今年事件"><span class="nav-number">2.</span> <span class="nav-text">今年事件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#明年目标"><span class="nav-number">3.</span> <span class="nav-text">明年目标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#感悟"><span class="nav-number">4.</span> <span class="nav-text">感悟</span></a></li></ol></div>
             
 
           </div>
