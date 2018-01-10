@@ -1,0 +1,889 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="大数据,hbase,hadoop,hive,spark," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言在搭建大数据Hadoop相关的环境时候，遇到很多了很多错误。我是个喜欢做笔记的人，这些错误基本都记载，并且将解决办法也写上了。因此写成博客，希望能够帮助那些搭建大数据环境的人解决问题。 说明: 遇到的问题以及相应的解决办法是对于个人当时的环境，具体因人而异。如果碰到同样的问题，本博客的方法无法解决您的问题，请先检查环境配置问题。 Hadoop伪分布式相关的问题1，FATAL conf.Con">
+<meta name="keywords" content="大数据,hbase,hadoop,hive,spark">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大数据学习系列之八----- Hadoop、Spark、HBase、Hive搭建环境遇到的错误以及解决方法">
+<meta property="og:url" content="http://yoursite.com/2018/01/07/pancm66/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言在搭建大数据Hadoop相关的环境时候，遇到很多了很多错误。我是个喜欢做笔记的人，这些错误基本都记载，并且将解决办法也写上了。因此写成博客，希望能够帮助那些搭建大数据环境的人解决问题。 说明: 遇到的问题以及相应的解决办法是对于个人当时的环境，具体因人而异。如果碰到同样的问题，本博客的方法无法解决您的问题，请先检查环境配置问题。 Hadoop伪分布式相关的问题1，FATAL conf.Con">
+<meta property="og:image" content="http://img.blog.csdn.net/20180107194021430?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20180107194031850?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2018-01-10T14:04:10.077Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="大数据学习系列之八----- Hadoop、Spark、HBase、Hive搭建环境遇到的错误以及解决方法">
+<meta name="twitter:description" content="前言在搭建大数据Hadoop相关的环境时候，遇到很多了很多错误。我是个喜欢做笔记的人，这些错误基本都记载，并且将解决办法也写上了。因此写成博客，希望能够帮助那些搭建大数据环境的人解决问题。 说明: 遇到的问题以及相应的解决办法是对于个人当时的环境，具体因人而异。如果碰到同样的问题，本博客的方法无法解决您的问题，请先检查环境配置问题。 Hadoop伪分布式相关的问题1，FATAL conf.Con">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20180107194021430?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/01/07/pancm66/"/>
+
+
+
+
+
+
+  <title>大数据学习系列之八----- Hadoop、Spark、HBase、Hive搭建环境遇到的错误以及解决方法 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/07/pancm66/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">大数据学习系列之八----- Hadoop、Spark、HBase、Hive搭建环境遇到的错误以及解决方法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-07T19:47:00+08:00">
+                2018-01-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/hadoop/" itemprop="url" rel="index">
+                    <span itemprop="name">hadoop</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在搭建大数据Hadoop相关的环境时候，遇到很多了很多错误。我是个喜欢做笔记的人，这些错误基本都记载，并且将解决办法也写上了。因此写成博客，希望能够帮助那些搭建大数据环境的人解决问题。</p>
+<p><strong>说明</strong>: 遇到的问题以及相应的解决办法是对于个人当时的环境，具体因人而异。如果碰到同样的问题，本博客的方法无法解决您的问题，请先检查环境配置问题。</p>
+<h2 id="Hadoop伪分布式相关的问题"><a href="#Hadoop伪分布式相关的问题" class="headerlink" title="Hadoop伪分布式相关的问题"></a>Hadoop伪分布式相关的问题</h2><h3 id="1，FATAL-conf-Configuration-error-parsing-conf-hdfs-site-xml"><a href="#1，FATAL-conf-Configuration-error-parsing-conf-hdfs-site-xml" class="headerlink" title="1，FATAL conf.Configuration: error parsing conf hdfs-site.xml"></a>1，FATAL conf.Configuration: error parsing conf hdfs-site.xml</h3><p> 原因: 字符编码问题。<br> 解决办法: 统一编码，将文件打开，另存为统一编码，如UTF-8 即可。</p>
+<h3 id="2，Use-of-this-script-to-execute-hdfs-command-is-deprecated。"><a href="#2，Use-of-this-script-to-execute-hdfs-command-is-deprecated。" class="headerlink" title="2，Use of this script to execute hdfs command is deprecated。"></a>2，Use of this script to execute hdfs command is deprecated。</h3><p>原因:hadoop版本问题，命令过时。<br>解决办法: 将hadoop命令改成hdfs。</p>
+<h3 id="3，org-apache-hadoop-hdfs-server-namenode-NameNode。"><a href="#3，org-apache-hadoop-hdfs-server-namenode-NameNode。" class="headerlink" title="3，org.apache.hadoop.hdfs.server.namenode.NameNode。"></a>3，org.apache.hadoop.hdfs.server.namenode.NameNode。</h3><p>原因:没有指定路径<br>解决办法:修改hadoop-env.sh文件。安装的hadoop路径是“/usr/local/hadoop/hadoop-2.8.2”， 在此路径下执行   vim etc/hadoop/hadoop-env.sh   在文件最后面添加   export HADOOP_PREFIX=/usr/local/hadoop/hadoop-2.8.2 ，并保存。</p>
+<h2 id="Hadoop相关的错误"><a href="#Hadoop相关的错误" class="headerlink" title="Hadoop相关的错误"></a>Hadoop相关的错误</h2><h3 id="1，启动hadoop时候报错：localhost-ssh-Could-not-resolve-hostname-localhost-Temporary-failure-in-name-resolution”"><a href="#1，启动hadoop时候报错：localhost-ssh-Could-not-resolve-hostname-localhost-Temporary-failure-in-name-resolution”" class="headerlink" title="1，启动hadoop时候报错：localhost: ssh: Could not resolve hostname localhost: Temporary failure in name resolution”"></a>1，启动hadoop时候报错：localhost: ssh: Could not resolve hostname localhost: Temporary failure in name resolution”</h3><p>原因: hadoop的环境没有配置好，或者没有使配置生效。<br>解决办法: 如果没有配置Hadoop的环境变量，就填加配置。</p>
+<p>例如:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">export JAVA_HOME=/opt/java/jdk</div><div class="line">export HADOOP_HOME=/opt/hadoop/hadoop2.8 </div><div class="line">export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native</div><div class="line">export HADOOP_OPTS=&quot;-Djava.library.path=$HADOOP_HOME/lib&quot;</div><div class="line">export PATH=$PATH:$JAVA_HOME/bin:$HADOOP_HOME/bin</div></pre></td></tr></table></figure></p>
+<p>然后使配置文件生效<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">source /etc/profile</div></pre></td></tr></table></figure>
+<h3 id="2，mkdir-user-hive-warehouse’-No-such-file-or-directory"><a href="#2，mkdir-user-hive-warehouse’-No-such-file-or-directory" class="headerlink" title="2，mkdir: `/user/hive/warehouse’: No such file or directory"></a>2，mkdir: `/user/hive/warehouse’: No such file or directory</h3><p>原因: 使用hadoop新建目录的时候报错，命名格式有问题<br>解决办法: 输入正确的命令格式<br>例如:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$HADOOP_HOME/bin/hadoop fs -mkdir -p /user/hive/warehouse</div></pre></td></tr></table></figure>
+<h3 id="3，bash-…：-is-a-directory"><a href="#3，bash-…：-is-a-directory" class="headerlink" title="3，bash:…： is a directory"></a>3，bash:…： is a directory</h3><p>原因:可能是/etc/profile 配置未能成功配置<br>解决办法: 确认配置文件没有问题之后，发现环境变量后面多了空格，将环境变量后面的空格去掉之后就好了。</p>
+<h3 id="4，Hadoop警告-Unable-to-load-native-hadoop-library-for-your-platform…-using-builtin-java-classes-where-applicable"><a href="#4，Hadoop警告-Unable-to-load-native-hadoop-library-for-your-platform…-using-builtin-java-classes-where-applicable" class="headerlink" title="4，Hadoop警告:Unable to load native-hadoop library for your platform… using builtin-java classes where applicable"></a>4，Hadoop警告:Unable to load native-hadoop library for your platform… using builtin-java classes where applicable</h3><p>原因:Apache提供的hadoop本地库是32位的，而在64位的服务器上就会有问题，因此需要自己编译64位的版本。<br>解决办法:<br>1.编译64位版本的lib包，可以使用这个网站提供的编译好的<a href="http://dl.bintray.com/sequenceiq/sequenceiq-bin/" target="_blank" rel="external">http://dl.bintray.com/sequenceiq/sequenceiq-bin/</a> 。</p>
+<ol>
+<li>将这个解压包解压到 hadoop/lib和hadoop/lib/native 目录下。</li>
+<li>设置环境变量，在/etc/profile中添加 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native  </div><div class="line">export HADOOP_OPTS=&quot;-Djava.library.path=$HADOOP_HOME/lib&quot;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol>
+<li>输入 hadoop checknative –a 检查</li>
+</ol>
+<p>参考:<br><a href="http://blog.csdn.net/jack85986370/article/details/51902871" target="_blank" rel="external">http://blog.csdn.net/jack85986370/article/details/51902871</a></p>
+<h3 id="5，hadoop成功配置之后，namenode没有成功启动。"><a href="#5，hadoop成功配置之后，namenode没有成功启动。" class="headerlink" title="5，hadoop成功配置之后，namenode没有成功启动。"></a>5，hadoop成功配置之后，namenode没有成功启动。</h3><p>原因:可能是hadoop的集群的配置不正确<br>解决方案: 检查hadoop/ etc/hadoop 的主要配置文件是否正确配置。</p>
+<h2 id="Spark相关的错误"><a href="#Spark相关的错误" class="headerlink" title="Spark相关的错误"></a>Spark相关的错误</h2><p>##1，使用spark sql的时候报错:javax.jdo.JDOFatalInternalException: Error creating transactional connection factory<br>  原因:可能是没有添加jdbc的驱动<br>  解决办法: Spark 中如果没有配置连接驱动，在spark/conf 目录下编辑spark-env.sh 添加驱动配置<br>  例如:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">export SPARK_CLASSPATH=$SPARK_CLASSPATH:/opt/spark/spark2.2/jars/mysql-connector-java-5.1.41.jar</div></pre></td></tr></table></figure></p>
+<p>或者在spark目录下直接加载驱动</p>
+<p>例如输入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">spark-sql --driver-class-path /opt/spark/spark2.2/jars/mysql-connector-java-5.1.41.jar</div></pre></td></tr></table></figure></p>
+<p>###2， spark-sql 登录日志过多<br>原因:  spark的日志级别设置为了INFO。<br>解决办法:<br>  将日志级别改成WARN就行了。<br>进入到spark目录/conf文件夹下，此时有一个log4j.properties.template文件，我们执行如下命令将其拷贝一份为log4j.properties，并对log4j.properties文件进行修改。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cp log4j.properties.template log4j.properties</div><div class="line">vim log4j.properties</div></pre></td></tr></table></figure></p>
+<p>将<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">log4j.rootCategory=INFO, console</div></pre></td></tr></table></figure></p>
+<p>改成<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">log4j.rootCategory=WARN, console</div></pre></td></tr></table></figure></p>
+<h3 id="3，spark-sql启动报错-org-apache-spark-sql-hive-thriftserver-SparkSQLCLIDriver"><a href="#3，spark-sql启动报错-org-apache-spark-sql-hive-thriftserver-SparkSQLCLIDriver" class="headerlink" title="3，spark sql启动报错:org.apache.spark.sql.hive.thriftserver.SparkSQLCLIDriver"></a>3，spark sql启动报错:org.apache.spark.sql.hive.thriftserver.SparkSQLCLIDriver</h3><p><img src="http://img.blog.csdn.net/20180107194021430?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>在spark/bin 目录下 修改spark-sql ，添加蓝色的字体的内容。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">export _SPARK_CMD_USAGE=&quot;Usage: ./bin/spark-sql [options] [cli option]&quot;</div><div class="line">exec &quot;$&#123;SPARK_HOME&#125;&quot;  /bin/spark-submit -jars /opt/spark/spark1.6-hadoop2.4-hive/lib/spark-assembly-1.6.3-hadoop2.4.0.jar --class org.apache.spark.sql.hive.thriftserver.SparkSQLCLIDriver &quot;$@&quot;</div></pre></td></tr></table></figure></p>
+<p><img src="http://img.blog.csdn.net/20180107194031850?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h2 id="HBase-相关的错误"><a href="#HBase-相关的错误" class="headerlink" title="HBase 相关的错误"></a>HBase 相关的错误</h2><h3 id="1，启动HBase错误-bash-opt-hbase-hbase-1-2-6-bin-is-a-directory"><a href="#1，启动HBase错误-bash-opt-hbase-hbase-1-2-6-bin-is-a-directory" class="headerlink" title="1，启动HBase错误: -bash: /opt/hbase/hbase-1.2.6/bin: is a directory"></a>1，启动HBase错误: -bash: /opt/hbase/hbase-1.2.6/bin: is a directory</h3><p>原因:未输入正确的命令，或者Hadoop未能正确运行<br>解决办法:<br>    首先检查命名格式是否正确，然后检查Hadoop是否成功运行。</p>
+<h3 id="2，Java-API-连接HBase-报错"><a href="#2，Java-API-连接HBase-报错" class="headerlink" title="2，Java API 连接HBase 报错"></a>2，Java API 连接HBase 报错</h3><p> org.apache.hadoop.hbase.client.RetriesExhaustedException: Failed after attempts=36, exceptions:<br>Tue Jul 19 16:36:05 CST 2016, null, java.net.SocketTimeoutException: callTimeout=60000, callDuration=79721: row ‘testtable,,’ on table ‘hbase:meta’ at region=hbase:meta,,1.1588230740, hostname=ubuntu,16020,1468916750524, seqNum=0</p>
+<p>原因:可能是使用了主机名进行连接，而未载windows系统的hosts文件进行配置。<br>解决办法:<br>  1.确认本地和集群服务之间的通信没有问题。<br>2.修改 C:\Windows\System32\drivers\etc\hosts 的文件，添加集群的主机名和IP做映射。<br>例如:<br>192.169.0.23 master<br>192.169.0.24 slave1<br>192.169.0.25 slave2</p>
+<h2 id="Hive相关的错误"><a href="#Hive相关的错误" class="headerlink" title="Hive相关的错误"></a>Hive相关的错误</h2><h3 id="1，hive2-Unable-to-instantiate-org-apache-hadoop-hive-ql-metadata-SessionHiveMetaStoreClient"><a href="#1，hive2-Unable-to-instantiate-org-apache-hadoop-hive-ql-metadata-SessionHiveMetaStoreClient" class="headerlink" title="1，hive2: Unable to instantiate org.apache.hadoop.hive.ql.metadata.SessionHiveMetaStoreClient"></a>1，hive2: Unable to instantiate org.apache.hadoop.hive.ql.metadata.SessionHiveMetaStoreClient</h3><p>原因: 无法连接元数据库，可能没有初始化元数据<br>解决办法:初始化元数据<br>输入: schematool -dbType mysql -initSchema<br>然后在输入: hive</p>
+<h3 id="2，进入hive警告-Class-path-contains-multiple-SLF4J-bindings"><a href="#2，进入hive警告-Class-path-contains-multiple-SLF4J-bindings" class="headerlink" title="2，进入hive警告:Class path contains multiple SLF4J bindings"></a>2，进入hive警告:Class path contains multiple SLF4J bindings</h3><p>原因:日志文件冲突。<br>解决办法: 移除其中的一个架包就可以了。<br>例如:移除hive或hadooop相关的一个slf4j.jar就可以； </p>
+<h3 id="3，java连接hive报错-HIVE2-Error-Failed-to-open-new-session-java-lang-RuntimeException-org-apache-hadoop-ipc-RemoteExc"><a href="#3，java连接hive报错-HIVE2-Error-Failed-to-open-new-session-java-lang-RuntimeException-org-apache-hadoop-ipc-RemoteExc" class="headerlink" title="3，java连接hive报错:HIVE2 Error: Failed to open new session: java.lang.RuntimeException:org.apache.hadoop.ipc.RemoteExc"></a>3，java连接hive报错:HIVE2 Error: Failed to open new session: java.lang.RuntimeException:org.apache.hadoop.ipc.RemoteExc</h3><p>原因：没有设置远程连接权限。<br>解决方案：在hadoop/conf/core-site.xml 中添加如下部分，重启服务即可：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;property&gt;</div><div class="line">  &lt;name&gt;hadoop.proxyuser.root.hosts&lt;/name&gt;</div><div class="line">  &lt;value&gt;*&lt;/value&gt;</div><div class="line"> &lt;/property&gt;</div><div class="line"> &lt;property&gt;</div><div class="line">  &lt;name&gt;hadoop.proxyuser.root.groups&lt;/name&gt;</div><div class="line">  &lt;value&gt;*&lt;/value&gt;</div><div class="line">&lt;/property&gt;</div></pre></td></tr></table></figure></p>
+<h3 id="4，java连接hive报错-hive-jdbc-connection-refused"><a href="#4，java连接hive报错-hive-jdbc-connection-refused" class="headerlink" title="4，java连接hive报错:hive:jdbc connection refused"></a>4，java连接hive报错:hive:jdbc connection refused</h3><p>原因:可能hive未启动或者配置未能正确配置<br>解决办法：<br>1.查看服务是否启动<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">netstat -anp |grep 10000</div></pre></td></tr></table></figure>
+<p>2.查看hive / conf/hive-site.xml配置是否正确，是否添加了这些配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;property&gt; </div><div class="line">       &lt;name&gt;hive.server2.thrift.port&lt;/name&gt; </div><div class="line">      &lt;value&gt;10000&lt;/value&gt; </div><div class="line">    &lt;/property&gt;</div><div class="line">&lt;property&gt;</div><div class="line">       &lt;name&gt;hive.server2.thrift.bind.host&lt;/name&gt;</div><div class="line">       &lt;value&gt;master&lt;/value&gt;</div><div class="line"> &lt;/property&gt;</div></pre></td></tr></table></figure>
+<p>注: master是我配置主机的名称，可以替换成主机的IP。</p>
+<p>3.确认配置没有问题之后，输入hive –service hiveserver2 之后，在使用java连接测试。</p>
+<h3 id="5，使用hive警告-WARN-conf-HiveConf-HiveConf-of-name-hive-metastore-local-does-not-exist"><a href="#5，使用hive警告-WARN-conf-HiveConf-HiveConf-of-name-hive-metastore-local-does-not-exist" class="headerlink" title="5，使用hive警告:WARN conf.HiveConf: HiveConf of name hive.metastore.local does not exist"></a>5，使用hive警告:WARN conf.HiveConf: HiveConf of name hive.metastore.local does not exist</h3><p>   原因: Hive的这个配置在1.0之后就废除了。<br>   解决办法：<br>  在hive / conf/hive-site.xml 去掉这个配置就行了<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"> &lt;property&gt;</div><div class="line">         &lt;name&gt;hive.metastore.local&lt;/name&gt;</div><div class="line">          &lt;value&gt;true&lt;/value&gt;</div><div class="line">     &lt;/property&gt;     </div><div class="line">``` </div><div class="line"></div><div class="line">### 6，Hive On Spark报错：Exception in thread &quot;main&quot; java.lang.NoClassDefFoundError: scala/collection/Iterable</div><div class="line">![这里写图片描述](http://img.blog.csdn.net/20180107193841191?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)</div><div class="line">原因:缺少spark编译的jar包</div><div class="line">解决办法:</div><div class="line">我是使用的spark-hadoop-without-hive 的spark，如果使用的不是这种，可以自行编译spark-without-hive。</div><div class="line">1.将spark/lib 目录下的spark-assembly-1.6.3-hadoop2.4.0.jar 拷贝到hive/lib目录下。</div><div class="line">2.在hive/conf 中的hive-env.sh 设置该jar的路径。</div><div class="line">注:spark-assembly-1.6.3-hadoop2.4.0.jar 架包在spark-1.6.3-bin-hadoop2.4-without-hive 解压包中.</div><div class="line"></div><div class="line">下载地址:http://mirror.bit.edu.cn/apache/spark</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">### 7, hive 使用spark引擎报错:Failedto execute spark task, with exception&apos;org.apache.hadoop.hive.ql.metadata.HiveException(Failed to create sparkclient.)</div><div class="line">原因:在使用Hive on Spark 执行查询命令的时候，出现这个错误。</div><div class="line">解决办法: </div><div class="line"> 1.检查hive和spark的版本是否正确，如果不相匹配，则配置相匹配的版本。</div><div class="line">2.编辑hive/conf 目录下的hive-site.xml 文件，添加</div></pre></td></tr></table></figure></p>
+<p><property><br>           <name>spark.master</name><br>           <value>spark://hserver1:7077</value><br>    </property><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">### 8，初始化hive元数据报错:Error: Duplicate key name &apos;PCS_STATS_IDX&apos; (state=42000,code=1061)</div><div class="line"></div><div class="line"> 原因：这可能是metastore_db文件夹已经存在；</div><div class="line"> 解决办法:  删除该文件</div><div class="line">![这里写图片描述](http://img.blog.csdn.net/20180107193928806?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)</div><div class="line"></div><div class="line">###9，hive 初始化元数据库报错:</div><div class="line">org.apache.hadoop.hive.metastore.HiveMetaException: Failed to get schema version.</div><div class="line">Underlying cause: java.sql.SQLException : Access denied for user &apos;root&apos;@&apos;master&apos; (using password: YES)</div><div class="line">SQL Error code: 1045</div><div class="line">![这里写图片描述](http://img.blog.csdn.net/20180107194119542?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)</div><div class="line"></div><div class="line"></div><div class="line">原因: 以为数据库连接用户名密码或权限问题，然而检查hive/hive-site.xml配置，和mysql设置的用户名和密码以及权限，都没问题。</div><div class="line">解决办法: 将hive/hive-site.xml连接数据库的别名改成ip地址就可以了。</div><div class="line">![这里写图片描述](http://img.blog.csdn.net/20180107194126459?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)</div><div class="line"></div><div class="line"></div><div class="line">### 9，hive使用mr进行关联查询报错:FAILED: Execution Error, return code 2 from org.apache.hadoop.hive.ql.exec.mr.MapredLocalTask</div><div class="line"></div><div class="line">  原因:内存太小了。</div><div class="line">  解决办法:将mr内存设置大一点</div></pre></td></tr></table></figure></p>
+<p>set mapred.reduce.tasks = 2000;<br>set mapreduce.reduce.memory.mb=16384;<br>set mapreduce.reduce.java.opts=-Xmx16384m;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">### Zookeeper相关的错误</div><div class="line">### 1，zookeeper集群启动之后输入status 报:Error contacting service. It is probably not running.</div><div class="line">原因:可能是zoopkeeper集群未能成功配置以及相关的环境未配置好。</div><div class="line">解决办法：</div><div class="line">  1.  集群成功配置并且启动成功后，检查集群中的防火墙是否关闭；</div><div class="line">2.检查myid和zoo.cfg文件配置格式是否正确，注意空格！！！</div><div class="line">3.输入jps查看zookeeper是否成功启动。</div><div class="line">4.zookeeper集群全部都启动成功之后，再输入zkServer.sh status 查看。</div><div class="line"></div><div class="line">   Zoo.cfg完整的配置</div></pre></td></tr></table></figure></p>
+<p>dataDir=/opt/zookeeper/data<br>dataLogDir=/opt/zookeeper/dataLog<br>server.1=master:2888:3888<br>server.2=slave1:2888:3888<br>server.3=slave2:2888:3888<br>```<br>myid的配置为 1、2、3</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/大数据/" rel="tag"># 大数据</a>
+          
+            <a href="/tags/hbase/" rel="tag"># hbase</a>
+          
+            <a href="/tags/hadoop/" rel="tag"># hadoop</a>
+          
+            <a href="/tags/hive/" rel="tag"># hive</a>
+          
+            <a href="/tags/spark/" rel="tag"># spark</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/31/pancm65/" rel="next" title="一个两年java程序猿的2017个人总结">
+                <i class="fa fa-chevron-left"></i> 一个两年java程序猿的2017个人总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/10/pancm67/" rel="prev" title="基于SpringBoot开发一个Restful服务，实现增删改查功能">
+                基于SpringBoot开发一个Restful服务，实现增删改查功能 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">66</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">41</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hadoop伪分布式相关的问题"><span class="nav-number">2.</span> <span class="nav-text">Hadoop伪分布式相关的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1，FATAL-conf-Configuration-error-parsing-conf-hdfs-site-xml"><span class="nav-number">2.1.</span> <span class="nav-text">1，FATAL conf.Configuration: error parsing conf hdfs-site.xml</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2，Use-of-this-script-to-execute-hdfs-command-is-deprecated。"><span class="nav-number">2.2.</span> <span class="nav-text">2，Use of this script to execute hdfs command is deprecated。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3，org-apache-hadoop-hdfs-server-namenode-NameNode。"><span class="nav-number">2.3.</span> <span class="nav-text">3，org.apache.hadoop.hdfs.server.namenode.NameNode。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hadoop相关的错误"><span class="nav-number">3.</span> <span class="nav-text">Hadoop相关的错误</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1，启动hadoop时候报错：localhost-ssh-Could-not-resolve-hostname-localhost-Temporary-failure-in-name-resolution”"><span class="nav-number">3.1.</span> <span class="nav-text">1，启动hadoop时候报错：localhost: ssh: Could not resolve hostname localhost: Temporary failure in name resolution”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2，mkdir-user-hive-warehouse’-No-such-file-or-directory"><span class="nav-number">3.2.</span> <span class="nav-text">2，mkdir: `/user/hive/warehouse’: No such file or directory</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3，bash-…：-is-a-directory"><span class="nav-number">3.3.</span> <span class="nav-text">3，bash:…： is a directory</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4，Hadoop警告-Unable-to-load-native-hadoop-library-for-your-platform…-using-builtin-java-classes-where-applicable"><span class="nav-number">3.4.</span> <span class="nav-text">4，Hadoop警告:Unable to load native-hadoop library for your platform… using builtin-java classes where applicable</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5，hadoop成功配置之后，namenode没有成功启动。"><span class="nav-number">3.5.</span> <span class="nav-text">5，hadoop成功配置之后，namenode没有成功启动。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark相关的错误"><span class="nav-number">4.</span> <span class="nav-text">Spark相关的错误</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3，spark-sql启动报错-org-apache-spark-sql-hive-thriftserver-SparkSQLCLIDriver"><span class="nav-number">4.1.</span> <span class="nav-text">3，spark sql启动报错:org.apache.spark.sql.hive.thriftserver.SparkSQLCLIDriver</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HBase-相关的错误"><span class="nav-number">5.</span> <span class="nav-text">HBase 相关的错误</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1，启动HBase错误-bash-opt-hbase-hbase-1-2-6-bin-is-a-directory"><span class="nav-number">5.1.</span> <span class="nav-text">1，启动HBase错误: -bash: /opt/hbase/hbase-1.2.6/bin: is a directory</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2，Java-API-连接HBase-报错"><span class="nav-number">5.2.</span> <span class="nav-text">2，Java API 连接HBase 报错</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hive相关的错误"><span class="nav-number">6.</span> <span class="nav-text">Hive相关的错误</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1，hive2-Unable-to-instantiate-org-apache-hadoop-hive-ql-metadata-SessionHiveMetaStoreClient"><span class="nav-number">6.1.</span> <span class="nav-text">1，hive2: Unable to instantiate org.apache.hadoop.hive.ql.metadata.SessionHiveMetaStoreClient</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2，进入hive警告-Class-path-contains-multiple-SLF4J-bindings"><span class="nav-number">6.2.</span> <span class="nav-text">2，进入hive警告:Class path contains multiple SLF4J bindings</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3，java连接hive报错-HIVE2-Error-Failed-to-open-new-session-java-lang-RuntimeException-org-apache-hadoop-ipc-RemoteExc"><span class="nav-number">6.3.</span> <span class="nav-text">3，java连接hive报错:HIVE2 Error: Failed to open new session: java.lang.RuntimeException:org.apache.hadoop.ipc.RemoteExc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4，java连接hive报错-hive-jdbc-connection-refused"><span class="nav-number">6.4.</span> <span class="nav-text">4，java连接hive报错:hive:jdbc connection refused</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5，使用hive警告-WARN-conf-HiveConf-HiveConf-of-name-hive-metastore-local-does-not-exist"><span class="nav-number">6.5.</span> <span class="nav-text">5，使用hive警告:WARN conf.HiveConf: HiveConf of name hive.metastore.local does not exist</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+<script src="https://files.cnblogs.com/files/xuwujing/xue.js"></script>
+
+<div class="Snow">
+    <canvas id="Snow"></canvas>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

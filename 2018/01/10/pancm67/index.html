@@ -1,0 +1,872 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,springBoot," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言在去年的时候，在各种渠道中略微的了解了SpringBoot，在开发web项目的时候是如何的方便、快捷。但是当时并没有认真的去学习下，毕竟感觉自己在Struts和SpringMVC都用得不太熟练。不过在看了很多关于SpringBoot的介绍之后，并没有想象中的那么难，于是开始准备学习SpringBoot。 在闲暇之余的时候，看了下SpringBoot实战以及一些大神关于SpringBoot的博">
+<meta name="keywords" content="java,springBoot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于SpringBoot开发一个Restful服务，实现增删改查功能">
+<meta property="og:url" content="http://yoursite.com/2018/01/10/pancm67/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言在去年的时候，在各种渠道中略微的了解了SpringBoot，在开发web项目的时候是如何的方便、快捷。但是当时并没有认真的去学习下，毕竟感觉自己在Struts和SpringMVC都用得不太熟练。不过在看了很多关于SpringBoot的介绍之后，并没有想象中的那么难，于是开始准备学习SpringBoot。 在闲暇之余的时候，看了下SpringBoot实战以及一些大神关于SpringBoot的博">
+<meta property="og:image" content="http://img.blog.csdn.net/20180110205638916?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20180110213629347?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20180110213635335?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2018-01-10T14:02:29.031Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于SpringBoot开发一个Restful服务，实现增删改查功能">
+<meta name="twitter:description" content="前言在去年的时候，在各种渠道中略微的了解了SpringBoot，在开发web项目的时候是如何的方便、快捷。但是当时并没有认真的去学习下，毕竟感觉自己在Struts和SpringMVC都用得不太熟练。不过在看了很多关于SpringBoot的介绍之后，并没有想象中的那么难，于是开始准备学习SpringBoot。 在闲暇之余的时候，看了下SpringBoot实战以及一些大神关于SpringBoot的博">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20180110205638916?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/01/10/pancm67/"/>
+
+
+
+
+
+
+  <title>基于SpringBoot开发一个Restful服务，实现增删改查功能 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/10/pancm67/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">基于SpringBoot开发一个Restful服务，实现增删改查功能</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-10T21:44:00+08:00">
+                2018-01-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/springBoot/" itemprop="url" rel="index">
+                    <span itemprop="name">springBoot</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在去年的时候，在各种渠道中略微的了解了SpringBoot，在开发web项目的时候是如何的方便、快捷。但是当时并没有认真的去学习下，毕竟感觉自己在Struts和SpringMVC都用得不太熟练。不过在看了很多关于SpringBoot的介绍之后，并没有想象中的那么难，于是开始准备学习SpringBoot。 在闲暇之余的时候，看了下SpringBoot实战以及一些大神关于SpringBoot的博客之后，开始写起了我的第一个SpringBoot的项目。在能够对SpringBoot进行一些简单的开发Restful风格接口实现CRUD功能之后，于是便有了本篇博文。</p>
+<h2 id="SpringBoot介绍"><a href="#SpringBoot介绍" class="headerlink" title="SpringBoot介绍"></a>SpringBoot介绍</h2><p>   Spring Boot是由Pivotal团队提供的全新框架，其设计目的是用来简化新Spring应用的初始搭建以及开发过程。该框架使用了特定的方式来进行配置，从而使开发人员不再需要定义样板化的配置。<br>        简单的来说就是，只需几个jar和一些简单的配置，就可以快速开发项目。<br>     假如我就想简单的开发一个对外的接口，那么只需要以下代码就可以了。</p>
+<p><strong>一个主程序启动springBoot</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">@SpringBootApplication</div><div class="line">public class Application &#123;</div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		SpringApplication.run(Application.class, args);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>控制层</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">@RestController</div><div class="line">public class HelloWorldController &#123;</div><div class="line">    @RequestMapping(&quot;/hello&quot;)</div><div class="line">    public String index() &#123;    	</div><div class="line">        return &quot;Hello World&quot;;</div><div class="line">    &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
+<p>成功启动主程序之后，编写控制层，然后在浏览器输入 <a href="http://localhost:8080//hello" target="_blank" rel="external">http://localhost:8080//hello</a>    便可以查看信息。</p>
+<p> 感觉使用SpringBoot开发程序是不是非常的简单呢！<br> 用SpringBoot实战的话来说：</p>
+<blockquote>
+<p>这里没有配置，没有web.xml，没有构建说明，甚至没有应用服务器，但这就是整个应用程序了。SpringBoot会搞定执行应用程序所需的各种后勤工作，你只要搞定应用程序的代码就好。</p>
+</blockquote>
+<h2 id="基于SpringBoot开发一个Restful服务"><a href="#基于SpringBoot开发一个Restful服务" class="headerlink" title="基于SpringBoot开发一个Restful服务"></a>基于SpringBoot开发一个Restful服务</h2><p>在开发程序之前，应先做好一下准备</p>
+<h3 id="一、开发准备"><a href="#一、开发准备" class="headerlink" title="一、开发准备"></a>一、开发准备</h3><h4 id="1-1-数据库和表"><a href="#1-1-数据库和表" class="headerlink" title="1.1 数据库和表"></a>1.1 数据库和表</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">CREATE DATABASE `springboot`;</div><div class="line"></div><div class="line">USE `springboot`;</div><div class="line"></div><div class="line">DROP TABLE IF EXISTS `t_user`;</div><div class="line"></div><div class="line">CREATE TABLE `t_user` (</div><div class="line">  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT &apos;id&apos;,</div><div class="line">  `name` varchar(10) DEFAULT NULL COMMENT &apos;姓名&apos;,</div><div class="line">  `age` int(2) DEFAULT NULL COMMENT &apos;年龄&apos;,</div><div class="line">  PRIMARY KEY (`id`)</div><div class="line">) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;</div></pre></td></tr></table></figure>
+<h3 id="1-2-maven相关依赖"><a href="#1-2-maven相关依赖" class="headerlink" title="1.2  maven相关依赖"></a>1.2  maven相关依赖</h3><p>springBoot最核心的jar<br>spring-boot-starter ：核心模块，包括自动配置支持、日志和YAML；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div></pre></td><td class="code"><pre><div class="line">&lt;parent&gt;</div><div class="line">		&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">		&lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;</div><div class="line">		&lt;version&gt;1.5.9.RELEASE&lt;/version&gt;</div><div class="line">		&lt;relativePath/&gt; </div><div class="line">	&lt;/parent&gt;</div><div class="line"></div><div class="line">     &lt;properties&gt;</div><div class="line">     	&lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;</div><div class="line">		&lt;java.version&gt;1.7&lt;/java.version&gt;</div><div class="line">		</div><div class="line">        &lt;mybatis-spring-boot&gt;1.2.0&lt;/mybatis-spring-boot&gt;</div><div class="line">        &lt;mysql-connector&gt;5.1.39&lt;/mysql-connector&gt;</div><div class="line">		</div><div class="line">	&lt;/properties&gt;</div><div class="line"></div><div class="line"></div><div class="line">    &lt;dependencies&gt;</div><div class="line">        &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line">        &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;spring-boot-starter-thymeleaf&lt;/artifactId&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line">        &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;spring-boot-starter-data-jpa&lt;/artifactId&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line">        </div><div class="line">       </div><div class="line">        &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;spring-boot-devtools&lt;/artifactId&gt;</div><div class="line">            &lt;optional&gt;true&lt;/optional&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line">		</div><div class="line">		&lt;dependency&gt;</div><div class="line">			&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">			&lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;</div><div class="line">			&lt;scope&gt;test&lt;/scope&gt;</div><div class="line">		&lt;/dependency&gt;</div><div class="line">		</div><div class="line">		</div><div class="line">		  &lt;!-- Spring Boot Mybatis 依赖 --&gt;</div><div class="line">        &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;org.mybatis.spring.boot&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;mybatis-spring-boot-starter&lt;/artifactId&gt;</div><div class="line">            &lt;version&gt;$&#123;mybatis-spring-boot&#125;&lt;/version&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line"> </div><div class="line">        &lt;!-- MySQL 连接驱动依赖 --&gt;</div><div class="line">        &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;mysql&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;</div><div class="line">            &lt;version&gt;$&#123;mysql-connector&#125;&lt;/version&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line"></div><div class="line">	&lt;/dependencies&gt;</div><div class="line">	</div><div class="line">	&lt;build&gt;</div><div class="line">		&lt;plugins&gt;</div><div class="line">		&lt;!--运用SpringBoot 插件  使用spring-boot-devtools模块的应用,当classpath中的文件有改变时，会自动重启！ --&gt;</div><div class="line">			&lt;plugin&gt;</div><div class="line">				&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">				&lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;</div><div class="line">				&lt;configuration&gt;</div><div class="line">	                &lt;fork&gt;true&lt;/fork&gt;</div><div class="line">	            &lt;/configuration&gt;</div><div class="line">			&lt;/plugin&gt;</div><div class="line">		&lt;/plugins&gt;</div><div class="line">	&lt;/build&gt;</div></pre></td></tr></table></figure>
+<h3 id="二、工程说明"><a href="#二、工程说明" class="headerlink" title="二、工程说明"></a>二、工程说明</h3><h4 id="2-1工程结构图"><a href="#2-1工程结构图" class="headerlink" title="2.1工程结构图:"></a>2.1工程结构图:</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">com.pancm.web - Controller 层</div><div class="line">com.pancm.dao - 数据操作层 DAO</div><div class="line">com.pancm.bean - 实体类</div><div class="line">com.pancm.bean.service - 业务逻辑层</div><div class="line">Application - 应用启动类</div><div class="line">application.properties - 应用配置文件，应用启动会自动读取配置</div></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20180110205638916?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h4 id="2-2-自定义配置文件"><a href="#2-2-自定义配置文件" class="headerlink" title="2.2 自定义配置文件"></a>2.2 自定义配置文件</h4><p>一般我们需要一些自定义的配置，例如配置jdbc的连接配置，在这里我们可以用 <strong>application.properties</strong>  进行配置。数据源实际的配置以各位的为准。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">## 数据源配置</div><div class="line">spring.datasource.url=jdbc:mysql://localhost:3306/springBoot?useUnicode=true&amp;characterEncoding=utf8</div><div class="line">spring.datasource.username=root</div><div class="line">spring.datasource.password=123456</div><div class="line">spring.datasource.driver-class-name=com.mysql.jdbc.Driver</div><div class="line"></div><div class="line"></div><div class="line">## Mybatis 配置</div><div class="line"># 配置为 com.pancm.bean 指向实体类包路径。</div><div class="line">mybatis.typeAliasesPackage=com.pancm.bean</div><div class="line"># 配置为 classpath 路径下 mapper 包下，* 代表会扫描所有 xml 文件。</div><div class="line">mybatis.mapperLocations=classpath\:mapper/*.xml</div></pre></td></tr></table></figure></p>
+<h3 id="三、代码编写"><a href="#三、代码编写" class="headerlink" title="三、代码编写"></a>三、代码编写</h3><p>  :</p>
+<h4 id="3-1-Pojo类User的编写"><a href="#3-1-Pojo类User的编写" class="headerlink" title="3.1  Pojo类User的编写"></a>3.1  Pojo类User的编写</h4><p>  来到重点的代码这快了。<br>   我们开始先编写pojo类，对应数据库中的t_user表。<br>   代码如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"> public class User &#123;</div><div class="line">	 /** 编号 */</div><div class="line">	 private int id;</div><div class="line">	 /** 姓名 */</div><div class="line">	 private String name;</div><div class="line">	 </div><div class="line">	 /** 年龄 */</div><div class="line">	 private int age;</div><div class="line">	 </div><div class="line">	 public User()&#123;</div><div class="line">	 &#125;</div><div class="line">   public class User &#123;</div><div class="line">	 /** 编号 */</div><div class="line">	 private int id;</div><div class="line">	 /** 姓名 */</div><div class="line">	 private String name;</div><div class="line">	 </div><div class="line">	 /** 年龄 */</div><div class="line">	 private int age;</div><div class="line">	 </div><div class="line">	 public User()&#123;</div><div class="line">	 &#125;</div><div class="line">//	 getter和 setter 略 </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="3-2-Dao层编写"><a href="#3-2-Dao层编写" class="headerlink" title="3.2  Dao层编写"></a>3.2  Dao层编写</h4><p>在以前的Dao层这块，hibernate和mybatis 都可以使用注解或者使用mapper配置文件。在这里我们使用spring的JPA来完成CRUD。</p>
+<p>说明:<br>一般有两种方式实现与数据库实现CRUD：<br>第一种是xml的mapper配置。<br>第二种是使用注解，@Insert、@Select、@Update、@Delete 这些来完成。本篇使用的是第二种</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line">import org.apache.ibatis.annotations.Delete;</div><div class="line">import org.apache.ibatis.annotations.Insert;</div><div class="line">import org.apache.ibatis.annotations.Mapper;</div><div class="line">import org.apache.ibatis.annotations.Result;</div><div class="line">import org.apache.ibatis.annotations.Results;</div><div class="line">import org.apache.ibatis.annotations.Select;</div><div class="line">import org.apache.ibatis.annotations.Update;</div><div class="line">import org.springframework.data.repository.query.Param;</div><div class="line"></div><div class="line">import com.pancm.bean.User;</div><div class="line">@Mapper</div><div class="line">public interface UserDao &#123;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 用户数据新增</div><div class="line">	 */</div><div class="line">	 @Insert(&quot;insert into t_user(id,name,age) values (#&#123;id&#125;,#&#123;name&#125;,#&#123;age&#125;)&quot;)</div><div class="line">	  void addUser(User user); </div><div class="line">	 </div><div class="line">	 /**</div><div class="line">	  * 用户数据修改</div><div class="line">	  */</div><div class="line">	 @Update(&quot;update t_user set name=#&#123;name&#125;,age=#&#123;age&#125; where id=#&#123;id&#125;&quot;)</div><div class="line">	  void updateUser(User user);</div><div class="line"></div><div class="line">	 /**</div><div class="line">	  * 用户数据删除</div><div class="line">	 */</div><div class="line">	 @Delete(&quot;delete from t_user where id=#&#123;id&#125;&quot;)</div><div class="line">	 void deleteUser(int id);</div><div class="line">	</div><div class="line">	 /**</div><div class="line">     * 根据用户名称查询用户信息</div><div class="line">     *</div><div class="line">     */</div><div class="line">    @Select(&quot;SELECT id,name,age FROM t_user&quot;)</div><div class="line">    // 返回 Map 结果集</div><div class="line">    @Results(&#123;</div><div class="line">            @Result(property = &quot;id&quot;, column = &quot;id&quot;),</div><div class="line">            @Result(property = &quot;name&quot;, column = &quot;name&quot;),</div><div class="line">            @Result(property = &quot;age&quot;, column = &quot;age&quot;),</div><div class="line">    &#125;)</div><div class="line">    User findByName(@Param(&quot;name&quot;) String userName);</div><div class="line">   </div><div class="line">    /**</div><div class="line">     * 根据用户ID查询用户信息</div><div class="line">     *</div><div class="line">     */</div><div class="line">    @Select(&quot;SELECT id,name,age FROM t_user&quot;)     </div><div class="line">    User findById(@Param(&quot;id&quot;) int userId);</div><div class="line">    </div><div class="line">    </div><div class="line">    /**</div><div class="line">     * 根据用户age查询用户信息</div><div class="line">     */</div><div class="line">    @Select(&quot;SELECT id,name,age FROM t_user where age = #&#123;userAge&#125;&quot;)     </div><div class="line">    User findByAge( int userAge);</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个接口使用的注解个人理解:<br>mapper : 在接口上添加了这个注解表示这个接口是基于注解实现的CRUD。<br>Results: 返回的map结果集，property 表示User类的字段，column 表示对应数据库的字段。<br>Param:sql条件的字段。<br>Insert、Select、Update、Delete:对应数据库的增、查、改、删。</p>
+<h4 id="3-3-Service-业务逻辑层"><a href="#3-3-Service-业务逻辑层" class="headerlink" title="3.3 Service 业务逻辑层"></a>3.3 Service 业务逻辑层</h4><p>这块和hibernate、mybatis的基本一样。<br>代码如下：</p>
+<p><strong>接口</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line">import com.pancm.bean.User;</div><div class="line"></div><div class="line">/**</div><div class="line"> * </div><div class="line">* Title: UserService</div><div class="line">* Description:用户接口 </div><div class="line">* Version:1.0.0  </div><div class="line">* @author pancm</div><div class="line">* @date 2018年1月9日</div><div class="line"> */</div><div class="line">public interface UserService &#123;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 新增用户</div><div class="line">	 * @param user</div><div class="line">	 * @return</div><div class="line">	 */</div><div class="line">	boolean addUser(User user);</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 修改用户</div><div class="line">	 * @param user</div><div class="line">	 * @return</div><div class="line">	 */</div><div class="line">	boolean updateUser(User user);</div><div class="line">	</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 删除用户</div><div class="line">	 * @param id</div><div class="line">	 * @return</div><div class="line">	 */</div><div class="line">	boolean deleteUser(int id);</div><div class="line">	</div><div class="line">	 /**</div><div class="line">     * 根据用户名字查询用户信息</div><div class="line">     * @param userName</div><div class="line">     */</div><div class="line">	User findUserByName(String userName);</div><div class="line">    </div><div class="line">    /**</div><div class="line">     * 根据用户ID查询用户信息</div><div class="line">     * @param userId</div><div class="line">     */</div><div class="line">	User findUserById(int userId);</div><div class="line">	</div><div class="line">	 /**</div><div class="line">     * 根据用户ID查询用户信息</div><div class="line">     * @param userAge</div><div class="line">     */</div><div class="line">	User findUserByAge(int userAge);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>实现类</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div></pre></td><td class="code"><pre><div class="line">import org.springframework.beans.factory.annotation.Autowired;</div><div class="line">import org.springframework.stereotype.Service;</div><div class="line"></div><div class="line">import com.pancm.bean.User;</div><div class="line">import com.pancm.dao.UserDao;</div><div class="line">import com.pancm.service.UserService;</div><div class="line"></div><div class="line">/**</div><div class="line"> * </div><div class="line">* Title: UserServiceImpl</div><div class="line">* Description:</div><div class="line">* 用户操作实现类 </div><div class="line">* Version:1.0.0  </div><div class="line">* @author pancm</div><div class="line">* @date 2018年1月9日</div><div class="line"> */</div><div class="line">@Service</div><div class="line">public class UserServiceImpl implements UserService &#123;</div><div class="line">	@Autowired</div><div class="line">    private UserDao userDao;</div><div class="line">	</div><div class="line">	</div><div class="line">	@Override</div><div class="line">	public boolean addUser(User user) &#123;</div><div class="line">		boolean flag=false;</div><div class="line">		try&#123;</div><div class="line">			userDao.addUser(user);</div><div class="line">			flag=true;</div><div class="line">		&#125;catch(Exception e)&#123;</div><div class="line">			e.printStackTrace();</div><div class="line">		&#125;</div><div class="line">		return flag;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public boolean updateUser(User user) &#123;</div><div class="line">		boolean flag=false;</div><div class="line">		try&#123;</div><div class="line">			userDao.updateUser(user);</div><div class="line">			flag=true;</div><div class="line">		&#125;catch(Exception e)&#123;</div><div class="line">			e.printStackTrace();</div><div class="line">		&#125;</div><div class="line">		return flag;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public boolean deleteUser(int id) &#123;</div><div class="line">		boolean flag=false;</div><div class="line">		try&#123;</div><div class="line">			userDao.deleteUser(id);</div><div class="line">			flag=true;</div><div class="line">		&#125;catch(Exception e)&#123;</div><div class="line">			e.printStackTrace();</div><div class="line">		&#125;</div><div class="line">		return flag;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public User findUserByName(String userName) &#123;</div><div class="line">		return userDao.findByName(userName);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public User findUserById(int userId) &#123;</div><div class="line">		return userDao.findById(userId);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public User findUserByAge(int userAge) &#123;</div><div class="line">		return userDao.findByAge(userAge);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="3-4-Controller-控制层"><a href="#3-4-Controller-控制层" class="headerlink" title="3.4 Controller 控制层"></a>3.4 Controller 控制层</h4><p>控制层这块和springMVC很像，但是相比而言要简洁不少。<br>关于控制层的注解个人的理解如下:</p>
+<p> RestController：默认类中的方法都会以json的格式返回。<br>RequestMapping: 接口路径配置。<br>method : 请求格式。<br>RequestParam: 请求参数。</p>
+<p>具体实现如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line">import org.springframework.beans.factory.annotation.Autowired;</div><div class="line">import org.springframework.web.bind.annotation.RequestMapping;</div><div class="line">import org.springframework.web.bind.annotation.RequestMethod;</div><div class="line">import org.springframework.web.bind.annotation.RequestParam;</div><div class="line">import org.springframework.web.bind.annotation.RestController;</div><div class="line"></div><div class="line">import com.pancm.bean.User;</div><div class="line">import com.pancm.service.UserService;</div><div class="line"></div><div class="line"></div><div class="line">/**</div><div class="line"> * </div><div class="line">* Title: UserRestController</div><div class="line">* Description: </div><div class="line">* 用户数据操作接口</div><div class="line">* Version:1.0.0  </div><div class="line">* @author pancm</div><div class="line">* @date 2018年1月9日</div><div class="line"> */</div><div class="line">@RestController</div><div class="line">@RequestMapping(value = &quot;/api/user&quot;)</div><div class="line">public class UserRestController &#123;</div><div class="line">	@Autowired</div><div class="line">    private UserService userService;</div><div class="line"> </div><div class="line">	@RequestMapping(value = &quot;/addUser&quot;, method = RequestMethod.POST)</div><div class="line">    public boolean addUser( User user) &#123;</div><div class="line">    	System.out.println(&quot;开始新增...&quot;);</div><div class="line">        return userService.addUser(user);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">	@RequestMapping(value = &quot;/updateUser&quot;, method = RequestMethod.PUT)</div><div class="line">    public boolean updateUser( User user) &#123;</div><div class="line">    	System.out.println(&quot;开始更新...&quot;);</div><div class="line">        return userService.updateUser(user);</div><div class="line">    &#125;</div><div class="line">	</div><div class="line">	@RequestMapping(value = &quot;/deleteUser&quot;, method = RequestMethod.DELETE)</div><div class="line">    public boolean delete(@RequestParam(value = &quot;userName&quot;, required = true) int userId) &#123;</div><div class="line">    	System.out.println(&quot;开始删除...&quot;);</div><div class="line">        return userService.deleteUser(userId);</div><div class="line">    &#125;</div><div class="line">	</div><div class="line">    @RequestMapping(value = &quot;/userName&quot;, method = RequestMethod.GET)</div><div class="line">    public User findByUserName(@RequestParam(value = &quot;userName&quot;, required = true) String userName) &#123;</div><div class="line">    	System.out.println(&quot;开始查询...&quot;);</div><div class="line">        return userService.findUserByName(userName);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    @RequestMapping(value = &quot;/userId&quot;, method = RequestMethod.GET)</div><div class="line">    public User findByUserId(@RequestParam(value = &quot;userId&quot;, required = true) int userId) &#123;</div><div class="line">    	System.out.println(&quot;开始查询...&quot;);</div><div class="line">        return userService.findUserById(userId);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    @RequestMapping(value = &quot;/userAge&quot;, method = RequestMethod.GET)</div><div class="line">    public User findByUserAge(@RequestParam(value = &quot;userAge&quot;, required = true) int userAge) &#123;</div><div class="line">    	System.out.println(&quot;开始查询...&quot;);</div><div class="line">        return userService.findUserById(userAge);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="3-5-Application-主程序"><a href="#3-5-Application-主程序" class="headerlink" title="3.5  Application 主程序"></a>3.5  Application 主程序</h4><p>SpringApplication 则是用于从main方法启动Spring应用的类。<br>默认，它会执行以下步骤：<br>        1.创建一个合适的ApplicationContext实例 （取决于classpath）。<br>        2.注册一个CommandLinePropertySource，以便将命令行参数作为Spring properties。<br>        3.刷新application context，加载所有单例beans。<br>        4.激活所有CommandLineRunner beans。<br>直接使用main启动该类，SpringBoot便自动化配置了。<br>ps:即使是现在我依旧觉得这个实在是太厉害了。</p>
+<p>该类的一些注解说明。:<br>SpringBootApplication：开启组件扫描和自动配置。<br>MapperScan: mapper 接口类扫描包配置</p>
+<p>代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">import org.mybatis.spring.annotation.MapperScan;</div><div class="line">import org.springframework.boot.SpringApplication;</div><div class="line">import org.springframework.boot.autoconfigure.SpringBootApplication;</div><div class="line">/**</div><div class="line"> * </div><div class="line">* Title: Application</div><div class="line">* Description:</div><div class="line">* springBoot 主程序 </div><div class="line">* Version:1.0.0  </div><div class="line">* @author pancm</div><div class="line">* @date 2018年1月5日</div><div class="line"> */</div><div class="line"></div><div class="line">@SpringBootApplication</div><div class="line">@MapperScan(&quot;com.pancm.dao&quot;)</div><div class="line">public class Application &#123;</div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		// 启动嵌入式的 Tomcat 并初始化 Spring 环境及其各 Spring 组件</div><div class="line">		SpringApplication.run(Application.class, args);</div><div class="line">		System.out.println(&quot;程序正在运行...&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="四、代码测试"><a href="#四、代码测试" class="headerlink" title="四、代码测试"></a>四、代码测试</h3><p>代码编写完之后，我们进行代码的测试。<br>启动Application 之后，使用postman工具进行接口的测试。<br>postman的使用教程可以看我的博客: <a href="http://www.panchengming.com/2017/04/24/pancm12/" target="_blank" rel="external">http://www.panchengming.com/2017/04/24/pancm12/</a></p>
+<p>测试结果如下:<br><img src="http://img.blog.csdn.net/20180110213629347?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p><img src="http://img.blog.csdn.net/20180110213635335?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>这里只使用了一个get和post测试，实际方法都测试过了，但是感觉没必要贴图了。<br>项目我放到github上面去了:<br><a href="https://github.com/xuwujing/springBoot" target="_blank" rel="external">https://github.com/xuwujing/springBoot</a></p>
+<p>如果觉得不错，希望顺便给个star。<br>到此，本文结束，谢谢阅读。</p>
+<p>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a><br>原创不易，转载请标明出处，谢谢！</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/springBoot/" rel="tag"># springBoot</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/07/pancm66/" rel="next" title="大数据学习系列之八----- Hadoop、Spark、HBase、Hive搭建环境遇到的错误以及解决方法">
+                <i class="fa fa-chevron-left"></i> 大数据学习系列之八----- Hadoop、Spark、HBase、Hive搭建环境遇到的错误以及解决方法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">66</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">41</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringBoot介绍"><span class="nav-number">2.</span> <span class="nav-text">SpringBoot介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于SpringBoot开发一个Restful服务"><span class="nav-number">3.</span> <span class="nav-text">基于SpringBoot开发一个Restful服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、开发准备"><span class="nav-number">3.1.</span> <span class="nav-text">一、开发准备</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-数据库和表"><span class="nav-number">3.1.1.</span> <span class="nav-text">1.1 数据库和表</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-maven相关依赖"><span class="nav-number">3.2.</span> <span class="nav-text">1.2  maven相关依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、工程说明"><span class="nav-number">3.3.</span> <span class="nav-text">二、工程说明</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1工程结构图"><span class="nav-number">3.3.1.</span> <span class="nav-text">2.1工程结构图:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-自定义配置文件"><span class="nav-number">3.3.2.</span> <span class="nav-text">2.2 自定义配置文件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、代码编写"><span class="nav-number">3.4.</span> <span class="nav-text">三、代码编写</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-Pojo类User的编写"><span class="nav-number">3.4.1.</span> <span class="nav-text">3.1  Pojo类User的编写</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-Dao层编写"><span class="nav-number">3.4.2.</span> <span class="nav-text">3.2  Dao层编写</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-Service-业务逻辑层"><span class="nav-number">3.4.3.</span> <span class="nav-text">3.3 Service 业务逻辑层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-Controller-控制层"><span class="nav-number">3.4.4.</span> <span class="nav-text">3.4 Controller 控制层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-5-Application-主程序"><span class="nav-number">3.4.5.</span> <span class="nav-text">3.5  Application 主程序</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、代码测试"><span class="nav-number">3.5.</span> <span class="nav-text">四、代码测试</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+<script src="https://files.cnblogs.com/files/xuwujing/xue.js"></script>
+
+<div class="Snow">
+    <canvas id="Snow"></canvas>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
