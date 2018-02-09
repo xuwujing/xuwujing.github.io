@@ -1,0 +1,886 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="大数据,hbase,hive,spark," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言   在之前的大数据学习系列之七 —– Hadoop+Spark+Zookeeper+HBase+Hive集群搭建 中介绍了集群的环境搭建，但是在使用hive进行数据查询的时候会非常的慢，因为hive默认使用的引擎是MapReduce。因此就将spark作为hive的引擎来对hbase进行查询，在成功的整合之后，我将如何整合的过程写成本篇博文。具体如下！ 事前准备在进行整合之前，首先确保Hi">
+<meta name="keywords" content="大数据,hbase,hive,spark">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大数据学习系列之九---- Hive整合Spark和HBase以及相关测试">
+<meta property="og:url" content="http://yoursite.com/2018/01/20/pancm68/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言   在之前的大数据学习系列之七 —– Hadoop+Spark+Zookeeper+HBase+Hive集群搭建 中介绍了集群的环境搭建，但是在使用hive进行数据查询的时候会非常的慢，因为hive默认使用的引擎是MapReduce。因此就将spark作为hive的引擎来对hbase进行查询，在成功的整合之后，我将如何整合的过程写成本篇博文。具体如下！ 事前准备在进行整合之前，首先确保Hi">
+<meta property="og:image" content="http://img.blog.csdn.net/20180120203608874?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2018-02-09T11:53:22.335Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="大数据学习系列之九---- Hive整合Spark和HBase以及相关测试">
+<meta name="twitter:description" content="前言   在之前的大数据学习系列之七 —– Hadoop+Spark+Zookeeper+HBase+Hive集群搭建 中介绍了集群的环境搭建，但是在使用hive进行数据查询的时候会非常的慢，因为hive默认使用的引擎是MapReduce。因此就将spark作为hive的引擎来对hbase进行查询，在成功的整合之后，我将如何整合的过程写成本篇博文。具体如下！ 事前准备在进行整合之前，首先确保Hi">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20180120203608874?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/01/20/pancm68/"/>
+
+
+
+
+
+
+  <title>大数据学习系列之九---- Hive整合Spark和HBase以及相关测试 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/20/pancm68/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">大数据学习系列之九---- Hive整合Spark和HBase以及相关测试</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-20T21:24:00+08:00">
+                2018-01-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/hadoop/" itemprop="url" rel="index">
+                    <span itemprop="name">hadoop</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>   在之前的<a href="http://www.panchengming.com/2017/12/30/pancm64/" target="_blank" rel="external">大数据学习系列之七 —– Hadoop+Spark+Zookeeper+HBase+Hive集群搭建</a> 中介绍了集群的环境搭建，但是在使用hive进行数据查询的时候会非常的慢，因为hive默认使用的引擎是MapReduce。因此就将spark作为hive的引擎来对hbase进行查询，在成功的整合之后，我将如何整合的过程写成本篇博文。具体如下！</p>
+<h2 id="事前准备"><a href="#事前准备" class="headerlink" title="事前准备"></a>事前准备</h2><p>在进行整合之前，首先确保Hive、HBase、Spark的环境已经搭建成功！如果没有成功搭建，具体可以看我之前写的<a href="http://www.panchengming.com/2017/12/30/pancm64/" target="_blank" rel="external">大数据学习系列之七 —– Hadoop+Spark+Zookeeper+HBase+Hive集群搭建</a> 这篇文章。<br>那么开始将hive、hbase、spark整合吧。<br>目前集群的配置如下:<br><img src="http://img.blog.csdn.net/20180120203608874?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h2 id="Hive整合HBase"><a href="#Hive整合HBase" class="headerlink" title="Hive整合HBase"></a>Hive整合HBase</h2><p>因为Hive与HBase整合的实现是利用两者本身对外的API接口互相通信来完成的，其具体工作交由Hive的lib目录中的<code>hive-hbase-handler-*.jar</code>工具类来实现。所以只需要将hive的 <code>hive-hbase-handler-*.jar</code> 复制到hbase/lib中就可以了。<br> 切换到hive/lib目录下<br>输入: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cp hive-hbase-handler-*.jar /opt/hbase/hbase1.2/lib</div></pre></td></tr></table></figure>
+<p><strong>注</strong>: 如果在hive整合hbase中，出现版本之类的问题，那么以hbase的版本为主，将hbase中的jar包覆盖hive的jar包。</p>
+<p>至于Hive和HBase之间的相关测试可以查看我之前的<a href="http://www.panchengming.com/2017/12/18/pancm62/" target="_blank" rel="external">大数据学习系列之五 —– Hive整合HBase图文详解</a> 这篇文章，本篇就不再过多描述了。</p>
+<h2 id="Hive整合Spark"><a href="#Hive整合Spark" class="headerlink" title="Hive整合Spark"></a>Hive整合Spark</h2><p>其实Hive整合Spark其实就是Hive使用Spark成功编译好的架包，但是Hive整合Spark比较坑的是版本不能随意，必须使用指定的进行编译。当初因为这个问题困扰了很久，最后查阅资料找到了已经编译好的spark和hive的版本，我们只需要将编译好的jar拿过来进行使用就行了。具体使用如下。</p>
+<h3 id="hive的配置更改"><a href="#hive的配置更改" class="headerlink" title="hive的配置更改"></a>hive的配置更改</h3><p>切换到hive/conf 目录下<br>编辑 <code>hive-env.sh</code> 文件<br>添加spark的环境:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">export  SPARK_HOME=/opt/spark/spark1.6-hadoop2.4-hive</div></pre></td></tr></table></figure></p>
+<p>然后编辑 <code>hive-site.xml</code> 文件<br>在hive-site.xml 添加 这些配置<br>这些配置的说明:</p>
+<p><strong>hive.execution.engine</strong>： 表示 hive 执行的默认引擎是，这里我们填的是spark。如果不想 加这个配置，希望手动使用spark，那么进入hive shell之后，输入:<br><figure class="highlight plain"><figcaption><span>hive.execution.engine=spark; ``` </span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">**spark.master**: spark的主机地址，这里我们填spark的默认地址。</div><div class="line">**spark.home**: spark 的安装路径，写spark的安装路径。</div><div class="line">**spark.submit.deployMode**：spark的提交方式，默认就写client。</div><div class="line">**spark.serializer**: spark 的序列化方式。</div><div class="line">**spark.eventLog.enabled**:是否使用spark的日志，默认true。</div><div class="line">**spark.eventLog.dir** : spark的日志存放路径，注意这个路径要用hadoop创建！</div><div class="line">**spark.executor.memory**:分配给spark的执行内存，根据个人机器来配置。</div><div class="line"> **spark.driver.memory**:  spark总内存，根据个人机器来配置。</div><div class="line">      </div><div class="line">完整配置:</div></pre></td></tr></table></figure></p>
+<!--  Hive On Spark 配置 -->
+<pre><code>&lt;property&gt;
+   &lt;name&gt;hive.execution.engine&lt;/name&gt;
+    &lt;value&gt;spark&lt;/value&gt;
+&lt;/property&gt;
+
+ &lt;property&gt;
+       &lt;name&gt;spark.master&lt;/name&gt;
+       &lt;value&gt;spark://master:7077&lt;/value&gt;
+&lt;/property&gt;
+
+    &lt;property&gt;
+    &lt;name&gt;spark.home&lt;/name&gt;
+    &lt;value&gt;/opt/spark/spark1.6-hadoop2.4-hive&lt;/value&gt;
+    &lt;/property&gt;
+
+    &lt;property&gt;
+    &lt;name&gt;spark.submit.deployMode&lt;/name&gt;
+    &lt;value&gt;client&lt;/value&gt;
+    &lt;/property&gt;
+
+    &lt;property&gt;
+       &lt;name&gt;spark.serializer&lt;/name&gt;
+       &lt;value&gt;org.apache.spark.serializer.KryoSerializer&lt;/value&gt;
+    &lt;/property&gt;
+
+&lt;property&gt;
+   &lt;name&gt;spark.eventLog.enabled&lt;/name&gt;
+   &lt;value&gt;true&lt;/value&gt;
+&lt;/property&gt;
+
+&lt;property&gt;
+   &lt;name&gt;spark.eventLog.dir&lt;/name&gt;
+   &lt;value&gt;hdfs://master:9000/directory&lt;/value&gt;
+&lt;/property&gt;
+</code></pre>   <property><br>       <name>spark.executor.memory</name><br>       <value>10G</value><br>    </property>
+
+<p>   <property><br>       <name>spark.driver.memory</name><br>       <value>10G</value><br>    </property><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">成功配置这些之后，进入hive shell中。</div><div class="line">简单进行两个表的关联查询</div><div class="line">![这里写图片描述](http://img.blog.csdn.net/20180120205832596?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)</div><div class="line">可以看到hive已经成功使用spark作为引擎了。</div><div class="line"></div><div class="line">## Hive on HBase 使用spark引擎测试</div><div class="line">在成功整合环境之后，并且建立了两张hive 外联hbase的表之后。进行数据查询测试。</div><div class="line">两张表的创建脚本:</div></pre></td></tr></table></figure></p>
+<p>create table t_student(id int,name string) stored by ‘org.apache.hadoop.hive.hbase.HBaseStorageHandler’ with serdeproperties(“hbase.columns.mapping”=”:key,st1:name”) tblproperties(“hbase.table.name”=”t_student”,”hbase.mapred.output.outputtable” = “t_student”);</p>
+<p>create table t_student_info(id int,age int,sex string) stored by ‘org.apache.hadoop.hive.hbase.HBaseStorageHandler’ with serdeproperties(“hbase.columns.mapping”=”:key,st1:age,st1:sex”) tblproperties(“hbase.table.name”=”t_student_info”,”hbase.mapred.output.outputtable” = “t_student_info”);<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">然后在两张表中个插入插入100万数据测试</div><div class="line">注：我这里是在HBase中直接插入100w数据的，使用HBase的Api完成的，具体可以[大数据学习系列之三 ----- HBase Java Api 图文详解](http://www.panchengming.com/2017/12/14/pancm59/)这篇博文。</div><div class="line"></div><div class="line">![这里写图片描述](http://img.blog.csdn.net/20180120211421282?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)</div><div class="line"></div><div class="line">成功插入之后，我们在hive shell中来测试查询速度。</div><div class="line"></div><div class="line">**条数测试:**</div><div class="line">![这里写图片描述](http://img.blog.csdn.net/20180120211735498?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)</div><div class="line"></div><div class="line">**主键管理查询测试:**</div><div class="line">![这里写图片描述](http://img.blog.csdn.net/20180120211814385?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)</div><div class="line"></div><div class="line">**非主键查询测试:**</div><div class="line">![这里写图片描述](http://img.blog.csdn.net/20180120211846883?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)</div><div class="line"></div><div class="line">注:其实也是可以使用hive的Api ，就是普通的JDBC连接，只不过连接驱动要换成</div></pre></td></tr></table></figure></p>
+<p>Class.forName(“org.apache.hive.jdbc.HiveDriver”);<br>```<br>具体实现可以看我的github中的代码:<a href="https://github.com/xuwujing/pancm_project/blob/master/src/main/java/com/pancm/test/hiveTest/hiveUtil.java" target="_blank" rel="external">https://github.com/xuwujing/pancm_project/blob/master/src/main/java/com/pancm/test/hiveTest/hiveUtil.java</a></p>
+<p><strong>结论:</strong> 使用 hive on spark 查询可以看出，如果查询条件是主键，也就是hbase中的rowkey的话，查询100w数据可以在2.3s左右就查出来了(个人感觉打开spark估计就要用2s左右，如果量大的话，速度估计也不会很慢)， 但是如果使用非主键的条件去查询，就可以看到速度明显变慢了。<br> 所以在使用 hive on hbase  的时候，尽量使用rowkey进行查询。</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p> 其实集群的环境搭建以及整合在我写第一篇大数据学习系列博客的时候就已经搭建好了。至于博客为什么写得这么迟，<strong>第一点</strong>是当初搭建环境的时候，并没有真正的理解那些配置的作用；<strong>第二点</strong>是环境搭建有些莫名其妙，经常出现问题，不过大部分问题和解决反感我都记录并写成博客了，所以慢慢写博客其实也是个人知识的重新整理；<strong>第三是</strong>个人的精力有限，无法一口气将这些都写成博客，毕竟写博客也需要一定时间和精力的。<br> 完成本篇博文之后，暂时先不写大数据这方面的博客了。感觉目前的自己能力还不够，如果就这样勉强的去自学，估计也很难学到知识点，更何况将其写成博客来讲解了。所以目前就先放放，有能力之后再来续写！<br>大数据学习系列的文章:<a href="http://blog.csdn.net/column/details/18120.html" target="_blank" rel="external">http://blog.csdn.net/column/details/18120.html</a> </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/大数据/" rel="tag"># 大数据</a>
+          
+            <a href="/tags/hbase/" rel="tag"># hbase</a>
+          
+            <a href="/tags/hive/" rel="tag"># hive</a>
+          
+            <a href="/tags/spark/" rel="tag"># spark</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/10/pancm67/" rel="next" title="基于SpringBoot开发一个Restful服务，实现增删改查功能">
+                <i class="fa fa-chevron-left"></i> 基于SpringBoot开发一个Restful服务，实现增删改查功能
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/25/pancm69/" rel="prev" title="Logback日志配置的简单使用">
+                Logback日志配置的简单使用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">43</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事前准备"><span class="nav-number">2.</span> <span class="nav-text">事前准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hive整合HBase"><span class="nav-number">3.</span> <span class="nav-text">Hive整合HBase</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hive整合Spark"><span class="nav-number">4.</span> <span class="nav-text">Hive整合Spark</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#hive的配置更改"><span class="nav-number">4.1.</span> <span class="nav-text">hive的配置更改</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#后记"><span class="nav-number">5.</span> <span class="nav-text">后记</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
