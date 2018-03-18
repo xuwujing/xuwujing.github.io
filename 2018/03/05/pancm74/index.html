@@ -1,0 +1,954 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="linux,sql," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言在之前的博客中，有过几篇都写了关于mysql在linux下的搭建教程，可能以后还会再写，但是又不想重复在写， 于是便想单独将此抽出来，单独写成一篇博客，并详细记录一些安装过程以及遇到的问题解决办法。顺便也将MySql的主从搭建教程也写在一起，方便以后查阅。 一、MySql安装在安装MySql之前，查看是否以及安装过MySql，如果已经安装，但是不符合要求的话就卸载。 1，查找以前是否装有my">
+<meta name="keywords" content="linux,sql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux CentOS 安装MySql以及搭建MySql主从复制">
+<meta property="og:url" content="http://yoursite.com/2018/03/05/pancm74/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言在之前的博客中，有过几篇都写了关于mysql在linux下的搭建教程，可能以后还会再写，但是又不想重复在写， 于是便想单独将此抽出来，单独写成一篇博客，并详细记录一些安装过程以及遇到的问题解决办法。顺便也将MySql的主从搭建教程也写在一起，方便以后查阅。 一、MySql安装在安装MySql之前，查看是否以及安装过MySql，如果已经安装，但是不符合要求的话就卸载。 1，查找以前是否装有my">
+<meta property="og:image" content="http://img.blog.csdn.net/20180305211726858?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="http://img.blog.csdn.net/20180305211747455?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="http://img.blog.csdn.net/20180305211949261?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="http://img.blog.csdn.net/20180305211958618?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="http://img.blog.csdn.net/20171216091314380?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171216091322445?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171216091342560?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171216091357000?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171216091501845?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171216091540852?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171216091605939?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20171216091707973?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20180305212827262?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="http://img.blog.csdn.net/20180305212901931?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="http://img.blog.csdn.net/20180305220450380?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="http://img.blog.csdn.net/20180305220551541?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="http://img.blog.csdn.net/20180305220559740?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:updated_time" content="2018-03-18T13:35:03.724Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux CentOS 安装MySql以及搭建MySql主从复制">
+<meta name="twitter:description" content="前言在之前的博客中，有过几篇都写了关于mysql在linux下的搭建教程，可能以后还会再写，但是又不想重复在写， 于是便想单独将此抽出来，单独写成一篇博客，并详细记录一些安装过程以及遇到的问题解决办法。顺便也将MySql的主从搭建教程也写在一起，方便以后查阅。 一、MySql安装在安装MySql之前，查看是否以及安装过MySql，如果已经安装，但是不符合要求的话就卸载。 1，查找以前是否装有my">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20180305211726858?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/03/05/pancm74/"/>
+
+
+
+
+
+
+  <title>Linux CentOS 安装MySql以及搭建MySql主从复制 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/05/pancm74/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux CentOS 安装MySql以及搭建MySql主从复制</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-05T22:09:28+08:00">
+                2018-03-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/sql/" itemprop="url" rel="index">
+                    <span itemprop="name">sql</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在之前的博客中，有过几篇都写了关于mysql在linux下的搭建教程，可能以后还会再写，但是又不想重复在写， 于是便想单独将此抽出来，单独写成一篇博客，并详细记录一些安装过程以及遇到的问题解决办法。顺便也将MySql的主从搭建教程也写在一起，方便以后查阅。</p>
+<h2 id="一、MySql安装"><a href="#一、MySql安装" class="headerlink" title="一、MySql安装"></a>一、MySql安装</h2><p>在安装MySql之前，查看是否以及安装过MySql，如果已经安装，但是不符合要求的话就卸载。<br> 1，查找以前是否装有mysql<br>  先输入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rpm -qa|grep -i mysql</div></pre></td></tr></table></figure></p>
+<p>查看是否安装了mysql<br><img src="http://img.blog.csdn.net/20180305211726858?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
+<p>2，停止mysql服务、删除之前安装的mysql<br>输入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ps -ef|grep mysql</div></pre></td></tr></table></figure></p>
+<p>删除命令<br>输入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rpm -e –nodeps 包名</div></pre></td></tr></table></figure></p>
+<p><img src="http://img.blog.csdn.net/20180305211747455?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br>如果提示依赖包错误，则使用以下命令尝试<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rpm -ev 包名 --nodeps</div></pre></td></tr></table></figure></p>
+<p>如果提示错误：error: %preun(xxxxxx) scriptlet failed, exit status 1<br>则用以下命令尝试：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rpm -e --noscripts 包名</div></pre></td></tr></table></figure></p>
+<p>3、查找并删除mysql目录<br>查找结果如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">find / -name mysql</div></pre></td></tr></table></figure></p>
+<p>删除对应的mysql目录<br>具体的步骤如图：查找目录并删除<br><img src="http://img.blog.csdn.net/20180305211949261?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br>注意：卸载后/etc/my.cnf不会删除，需要进行手工删除</p>
+<p>4、再次查找机器是否安装mysql<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rpm -qa|grep -i mysql</div></pre></td></tr></table></figure></p>
+<p><img src="http://img.blog.csdn.net/20180305211958618?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
+<p>  Mysql有两种安装模式，可自行选择。</p>
+<p>###1，yum安装<br>首先查看mysql 是否已经安装<br>输入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rpm -qa | grep mysql</div></pre></td></tr></table></figure></p>
+<p>如果已经安装，想删除的话<br>输入:<br>普通删除命令:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rpm -e mysql</div></pre></td></tr></table></figure></p>
+<p>强力删除命令:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rpm -e --nodeps mysql</div></pre></td></tr></table></figure></p>
+<p> 依赖文件也会删除</p>
+<p>安装mysql<br>输入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum list mysql-server</div></pre></td></tr></table></figure></p>
+<p>如果没有，则通过wget命令下载该包<br>输入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wget http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm</div></pre></td></tr></table></figure></p>
+<p>下载成功之后，再输入命令安装<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install mysql-server</div></pre></td></tr></table></figure></p>
+<p>在安装过程中遇到选择输入y就行了<br><img src="http://img.blog.csdn.net/20171216091314380?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br><img src="http://img.blog.csdn.net/20171216091322445?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>安装成功后，输入 service mysqld start  启动服务<br>输入:<br> mysqladmin -u root -p password ‘123456’<br>来设置密码<br>输入之后直接回车(默认是没有密码的)<br>然后再输入<br>mysql -u root -p<br><img src="http://img.blog.csdn.net/20171216091342560?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>通过授权法更改远程连接权限<br>输入: grant all privileges on <em>.</em> to ‘root’@’%’ identified by ‘123456’;<br>注:第一个’root’是用户名,第二个’%’是所有的ip都可以远程访问,第三个’123456’表示 用户密码  如果不常用 就关闭掉<br>输入:flush privileges;  //刷新</p>
+<p>在防火墙关闭之后，使用SQLYog之类的工具测试是否能正确连接</p>
+<p><img src="http://img.blog.csdn.net/20171216091357000?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h3 id="2，编译包安装"><a href="#2，编译包安装" class="headerlink" title="2，编译包安装"></a>2，编译包安装</h3><h4 id="Mysql文件准备"><a href="#Mysql文件准备" class="headerlink" title="Mysql文件准备"></a>Mysql文件准备</h4><p>将下载好的mysql安装包上传到linux服务器<br>解压mysql解压包，并移动到/usr/local目录下，重命名为mysql。<br>命令:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">tar -xvf mysql-5.6.21-linux-glibc2.5-x86_64.tar.gz</div><div class="line">mv mysql-5.6.21-linux-glibc2.5-x86_64 /usr/local</div><div class="line">cd /usr/local</div><div class="line">mv mysql-5.6.21-linux-glibc2.5-x86_64 mysql</div></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20171216091501845?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p><strong>注: mysql默认的路径是就是/usr/local/mysql ，如果安装的地方更改，需要更改相应的配置文件。</strong></p>
+<h4 id="安装mysql"><a href="#安装mysql" class="headerlink" title="安装mysql"></a>安装mysql</h4><p>切换到mysql的目录 /usr/local/mysql<br>输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./scripts/mysql_install_db --user=mysql</div></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20171216091540852?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>成功安装mysql之后，输入<br>service mysql start  或  /etc/init.d/mysql start</p>
+<p><img src="http://img.blog.csdn.net/20171216091605939?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>查看是否启动成功<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ps -ef|grep mysql</div></pre></td></tr></table></figure>
+<p>切换到 /usr/local/mysql/bin 目录下<br>设置密码<br>mysqladmin -u root password ‘123456’入mysql<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -u root -p</div></pre></td></tr></table></figure>
+<p>设置远程连接权限<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">grant all privileges on *.* to &apos;root&apos;@&apos;%&apos; identified by &apos;123456&apos;;</div></pre></td></tr></table></figure>
+<p>然后输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">flush privileges;</div></pre></td></tr></table></figure>
+<p><strong>说明: 第一个’root’是用户名,第二个’%’是所有的ip都可以远程访问,第三个’123456’表示用户密码  如果不常用就关闭掉。</strong></p>
+<p>使用本地连接工具连接测试</p>
+<p><img src="http://img.blog.csdn.net/20171216091707973?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<h2 id="二、MySql搭建遇到的错误解决办法"><a href="#二、MySql搭建遇到的错误解决办法" class="headerlink" title="二、MySql搭建遇到的错误解决办法"></a>二、MySql搭建遇到的错误解决办法</h2><h3 id="1，mysql离线安装出现-Can’t-change-to-run-as-user-‘mysql’-Please-check-that-the-user-exists"><a href="#1，mysql离线安装出现-Can’t-change-to-run-as-user-‘mysql’-Please-check-that-the-user-exists" class="headerlink" title="1，mysql离线安装出现:Can’t change to run as user ‘mysql’ ;  Please check that the user exists!"></a>1，mysql离线安装出现:Can’t change to run as user ‘mysql’ ;  Please check that the user exists!</h3><p>原因:没有该用户。<br>解决办法:创建该用户!<br>例如:<br>添加用户:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">groupadd -g 315 mysql</div></pre></td></tr></table></figure>
+<p>用户加入mysql:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">useradd -u 315 -g mysql -d /usr/local/mysql -M mysql</div></pre></td></tr></table></figure>
+<p>再次输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./scripts/mysql_install_db --user=mysql</div></pre></td></tr></table></figure>
+<p>成功！<br><img src="http://img.blog.csdn.net/20180305212827262?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
+<h3 id="2，安装完mysql之后，输入service-mysql-start-提示-mysql-unrecognized-service。"><a href="#2，安装完mysql之后，输入service-mysql-start-提示-mysql-unrecognized-service。" class="headerlink" title="2，安装完mysql之后，输入service mysql start 提示 mysql: unrecognized service。"></a>2，安装完mysql之后，输入service mysql start 提示 mysql: unrecognized service。</h3><p>问题原因:  是因为/etc/init.d/  不存在 mysql 这个命令，所以无法识别。<br>解决办法:<br>1.首先查找mysql.server文件在哪<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">find  /  -name mysql.server</div></pre></td></tr></table></figure>
+<p>2.将mysql.server 复制到/etc/init.d/目录下，并重命名为mysql或mysqld</p>
+<p>输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cp /usr/local/mysql/support-files/mysql.server /etc/init.d/mysql</div></pre></td></tr></table></figure>
+<p>3.测试是否可以使用该命令<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service mysql status</div></pre></td></tr></table></figure>
+<p>或</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service mysqld status</div></pre></td></tr></table></figure>
+<p><img src="http://img.blog.csdn.net/20180305212901931?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
+<h3 id="3，mysql数据导入报错"><a href="#3，mysql数据导入报错" class="headerlink" title="3，mysql数据导入报错"></a>3，mysql数据导入报错</h3><p>错误：<strong>Got a packet bigger than‘max_allowed_packet’bytes</strong>的问题</p>
+<p>2个解决方法：</p>
+<p>1.临时修改：mysql&gt;set global max_allowed_packet=524288000;修改 #512M</p>
+<p>2.永久修改: 编辑my.cnf，  在 [MySQLd] 部分添加一句（如果存在，调整其值就可以）：<br>  <strong>max_allowed_packet=10M</strong></p>
+<p>  成功之后重启mysql。</p>
+<h3 id="4，mysql数据库关于max-allowed-packet的问题"><a href="#4，mysql数据库关于max-allowed-packet的问题" class="headerlink" title="4，mysql数据库关于max_allowed_packet的问题"></a>4，mysql数据库关于max_allowed_packet的问题</h3><p>主要是mysql的JDBC连接限制了最大包长度1024B，即1KB<br>查询当前数据库的包长度显示:  show VARIABLES like ‘%max_allowed_packet%’;<br>修改此参数<br>解决方案一(临时): 进入msyql<br>            输入:<br>          <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">set global max_allowed_packet = 2*1024*10</div></pre></td></tr></table></figure></p>
+<pre><code>更改最大值
+</code></pre><p>解决方案二(永久):修改mysql.cnf（windows下my.ini）,在[mysqld]段或者mysql的server配置段            进行修改。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">max_allowed_packet = 20K。</div></pre></td></tr></table></figure></p>
+<p>修改成功后，重启mysql。</p>
+<h2 id="三、MySql-用到的一些命令"><a href="#三、MySql-用到的一些命令" class="headerlink" title="三、MySql 用到的一些命令"></a>三、MySql 用到的一些命令</h2><h3 id="1-查看mysql连接数"><a href="#1-查看mysql连接数" class="headerlink" title="1.查看mysql连接数"></a>1.查看mysql连接数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">SHOW FULL PROCESSLIST;</div></pre></td></tr></table></figure>
+<h3 id="2-查看mysql的配置"><a href="#2-查看mysql的配置" class="headerlink" title="2.查看mysql的配置"></a>2.查看mysql的配置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">show variables like &quot;%innodb%&quot;;</div></pre></td></tr></table></figure>
+<h3 id="3-查看mysql事件是否开启"><a href="#3-查看mysql事件是否开启" class="headerlink" title="3.查看mysql事件是否开启"></a>3.查看mysql事件是否开启</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">show variables like &apos;event_scheduler&apos;;</div></pre></td></tr></table></figure>
+<h3 id="4-查看mysql锁的状态"><a href="#4-查看mysql锁的状态" class="headerlink" title="4.查看mysql锁的状态"></a>4.查看mysql锁的状态</h3><p>是否锁表:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">SHOW OPEN TABLES WHERE In_use &gt; 0;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">SHOW INNODB STATUS/G;</div></pre></td></tr></table></figure>
+<h3 id="5-查看mysql-data的存放位置"><a href="#5-查看mysql-data的存放位置" class="headerlink" title="5.查看mysql data的存放位置"></a>5.查看mysql data的存放位置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">SHOW VARIABLES LIKE &apos;%datadir%&apos;</div></pre></td></tr></table></figure>
+<h3 id="6-查看mysql-的超时时间设置"><a href="#6-查看mysql-的超时时间设置" class="headerlink" title="6.查看mysql 的超时时间设置"></a>6.查看mysql 的超时时间设置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">show variables like &apos;%timeout%&apos;;</div></pre></td></tr></table></figure>
+<h2 id="四、MySql修改密码"><a href="#四、MySql修改密码" class="headerlink" title="四、MySql修改密码"></a>四、MySql修改密码</h2><h3 id="1-知道原来的myql数据库的root密码；"><a href="#1-知道原来的myql数据库的root密码；" class="headerlink" title="1,知道原来的myql数据库的root密码；"></a>1,知道原来的myql数据库的root密码；</h3><h4 id="在终端命令行修改"><a href="#在终端命令行修改" class="headerlink" title="在终端命令行修改"></a>在终端命令行修改</h4><p>输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysqladmin -u root -p password &quot;新密码&quot;</div></pre></td></tr></table></figure>
+<p>回车<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Enter password: 【输入原来的旧密码】</div></pre></td></tr></table></figure></p>
+<h4 id="登录mysql系统修改"><a href="#登录mysql系统修改" class="headerlink" title="登录mysql系统修改"></a>登录mysql系统修改</h4><p>进入mysql<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -uroot -p 回车 Enter password: 【输入原来的密码】</div></pre></td></tr></table></figure>
+<p>进入之后<br>输入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">use mysql;</div><div class="line">update user set password=password(&quot;新密码&quot;) where user=&apos;root&apos;;</div><div class="line">flush privileges;</div></pre></td></tr></table></figure></p>
+<p>然后使用刚才输入的新密码即可登录。</p>
+<h3 id="2，不知道原来的myql的root的密码；"><a href="#2，不知道原来的myql的root的密码；" class="headerlink" title="2，不知道原来的myql的root的密码；"></a>2，不知道原来的myql的root的密码；</h3><p>首先，你必须要有操作系统的root权限了。要是连系统的root权限都没有的话，先考虑root系统再走下面的步骤。 类似于安全模式登录系统。<br>需要先停止mysql服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service mysql stop</div></pre></td></tr></table></figure></p>
+<p>或<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/etc/init.d/mysql stop</div></pre></td></tr></table></figure></p>
+<p>注:如果mysql不行，就用mysqld<br>当提示mysql已停止后进行下一步操作  </p>
+<p>在终端命令行输入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mysqld_safe --skip-grant-tables &amp;  </div><div class="line">```       </div><div class="line">输入mysql登录mysql系统</div></pre></td></tr></table></figure></p>
+<p>use mysql;<br>UPDATE user SET password=password(“新密码”) WHERE user=’root’;<br>flush privileges;<br>exit;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">重新启动mysql服务</div><div class="line">这样新的root密码就设置成功了。</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">## 五、MySql主从搭建</div><div class="line">主从搭建参考:http://www.cnblogs.com/phpstudy2015-6/p/6485819.html#_label2</div><div class="line"></div><div class="line">说明:搭建MySql的主从时，如复制名称出现了错误，那么尝试使用用手动输入命令。</div><div class="line"></div><div class="line">### 1，事前准备 </div><div class="line">    </div><div class="line"></div><div class="line">信息</div><div class="line">操作系统：CentOS6.8</div><div class="line">Mysql:5.6</div><div class="line">IP:192.169.2.156 (主),192.169.2.98(从)</div><div class="line"></div><div class="line">确保MySql已经成功安装 ！</div><div class="line">### 2，配置更改</div><div class="line">   更改mysql中的my.cnf文件</div><div class="line">   添加如下:</div><div class="line">    **主(Master):**</div></pre></td></tr></table></figure></p>
+<p>#任意自然数n，只要保证两台MySQL主机不重复就可以了。<br>server-id=1</p>
+<p>#开启二进制日志<br>log-bin=mysql-bin  </p>
+<p>#步进值auto_imcrement。一般有n台主MySQL就填n<br>auto_increment_increment=2</p>
+<p>#起始值。一般填第n台主MySQL。此时为第一台主MySQL<br> auto_increment_offset=1 </p>
+<p>#忽略指定的数据库<br>binlog-ignore=mysql<br>binlog-ignore=information_schema  </p>
+<p>#要同步的数据库(多个可以使用逗号隔开)，默认所有库<br>replicate-do-db=DBTEST<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">**从(Slave):**</div></pre></td></tr></table></figure></p>
+<p>server-id=2<br>log-bin=mysql-bin<br>auto_increment_increment=2<br>auto_increment_offset=2<br>replicate-do-db=DBTEST<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">更改完配置之后重启！</div><div class="line"></div><div class="line">### 3，主从配置</div><div class="line">**主(Master)**</div><div class="line">master新建slave用户</div><div class="line">进入MySql之后输入：</div></pre></td></tr></table></figure></p>
+<p>grant replication slave on <em>.</em> to ‘slave_account’@’192.169.2.98’ identified by ‘123456’;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">**说明**: 设置一个slave_account用户拥有REPLICATION SLAVE权限，可以访问的ip为192.169.2.98，并设置密码为123456。</div><div class="line">如果想某个网段的服务器都能登录，可以使用192.168.2.% 。表示192.168.2.0-192.168.2.255的Server都可以用slave_account用户登陆主服务器。</div><div class="line">如果想所有的服务器都能登录，那么可以设置为 % 。</div><div class="line"></div><div class="line">然后输入:</div></pre></td></tr></table></figure></p>
+<p>flush privileges;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">查看信息，并记录下文件名称和分区ID</div></pre></td></tr></table></figure></p>
+<p>SHOW MASTER STATUS;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">![这里写图片描述](http://img.blog.csdn.net/20180305215740127?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)</div><div class="line"></div><div class="line">**从(Slave):**</div><div class="line">获取master的授权信息之后，输入slave的授权命令:</div></pre></td></tr></table></figure></p>
+<p>change master to master_host=’192.169.2.156’,master_user=’slave_account’,master_password=’123456’,master_log_file=’mysql-bin.000001’,master_log_pos=427;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">确保成功执行！</div><div class="line"></div><div class="line"></div><div class="line">### 4，主从测试</div><div class="line">   **从(Slave):**</div><div class="line"> 开始主从复制:</div><div class="line"> 输入:</div></pre></td></tr></table></figure></p>
+<p>START SLAVE;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">查看主从复制是否配置成功:</div></pre></td></tr></table></figure></p>
+<p>SHOW SLAVE STATUS\G<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">![这里写图片描述](http://img.blog.csdn.net/20180305220123427?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)</div><div class="line"></div><div class="line">**说明:当看到Slave_IO_Running: YES、Slave_SQL_Running: YES 说明成功，否则失败。**</div><div class="line"></div><div class="line">**主(Master)**</div><div class="line">首先创建一个DBTEST数据库，然后创建test表，并插入两条数据。</div><div class="line">这里为了看起来更加明朗，我是用的是SQLYog 工具进行操作的。</div><div class="line">进入mysql执行如下脚本:</div></pre></td></tr></table></figure></p>
+<p>CREATE DATABASE<code>DBTEST</code>;<br>USE <code>DBTEST</code>;<br>CREATE TABLE <code>test</code> (<br>  <code>id</code> bigint(20) NOT NULL AUTO_INCREMENT,<br>  <code>name</code> varchar(16) DEFAULT NULL,<br>  PRIMARY KEY (<code>id</code>)<br>) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;</p>
+<p>insert  into <code>test</code>(<code>id</code>,<code>name</code>) values (1,’张三’),(2,’李四’);<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">查看</div><div class="line">输入:</div></pre></td></tr></table></figure></p>
+<p>select * from test;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">![这里写图片描述](http://img.blog.csdn.net/20180305220334233?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)</div><div class="line"></div><div class="line">**从(Slave):**</div><div class="line">查看</div><div class="line">输入:</div></pre></td></tr></table></figure></p>
+<p>select * from test;<br>```<br><img src="http://img.blog.csdn.net/20180305220450380?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
+<p>从数据库并没有执行脚本，但是信息一致，说明成功同步了。</p>
+<p>继续测试，在主(master)删除一条数据，查看从的数据。<br><strong>主(Master)</strong><br><img src="http://img.blog.csdn.net/20180305220551541?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
+<p><strong>从(Slave):</strong><br><img src="http://img.blog.csdn.net/20180305220559740?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
+<p>可以看到已经完全同步了！</p>
+<p>那么本篇教程就到此结束了，谢谢阅读！</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+            <a href="/tags/sql/" rel="tag"># sql</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/28/pancm73/" rel="next" title="Linux CentOS 安装MySql以及搭建MySql主从复制">
+                <i class="fa fa-chevron-left"></i> Linux CentOS 安装MySql以及搭建MySql主从复制
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/16/pancm75/" rel="prev" title="Storm 入门的Demo教程">
+                Storm 入门的Demo教程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">43</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一、MySql安装"><span class="nav-number">2.</span> <span class="nav-text">一、MySql安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2，编译包安装"><span class="nav-number">2.1.</span> <span class="nav-text">2，编译包安装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Mysql文件准备"><span class="nav-number">2.1.1.</span> <span class="nav-text">Mysql文件准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装mysql"><span class="nav-number">2.1.2.</span> <span class="nav-text">安装mysql</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、MySql搭建遇到的错误解决办法"><span class="nav-number">3.</span> <span class="nav-text">二、MySql搭建遇到的错误解决办法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1，mysql离线安装出现-Can’t-change-to-run-as-user-‘mysql’-Please-check-that-the-user-exists"><span class="nav-number">3.1.</span> <span class="nav-text">1，mysql离线安装出现:Can’t change to run as user ‘mysql’ ;  Please check that the user exists!</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2，安装完mysql之后，输入service-mysql-start-提示-mysql-unrecognized-service。"><span class="nav-number">3.2.</span> <span class="nav-text">2，安装完mysql之后，输入service mysql start 提示 mysql: unrecognized service。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3，mysql数据导入报错"><span class="nav-number">3.3.</span> <span class="nav-text">3，mysql数据导入报错</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4，mysql数据库关于max-allowed-packet的问题"><span class="nav-number">3.4.</span> <span class="nav-text">4，mysql数据库关于max_allowed_packet的问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、MySql-用到的一些命令"><span class="nav-number">4.</span> <span class="nav-text">三、MySql 用到的一些命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-查看mysql连接数"><span class="nav-number">4.1.</span> <span class="nav-text">1.查看mysql连接数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-查看mysql的配置"><span class="nav-number">4.2.</span> <span class="nav-text">2.查看mysql的配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-查看mysql事件是否开启"><span class="nav-number">4.3.</span> <span class="nav-text">3.查看mysql事件是否开启</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-查看mysql锁的状态"><span class="nav-number">4.4.</span> <span class="nav-text">4.查看mysql锁的状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-查看mysql-data的存放位置"><span class="nav-number">4.5.</span> <span class="nav-text">5.查看mysql data的存放位置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-查看mysql-的超时时间设置"><span class="nav-number">4.6.</span> <span class="nav-text">6.查看mysql 的超时时间设置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、MySql修改密码"><span class="nav-number">5.</span> <span class="nav-text">四、MySql修改密码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-知道原来的myql数据库的root密码；"><span class="nav-number">5.1.</span> <span class="nav-text">1,知道原来的myql数据库的root密码；</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#在终端命令行修改"><span class="nav-number">5.1.1.</span> <span class="nav-text">在终端命令行修改</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#登录mysql系统修改"><span class="nav-number">5.1.2.</span> <span class="nav-text">登录mysql系统修改</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2，不知道原来的myql的root的密码；"><span class="nav-number">5.2.</span> <span class="nav-text">2，不知道原来的myql的root的密码；</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

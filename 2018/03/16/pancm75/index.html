@@ -1,0 +1,996 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,storm," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="Storm介绍Storm是Twitter开源的分布式实时大数据处理框架，最早开源于github，从0.9.1版本之后，归于Apache社区，被业界称为实时版Hadoop。随着越来越多的场景对Hadoop的MapReduce高延迟无法容忍，比如网站统计、推荐系统、预警系统、金融系统(高频交易、股票)等等，大数据实时处理解决方案（流计算）的应用日趋广泛，目前已是分布式技术领域最新爆发点，而Storm">
+<meta name="keywords" content="java,storm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Storm 入门的Demo教程">
+<meta property="og:url" content="http://yoursite.com/2018/03/16/pancm75/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="Storm介绍Storm是Twitter开源的分布式实时大数据处理框架，最早开源于github，从0.9.1版本之后，归于Apache社区，被业界称为实时版Hadoop。随着越来越多的场景对Hadoop的MapReduce高延迟无法容忍，比如网站统计、推荐系统、预警系统、金融系统(高频交易、股票)等等，大数据实时处理解决方案（流计算）的应用日趋广泛，目前已是分布式技术领域最新爆发点，而Storm">
+<meta property="og:image" content="http://img-blog.csdn.net/20180316185702715?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:image" content="http://img-blog.csdn.net/20180316185651566?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:updated_time" content="2018-03-18T13:35:38.944Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Storm 入门的Demo教程">
+<meta name="twitter:description" content="Storm介绍Storm是Twitter开源的分布式实时大数据处理框架，最早开源于github，从0.9.1版本之后，归于Apache社区，被业界称为实时版Hadoop。随着越来越多的场景对Hadoop的MapReduce高延迟无法容忍，比如网站统计、推荐系统、预警系统、金融系统(高频交易、股票)等等，大数据实时处理解决方案（流计算）的应用日趋广泛，目前已是分布式技术领域最新爆发点，而Storm">
+<meta name="twitter:image" content="http://img-blog.csdn.net/20180316185702715?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/03/16/pancm75/"/>
+
+
+
+
+
+
+  <title>Storm 入门的Demo教程 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/16/pancm75/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Storm 入门的Demo教程</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-16T20:05:03+08:00">
+                2018-03-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/storm/" itemprop="url" rel="index">
+                    <span itemprop="name">storm</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="Storm介绍"><a href="#Storm介绍" class="headerlink" title="Storm介绍"></a>Storm介绍</h2><p>Storm是Twitter开源的分布式实时大数据处理框架，最早开源于github，从0.9.1版本之后，归于Apache社区，被业界称为实时版Hadoop。随着越来越多的场景对Hadoop的MapReduce高延迟无法容忍，比如网站统计、推荐系统、预警系统、金融系统(高频交易、股票)等等，大数据实时处理解决方案（流计算）的应用日趋广泛，目前已是分布式技术领域最新爆发点，而Storm更是流计算技术中的佼佼者和主流。</p>
+<h3 id="Storm的核心组件"><a href="#Storm的核心组件" class="headerlink" title="Storm的核心组件"></a>Storm的核心组件</h3><ul>
+<li><strong>Nimbus</strong>：即Storm的Master，负责资源分配和任务调度。一个Storm集群只有一个Nimbus。</li>
+<li><strong>Supervisor</strong>：即Storm的Slave，负责接收Nimbus分配的任务，管理所有Worker，一个Supervisor节点中包含多个Worker进程。</li>
+<li><strong>Worker</strong>：工作进程，每个工作进程中都有多个Task。</li>
+<li><strong>Task</strong>：任务，在 Storm 集群中每个 Spout 和 Bolt 都由若干个任务（tasks）来执行。每个任务都与一个执行线程相对应。</li>
+<li><strong>Topology</strong>：计算拓扑，Storm 的拓扑是对实时计算应用逻辑的封装，它的作用与 MapReduce 的任务（Job）很相似，区别在于 MapReduce 的一个 Job 在得到结果之后总会结束，而拓扑会一直在集群中运行，直到你手动去终止它。拓扑还可以理解成由一系列通过数据流（Stream Grouping）相互关联的 Spout 和 Bolt 组成的的拓扑结构。</li>
+<li><strong>Stream</strong>：数据流（Streams）是 Storm 中最核心的抽象概念。一个数据流指的是在分布式环境中并行创建、处理的一组元组（tuple）的无界序列。数据流可以由一种能够表述数据流中元组的域（fields）的模式来定义。</li>
+<li><strong>Spout</strong>：数据源（Spout）是拓扑中数据流的来源。一般 Spout 会从一个外部的数据源读取元组然后将他们发送到拓扑中。根据需求的不同，Spout 既可以定义为可靠的数据源，也可以定义为不可靠的数据源。一个可靠的 Spout能够在它发送的元组处理失败时重新发送该元组，以确保所有的元组都能得到正确的处理；相对应的，不可靠的 Spout 就不会在元组发送之后对元组进行任何其他的处理。一个 Spout可以发送多个数据流。</li>
+<li><strong>Bolt</strong>：拓扑中所有的数据处理均是由 Bolt 完成的。通过数据过滤（filtering）、函数处理（functions）、聚合（aggregations）、联结（joins）、数据库交互等功能，Bolt 几乎能够完成任何一种数据处理需求。一个 Bolt 可以实现简单的数据流转换，而更复杂的数据流变换通常需要使用多个 Bolt 并通过多个步骤完成。</li>
+<li><strong>Stream grouping</strong>：为拓扑中的每个 Bolt 的确定输入数据流是定义一个拓扑的重要环节。数据流分组定义了在 Bolt 的不同任务（tasks）中划分数据流的方式。在 Storm 中有八种内置的数据流分组方式。</li>
+<li><strong>Reliability</strong>：可靠性。Storm 可以通过拓扑来确保每个发送的元组都能得到正确处理。通过跟踪由 Spout 发出的每个元组构成的元组树可以确定元组是否已经完成处理。每个拓扑都有一个“消息延时”参数，如果 Storm 在延时时间内没有检测到元组是否处理完成，就会将该元组标记为处理失败，并会在稍后重新发送该元组。</li>
+</ul>
+<p>Storm程序再Storm集群中运行的示例图如下:<br><img src="//img-blog.csdn.net/20180316185702715?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
+<h3 id="Topology"><a href="#Topology" class="headerlink" title="Topology"></a>Topology</h3><p>为什么把Topology单独提出来呢，因为Topology是我们开发程序主要的用的组件。<br>Topology和MapReduce很相像。<br>MapReduce是Map进行获取数据，Reduce进行处理数据。<br>而Topology则是使用Spout获取数据，Bolt来进行计算。<br>总的来说就是一个Topology由一个或者多个的Spout和Bolt组成。</p>
+<p>具体流程是怎么走，可以通过查看下面这张图来进行了解。<br>示例图:<br><img src="//img-blog.csdn.net/20180316185651566?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
+<p>注:图片来源<a href="http://www.tianshouzhi.com/api/tutorials/storm/52。" target="_blank" rel="external">http://www.tianshouzhi.com/api/tutorials/storm/52。</a></p>
+<p>图片有三种模式，解释如下:<br>第一种比较简单，就是由一个Spout获取数据，然后交给一个Bolt进行处理;<br>第二种稍微复杂点，由一个Spout获取数据，然后交给一个Bolt进行处理一部分，然后在交给下一个Bolt进行处理其他部分。<br>第三种则比较复杂，一个Spout可以同时发送数据到多个Bolt，而一个Bolt也可以接受多个Spout或多个Bolt，最终形成多个数据流。但是这种数据流必须是有方向的，有起点和终点，不然会造成死循环，数据永远也处理不完。就是Spout发给Bolt1，Bolt1发给Bolt2，Bolt2又发给了Bolt1,最终形成了一个环状。</p>
+<h2 id="Storm-集群安装"><a href="#Storm-集群安装" class="headerlink" title="Storm 集群安装"></a>Storm 集群安装</h2><p>之前已经写过了，这里就不在说明了。<br>博客地址:<a href="http://www.panchengming.com/2018/01/26/pancm70/" target="_blank" rel="external">http://www.panchengming.com/2018/01/26/pancm70/</a></p>
+<h2 id="Storm-Hello-World"><a href="#Storm-Hello-World" class="headerlink" title="Storm Hello World"></a>Storm Hello World</h2><p>前面讲了一些Storm概念，可能在理解上不太清楚，那么这里我们就用一个Hello World代码示例来体验下Storm运作的流程吧。</p>
+<h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><p>在进行代码开发之前，首先得做好相关的准备。<br>本项目是使用Maven构建的，使用Storm的版本为1.1.1。<br>Maven的相关依赖如下:</p>
+<pre><code> &lt;!--storm相关jar  --&gt;
+ &lt;dependency&gt;
+   &lt;groupId&gt;org.apache.storm&lt;/groupId&gt;
+   &lt;artifactId&gt;storm-core&lt;/artifactId&gt;
+   &lt;version&gt;1.1.1&lt;/version&gt;
+   &lt;scope&gt;provided&lt;/scope&gt;
+&lt;/dependency&gt; 
+</code></pre><h3 id="具体流程"><a href="#具体流程" class="headerlink" title="具体流程"></a>具体流程</h3><p>在写代码的时候，我们先来明确要用Storm做什么。<br>那么第一个程序，就简单的输出下信息。<br>具体步骤如下:</p>
+<ol>
+<li>启动topology，设置好Spout和Bolt。</li>
+<li>将Spout获取的数据传递给Bolt。</li>
+<li>Bolt接受Spout的数据进行打印。</li>
+</ol>
+<h4 id="Spout"><a href="#Spout" class="headerlink" title="Spout"></a>Spout</h4><p>那么首先开始编写Spout类。一般是实现 <strong>IRichSpout</strong> 或继承<strong>BaseRichSpout</strong>该类，然后实现该方法。<br>这里我们继承BaseRichSpout这个类,该类需要实现这几个主要的方法:</p>
+<h5 id="一、open"><a href="#一、open" class="headerlink" title="一、open"></a>一、open</h5><p>open()方法中是在ISpout接口中定义，在Spout组件初始化时被调用。<br>有三个参数，它们的作用分别是:</p>
+<ol>
+<li>Storm配置的Map;</li>
+<li>topology中组件的信息;</li>
+<li>发射tuple的方法;</li>
+</ol>
+<p>代码示例:</p>
+<pre><code>@Override
+  public void open(Map map, TopologyContext arg1, SpoutOutputCollector collector) {
+      System.out.println(&quot;open:&quot;+map.get(&quot;test&quot;));
+      this.collector = collector;
+  }
+</code></pre><h5 id="二、nextTuple"><a href="#二、nextTuple" class="headerlink" title="二、nextTuple"></a>二、nextTuple</h5><p>nextTuple()方法是Spout实现的核心。<br>也就是主要执行方法，用于输出信息,通过<code>collector.emit</code>方法发射。</p>
+<p>这里我们的数据信息已经写死了，所以这里我们就直接将数据进行发送。<br>这里设置只发送两次。<br>代码示例:</p>
+<pre><code> @Override
+public void nextTuple() {
+    if(count&lt;=2){
+        System.out.println(&quot;第&quot;+count+&quot;次开始发送数据...&quot;);
+        this.collector.emit(new Values(message));
+    }
+    count++;
+}
+</code></pre><h5 id="三、declareOutputFields"><a href="#三、declareOutputFields" class="headerlink" title="三、declareOutputFields"></a>三、declareOutputFields</h5><p>declareOutputFields是在IComponent接口中定义，用于声明数据格式。<br>即输出的一个Tuple中，包含几个字段。</p>
+<p>因为这里我们只发射一个，所以就指定一个。如果是多个，则用逗号隔开。<br>代码示例:</p>
+<pre><code>@Override
+public void declareOutputFields(OutputFieldsDeclarer declarer) {
+    System.out.println(&quot;定义格式...&quot;);
+    declarer.declare(new Fields(field));
+}
+</code></pre><h5 id="四、ack"><a href="#四、ack" class="headerlink" title="四、ack"></a>四、ack</h5><p>ack是在ISpout接口中定义，用于表示Tuple处理成功。</p>
+<p>代码示例:</p>
+<pre><code>@Override
+public void ack(Object obj) {
+    System.out.println(&quot;ack:&quot;+obj);
+}
+</code></pre><h5 id="五、fail"><a href="#五、fail" class="headerlink" title="五、fail"></a>五、fail</h5><p>fail是在ISpout接口中定义，用于表示Tuple处理失败。</p>
+<p>代码示例:</p>
+<pre><code>@Override
+public void fail(Object obj) {
+    System.out.println(&quot;失败:&quot;+obj);
+}
+</code></pre><h5 id="六、close"><a href="#六、close" class="headerlink" title="六、close"></a>六、close</h5><p>close是在ISpout接口中定义，用于表示Topology停止。</p>
+<p>代码示例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">	public void close() &#123;</div><div class="line">		System.out.println(&quot;关闭...&quot;);</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<p>至于还有其他的，这里就不在一一列举了。</p>
+<h4 id="Bolt"><a href="#Bolt" class="headerlink" title="Bolt"></a>Bolt</h4><p>Bolt是用于处理数据的组件，主要是由execute方法来进行实现。一般来说需要实现 <strong>IRichBolt</strong> 或继承<strong>BaseRichBolt</strong>该类，然后实现其方法。<br>需要实现方法如下:</p>
+<h5 id="一、prepare"><a href="#一、prepare" class="headerlink" title="一、prepare"></a>一、prepare</h5><p>在Bolt启动前执行，提供Bolt启动环境配置的入口。<br>参数基本和Sqout一样。<br>一般对于不可序列化的对象进行实例化。<br>这里的我们就简单的打印下</p>
+<pre><code>@Override
+public void prepare(Map map, TopologyContext arg1, OutputCollector collector) {
+    System.out.println(&quot;prepare:&quot;+map.get(&quot;test&quot;));
+    this.collector=collector;
+}
+</code></pre><p>  <strong>注:如果是可以序列化的对象，那么最好是使用构造函数。</strong></p>
+<h5 id="二、execute"><a href="#二、execute" class="headerlink" title="二、execute"></a>二、execute</h5><p> execute()方法是Bolt实现的核心。<br>也就是执行方法，每次Bolt从流接收一个订阅的tuple，都会调用这个方法。<br>从tuple中获取消息可以使用 <code>tuple.getString()</code>和<code>tuple.getStringByField();</code>这两个方法。个人推荐第二种，可以通过field来指定接收的消息。<br><strong>注:如果继承的是IRichBolt，则需要手动ack。这里就不用了,BaseRichBolt会自动帮我们应答。</strong><br>代码示例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">	@Override</div><div class="line">	public void execute(Tuple tuple) &#123;</div><div class="line">//		String msg=tuple.getString(0);</div><div class="line">		String msg=tuple.getStringByField(&quot;test&quot;);</div><div class="line">		//这里我们就不做消息的处理，只打印</div><div class="line">	    System.out.println(&quot;Bolt第&quot;+count+&quot;接受的消息:&quot;+msg);	</div><div class="line">	    count++;</div><div class="line">	    /**</div><div class="line">	     * </div><div class="line">         * 没次调用处理一个输入的tuple，所有的tuple都必须在一定时间内应答。</div><div class="line">         * 可以是ack或者fail。否则，spout就会重发tuple。</div><div class="line">	     */</div><div class="line">//	    collector.ack(tuple);</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<h5 id="三、declareOutputFields-1"><a href="#三、declareOutputFields-1" class="headerlink" title="三、declareOutputFields"></a>三、declareOutputFields</h5><p> 和Spout的一样。<br> 因为到了这里就不再输出了，所以就什么都没写。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">   @Override</div><div class="line">public void declareOutputFields(OutputFieldsDeclarer arg0) &#123;		</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="cleanup"><a href="#cleanup" class="headerlink" title="cleanup"></a>cleanup</h5><p> cleanup是IBolt接口中定义,用于释放bolt占用的资源。<br> Storm在终止一个bolt之前会调用这个方法。<br> 因为这里没有什么资源需要释放，所以就简单的打印一句就行了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">	public void cleanup() &#123;</div><div class="line">		System.out.println(&quot;资源释放&quot;);</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<h4 id="Topology-1"><a href="#Topology-1" class="headerlink" title="Topology"></a>Topology</h4><p> 这里我们就是用main方法进行提交topology。<br> 不过在提交topology之前，需要进行相应的设置。<br> 这里我就不一一细说了，代码的注释已经很详细了。<br> 代码示例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line">import org.apache.storm.Config;</div><div class="line">import org.apache.storm.LocalCluster;</div><div class="line">import org.apache.storm.StormSubmitter;</div><div class="line">import org.apache.storm.topology.TopologyBuilder;</div><div class="line"></div><div class="line">/**</div><div class="line"> * </div><div class="line">* Title: App</div><div class="line">* Description:</div><div class="line">* storm测试 </div><div class="line">* Version:1.0.0  </div><div class="line">* @author pancm</div><div class="line">* @date 2018年3月6日</div><div class="line"> */</div><div class="line">public class App &#123;</div><div class="line">	</div><div class="line">	private static final String str1=&quot;test1&quot;; </div><div class="line">	private static final String str2=&quot;test2&quot;; </div><div class="line"></div><div class="line">	public static void main(String[] args)  &#123;</div><div class="line">		// TODO Auto-generated method stub</div><div class="line">		//定义一个拓扑</div><div class="line">		TopologyBuilder builder=new TopologyBuilder();</div><div class="line">		//设置一个Executeor(线程)，默认一个</div><div class="line">		builder.setSpout(str1, new TestSpout());</div><div class="line">		//设置一个Executeor(线程)，和一个task</div><div class="line">		builder.setBolt(str2, new TestBolt(),1).setNumTasks(1).shuffleGrouping(str1);</div><div class="line">		Config conf = new Config();</div><div class="line">		conf.put(&quot;test&quot;, &quot;test&quot;);</div><div class="line">		try&#123;</div><div class="line">		  //运行拓扑</div><div class="line">	   if(args !=null&amp;&amp;args.length&gt;0)&#123; //有参数时，表示向集群提交作业，并把第一个参数当做topology名称</div><div class="line">	   	 System.out.println(&quot;远程模式&quot;);</div><div class="line">			 StormSubmitter.submitTopology(args[0], conf, builder.createTopology());</div><div class="line">	  &#125; else&#123;//没有参数时，本地提交</div><div class="line">	//启动本地模式</div><div class="line">	 System.out.println(&quot;本地模式&quot;);</div><div class="line">	LocalCluster cluster = new LocalCluster();</div><div class="line">	cluster.submitTopology(&quot;111&quot; ,conf,  builder.createTopology() );</div><div class="line">	Thread.sleep(10000);</div><div class="line">//	关闭本地集群</div><div class="line">	cluster.shutdown();</div><div class="line">	  &#125;</div><div class="line">		&#125;catch (Exception e)&#123;</div><div class="line">			e.printStackTrace();</div><div class="line">		&#125;	</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>运行该方法，输出结果如下:</p>
+<pre><code>本地模式
+定义格式...
+open:test
+第1次开始发送数据...
+第2次开始发送数据...
+prepare:test
+Bolt第1接受的消息:这是个测试消息!
+Bolt第2接受的消息:这是个测试消息!
+资源释放
+关闭...
+</code></pre><p>到这里，是不是基本上对Storm的运作有些了解了呢。<br>这个demo达到了上述的三种模式图中的第一种，一个Spout传输数据， 一个Bolt处理数据。</p>
+<p>那么如果我们想达到第二种模式呢，那又该如何做呢？<br>假如我们想统计下在一段文本中的单词出现频率的话，我们只需执行一下步骤就可以了。<br>1.首先将Spout中的message消息进行更改为数组，并依次将消息发送到TestBolt。<br>2.然后TestBolt将获取的数据进行分割，将分割的数据发送到TestBolt2。<br>3.TestBolt2对数据进行统计，在程序关闭的时候进行打印。<br>4.Topology成功配置并且启动之后，等待20秒左右，关闭程序，然后得到输出的结果。</p>
+<p><strong>代码示例如下:</strong></p>
+<p><strong>Spout</strong><br>用于发送消息。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div></pre></td><td class="code"><pre><div class="line">import java.util.Map;</div><div class="line">   import org.apache.storm.spout.SpoutOutputCollector;</div><div class="line">   import org.apache.storm.task.TopologyContext;</div><div class="line">   import org.apache.storm.topology.OutputFieldsDeclarer;</div><div class="line">   import org.apache.storm.topology.base.BaseRichSpout;</div><div class="line">   import org.apache.storm.tuple.Fields;</div><div class="line">   import org.apache.storm.tuple.Values;</div><div class="line">   </div><div class="line">   /**</div><div class="line">    * </div><div class="line">   * Title: TestSpout</div><div class="line">   * Description:</div><div class="line">   * 发送信息</div><div class="line">   * Version:1.0.0  </div><div class="line">   * @author pancm</div><div class="line">   * @date 2018年3月6日</div><div class="line">    */</div><div class="line">   public class TestSpout extends BaseRichSpout&#123;</div><div class="line">   </div><div class="line">   	private static final long serialVersionUID = 225243592780939490L;</div><div class="line">   </div><div class="line">   	private SpoutOutputCollector collector;</div><div class="line">   	private static final String field=&quot;word&quot;;</div><div class="line">   	private int count=1;</div><div class="line">   	private String[] message =  &#123;</div><div class="line">   &quot;My nickname is xuwujing&quot;,</div><div class="line">   &quot;My blog address is http://www.panchengming.com/&quot;,</div><div class="line">   &quot;My interest is playing games&quot;</div><div class="line">   &#125;;</div><div class="line">   	</div><div class="line">   	/**</div><div class="line">    * open()方法中是在ISpout接口中定义，在Spout组件初始化时被调用。</div><div class="line">    * 有三个参数:</div><div class="line">    * 1.Storm配置的Map;</div><div class="line">    * 2.topology中组件的信息;</div><div class="line">    * 3.发射tuple的方法;</div><div class="line">    */</div><div class="line">   	@Override</div><div class="line">   	public void open(Map map, TopologyContext arg1, SpoutOutputCollector collector) &#123;</div><div class="line">   		System.out.println(&quot;open:&quot;+map.get(&quot;test&quot;));</div><div class="line">   		this.collector = collector;</div><div class="line">   	&#125;</div><div class="line">   </div><div class="line">   /**</div><div class="line">    * nextTuple()方法是Spout实现的核心。</div><div class="line">    * 也就是主要执行方法，用于输出信息,通过collector.emit方法发射。</div><div class="line">    */</div><div class="line">   	@Override</div><div class="line">   	public void nextTuple() &#123;</div><div class="line">   			</div><div class="line">   		if(count&lt;=message.length)&#123;</div><div class="line">   			System.out.println(&quot;第&quot;+count +&quot;次开始发送数据...&quot;);</div><div class="line">   			this.collector.emit(new Values(message[count-1]));</div><div class="line">   		&#125;</div><div class="line">   		count++;</div><div class="line">   	&#125;</div><div class="line">   </div><div class="line">   </div><div class="line">   	/**</div><div class="line">    * declareOutputFields是在IComponent接口中定义，用于声明数据格式。</div><div class="line">    * 即输出的一个Tuple中，包含几个字段。</div><div class="line">    */</div><div class="line">   	@Override</div><div class="line">   	public void declareOutputFields(OutputFieldsDeclarer declarer) &#123;</div><div class="line">   		System.out.println(&quot;定义格式...&quot;);</div><div class="line">   		declarer.declare(new Fields(field));</div><div class="line">   	&#125;</div><div class="line">   </div><div class="line">   	/**</div><div class="line">   	 * 当一个Tuple处理成功时，会调用这个方法</div><div class="line">   	 */</div><div class="line">   	@Override</div><div class="line">   	public void ack(Object obj) &#123;</div><div class="line">   		System.out.println(&quot;ack:&quot;+obj);</div><div class="line">   	&#125;</div><div class="line">   	</div><div class="line">   	/**</div><div class="line">   	 * 当Topology停止时，会调用这个方法</div><div class="line">   	 */</div><div class="line">   	@Override</div><div class="line">   	public void close() &#123;</div><div class="line">   		System.out.println(&quot;关闭...&quot;);</div><div class="line">   	&#125;</div><div class="line">   	</div><div class="line">   	/**</div><div class="line">   	 * 当一个Tuple处理失败时，会调用这个方法</div><div class="line">   	 */</div><div class="line">   	@Override</div><div class="line">   	public void fail(Object obj) &#123;</div><div class="line">   		System.out.println(&quot;失败:&quot;+obj);</div><div class="line">   	&#125;</div><div class="line">   	</div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
+<p><strong>TestBolt</strong></p>
+<p>用于分割单词。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div></pre></td><td class="code"><pre><div class="line">import java.util.Map;</div><div class="line"></div><div class="line">import org.apache.storm.task.OutputCollector;</div><div class="line">import org.apache.storm.task.TopologyContext;</div><div class="line">import org.apache.storm.topology.OutputFieldsDeclarer;</div><div class="line">import org.apache.storm.topology.base.BaseRichBolt;</div><div class="line">import org.apache.storm.tuple.Fields;</div><div class="line">import org.apache.storm.tuple.Tuple;</div><div class="line">import org.apache.storm.tuple.Values;</div><div class="line"></div><div class="line"></div><div class="line">/**</div><div class="line"> * </div><div class="line">* Title: TestBolt</div><div class="line">* Description: </div><div class="line">* 对单词进行分割</div><div class="line">* Version:1.0.0  </div><div class="line">* @author pancm</div><div class="line">* @date 2018年3月16日</div><div class="line"> */</div><div class="line">public class TestBolt extends BaseRichBolt&#123;</div><div class="line"></div><div class="line">	/**</div><div class="line">	 * </div><div class="line">	 */</div><div class="line">	private static final long serialVersionUID = 4743224635827696343L;</div><div class="line">	</div><div class="line">	private OutputCollector collector;</div><div class="line">   </div><div class="line">	/**</div><div class="line">* 在Bolt启动前执行，提供Bolt启动环境配置的入口</div><div class="line">* 一般对于不可序列化的对象进行实例化。</div><div class="line">* 注:如果是可以序列化的对象，那么最好是使用构造函数。</div><div class="line">*/</div><div class="line">	@Override</div><div class="line">	public void prepare(Map map, TopologyContext arg1, OutputCollector collector) &#123;</div><div class="line">		System.out.println(&quot;prepare:&quot;+map.get(&quot;test&quot;));</div><div class="line">		this.collector=collector;</div><div class="line">	&#125;</div><div class="line">  </div><div class="line">	/**</div><div class="line">	 * execute()方法是Bolt实现的核心。</div><div class="line">	 * 也就是执行方法，每次Bolt从流接收一个订阅的tuple，都会调用这个方法。</div><div class="line">	 */</div><div class="line">	@Override</div><div class="line">	public void execute(Tuple tuple) &#123;</div><div class="line">		String msg=tuple.getStringByField(&quot;word&quot;);</div><div class="line">	System.out.println(&quot;开始分割单词:&quot;+msg);</div><div class="line">String[] words = msg.toLowerCase().split(&quot; &quot;);</div><div class="line">for (String word : words) &#123;</div><div class="line">this.collector.emit(new Values(word));//向下一个bolt发射数据</div><div class="line">&#125; </div><div class="line">	</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	/**</div><div class="line">	 * 声明数据格式</div><div class="line">	 */</div><div class="line">	@Override</div><div class="line">	public void declareOutputFields(OutputFieldsDeclarer declarer) &#123;</div><div class="line">		declarer.declare(new Fields(&quot;count&quot;));</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line"> * cleanup是IBolt接口中定义,用于释放bolt占用的资源。</div><div class="line"> * Storm在终止一个bolt之前会调用这个方法。</div><div class="line">	 */</div><div class="line">	@Override</div><div class="line">	public void cleanup() &#123;</div><div class="line">		System.out.println(&quot;TestBolt的资源释放&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>Test2Bolt</strong><br>用于统计单词出现次数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div></pre></td><td class="code"><pre><div class="line">  </div><div class="line">import java.util.HashMap;</div><div class="line">import java.util.Map;</div><div class="line"></div><div class="line">import org.apache.storm.task.OutputCollector;</div><div class="line">import org.apache.storm.task.TopologyContext;</div><div class="line">import org.apache.storm.topology.OutputFieldsDeclarer;</div><div class="line">import org.apache.storm.topology.base.BaseRichBolt;</div><div class="line">import org.apache.storm.tuple.Tuple;</div><div class="line"></div><div class="line">/**</div><div class="line"> * </div><div class="line">* Title: Test2Bolt</div><div class="line">* Description:</div><div class="line">* 统计单词出现的次数 </div><div class="line">* Version:1.0.0  </div><div class="line">* @author pancm</div><div class="line">* @date 2018年3月16日</div><div class="line"> */</div><div class="line">public class Test2Bolt extends BaseRichBolt&#123;</div><div class="line"></div><div class="line">	/**</div><div class="line">	 * </div><div class="line">	 */</div><div class="line">	private static final long serialVersionUID = 4743224635827696343L;</div><div class="line">	</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 保存单词和对应的计数</div><div class="line">	 */</div><div class="line">	private HashMap&lt;String, Integer&gt; counts = null;</div><div class="line">	 </div><div class="line">	private long count=1;</div><div class="line">	/**</div><div class="line">* 在Bolt启动前执行，提供Bolt启动环境配置的入口</div><div class="line">* 一般对于不可序列化的对象进行实例化。</div><div class="line">* 注:如果是可以序列化的对象，那么最好是使用构造函数。</div><div class="line">*/</div><div class="line">	@Override</div><div class="line">	public void prepare(Map map, TopologyContext arg1, OutputCollector collector) &#123;</div><div class="line">		System.out.println(&quot;prepare:&quot;+map.get(&quot;test&quot;));</div><div class="line">		this.counts=new HashMap&lt;String, Integer&gt;();</div><div class="line">	&#125;</div><div class="line">  </div><div class="line">	/**</div><div class="line">	 * execute()方法是Bolt实现的核心。</div><div class="line">	 * 也就是执行方法，每次Bolt从流接收一个订阅的tuple，都会调用这个方法。</div><div class="line">	 * </div><div class="line">	 */</div><div class="line">	@Override</div><div class="line">	public void execute(Tuple tuple) &#123;</div><div class="line">		String msg=tuple.getStringByField(&quot;count&quot;);</div><div class="line">		System.out.println(&quot;第&quot;+count+&quot;次统计单词出现的次数&quot;);</div><div class="line">		/**</div><div class="line">		 * 如果不包含该单词，说明在该map是第一次出现</div><div class="line">		 * 否则进行加1</div><div class="line">		 */</div><div class="line">		if (!counts.containsKey(msg)) &#123;</div><div class="line">			counts.put(msg, 1);</div><div class="line">		&#125; else &#123;</div><div class="line">			counts.put(msg, counts.get(msg)+1);</div><div class="line">		&#125;</div><div class="line">		count++;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	</div><div class="line">	/**</div><div class="line"> * cleanup是IBolt接口中定义,用于释放bolt占用的资源。</div><div class="line"> * Storm在终止一个bolt之前会调用这个方法。</div><div class="line">	 */</div><div class="line">	@Override</div><div class="line">	public void cleanup() &#123;</div><div class="line">		System.out.println(&quot;===========开始显示单词数量============&quot;);</div><div class="line">		for (Map.Entry&lt;String, Integer&gt; entry : counts.entrySet()) &#123;</div><div class="line">			System.out.println(entry.getKey() + &quot;: &quot; + entry.getValue());</div><div class="line">		&#125;</div><div class="line">		System.out.println(&quot;===========结束============&quot;);</div><div class="line">	   System.out.println(&quot;Test2Bolt的资源释放&quot;);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 声明数据格式</div><div class="line">	 */</div><div class="line">	@Override</div><div class="line">	public void declareOutputFields(OutputFieldsDeclarer arg0) &#123;</div><div class="line">		</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>  <strong>Topology</strong></p>
+<p>  主程序入口。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line">import org.apache.storm.Config;</div><div class="line">  import org.apache.storm.LocalCluster;</div><div class="line">  import org.apache.storm.StormSubmitter;</div><div class="line">  import org.apache.storm.topology.TopologyBuilder;</div><div class="line">  import org.apache.storm.tuple.Fields;</div><div class="line">  </div><div class="line">  /**</div><div class="line">   * </div><div class="line">  * Title: App</div><div class="line">  * Description:</div><div class="line">  * storm测试 </div><div class="line">  * Version:1.0.0  </div><div class="line">  * @author pancm</div><div class="line">  * @date 2018年3月6日</div><div class="line">   */</div><div class="line">  public class App &#123;</div><div class="line">  	</div><div class="line">  	private static final String test_spout=&quot;test_spout&quot;; </div><div class="line">  	private static final String test_bolt=&quot;test_bolt&quot;; </div><div class="line">  	private static final String test2_bolt=&quot;test2_bolt&quot;; </div><div class="line">  </div><div class="line">  	public static void main(String[] args)  &#123;</div><div class="line">  		//定义一个拓扑</div><div class="line">  		TopologyBuilder builder=new TopologyBuilder();</div><div class="line">  		//设置一个Executeor(线程)，默认一个</div><div class="line">  		builder.setSpout(test_spout, new TestSpout(),1);</div><div class="line">  		//shuffleGrouping:表示是随机分组</div><div class="line">  		//设置一个Executeor(线程)，和一个task</div><div class="line">  		builder.setBolt(test_bolt, new TestBolt(),1).setNumTasks(1).shuffleGrouping(test_spout);</div><div class="line">  		//fieldsGrouping:表示是按字段分组</div><div class="line">  		//设置一个Executeor(线程)，和一个task</div><div class="line">  		builder.setBolt(test2_bolt, new Test2Bolt(),1).setNumTasks(1).fieldsGrouping(test_bolt, new Fields(&quot;count&quot;));</div><div class="line">  		Config conf = new Config();</div><div class="line">  		conf.put(&quot;test&quot;, &quot;test&quot;);</div><div class="line">  		try&#123;</div><div class="line">  		  //运行拓扑</div><div class="line">  	   if(args !=null&amp;&amp;args.length&gt;0)&#123; //有参数时，表示向集群提交作业，并把第一个参数当做topology名称</div><div class="line">  	   	 System.out.println(&quot;运行远程模式&quot;);</div><div class="line">  			 StormSubmitter.submitTopology(args[0], conf, builder.createTopology());</div><div class="line">  	  &#125; else&#123;//没有参数时，本地提交</div><div class="line">  	//启动本地模式</div><div class="line">  	 	System.out.println(&quot;运行本地模式&quot;);</div><div class="line">  	LocalCluster cluster = new LocalCluster();</div><div class="line">  	cluster.submitTopology(&quot;Word-counts&quot; ,conf,  builder.createTopology() );</div><div class="line">  	Thread.sleep(20000);</div><div class="line">  //	//关闭本地集群</div><div class="line">  	cluster.shutdown();</div><div class="line">  	  &#125;</div><div class="line">  		&#125;catch (Exception e)&#123;</div><div class="line">  			e.printStackTrace();</div><div class="line">  		&#125;</div><div class="line">  	&#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>输出结果:</p>
+<pre><code>运行本地模式
+定义格式...
+open:test
+第1次开始发送数据...
+第2次开始发送数据...
+第3次开始发送数据...
+prepare:test
+prepare:test
+开始分割单词:My nickname is xuwujing
+开始分割单词:My blog address is http://www.panchengming.com/
+开始分割单词:My interest is playing games
+第1次统计单词出现的次数
+第2次统计单词出现的次数
+第3次统计单词出现的次数
+第4次统计单词出现的次数
+第5次统计单词出现的次数
+第6次统计单词出现的次数
+第7次统计单词出现的次数
+第8次统计单词出现的次数
+第9次统计单词出现的次数
+第10次统计单词出现的次数
+第11次统计单词出现的次数
+第12次统计单词出现的次数
+第13次统计单词出现的次数
+第14次统计单词出现的次数
+===========开始显示单词数量============
+address: 1
+interest: 1
+nickname: 1
+games: 1
+is: 3
+xuwujing: 1
+playing: 1
+my: 3
+blog: 1
+http://www.panchengming.com/: 1
+===========结束============
+Test2Bolt的资源释放
+TestBolt的资源释放
+关闭...
+</code></pre><p>上述的是本地模式运行，如果想在Storm集群中进行使用，只需要将程序打包为jar，然后将程序上传到storm集群中，<br>输入:</p>
+<p><strong>storm jar xxx.jar xxx xxx</strong><br><strong>说明:第一个xxx是storm程序打包的包名,第二个xxx是运行主程序的路径，第三个xxx则表示主程序输入的参数，这个可以随意。</strong></p>
+<p>如果是使用maven打包的话，则需要在pom.xml加上</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&lt;plugin&gt;</div><div class="line">          &lt;artifactId&gt;maven-assembly-plugin&lt;/artifactId&gt;</div><div class="line">          &lt;configuration&gt;</div><div class="line">            &lt;descriptorRefs&gt;</div><div class="line">              &lt;descriptorRef&gt;jar-with-dependencies&lt;/descriptorRef&gt;</div><div class="line">            &lt;/descriptorRefs&gt;</div><div class="line">            &lt;archive&gt;</div><div class="line">              &lt;manifest&gt;</div><div class="line">                &lt;mainClass&gt;com.pancm.storm.App&lt;/mainClass&gt;</div><div class="line">              &lt;/manifest&gt;</div><div class="line">            &lt;/archive&gt;</div><div class="line">          &lt;/configuration&gt;</div><div class="line">      &lt;/plugin&gt;</div></pre></td></tr></table></figure>
+<p>成功运行程序之后，可以在Storm集群的UI界面查看该程序的状态。</p>
+<p>到此，本文结束，谢谢阅读！</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/storm/" rel="tag"># storm</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/05/pancm74/" rel="next" title="Linux CentOS 安装MySql以及搭建MySql主从复制">
+                <i class="fa fa-chevron-left"></i> Linux CentOS 安装MySql以及搭建MySql主从复制
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/18/pancm76/" rel="prev" title="Java基础知识回顾之一 ----- 基本数据类型">
+                Java基础知识回顾之一 ----- 基本数据类型 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">43</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Storm介绍"><span class="nav-number">1.</span> <span class="nav-text">Storm介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Storm的核心组件"><span class="nav-number">1.1.</span> <span class="nav-text">Storm的核心组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Topology"><span class="nav-number">1.2.</span> <span class="nav-text">Topology</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Storm-集群安装"><span class="nav-number">2.</span> <span class="nav-text">Storm 集群安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Storm-Hello-World"><span class="nav-number">3.</span> <span class="nav-text">Storm Hello World</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#环境准备"><span class="nav-number">3.1.</span> <span class="nav-text">环境准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#具体流程"><span class="nav-number">3.2.</span> <span class="nav-text">具体流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Spout"><span class="nav-number">3.2.1.</span> <span class="nav-text">Spout</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#一、open"><span class="nav-number">3.2.1.1.</span> <span class="nav-text">一、open</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#二、nextTuple"><span class="nav-number">3.2.1.2.</span> <span class="nav-text">二、nextTuple</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#三、declareOutputFields"><span class="nav-number">3.2.1.3.</span> <span class="nav-text">三、declareOutputFields</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#四、ack"><span class="nav-number">3.2.1.4.</span> <span class="nav-text">四、ack</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#五、fail"><span class="nav-number">3.2.1.5.</span> <span class="nav-text">五、fail</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#六、close"><span class="nav-number">3.2.1.6.</span> <span class="nav-text">六、close</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Bolt"><span class="nav-number">3.2.2.</span> <span class="nav-text">Bolt</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#一、prepare"><span class="nav-number">3.2.2.1.</span> <span class="nav-text">一、prepare</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#二、execute"><span class="nav-number">3.2.2.2.</span> <span class="nav-text">二、execute</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#三、declareOutputFields-1"><span class="nav-number">3.2.2.3.</span> <span class="nav-text">三、declareOutputFields</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#cleanup"><span class="nav-number">3.2.2.4.</span> <span class="nav-text">cleanup</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Topology-1"><span class="nav-number">3.2.3.</span> <span class="nav-text">Topology</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

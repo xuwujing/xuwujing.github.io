@@ -1,0 +1,885 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言在开始工作至今，学习各种各样的技术之中发现自己的很多Java的基础知识都忘了⊙﹏⊙b汗。。。 而且越是学习越是发现Java基础的重要性，所以准备单独抽一下时间进行Java基础的重新学习。在重新学习的时候，对这些又有了不同的感悟，于是准备将这些都记载下来，并整理成博客，希望能够帮助那些需要的人。 基本数据类型介绍基本数据类型主要有这几个:byte、short、int、long、float、do">
+<meta name="keywords" content="java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java基础知识回顾之一 ----- 基本数据类型">
+<meta property="og:url" content="http://yoursite.com/2018/03/18/pancm76/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言在开始工作至今，学习各种各样的技术之中发现自己的很多Java的基础知识都忘了⊙﹏⊙b汗。。。 而且越是学习越是发现Java基础的重要性，所以准备单独抽一下时间进行Java基础的重新学习。在重新学习的时候，对这些又有了不同的感悟，于是准备将这些都记载下来，并整理成博客，希望能够帮助那些需要的人。 基本数据类型介绍基本数据类型主要有这几个:byte、short、int、long、float、do">
+<meta property="og:updated_time" content="2018-03-18T13:36:30.476Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java基础知识回顾之一 ----- 基本数据类型">
+<meta name="twitter:description" content="前言在开始工作至今，学习各种各样的技术之中发现自己的很多Java的基础知识都忘了⊙﹏⊙b汗。。。 而且越是学习越是发现Java基础的重要性，所以准备单独抽一下时间进行Java基础的重新学习。在重新学习的时候，对这些又有了不同的感悟，于是准备将这些都记载下来，并整理成博客，希望能够帮助那些需要的人。 基本数据类型介绍基本数据类型主要有这几个:byte、short、int、long、float、do">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/03/18/pancm76/"/>
+
+
+
+
+
+
+  <title>Java基础知识回顾之一 ----- 基本数据类型 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/18/pancm76/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java基础知识回顾之一 ----- 基本数据类型</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-18T21:36:45+08:00">
+                2018-03-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在开始工作至今，学习各种各样的技术之中发现自己的很多Java的基础知识都忘了⊙﹏⊙b汗。。。 而且越是学习越是发现Java基础的重要性，所以准备单独抽一下时间进行Java基础的重新学习。在重新学习的时候，对这些又有了不同的感悟，于是准备将这些都记载下来，并整理成博客，希望能够帮助那些需要的人。</p>
+<h2 id="基本数据类型介绍"><a href="#基本数据类型介绍" class="headerlink" title="基本数据类型介绍"></a>基本数据类型介绍</h2><p>基本数据类型主要有这几个:<br><strong>byte、short、int、long、float、double、char、boolean</strong><br>可以分为三类:</p>
+<ol>
+<li>数值类型:<strong>byte、short、int、long、float、double</strong></li>
+<li>字符类型:<strong>char</strong></li>
+<li>布尔型:<strong>boolean</strong></li>
+</ol>
+<h3 id="byte"><a href="#byte" class="headerlink" title="byte"></a>byte</h3><ol>
+<li>byte是8位的数据类型，占用1个字节(8bit)，默认值是0，它的取值范围是<strong>(-2^7) ~ (2^7-1)</strong>，也就是  <strong>-128  ~ 127</strong>之间，所以最大存储数据量是255;</li>
+<li>byte一般在大型数组中使用，来代替整数，因为byte变量占用的空间只有int的1/4。</li>
+<li>byte使用示例: byte a = 10,byte=-10。在使用byte数据类型的时候需要注意取值范围！！！</li>
+</ol>
+<h3 id="short"><a href="#short" class="headerlink" title="short"></a>short</h3><ol>
+<li>short是16位的数据类型，占用2个字节，默认值是0，它的取值范围是<strong>(-2^15) ~(2^15-1)</strong>，也就是  <strong>-32768 ~ 32767</strong>之间，所以最大数据存储量是65536;</li>
+<li>short虽然是int型变量所占空间的1/2，但是在实际中却很少用到。在大型数组中也可以节省空间。</li>
+<li>short使用示例:short a=100,short b=-200;</li>
+</ol>
+<h3 id="int"><a href="#int" class="headerlink" title="int"></a>int</h3><ol>
+<li>int是32位的数据类型，占用4个字节，默认值是0，它的取值范围是<strong>(-2^31) ~(2^31-1)</strong>，也就是  <strong>-2147483648 ~ 2147483647</strong>之间，所以最大数据存储量是<strong>2^32-1</strong>;</li>
+<li>int是数据类型是整型，是我们在项目中用到最多的数据类型之一;</li>
+<li>int 使用示例:int a=1000,int b=-2000;</li>
+</ol>
+<h3 id="long"><a href="#long" class="headerlink" title="long"></a>long</h3><ol>
+<li>long是64位的数据类型，占用8个字节，默认值是0L，它的取值范围是<strong>(-2^63) ~(2^63-1)</strong>，也就是  <strong>-9223372036854775808  ~  9223372036854775808</strong>之间，所以最大数据存储量是<strong>2^64</strong>;</li>
+<li>long是数据类型是长整型，是我们在项目中用到最多的数据类型之一。在使用long类型的数据时最好在数值末尾带上大写的L！</li>
+<li>long 使用示例:long a=1000L,long b=-2000L;</li>
+</ol>
+<h3 id="float"><a href="#float" class="headerlink" title="float"></a>float</h3><ol>
+<li>float是32位的数据类型，占用4个字节，默认值是0，它的取值范围是<strong>3.4e-45 ~   1.4e38</strong> 之间;</li>
+<li>float是数据类型是单精度，在直接赋值时必须在数字后加上f或F。</li>
+<li>float使用示例:float a=10.25f, float b=-20.35F;</li>
+</ol>
+<h3 id="double"><a href="#double" class="headerlink" title="double"></a>double</h3><ol>
+<li>double是64位的数据类型，占用8个字节，默认值是0，它的取值范围是<strong>4.9e-324 ~ 1.8e308</strong> 之间;</li>
+<li>double是数据类型是双精度，在直接赋值的时候最好加上D或d。</li>
+<li>double使用示例:double  a=10.123d, double  b= -10.25644D;</li>
+</ol>
+<h3 id="boolean"><a href="#boolean" class="headerlink" title="boolean"></a>boolean</h3><ol>
+<li>boolean是布尔类型，占用1个字节，只有两个值,false和true，默认值是 false。</li>
+<li>boolean只能用一种标志来记录 true或false，一般和 if 结合使用。</li>
+<li>boolean使用示例: boolean a=true，boolean b=false;</li>
+</ol>
+<h3 id="char"><a href="#char" class="headerlink" title="char"></a>char</h3><ol>
+<li>char是字符类型，占用2个字节，默认值为空，取值范围 为 <strong>0~65535</strong>，也就是  <strong>\u0000 ~  \uffff</strong>。</li>
+<li>char数据类型可以储存任何字符。</li>
+<li>char 使用示例: char a=1，char b=’A’;</li>
+</ol>
+<p>数值类型的级别从低到高分别为：<br><strong>byte,char,short(这三个平级)——&gt;int——&gt;float——&gt;long——&gt;double</strong><br>其中由低级别转到高级别，是属于<strong>自动类型转换</strong>，这点是由系统自动转换的。</p>
+<p>例如将int类型的数据转为float类型的数据。<br>示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">int i=10;</div><div class="line">float j=i;</div><div class="line">System.out.println(&quot;i:&quot;+i+&quot;,j:&quot;+j);</div></pre></td></tr></table></figure></p>
+<p>结果:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">i:10,j:10.0</div></pre></td></tr></table></figure>
+<p>如果由高级别转为低级别，则需要<strong>强制转换</strong>，也就是强制类型转换。<br>例如将int类型的数据转换为byte类型的数据。<br>示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">int i=127;</div><div class="line">int j=128;</div><div class="line">byte bye=(byte)i;</div><div class="line">byte bye2=(byte)j;</div><div class="line">System.out.println(&quot;i:&quot;+i+&quot;,bye:&quot;+bye);</div><div class="line">System.out.println(&quot;j:&quot;+j+&quot;,bye2:&quot;+bye2);</div></pre></td></tr></table></figure></p>
+<p>结果:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">i:127,bye:127</div><div class="line">j:128,bye2:-128</div></pre></td></tr></table></figure></p>
+<p><strong>说明:因为 byte 类型是 8 位，最大值为127，所以当 int 强制转换为 byte 类型时，值 128 时候就会导致溢出。所以在进行强制类型转换的时候，要注意取值范围！</strong></p>
+<p>在<strong>强制转换</strong>的时候需要注意数据的精确度，否则可能会出现数据精确丢失。<br>例如 double类型的数据转换为float类型数据。<br>示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">double d=10.1111115;</div><div class="line">float f=(float) d;</div><div class="line">System.out.println(&quot;f:&quot;+f+&quot;,d:&quot;+d);</div></pre></td></tr></table></figure></p>
+<p>结果:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">f:10.111112,d:10.1111115</div></pre></td></tr></table></figure></p>
+<p>了解了数据类型的级别之后，如果用不同的数据类型进行计算，那么最终的数据类型又是哪一种呢?<br>这里我们用这几种来测试:<br>1.byte 类型的数据 加 short 类型的数据;<br>2.short 类型的数据 加 int 类型的数据;<br>3.int 类型的数据 加 long 类型的数据;</p>
+<p>这里我们使用这个方法来获取最终的数据类型<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public static String getType(Object o)&#123; </div><div class="line">		return o.getClass().toString(); </div><div class="line">	&#125;</div></pre></td></tr></table></figure></p>
+<p>代码:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">short a=1;</div><div class="line">byte b=2;</div><div class="line">int c = 3;</div><div class="line">long d = 4;</div><div class="line">System.out.println(getType(a));</div><div class="line">System.out.println(getType(b));</div><div class="line">System.out.println(getType(c));</div><div class="line">System.out.println(getType(d));</div><div class="line">System.out.println(getType(a+b));</div><div class="line">System.out.println(getType(a+c));</div><div class="line">System.out.println(getType(c+d));</div></pre></td></tr></table></figure></p>
+<p>结果:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">class java.lang.Short</div><div class="line">class java.lang.Byte</div><div class="line">class java.lang.Integer</div><div class="line">class java.lang.Long</div><div class="line">class java.lang.Integer</div><div class="line">class java.lang.Integer</div><div class="line">class java.lang.Long</div></pre></td></tr></table></figure></p>
+<p>看到结果是不是有点吃惊呢？那么是为什么呢?<br>这里的不同的数值类型数据进行相加的时候，会自动转换为级别最高的那一个。<br>那么short 类型的数据加 byte 类型的数据为什么是int类型呢？<br>因为在java的世界里，如果比int类型小的类型做运算，java在编译的时候就会将它们统一强转成int类型。<br>如果上述不好理解的，那么这里我们来做个实验测试下，通过结果来进行验证。<br>示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">short a=1,b=2;</div><div class="line">byte c=3,d=4;</div><div class="line">System.out.println(getType(a+b));</div><div class="line">System.out.println(getType(c+d));</div></pre></td></tr></table></figure></p>
+<p>结果:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">class java.lang.Integer</div><div class="line">class java.lang.Integer</div></pre></td></tr></table></figure>
+<p>那么这里可以得出结论，在数值类型中，若级别小于int，进行计算的时候，最终的数据类型会自动转换为int，如果高于int，最终数据结果会取其中最高的一个！</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/16/pancm75/" rel="next" title="Storm 入门的Demo教程">
+                <i class="fa fa-chevron-left"></i> Storm 入门的Demo教程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">43</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本数据类型介绍"><span class="nav-number">2.</span> <span class="nav-text">基本数据类型介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#byte"><span class="nav-number">2.1.</span> <span class="nav-text">byte</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#short"><span class="nav-number">2.2.</span> <span class="nav-text">short</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#int"><span class="nav-number">2.3.</span> <span class="nav-text">int</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#long"><span class="nav-number">2.4.</span> <span class="nav-text">long</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#float"><span class="nav-number">2.5.</span> <span class="nav-text">float</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#double"><span class="nav-number">2.6.</span> <span class="nav-text">double</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#boolean"><span class="nav-number">2.7.</span> <span class="nav-text">boolean</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#char"><span class="nav-number">2.8.</span> <span class="nav-text">char</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

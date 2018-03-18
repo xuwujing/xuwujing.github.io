@@ -1,0 +1,855 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,springBoot," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言在之前的学习springBoot中，成功的实现了Restful风格的基本服务。但是想将之前的工程作为一个项目来说，那些是仅仅不够的。可能还需要获取自定义的配置以及添加过滤器和拦截器。至于为什么将这些写在一起，只是因为这些比较简单而且也会经常用到，所以干脆就一起写出来了。 读取配置文件在使用maven项目中，配置文件会放在resources根目录下。我们的springBoot是用Maven搭建">
+<meta name="keywords" content="java,springBoot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux CentOS 安装MySql以及搭建MySql主从复制">
+<meta property="og:url" content="http://yoursite.com/2018/02/28/pancm73/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言在之前的学习springBoot中，成功的实现了Restful风格的基本服务。但是想将之前的工程作为一个项目来说，那些是仅仅不够的。可能还需要获取自定义的配置以及添加过滤器和拦截器。至于为什么将这些写在一起，只是因为这些比较简单而且也会经常用到，所以干脆就一起写出来了。 读取配置文件在使用maven项目中，配置文件会放在resources根目录下。我们的springBoot是用Maven搭建">
+<meta property="og:updated_time" content="2018-03-18T13:32:20.671Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux CentOS 安装MySql以及搭建MySql主从复制">
+<meta name="twitter:description" content="前言在之前的学习springBoot中，成功的实现了Restful风格的基本服务。但是想将之前的工程作为一个项目来说，那些是仅仅不够的。可能还需要获取自定义的配置以及添加过滤器和拦截器。至于为什么将这些写在一起，只是因为这些比较简单而且也会经常用到，所以干脆就一起写出来了。 读取配置文件在使用maven项目中，配置文件会放在resources根目录下。我们的springBoot是用Maven搭建">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/02/28/pancm73/"/>
+
+
+
+
+
+
+  <title>Linux CentOS 安装MySql以及搭建MySql主从复制 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/28/pancm73/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux CentOS 安装MySql以及搭建MySql主从复制</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-28T21:09:45+08:00">
+                2018-02-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/springBoot/" itemprop="url" rel="index">
+                    <span itemprop="name">springBoot</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在之前的学习<a href="http://www.panchengming.com/2018/01/10/pancm67/" target="_blank" rel="external">springBoot</a>中，成功的实现了Restful风格的基本服务。但是想将之前的工程作为一个项目来说，那些是仅仅不够的。可能还需要获取自定义的配置以及添加过滤器和拦截器。至于为什么将这些写在一起，只是因为这些比较简单而且也会经常用到，所以干脆就一起写出来了。</p>
+<h2 id="读取配置文件"><a href="#读取配置文件" class="headerlink" title="读取配置文件"></a>读取配置文件</h2><p>在使用maven项目中，配置文件会放在<strong>resources</strong>根目录下。<br>我们的springBoot是用Maven搭建的，所以springBoot的默认配置文件和自定义的配置文件都放在此目录。<br>springBoot的 默认配置文件为 <strong>application.properties</strong> 或 <strong>application.yml</strong>，这里我们使用 <strong>application.properties</strong>。</p>
+<p>首先在<strong>application.properties</strong>中添加我们要读取的数据。<br>springBoot支持分层结构。<br>例如:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">web:</div><div class="line">  pancm:</div><div class="line">    title: SpringBoot</div><div class="line">    description: test</div></pre></td></tr></table></figure>
+<p><strong>注意前面的空格!</strong></p>
+<p>在<strong>application.properties</strong>添加完之后，我们便在代码中进行读取。<br>这里我们使用<strong>@Value</strong> 方式。<br>首先在类中添加 <strong>@Component</strong>、<strong>@ConfigurationProperties</strong>这两个注解。<br>第一个注解表示这个类是获取配置文件，第二个注解表示从配置文件中获取的数据转换为对象。因为我们使用了层级结构，获取web.pancm目录下的参数，所以我们再加上<strong>prefix = “web.pancm”</strong>这个表示获取这之后的数据，就避免了下面在重复书写。<br>那么代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">import org.springframework.beans.factory.annotation.Value;</div><div class="line">import org.springframework.boot.context.properties.ConfigurationProperties;</div><div class="line">import org.springframework.context.annotation.PropertySource;</div><div class="line">import org.springframework.stereotype.Component;</div><div class="line"></div><div class="line">/**</div><div class="line"> * </div><div class="line">* Title: MyProperties</div><div class="line">* Description:</div><div class="line">* 从application.properties 获取 配置</div><div class="line">* Version:1.0.0  </div><div class="line">* @author pancm</div><div class="line">* @date 2018年1月11日</div><div class="line"> */</div><div class="line">@Component</div><div class="line">@ConfigurationProperties(prefix = &quot;web.pancm&quot;)  </div><div class="line">public class MyProperties &#123;</div><div class="line">	/**</div><div class="line">	 * 获取个人标题</div><div class="line">	 * </div><div class="line">	 */</div><div class="line">	@Value(&quot;$&#123;title&#125;&quot;)</div><div class="line">	private String title;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 获取个人描述</div><div class="line">	 */</div><div class="line">	@Value(&quot;$&#123;description&#125;&quot;)</div><div class="line">	private String description;</div><div class="line"></div><div class="line">	/** get和set略 */</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>本类中可以直接获取该属性，不过在外部类调用的时候，需要添加<strong>@Autowired</strong>。</p>
+<p>例如:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">@Autowired</div><div class="line">MyProperties myProperties;</div><div class="line"></div><div class="line"></div><div class="line">System.out.println(myProperties.getTitle());</div><div class="line">System.out.println(myProperties.getDescription());</div></pre></td></tr></table></figure></p>
+<p>上面的是获取<strong>application.properties</strong>中的方法。<br>如果想自定义配置文件和属性的话，只需再添加一个<strong>@PropertySource</strong>注解就可，然后添加 <strong>value</strong>属性，指向文件路径即可。<br>例如:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">import org.springframework.beans.factory.annotation.Value;</div><div class="line">import org.springframework.boot.context.properties.ConfigurationProperties;</div><div class="line">import org.springframework.context.annotation.PropertySource;</div><div class="line">import org.springframework.stereotype.Component;</div><div class="line">/**</div><div class="line"> * </div><div class="line">* Title: MyConfig</div><div class="line">* Description:</div><div class="line">* 自定义配置文件 </div><div class="line">* Version:1.0.0  </div><div class="line">* @author pancm</div><div class="line">* @date 2018年1月20日</div><div class="line"> */</div><div class="line">@Component </div><div class="line">@ConfigurationProperties(prefix = &quot;myconfig&quot;) </div><div class="line">@PropertySource(value = &quot;classpath:myconfig.proferties&quot;)</div><div class="line">public class MyConfig &#123;  </div><div class="line">  </div><div class="line">    @Value(&quot;$&#123;test&#125;&quot;) </div><div class="line">    private String test;  </div><div class="line">  </div><div class="line">    public String getTest() &#123;  </div><div class="line">        return test;  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">    public void setTest(String test) &#123;  </div><div class="line">        this.test = test;  </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>调用方法同上！</p>
+<p><strong>注: 之前的springBoot版本的@ConfigurationProperties注解可以使用 locations 方法来指定自定义配置文件路径，不过在 springBoot 1.5以上的就已经不支持 location属性，所以这里使用的是PropertySource。</strong></p>
+<h2 id="过滤器"><a href="#过滤器" class="headerlink" title="过滤器"></a>过滤器</h2><p>过滤器是什么?<br>简单的来说，过滤器就是过滤的作用，在web开发中过滤一些我们指定的url。<br>过滤器主要做什么？<br>过滤掉一些不需要的东西，例如一些错误的请求。<br>也可以修改请求和相应的内容。</p>
+<p>过滤器的代码实现<br>过滤器(filter)有三个方法，其中初始化（init）和摧毁（destroy）方法一般不会用到，主要用到的是doFilter这个方法。<br>而至于怎么过滤呢？<br>如果过滤通过，则在doFilter执行<code>filterChain.doFilter(request,response);</code>该方法。</p>
+<p>这里我们在过滤器中设置下请求的时间， 符合就通过。否则返回错误信息！<br>代码示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">class MyFilter implements Filter &#123;</div><div class="line">	@Override</div><div class="line">	public void doFilter(ServletRequest srequest, ServletResponse sresponse, FilterChain filterChain)</div><div class="line">			throws IOException, ServletException &#123;</div><div class="line">		HttpServletRequest request = (HttpServletRequest) srequest;</div><div class="line">		//执行过滤操作...</div><div class="line">		System.out.println(&quot;请求的url :&quot;+request.getRequestURI());</div><div class="line">		// 获取系统时间</div><div class="line">        Calendar ca = Calendar.getInstance();</div><div class="line">        int hour = ca.get(Calendar.HOUR_OF_DAY);</div><div class="line">        // 设置限制运行时间 </div><div class="line">        if (0&lt;hour &amp;&amp; hour &lt; 18) &#123;</div><div class="line">              HttpServletResponse response = (HttpServletResponse) sresponse;</div><div class="line">              response.setCharacterEncoding(&quot;UTF-8&quot;);</div><div class="line">              response.setContentType(&quot;application/json; charset=utf-8&quot;);</div><div class="line">              // 消息</div><div class="line">              Map&lt;String, Object&gt; messageMap = new HashMap&lt;&gt;();</div><div class="line">              messageMap.put(&quot;status&quot;, &quot;1&quot;);</div><div class="line">              messageMap.put(&quot;message&quot;, &quot;此接口可以请求时间为:18-24点&quot;);</div><div class="line">              ObjectMapper objectMapper=new ObjectMapper();</div><div class="line">              String writeValueAsString = objectMapper.writeValueAsString(messageMap);</div><div class="line">              response.getWriter().write(writeValueAsString);</div><div class="line">            return;</div><div class="line">        &#125;</div><div class="line">		</div><div class="line">		filterChain.doFilter(srequest, sresponse);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public void init(FilterConfig filterConfig) throws ServletException &#123;</div><div class="line">		System.out.println(&quot;参数初始化:&quot;+filterConfig);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	@Override</div><div class="line">	public void destroy() &#123;</div><div class="line">		System.out.println(&quot;开始销毁...&quot;);</div><div class="line">	&#125;</div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
+<p>那么在springBoot中如何使用过滤器呢？<br>一般是使用Component和WebFilter 这两个注解，但是这里我们就直接方法调用。<br>在该方法中添加Bean注解，springBoot会在启动的时候进行调用。并指定需要过滤的请求。</p>
+<p>代码示例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">    @Bean</div><div class="line">    public FilterRegistrationBean testFilterRegistration() &#123;</div><div class="line">        FilterRegistrationBean registration = new FilterRegistrationBean();</div><div class="line">        registration.setFilter(new MyFilter());</div><div class="line">        //过滤掉 /getUser 和/hello 的请求</div><div class="line">        registration.addUrlPatterns(&quot;/getUser&quot;,&quot;/hello&quot;);</div><div class="line">        //过滤掉所有请求</div><div class="line">//      registration.addUrlPatterns(&quot;/*&quot;);</div><div class="line">        registration.setName(&quot;MyFilter&quot;);</div><div class="line">        registration.setOrder(1);</div><div class="line">        return registration;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p><strong>说明: registration.setOrder() 方法是设置优先级，数值越大，优先级越高。</strong> </p>
+<h2 id="拦截器"><a href="#拦截器" class="headerlink" title="拦截器"></a>拦截器</h2><p>拦截器是什么?<br>简单的来说，就是一道阀门，拦截不需要的东西。<br>拦截器主要做什么？<br>对正在运行的流程进行干预。</p>
+<p>拦截器的代码实现。<br>拦截器也主要有三个方法，其中preHandle是在请求之前就进行调用，如果该请求需要被拦截，则返回false，否则true; postHandle是在请求之后进行调用，无返回值;afterCompletion是在请求结束的时候进行调用，无返回值。</p>
+<p>这里我们就简单的模拟下拦截非白名单的IP请求。<br>代码示例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div></pre></td><td class="code"><pre><div class="line">class MyInterceptor implements HandlerInterceptor &#123;</div><div class="line">    	</div><div class="line">    	@Autowired  </div><div class="line">        private IpConfig ipconfig; </div><div class="line">    	</div><div class="line">        public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object arg2) throws Exception &#123;</div><div class="line">            String ip = getIpAddr(request);</div><div class="line">            // 获取可以访问系统的白名单</div><div class="line">            String ipStr = ipconfig.getIpWhiteList();</div><div class="line">            String[] ipArr = ipStr.split(&quot;\\|&quot;);</div><div class="line">            List&lt;String&gt; ipList = Arrays.asList(ipArr);</div><div class="line"></div><div class="line">            if (ipList.contains(ip)) &#123;</div><div class="line">            	 System.out.println(&quot;该IP: &quot; + ip+&quot;通过!&quot;);</div><div class="line">                 return true;</div><div class="line">            &#125; else &#123;</div><div class="line">                System.out.println(&quot;该IP: &quot; + ip+&quot;不通过!&quot;);</div><div class="line">	              response.setCharacterEncoding(&quot;UTF-8&quot;);</div><div class="line">	              response.setContentType(&quot;application/json; charset=utf-8&quot;);</div><div class="line">	              // 消息</div><div class="line">	              Map&lt;String, Object&gt; messageMap = new HashMap&lt;&gt;();</div><div class="line">	              messageMap.put(&quot;status&quot;, &quot;1&quot;);</div><div class="line">	              messageMap.put(&quot;message&quot;, &quot;您好，ip为&quot; + ip + &quot;,暂时没有访问权限，请联系管理员开通访问权限。&quot;);</div><div class="line">	              ObjectMapper objectMapper=new ObjectMapper();</div><div class="line">	              String writeValueAsString = objectMapper.writeValueAsString(messageMap);</div><div class="line">	              response.getWriter().write(writeValueAsString);</div><div class="line">                return false;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        public  String getIpAddr(HttpServletRequest request) &#123;</div><div class="line">            String ip = request.getHeader(&quot;X-Forwarded-For&quot;);</div><div class="line">            if (ip == null || ip.length() == 0 || &quot;unknown&quot;.equalsIgnoreCase(ip)) &#123;</div><div class="line">                ip = request.getHeader(&quot;Proxy-Client-IP&quot;);</div><div class="line">            &#125;</div><div class="line">            if (ip == null || ip.length() == 0 || &quot;unknown&quot;.equalsIgnoreCase(ip)) &#123;</div><div class="line">                ip = request.getHeader(&quot;WL-Proxy-Client-IP&quot;);</div><div class="line">            &#125;</div><div class="line">            if (ip == null || ip.length() == 0 || &quot;unknown&quot;.equalsIgnoreCase(ip)) &#123;</div><div class="line">                ip = request.getHeader(&quot;HTTP_CLIENT_IP&quot;);</div><div class="line">            &#125;</div><div class="line">            if (ip == null || ip.length() == 0 || &quot;unknown&quot;.equalsIgnoreCase(ip)) &#123;</div><div class="line">                ip = request.getHeader(&quot;HTTP_X_FORWARDED_FOR&quot;);</div><div class="line">            &#125;</div><div class="line">            if (ip == null || ip.length() == 0 || &quot;unknown&quot;.equalsIgnoreCase(ip)) &#123;</div><div class="line">                ip = request.getRemoteAddr();</div><div class="line">            &#125;</div><div class="line">            return ip;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView) throws Exception &#123;</div><div class="line">            System.out.println(&quot;postHandle被调用&quot;);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception &#123;</div><div class="line">            System.out.println(&quot;afterCompletion被调用&quot;);</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>依旧再启动springBoot的时候启动拦截器，并指定拦截的请求。</p>
+<p>代码示例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">import java.util.Arrays;</div><div class="line">import java.util.HashMap;</div><div class="line">import java.util.List;</div><div class="line">import java.util.Map;</div><div class="line"></div><div class="line">import javax.servlet.http.HttpServletRequest;</div><div class="line">import javax.servlet.http.HttpServletResponse;</div><div class="line"></div><div class="line">import org.springframework.beans.factory.annotation.Autowired;</div><div class="line">import org.springframework.context.annotation.Bean;</div><div class="line">import org.springframework.context.annotation.Configuration;</div><div class="line">import org.springframework.web.servlet.HandlerInterceptor;</div><div class="line">import org.springframework.web.servlet.ModelAndView;</div><div class="line">import org.springframework.web.servlet.config.annotation.InterceptorRegistry;</div><div class="line">import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;</div><div class="line"></div><div class="line">import com.fasterxml.jackson.databind.ObjectMapper;</div><div class="line">import com.pancm.springboot_config.config.IpConfig;</div><div class="line"></div><div class="line"></div><div class="line">@Configuration</div><div class="line">public class MyWebAppConfigurer extends WebMvcConfigurerAdapter &#123;</div><div class="line"></div><div class="line">    @Bean   </div><div class="line">    public HandlerInterceptor getMyInterceptor()&#123;</div><div class="line">        return new MyInterceptor();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void addInterceptors(InterceptorRegistry registry) &#123;</div><div class="line">        // addPathPatterns 用于添加拦截规则, 这里假设拦截 /url 后面的全部链接</div><div class="line">        // excludePathPatterns 用户排除拦截</div><div class="line">        registry.addInterceptor(getMyInterceptor()).addPathPatterns(&quot;/**&quot;);</div><div class="line">        super.addInterceptors(registry);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>关于springBoot配置文件的获取以及过滤器和拦截器的使用暂时就介绍到这了。如果在某些方面描述的不够清楚或者说的不太正确，希望读者能指出。<br>该项目完整的代码我放到github上了，有兴趣的可以看看。<br><a href="https://github.com/xuwujing/springBoot" target="_blank" rel="external">https://github.com/xuwujing/springBoot</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/springBoot/" rel="tag"># springBoot</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/08/pancm72/" rel="next" title="关于Kafka 的 consumer 消费者手动提交详解">
+                <i class="fa fa-chevron-left"></i> 关于Kafka 的 consumer 消费者手动提交详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/05/pancm74/" rel="prev" title="Linux CentOS 安装MySql以及搭建MySql主从复制">
+                Linux CentOS 安装MySql以及搭建MySql主从复制 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">43</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#读取配置文件"><span class="nav-number">2.</span> <span class="nav-text">读取配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#过滤器"><span class="nav-number">3.</span> <span class="nav-text">过滤器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拦截器"><span class="nav-number">4.</span> <span class="nav-text">拦截器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结语"><span class="nav-number">5.</span> <span class="nav-text">结语</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
