@@ -1,0 +1,1040 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言在上一篇中，回顾了Java的基本数据类型 ，这篇就来回顾下Java中的一些修饰符以及String。 修饰符介绍Java修饰符主要分为两类:  访问修饰符 非访问修饰符  其中访问修饰符主要包括 private、default、protected、public。非访问修饰符主要包括 static、final、abstract、synchronized。 访问修饰符访问修饰符可以使用下图这张表来">
+<meta name="keywords" content="java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java基础知识回顾之二 ----- 修饰符和String">
+<meta property="og:url" content="http://yoursite.com/2018/03/24/pancm77/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言在上一篇中，回顾了Java的基本数据类型 ，这篇就来回顾下Java中的一些修饰符以及String。 修饰符介绍Java修饰符主要分为两类:  访问修饰符 非访问修饰符  其中访问修饰符主要包括 private、default、protected、public。非访问修饰符主要包括 static、final、abstract、synchronized。 访问修饰符访问修饰符可以使用下图这张表来">
+<meta property="og:updated_time" content="2018-04-28T13:28:54.801Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java基础知识回顾之二 ----- 修饰符和String">
+<meta name="twitter:description" content="前言在上一篇中，回顾了Java的基本数据类型 ，这篇就来回顾下Java中的一些修饰符以及String。 修饰符介绍Java修饰符主要分为两类:  访问修饰符 非访问修饰符  其中访问修饰符主要包括 private、default、protected、public。非访问修饰符主要包括 static、final、abstract、synchronized。 访问修饰符访问修饰符可以使用下图这张表来">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/03/24/pancm77/"/>
+
+
+
+
+
+
+  <title>Java基础知识回顾之二 ----- 修饰符和String | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/24/pancm77/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java基础知识回顾之二 ----- 修饰符和String</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-24T11:56:53+08:00">
+                2018-03-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在上一篇中，回顾了Java的<a href="http://blog.csdn.net/qazwsxpcm/article/details/79595857" target="_blank" rel="external">基本数据类型</a> ，这篇就来回顾下Java中的一些修饰符以及String。</p>
+<h2 id="修饰符介绍"><a href="#修饰符介绍" class="headerlink" title="修饰符介绍"></a>修饰符介绍</h2><p>Java修饰符主要分为两类:</p>
+<ul>
+<li>访问修饰符</li>
+<li>非访问修饰符</li>
+</ul>
+<p>其中访问修饰符主要包括 private、default、protected、public。<br>非访问修饰符主要包括 static、final、abstract、synchronized。</p>
+<h3 id="访问修饰符"><a href="#访问修饰符" class="headerlink" title="访问修饰符"></a>访问修饰符</h3><p>访问修饰符可以使用下图这张表来说明访问权限:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">修饰符</th>
+<th style="text-align:center">当前类</th>
+<th style="text-align:center">同一包内</th>
+<th style="text-align:center">子类</th>
+<th style="text-align:center">其它包</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">public</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">Y</td>
+</tr>
+<tr>
+<td style="text-align:center">protected</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">N</td>
+</tr>
+<tr>
+<td style="text-align:center">default</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">N</td>
+<td style="text-align:center">N</td>
+</tr>
+<tr>
+<td style="text-align:center">private</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:center">N</td>
+<td style="text-align:center">N</td>
+<td style="text-align:center">N</td>
+</tr>
+</tbody>
+</table>
+<p>简单点查看访问级别的话，级别是由低到高。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">private＜default＜protected＜public</div></pre></td></tr></table></figure>
+<h4 id="private"><a href="#private" class="headerlink" title="private"></a><strong>private</strong></h4><p><strong>被private修饰的变量、方法仅限在本类中使用。</strong><br>所以private是最严的的访问级别，主要用于隐藏类的一些细节实现和保护类的数据。<br>例如pojo类就是使用private修饰变量，对外提供setter和getter的方法。<br>还有如果使用private用来修饰构造方法的话，该类是不能实例化的。这种在单例模式中可以经常看到！</p>
+<p>虽然private主要用于修饰变量和方法，不过也可以修饰内部类，只不过是内部类。</p>
+<p>例如：</p>
+<pre><code>public class Test{
+    //修饰一个私有变量
+    private int count=1;
+    //修饰一个私有方法
+    private int add(int i,int j){
+        return i+j;
+   }
+    private class Test1{            
+    }
+}
+</code></pre><p><strong>注意：private不能修饰外部类。</strong></p>
+<p>因为Test类中的变量和方法是私有的，所以其他类无法调用！<br>例:</p>
+<pre><code>public class Test2 {
+    public static void main(String[] args) {
+        Test t=new Test();
+        //下面的变量和方法是无法获取的
+        //t.count=2;
+        //t.add(1,2);
+    }
+}
+</code></pre><p><strong>说明:其实private修饰的方法和变量是可以使用反射调用，不过这里就不说明了。</strong></p>
+<h4 id="default"><a href="#default" class="headerlink" title="default"></a><strong>default</strong></h4><p>default:就是不使用任何修饰符。类、接口、变量、方法都可以使用。不过仅限在同一包下。</p>
+<p>例如:</p>
+<pre><code>class Test{
+     int count=1;
+     int add(int i,int j){
+            return i+j;
+     }
+    interface Test1{
+    }
+}
+</code></pre><h4 id="protected"><a href="#protected" class="headerlink" title="protected"></a><strong>protected</strong></h4><p>被protected修饰的变量、方法仅仅对同一包内的类和所有子类可见。</p>
+<p>例如:</p>
+<pre><code>public class Test{
+    protected int count=1;
+    protected int add(int i,int j){
+            return i+j;
+     }
+     protected class Test1{
+     }
+}
+</code></pre><p>在同包下可以直接调用，如果不在同包，则需要继承才可以使用。</p>
+<pre><code>public class Test2 extends Test{
+    public static void main(String[] args) {
+        Test t=new Test();
+        t.count=2;
+        t.add(1,2);
+    }
+}
+</code></pre><p><strong>注意：protected不能修饰外部类。</strong></p>
+<h4 id="public"><a href="#public" class="headerlink" title="public"></a><strong>public</strong></h4><p>public:修饰的类、接口、变量、方法对所有类都可以使用。</p>
+<p>例如:</p>
+<pre><code> public class Test{
+  public int count=1;
+  public int add(int i,int j){
+          return i+j;
+   }
+}
+</code></pre><h2 id="非访问修饰符"><a href="#非访问修饰符" class="headerlink" title="非访问修饰符"></a>非访问修饰符</h2><p>为了实现一些其他的功能，Java 也提供了许多非访问修饰符。</p>
+<h3 id="static"><a href="#static" class="headerlink" title="static"></a><strong>static</strong></h3><p><strong>static</strong>: 用来修饰类变量和类方法。</p>
+<p><strong>静态变量</strong>：<br>static在修饰类变量的时候，无论该类被实例化了多少次，它的静态变量只有一份拷贝。静态变量也被称为类变量。局部变量是不能被声明为static变量的。</p>
+<p><strong>静态方法</strong>：<br>static在修饰类方法的时候，静态方法是不能使用类的非静态变量。静态方法可以直接通过类名调用，因此静态方法中是不能用<strong>this</strong>和<strong>super</strong>关键字的。</p>
+<p>示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">public class Test&#123;</div><div class="line">   public  String name=&quot;xuwujing&quot;;</div><div class="line">   public  static String name2=&quot;xuwujing&quot;;</div><div class="line">   </div><div class="line">   public  static String getName() &#123;</div><div class="line">   //这个一句 会报错  因为静态方法是不能使用类的非静态变量</div><div class="line">   //String reult=name;</div><div class="line">   //这一句就可以</div><div class="line">   String reult=name2;</div><div class="line">   return reult;</div><div class="line">    &#125;</div><div class="line">   </div><div class="line">   //main方法是静态方法，可以直接调用本类中的静态方法和静态变量</div><div class="line">   public static void main(String[] args) &#123;</div><div class="line">    System.out.println(name2);</div><div class="line">    System.out.println(getName());</div><div class="line">   &#125;</div><div class="line">   </div><div class="line">   //该方法是不静态方法，所以调用本类中的静态方法和静态变量时，</div><div class="line">   //需要使用classname.variablename和 classname.methodname的方式访问</div><div class="line">   private void print()&#123;</div><div class="line">    System.out.println(Test.name2);</div><div class="line">    System.out.println(Test.getName());</div><div class="line">    &#125;</div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
+<p>在这里顺便提一下，static 静态块。<br>在JVM类加载机制中，<strong>如果类存在直接的父类并且这个类还没有被初始化，那么就先初始化父类；如果类中存在初始化语句，就依次执行这些初始化语句。</strong><br>可能上述的两句话不太好理解，那么这里我们来运行下代码查看其结果，通过结果可能就能更好的理解上述语句的话了。</p>
+<p>示例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">class HelloA &#123;</div><div class="line"></div><div class="line">    public HelloA() &#123;</div><div class="line">        System.out.println(&quot;HelloA&quot;); </div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    &#123; System.out.println(&quot;I&apos;m A class&quot;); &#125; </div><div class="line">    </div><div class="line">    static &#123; System.out.println(&quot;static A&quot;); &#125; </div><div class="line"></div><div class="line">&#125;</div><div class="line">public class HelloB extends HelloA&#123;</div><div class="line">    public HelloB() &#123;</div><div class="line">        System.out.println(&quot;HelloB&quot;); </div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    &#123; System.out.println(&quot;I&apos;m B class&quot;); &#125;  </div><div class="line">    </div><div class="line">    static &#123; System.out.println(&quot;static B&quot;); &#125; </div><div class="line">    </div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">    	new HelloB();   </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>结果:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">static A</div><div class="line">static B</div><div class="line">I&apos;m A class</div><div class="line">HelloA</div><div class="line">I&apos;m B class</div><div class="line">HelloB</div></pre></td></tr></table></figure></p>
+<p>那么根据这个类返回的结果是不是感觉更好理解了呢？<br><strong>创建对象时构造器的调用顺序是：</strong></p>
+<blockquote>
+<p>先初始化静态成员，然后调用父类构造器，再初始化非静态成员，最后调用自身构造器。</p>
+</blockquote>
+<p> 那么static修饰符这块的运用可以总结如下:</p>
+<blockquote>
+<ol>
+<li>静态变量在内存中只有一个拷贝，在类的所有实例中共享。</li>
+<li>在静态方法中不能直接访问实例方法和实例变量，反之可以。</li>
+<li>在静态方法中不能使用this和super关键字。</li>
+<li>静态方法不能被abstract修饰。</li>
+<li>静态方法和静态变量都可以通过类名直接访问。</li>
+<li>当类被加载时，静态代码块只被加载一次。有多个静态变量或块时，按声明顺序加载。</li>
+</ol>
+</blockquote>
+<h3 id="final"><a href="#final" class="headerlink" title="final"></a><strong>final</strong></h3><p><strong>final</strong> :用来修饰类、方法和变量。<br>final 修饰的类不能够被继承，修饰的方法不能被继承类重新定义，修饰的变量为常量，是不可修改的。<br>如果上述语句不好理解的话，我们可以通过编写相关代码进行实验。<br>定义一个final修饰的变量、方法以及类。然后进行相关的测试</p>
+<p>示例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">public class Test&#123;</div><div class="line">   	//定义一个final修饰的变量</div><div class="line">   public  static final String name=&quot;xuwujing&quot;;</div><div class="line">   </div><div class="line"> public static void main(String[] args) &#123;</div><div class="line"> 		//这句会报错  因为该变量已经被final修饰了</div><div class="line"> 		name=&quot;张三&quot;;</div><div class="line"> 	&#125;</div><div class="line"> 	//类加上final之后，该类是无法被继承的</div><div class="line"> 	final class Test2&#123;</div><div class="line"> 	&#125;</div><div class="line"> 	//这句会报错，因为Test2是被final修饰的类</div><div class="line"> 	class Test3 extends Test2&#123;</div><div class="line"> 	&#125;</div><div class="line"> 	</div><div class="line"> 	class Test4&#123;</div><div class="line"> 		//定义一个被final修饰的方法</div><div class="line"> 		 final Date getTime()&#123;</div><div class="line"> 			return new Date();</div><div class="line"> 		&#125;</div><div class="line"> 	&#125;</div><div class="line"> 	</div><div class="line"> 	class Test5 extends Test4&#123;</div><div class="line"> 		//这句会报错，因为final方法是不能被子类修改的。</div><div class="line"> 		Date getTime()&#123;</div><div class="line">	return new Date();</div><div class="line"> 		&#125;</div><div class="line"> 	&#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>从上述 代码结果，我们可以得出一下结论:</p>
+<blockquote>
+<p>final修饰类：表示该类不能被继承；<br>final修饰方法：表示方法不能被重写；<br>final修饰变量：表示变量只能一次赋值以后值不能被修改（常量）;</p>
+</blockquote>
+<h3 id="abstract"><a href="#abstract" class="headerlink" title="abstract"></a>abstract</h3><p><strong>abstract</strong> ：用来创建抽象类和抽象方法。</p>
+<blockquote>
+<p>Java是面向对象的语言，而抽象类是Java语言中对抽象概念进行定义的一种机制，也正是因为这个，所以赋予了Java强大的面向对象的能力。</p>
+</blockquote>
+<p><strong>修饰类</strong></p>
+<blockquote>
+<p> 会使这个类成为一个抽象类，这个类将不能生成对象实例，但可以做为对象变量声明的类型（见后面实例），也就是编译时类型。抽象类就相当于一类的半成品，需要子类继承并覆盖其中的抽象方法。</p>
+</blockquote>
+<p><strong>修饰方法</strong></p>
+<blockquote>
+<p>会使这个方法变成抽象方法，也就是只有声明而没有实现，需要子类继承实现。</p>
+</blockquote>
+<p>这里依旧使用一个简单例子来进行理解。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">public class AbstractTest&#123;</div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		//这句会报错，因为抽象类不能实例化</div><div class="line">		// Animal a=new Animal();</div><div class="line">		//抽象类可以实例化重写该类抽象方法的子类</div><div class="line">		Animal a = new Dog();</div><div class="line">		a.show();</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">abstract class Animal&#123;</div><div class="line">	abstract void show();</div><div class="line">	public void print()&#123;</div><div class="line">		System.out.println(&quot;Animal&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">//继承抽象类需要实现抽象类的方法</div><div class="line">class Dog extends Animal&#123;	</div><div class="line">	@Override</div><div class="line">	void show() &#123;</div><div class="line">		System.out.println(&quot;This is Dog!&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>总结:</p>
+<blockquote>
+<p>1、抽象类和抽象方法都需要被abstract修饰。抽象方法一定要定义在抽象类中。<br>2、抽象类不可以创建实例，原因：调用抽象方法没有意义。<br>3、只有覆盖了抽象类中所有的抽象方法后，其子类才可以实例化。否则该子类还是一个抽象类。</p>
+</blockquote>
+<p>注意事项:</p>
+<blockquote>
+<p>1、抽象类不能用来实例化对象，声明抽象类的唯一目的是为了将来对该类进行扩充。 2、一个类不能同时被 abstract 和 final<br>修饰。如果一个类包含抽象方法，那么该类一定要声明为抽象类，否则将出现编译错误。<br>3、抽象方法是一种没有任何实现的方法，该方法的的具体实现由子类提供。 4、抽象方法不能被声明成 final 和 static。<br>5、任何继承抽象类的子类必须实现父类的所有抽象方法，除非该子类也是抽象类。<br>6、如果一个类包含若干个抽象方法，那么该类必须声明为抽象类。抽象类可以不包含抽象方法。</p>
+</blockquote>
+<h3 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h3><p><strong>synchronized</strong>: 修饰的方法同一时间只能被一个线程访问。在多线程中运用很常见。<br>synchronized 的解释如下:</p>
+<blockquote>
+<p>synchronized 方法控制对类成员变量的访问：每个类实例对应一把锁，每个 synchronized方法都必须获得调用该方法的类实例的锁方能执行，否则所属线程阻塞，方法一旦执行，就独占该锁，直到从该方法返回时才将锁释放，此后被阻塞的线程方能获得该锁，重新进入可执行状态。这种机制确保了同一时刻对于每一个类实例，其所有声明synchronized 的成员函数中至多只有一个处于可执行状态（因为至多只有一个能够获得该类实例对应的锁），从而有效避免了类成员变量的访问冲突（只要所有可能访问类成员变量的方法均被声明为 synchronized）。</p>
+</blockquote>
+<p>简单的来说，就是使用synchronized 修饰的方法，在多线程进行同时访问的时候，只会让一个线程先进行访问，其它的线程等候，当这个线程访问完了之后，再让下一个进行访问，依次类推。</p>
+<p>Java中还有两个不太常见的修饰符，<strong>transient</strong> 和<strong>native</strong>。</p>
+<p><strong>transient</strong>:被 transient 修饰的实例变量时，java 虚拟机(JVM)跳过该特定的变量。<br><strong>native</strong>: 被native修饰的方法实际是由另一种语言进行实现的本地方法。例如Java中获取的Long类型的时间戳 ：<code>System.currentTimeMillis();</code> 实际是由native 修饰的，<br>源码为:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">public static native long currentTimeMillis();</div></pre></td></tr></table></figure>
+<h2 id="String"><a href="#String" class="headerlink" title="String"></a>String</h2><p>String 类型可能就是我们最常用的的对象了。<br>首先说明，String并不是基本数据类型，而是一个对象，并且是不可变的对象。查看源码可以String类是被final修饰的，是不可被继承的！</p>
+<blockquote>
+<p>String的在未被初始化的时候为null，表示它还没有被创建，自然也就没有分配空间;<br>而” “和 new String()不是null，它们是已经被创建，只是值为空而已！并且也分配了内存空间。</p>
+</blockquote>
+<p>String有15种构造方法,有两种是过时的，其中包含char[],byte[],int[],String,StringBuffer,StringBuilder。<br>我们在创建String对象的的时候，一般是使用 String str=”xxx”，但有时也会用new String()来初始话字符串。<br>例如:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">String hello=&quot;hello&quot;;</div><div class="line">String newHello=new String(&quot;hello&quot;);</div><div class="line">char []cHello =&#123;&apos;h&apos;,&apos;e&apos;,&apos;l&apos;,&apos;l&apos;,&apos;o&apos;&#125;;</div><div class="line">String str=new String(cHello);</div></pre></td></tr></table></figure>
+<p><strong>注意:String 类是不可改变的，所以你一旦创建了 String 对象，那它的值就无法改变了。</strong></p>
+<h3 id="String常用方法"><a href="#String常用方法" class="headerlink" title="String常用方法"></a>String常用方法</h3><p>大概讲述了String的用法之后，这里我们来列举一些String常用的方法。</p>
+<blockquote>
+<p>1.length ：返回此字符串的长度。<br>2.charAt：返回指定索引处的 char 值。<br>3.compareTo:把这个字符串和另一个对象比较。<br>4.concat：将指定字符串连接到此字符串的结尾。<br>5.split:根据给定正则表达式的匹配拆分此字符串。<br>6.equals:将此字符串与指定的对象比较。<br>7.endsWith:测试此字符串是否以指定的后缀结束。<br>8.startsWith:测试此字符串是否以指定的前缀结束。<br>9.getBytes: 使用平台的默认字符集将此 String 编码为 byte 序列，并将结果存储到一个新的 byte 数组中。<br>10.indexOf:返回指定字符在此字符串中第一次出现处的索引。<br>11.replace：返回一个新的字符串，它是通过用 newChar 替换此字符串中出现的所有 oldChar 得到的。 12:substring：返回一个新的字符串，它是此字符串的一个子字符串。<br> …</p>
+</blockquote>
+<p>更多可以参考Api文档。</p>
+<h3 id="String对象比较"><a href="#String对象比较" class="headerlink" title="String对象比较"></a>String对象比较</h3><p>String作为我们最常用的对象，在面试中估计也会接触不少。一般来说，会考到String的常量池相关问题，主要是使用String进行比较的时候，==和equals这两种方法来判断是否相当。这里收集了一些String经常遇到的问题。<br>代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">  </div><div class="line">String s1 = &quot;test&quot;;</div><div class="line">String s2 = new String(&quot;test&quot;);</div><div class="line">String s3 = &quot;te&quot;;</div><div class="line">String s4 = &quot;st&quot;;</div><div class="line">String s5 = &quot;te&quot; + &quot;st&quot;;</div><div class="line">String s6 = s3 + s4;</div><div class="line">String s7 = new String(s1);</div><div class="line">System.out.println(s1 == s2); </div><div class="line">System.out.println(s1 == s5); </div><div class="line">System.out.println(s1 == s6); </div><div class="line">System.out.println(s7==s1);       </div><div class="line">System.out.println(s7.equals(s1));</div></pre></td></tr></table></figure>
+<p>结果:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">false</div><div class="line">true</div><div class="line">false</div><div class="line">false</div><div class="line">true</div></pre></td></tr></table></figure></p>
+<p>如果有经验的话，大概可以一眼看出结果。但是如果经验不足的话，往往会吃这个亏。这里来解释下为什么会出现这种结果。</p>
+<blockquote>
+<p>1.虽然看起来是一样的，但是新建一个String类的时候会重新分配引用地址，而 == 就是比较引用地址，所以为false。<br>2.在编译之前就可以确认s5=test， 并且引用地址一样，所以为true;<br>3.字符串常量池的原则 这时 s6 的值是在运行时得到的，它会重新构造字符串对象 所以为false。<br>4.和第一个一样的，就是换汤不换药，所以为false。<br>5.equals 只比较值相等，不关心它的引用地址。</p>
+</blockquote>
+<p>看完上面的例子之后，再来看看下面的这个<br>代码示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">String ab=&quot;ab&quot;;</div><div class="line">String c=&quot;c&quot;;</div><div class="line">String ab_c=ab+c;</div><div class="line">String ab_c1=&quot;ab&quot;+&quot;c&quot;;</div><div class="line">String abc=&quot;abc&quot;;</div><div class="line">System.out.println(ab_c == abc + &quot; : &quot; + ab_c.equals(abc));</div><div class="line"></div><div class="line">System.out.println((ab_c == abc) + &quot; : &quot; + ab_c.equals(abc));</div><div class="line"></div><div class="line">System.out.println((ab_c1 == abc) + &quot; : &quot; + ab_c1.equals(abc));</div></pre></td></tr></table></figure></p>
+<p>运行结果:</p>
+<blockquote>
+<p>false<br> false : true<br> true : true</p>
+</blockquote>
+<p>到这里，可能就会诧异了，为什么和我想的不一样呢？<br>这里其实是有陷阱的，也就是运算符的优先级。<br>第一个结果就是优先级的问题导致的，它会先计算 <code>abc + &quot; : &quot; + ab_c.equals(abc)</code> ，然后再来进行比较，所以为false。同理，下面的也是如此，基本和上面的那个例子差不多，这里就不再概述了。</p>
+<h3 id="String、StringBuffer和StringBuilder"><a href="#String、StringBuffer和StringBuilder" class="headerlink" title="String、StringBuffer和StringBuilder"></a>String、StringBuffer和StringBuilder</h3><p>String、StringBuffer和StringBuilder的区别:</p>
+<blockquote>
+<ul>
+<li>String:  String的特点是一旦赋值，便不能更改其指向的字符对象，如果更改，则会指向一个新的字符对象。</li>
+<li>StringBuffer:StringBuffer对象可以调用其方法动态的进行增加、插入、修改和删    除操作，且不用像数组那样事先指定大小，从而实现多次插入字    符，一次整体取出的效果，因而操作字符串非常灵活方便。并且生成数据之后可以toString转为String，线程安全。</li>
+<li>StringBuilder：它是在单线程环境下使用的，因为它的所有方面都没有被synchronized修饰，因此它的效率也比StringBuffer要高。</li>
+</ul>
+</blockquote>
+<p>关于字符串拼接方式，在String类中，我们最常用的是 + ,其次是使用StringBuffer或StringBuilder 的append方法，至于String类中的concat几乎很少用到。<br>一般来说，如果在少量的字符串进行拼接的话，我们会使用+，如果拼接过多的话，单线程使用  StringBuilder ，多线程使用StringBuffer 进行拼接。因为使用String 的 + 在过多的字符串进行拼接的时候会极大的使用内存，因为它在凭借的时候还是使用 append()方法，然后再进行toString转换，如果是少量的时候，是感觉不到差异的，但是在大量拼接的时候就会明显感受得到。</p>
+<p>代码示例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">String str=&quot;Hello World&quot;;</div><div class="line">String str1=&quot;&quot;;</div><div class="line">StringBuffer sbr=new StringBuffer(str); </div><div class="line">StringBuilder sbd=new StringBuilder(str); </div><div class="line">long start=System.currentTimeMillis();</div><div class="line">   for(int i=0;i&lt;10000;i++)&#123;</div><div class="line">  	 str1+=str;</div><div class="line">   &#125;</div><div class="line">   System.out.println(&quot;String累加用时:&quot;+(System.currentTimeMillis()-start)+&quot;ms&quot;);</div><div class="line">   long start2=System.currentTimeMillis();</div><div class="line">   for(int i=0;i&lt;10000;i++)&#123;</div><div class="line">  	 sbr.append(str);</div><div class="line">   &#125;</div><div class="line">   System.out.println(&quot;StringBuffer累加用时:&quot;+(System.currentTimeMillis()-start2)+&quot;ms&quot;);</div><div class="line">   long start3=System.currentTimeMillis();</div><div class="line">   for(int i=0;i&lt;10000;i++)&#123;</div><div class="line">  	 sbd.append(str);</div><div class="line">   &#125;</div><div class="line">   System.out.println(&quot;StringBuilder累加用时:&quot;+(System.currentTimeMillis()-start3)+&quot;ms&quot;);</div></pre></td></tr></table></figure>
+<p>结果:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">String累加用时:701ms</div><div class="line">StringBuffer累加用时:2ms</div><div class="line">StringBuilder累加用时:0ms</div></pre></td></tr></table></figure>
+<p>这里从输出结果中可以看到String 的+拼接方法的耗时了。但是使用 + 实在是方便。所以在这里建议如果字符串拼接次数在10一下，可以使用+，过多的则用StringBuffer或StringBuilder。</p>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><p>参考:<br><a href="https://blog.csdn.net/qiumengchen12/article/details/44939929" target="_blank" rel="external">https://blog.csdn.net/qiumengchen12/article/details/44939929</a></p>
+<p><a href="https://blog.csdn.net/chenssy/article/details/13004291" target="_blank" rel="external">https://blog.csdn.net/chenssy/article/details/13004291</a></p>
+<p>到此，本文就结束了，谢谢阅读！欢迎留言和点赞，你的支持是我写作最大的动力！<br>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a><br>原创不易，转载请标明出处，谢谢！</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/18/pancm76/" rel="next" title="Java基础知识回顾之一 ----- 基本数据类型">
+                <i class="fa fa-chevron-left"></i> Java基础知识回顾之一 ----- 基本数据类型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/31/pancm78/" rel="prev" title="Java基础知识回顾之三 ----- 封装、继承和多态">
+                Java基础知识回顾之三 ----- 封装、继承和多态 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">80</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">47</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修饰符介绍"><span class="nav-number">2.</span> <span class="nav-text">修饰符介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#访问修饰符"><span class="nav-number">2.1.</span> <span class="nav-text">访问修饰符</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#private"><span class="nav-number">2.1.1.</span> <span class="nav-text">private</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#default"><span class="nav-number">2.1.2.</span> <span class="nav-text">default</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#protected"><span class="nav-number">2.1.3.</span> <span class="nav-text">protected</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#public"><span class="nav-number">2.1.4.</span> <span class="nav-text">public</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#非访问修饰符"><span class="nav-number">3.</span> <span class="nav-text">非访问修饰符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#static"><span class="nav-number">3.1.</span> <span class="nav-text">static</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#final"><span class="nav-number">3.2.</span> <span class="nav-text">final</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#abstract"><span class="nav-number">3.3.</span> <span class="nav-text">abstract</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized"><span class="nav-number">3.4.</span> <span class="nav-text">synchronized</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#String"><span class="nav-number">4.</span> <span class="nav-text">String</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#String常用方法"><span class="nav-number">4.1.</span> <span class="nav-text">String常用方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#String对象比较"><span class="nav-number">4.2.</span> <span class="nav-text">String对象比较</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#String、StringBuffer和StringBuilder"><span class="nav-number">4.3.</span> <span class="nav-text">String、StringBuffer和StringBuilder</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它"><span class="nav-number">5.</span> <span class="nav-text">其它</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

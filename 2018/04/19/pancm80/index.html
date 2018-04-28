@@ -1,0 +1,920 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言在上一篇中回顾了Java的三大特性：封装、继承和多态。本篇则来介绍下集合。 集合介绍我们在进行Java程序开发的时候，除了最常用的基础数据类型和String对象外，也经常会用到集合相关类。集合类存放的都是对象的引用，而非对象本身，出于表达上的便利，我们称集合中的对象就是指集合中对象的引用。集合类型主要有3种：List、Set、和Map。它们之间的关系可用下图来表示:  注:Map不是coll">
+<meta name="keywords" content="java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java基础知识回顾之四 ----- 集合List、Map和Set">
+<meta property="og:url" content="http://yoursite.com/2018/04/19/pancm80/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言在上一篇中回顾了Java的三大特性：封装、继承和多态。本篇则来介绍下集合。 集合介绍我们在进行Java程序开发的时候，除了最常用的基础数据类型和String对象外，也经常会用到集合相关类。集合类存放的都是对象的引用，而非对象本身，出于表达上的便利，我们称集合中的对象就是指集合中对象的引用。集合类型主要有3种：List、Set、和Map。它们之间的关系可用下图来表示:  注:Map不是coll">
+<meta property="og:image" content="http://img.blog.csdn.net/20180410191542757?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2018-04-28T13:30:49.742Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java基础知识回顾之四 ----- 集合List、Map和Set">
+<meta name="twitter:description" content="前言在上一篇中回顾了Java的三大特性：封装、继承和多态。本篇则来介绍下集合。 集合介绍我们在进行Java程序开发的时候，除了最常用的基础数据类型和String对象外，也经常会用到集合相关类。集合类存放的都是对象的引用，而非对象本身，出于表达上的便利，我们称集合中的对象就是指集合中对象的引用。集合类型主要有3种：List、Set、和Map。它们之间的关系可用下图来表示:  注:Map不是coll">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20180410191542757?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/04/19/pancm80/"/>
+
+
+
+
+
+
+  <title>Java基础知识回顾之四 ----- 集合List、Map和Set | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/19/pancm80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java基础知识回顾之四 ----- 集合List、Map和Set</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-19T23:10:10+08:00">
+                2018-04-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在<a href="http://www.cnblogs.com/xuwujing/p/8681123.html#top" target="_blank" rel="external">上一篇</a>中回顾了Java的三大特性：封装、继承和多态。本篇则来介绍下集合。</p>
+<h2 id="集合介绍"><a href="#集合介绍" class="headerlink" title="集合介绍"></a>集合介绍</h2><p>我们在进行Java程序开发的时候，除了最常用的基础数据类型和String对象外，也经常会用到集合相关类。<br>集合类存放的都是对象的引用，而非对象本身，出于表达上的便利，我们称集合中的对象就是指集合中对象的引用。<br>集合类型主要有3种：List、Set、和Map。<br>它们之间的关系可用下图来表示:</p>
+<p><img src="http://img.blog.csdn.net/20180410191542757?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcWF6d3N4cGNt/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p><strong>注:Map不是collections的子类，但是它们完全整合在集合中了！</strong></p>
+<h2 id="List"><a href="#List" class="headerlink" title="List"></a>List</h2><blockquote>
+<p> List 接口是继承于 Collection接口并定义    一个允许重复项的有序集合。该接口不但能够对列表的一部分进行处理，还添加了面向位置的操作。</p>
+</blockquote>
+<p>一般来说，我们在单线程中主要使用的List是ArrayList和LinkedList来实现，多线程则是使用Vector或者使用Collections.sychronizedList来装饰一个集合。<br>这三个的解释如下:</p>
+<ul>
+<li>ArrayList：内部是通过数组实现的，它允许对元素进行快随机访问。当从ArrayList的中间位置插入或者删除元素时，需要对数组进行复制、移动、代价比较高。因此，它适合随机查找和遍历，不适合插入和删除。</li>
+<li>LinkedList: 则是链表结构存储数据的，很适合数据的动态插入和删除，随机访问和遍历速度比较慢。另外，他还提供了List接口中没有定义的方法，专门用于操作表头和表尾元素，可以当作堆栈、队列和双向队列使用。</li>
+<li>Vector: 通过数组实现的，不同的是它支持线程的同步。访问速度ArrayList慢。</li>
+</ul>
+<p>它们的用法如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">List list1 = new ArrayList();</div><div class="line">List list2 = new LinkedList();</div><div class="line">List list3 = new Vector();</div><div class="line">List list4=Collections.synchronizedList(new ArrayList())</div></pre></td></tr></table></figure>
+<p>在了解了它们的用法之后，我们来看看为什么说使用ArrayList比LinkedList查询快，使用LinkedList比ArrayList新增和删除快!<br>这里也用以下代码来进行说明，顺便也将Vector进行比较。</p>
+<p>代码示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div></pre></td><td class="code"><pre><div class="line">private final static int count=50000;</div><div class="line"></div><div class="line">private static ArrayList arrayList = new ArrayList&lt;&gt;();  </div><div class="line">   private static LinkedList linkedList = new LinkedList&lt;&gt;();  </div><div class="line">   private static Vector vector = new Vector&lt;&gt;();  </div><div class="line"> </div><div class="line"></div><div class="line">public static void main(String[] args) &#123;</div><div class="line">	insertList(arrayList);</div><div class="line">	insertList(linkedList);</div><div class="line">	insertList(vector);</div><div class="line">	</div><div class="line">	System.out.println(&quot;--------------------&quot;);</div><div class="line">	</div><div class="line">	readList(arrayList);</div><div class="line">	readList(linkedList);</div><div class="line">	readList(vector);</div><div class="line">	</div><div class="line">	System.out.println(&quot;--------------------&quot;);</div><div class="line">	</div><div class="line">	delList(arrayList);</div><div class="line">	delList(linkedList);</div><div class="line">	delList(vector);</div><div class="line">&#125;</div><div class="line"></div><div class="line">private  static void insertList(List list)&#123;   </div><div class="line">     long start=System.currentTimeMillis();   </div><div class="line">     Object o = new Object();   </div><div class="line">     for(int i=0;i&lt;count;i++)&#123;   </div><div class="line">         list.add(0, o);   </div><div class="line">     &#125;</div><div class="line">    System.out.println(getName(list)+&quot;插入&quot;+count+&quot;条数据，耗时:&quot;+(System.currentTimeMillis()-start)+&quot;ms&quot;);</div><div class="line"> &#125;   </div><div class="line"></div><div class="line">private  static void readList(List list)&#123;   </div><div class="line">     long start=System.currentTimeMillis();   </div><div class="line">     Object o = new Object();   </div><div class="line">     for(int i = 0 ; i &lt; count ; i++)&#123;  </div><div class="line">            list.get(i);  </div><div class="line">        &#125;</div><div class="line">    System.out.println(getName(list)+&quot;查询&quot;+count+&quot;条数据，耗时:&quot;+(System.currentTimeMillis()-start)+&quot;ms&quot;);</div><div class="line"> &#125;  </div><div class="line"></div><div class="line"></div><div class="line">private  static void delList(List list)&#123;   </div><div class="line">     long start=System.currentTimeMillis();   </div><div class="line">     Object o = new Object();   </div><div class="line">     for(int i = 0 ; i &lt; count ; i++)&#123;  </div><div class="line">    	 list.remove(0);   </div><div class="line">        &#125;</div><div class="line">    System.out.println(getName(list)+&quot;删除&quot;+count+&quot;条数据，耗时:&quot;+(System.currentTimeMillis()-start)+&quot;ms&quot;);</div><div class="line"> &#125;  </div><div class="line"></div><div class="line">private static String getName(List list) &#123;  </div><div class="line">       String name = &quot;&quot;;  </div><div class="line">       if(list instanceof ArrayList)&#123;  </div><div class="line">           name = &quot;ArrayList&quot;;  </div><div class="line">       &#125;  </div><div class="line">       else if(list instanceof LinkedList)&#123;  </div><div class="line">           name = &quot;LinkedList&quot;;  </div><div class="line">       &#125;  </div><div class="line">       else if(list instanceof Vector)&#123;  </div><div class="line">           name = &quot;Vector&quot;;  </div><div class="line">       &#125;  </div><div class="line">       return name;  </div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
+<p>输出结果:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">ArrayList插入50000条数据，耗时:281ms</div><div class="line">LinkedList插入50000条数据，耗时:2ms</div><div class="line">Vector插入50000条数据，耗时:274ms</div><div class="line">--------------------</div><div class="line">ArrayList查询50000条数据，耗时:1ms</div><div class="line">LinkedList查询50000条数据，耗时:1060ms</div><div class="line">Vector查询50000条数据，耗时:2ms</div><div class="line">--------------------</div><div class="line">ArrayList删除50000条数据，耗时:143ms</div><div class="line">LinkedList删除50000条数据，耗时:1ms</div><div class="line">Vector删除50000条数据，耗时:137ms</div></pre></td></tr></table></figure>
+<p>从上述结果中，可以明显看出ArrayList和LinkedList在新增、删除和查询性能上的区别。</p>
+<p>在集合中，我们一般用于存储数据。不过有时在有多个集合的时候，我们想将这几个集合做合集、交集、差集和并集的操作。在List中，这些方法已经封装好了，我们无需在进行编写相应的代码，直接拿来使用就行。<br>代码示例如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">	 * 合集</div><div class="line">	 * @param ls1</div><div class="line">	 * @param ls2</div><div class="line">	 * @return</div><div class="line">	 */</div><div class="line">	private static List&lt;String&gt; addAll(List&lt;String&gt; ls1,List&lt;String&gt;ls2)&#123;</div><div class="line">		ls1.addAll(ls2);</div><div class="line">		return ls1;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 交集 （retainAll 会删除 ls1在ls2中没有的元素）</div><div class="line">	 * @param ls1</div><div class="line">	 * @param ls2</div><div class="line">	 * @return</div><div class="line">	 */</div><div class="line">	private static List&lt;String&gt; retainAll(List&lt;String&gt; ls1,List&lt;String&gt;ls2)&#123;</div><div class="line">		ls1.retainAll(ls2);</div><div class="line">		return ls1;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 差集 (删除ls2中没有ls1中的元素)</div><div class="line">	 * @param ls1</div><div class="line">	 * @param ls2</div><div class="line">	 * @return</div><div class="line">	 */</div><div class="line">	private static List&lt;String&gt; removeAll(List&lt;String&gt; ls1,List&lt;String&gt;ls2)&#123;</div><div class="line">		ls1.removeAll(ls2);</div><div class="line">		return ls1;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 无重复的并集 (ls1和ls2中并集，并无重复)</div><div class="line">	 * @param ls1</div><div class="line">	 * @param ls2</div><div class="line">	 * @return</div><div class="line">	 */</div><div class="line">	private static List&lt;String&gt; andAll(List&lt;String&gt; ls1,List&lt;String&gt;ls2)&#123;</div><div class="line">		//删除在ls1中出现的元素</div><div class="line">		ls2.removeAll(ls1);</div><div class="line">		//将剩余的ls2中的元素添加到ls1中</div><div class="line">		ls1.addAll(ls2);</div><div class="line">		return ls1;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<p>当然，经常用到的还有对List进行遍历。<br>List数组遍历主要有这三种方法，普通的for循环，增强for循环(jdk1.5之后出现)，和Iterator(迭代器)。</p>
+<p>代码示例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">List&lt;String&gt; list=new ArrayList&lt;String&gt;();</div><div class="line">   list.add(&quot;a&quot;);</div><div class="line">   list.add(&quot;b&quot;);</div><div class="line">   list.add(&quot;c&quot;);</div><div class="line">   </div><div class="line">   for(int i=0;i&lt;list.size();i++)&#123;</div><div class="line">  	 System.out.println(list.get(i));</div><div class="line">   &#125;</div><div class="line"></div><div class="line">   for (String str : list) &#123;  </div><div class="line">  	 System.out.println(str);</div><div class="line">   &#125;</div><div class="line">   </div><div class="line">   Iterator&lt;String&gt; iterator=list.iterator();</div><div class="line">   while(iterator.hasNext())</div><div class="line">   &#123;</div><div class="line">       System.out.println(iterator.next());</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p><strong>说明:</strong>普通的for循环和增强for循环区别不大，主要区别在于普通的for循环可以获取集合的下标，而增强for循环则不可以。但增强for循环写起来方法，如果不需要获取具体集合的下标，推荐使用增强for循环。至于Iterator(迭代器）这种也是无法获取数据下标，但是该方法可以不用担心在遍历的过程中会集合的长度发生改变。也就是在遍历的时候对集合进行增加和删除。</p>
+<p>在<strong>&lt;阿里巴巴Java开发手册&gt;</strong>中，对于集合操作也有这种说明。</p>
+<blockquote>
+<p>不要在 foreach 循环里进行元素的 remove / add 操作。 remove 元素请使用Iterator方式，如果并发操作，需要对 Iterator 对象加锁。</p>
+</blockquote>
+<p>那么为什么不要使用 foreach 循环进行元素的 remove / add 操作呢?<br>我们这里可以简单的做下验证。</p>
+<p>代码示例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">List&lt;String&gt; list = new ArrayList&lt;String&gt;();</div><div class="line">	 list.add(&quot;1&quot;);</div><div class="line">	 list.add(&quot;2&quot;);</div><div class="line">	 System.out.println(&quot;list遍历之前:&quot;+list);</div><div class="line">	 for (String item : list) &#123;</div><div class="line">	   if (&quot;2&quot;.equals(item)) &#123;</div><div class="line">	    list.remove(item);</div><div class="line">	    //如果这里不适用break的话，会直接报错的</div><div class="line">	    break; </div><div class="line">	 &#125;</div><div class="line">   &#125; </div><div class="line">	System.out.println(&quot;list遍历之后:&quot;+list);</div><div class="line">	</div><div class="line">	List&lt;String&gt; list1 = new ArrayList&lt;String&gt;();</div><div class="line">	 list1.add(&quot;1&quot;);</div><div class="line">	 list1.add(&quot;2&quot;);</div><div class="line">	System.out.println(&quot;list1遍历之前:&quot;+list1);</div><div class="line">	 Iterator&lt;String&gt; iterator = list1.iterator();</div><div class="line">	 while (iterator.hasNext()) &#123;</div><div class="line">		 String item = iterator.next();</div><div class="line">		 if (&quot;2&quot;.equals(item)) &#123;</div><div class="line">			 iterator.remove();</div><div class="line">		 &#125;</div><div class="line">	 &#125;</div><div class="line">	 System.out.println(&quot;list1遍历之后:&quot;+list1);</div></pre></td></tr></table></figure>
+<p>输出结果:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">list遍历之前:[1, 2]</div><div class="line">list遍历之后:[1]</div><div class="line">list1遍历之前:[1, 2]</div><div class="line">list1遍历之后:[1]</div></pre></td></tr></table></figure>
+<p><strong>注意:上述代码中，在对list进行for循环遍历的时候，加了break，</strong></p>
+<p>上述示例中，都正确的打印我们想要的数据，不过在foreach循环中，我在其中是加上了<strong>break</strong>。如果不加break，就会直接抛出ConcurrentModificationException异常！</p>
+<h2 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h2><blockquote>
+<p><strong>Map 接口并不是 Collection 接口的继承</strong>。Map提供key到value的映射。一个Map中不能包含相同的key，每个key只能映射一个value。Map接口提供3种集合的视图，Map的内容可以被当作一组key集合，一组value集合，或者一组key-value映射。</p>
+</blockquote>
+<p>Map接口主要由HashMap、TreeMap、LinkedHashMap、Hashtable和ConcurrentHashMap这几个类实现。<br>它们的解释如下:</p>
+<ul>
+<li><strong>HashMap</strong>: HashMap的键是根据HashCode来获取，所以根据键可以很快的获取相应的值。不过它的键对象是不可以重复的，它允许键为Null，但是最多只能有一条记录，不过却是可以允许多条记录的值为Null。因为HashMap是非线程安全的，所以它的效率很高。</li>
+<li><strong>TreeMap</strong>:可以将保存的记录根据键进行排序，默认是按键值的升序排序（自然顺序）。也可以指定排序的比较器，当用Iterator遍历TreeMap时，得到的记录是排过序的。它也是不允许key值为空，并且不是线程安全的。</li>
+<li><strong>LinkedHashMap</strong>:LinkedHashMap基本和HashMap一致。不过区别在与LinkedHashMap是维护一个双链表，可以将里面的数据按写入                        的顺序读出。可以认为LinkedHashMap是HashMap+LinkedList。即它既使用HashMap操作数据结构，又使用LinkedList维护插入元素的先后顺序。它也不是线程安全的。</li>
+<li><strong>Hashtable</strong>:Hashtable与HashMap类似，可以说是HashMap的线程安全版。不过它是不允许记录的键或者值为null。因为它支持线程的同步，是线程安全的，所以也导致了Hashtale在效率较低。</li>
+<li><strong>ConcurrentHashMap</strong>: ConcurrentHashMap在Java 1.5作为Hashtable的替代选择新引入的。使用锁分段技术技术来保证线程安全的，可以看作是Hashtable的升级版。</li>
+</ul>
+<p>在工作中，我们使用得最多的Map应该是HashMap。不过有时在使用Map的时候，需要进行自然顺序排序。这里我们就可以使用TreeMap，而不必自己实现这个功能。TreeMap的使用和HashMap差不多。不过需要注意的是TreeMap是不允许key为null。 这里简单的介绍下TreeMap的使用。</p>
+<p>代码示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">Map&lt;String,Object&gt; hashMap=new HashMap&lt;String,Object&gt;();</div><div class="line">	hashMap.put(&quot;a&quot;, 1);</div><div class="line">	hashMap.put(&quot;c&quot;, 3);</div><div class="line">	hashMap.put(&quot;b&quot;, 2);</div><div class="line">	System.out.println(&quot;HashMap:&quot;+hashMap);</div><div class="line">	</div><div class="line">	Map&lt;String,Object&gt; treeMap=new TreeMap&lt;String,Object&gt;();</div><div class="line">	treeMap.put(&quot;a&quot;, 1);</div><div class="line">	treeMap.put(&quot;c&quot;, 3);</div><div class="line">	treeMap.put(&quot;b&quot;, 2);</div><div class="line">	System.out.println(&quot;TreeMap:&quot;+treeMap);</div></pre></td></tr></table></figure></p>
+<p>输出结果:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">HashMap:&#123;b=2, c=3, a=1&#125;</div><div class="line">TreeMap:&#123;a=1, b=2, c=3&#125;</div></pre></td></tr></table></figure></p>
+<p>上述中可以看出HashMap是无序的，TreeMap是有序的。</p>
+<p>在使用Map的时候，也会对Map进行遍历。一般遍历Map的key和value有三种方式:<br>第一种通过Map.keySet遍历；<br>第二种通过Map.entrySet使用iterator遍历;<br>第三种是通过Map.entrySet进行遍历。<br>使用如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">Map&lt;String, String&gt; map = new HashMap&lt;String, String&gt;();</div><div class="line">for (String key : map.keySet()) &#123;</div><div class="line">      System.out.println(&quot;key= &quot;+ key + &quot; and value= &quot; + map.get(key));</div><div class="line">     &#125;</div><div class="line"> Iterator&lt;Map.Entry&lt;String, String&gt;&gt; it = map.entrySet().iterator();</div><div class="line">   while (it.hasNext()) &#123;</div><div class="line">      Map.Entry&lt;String, String&gt; entry = it.next();</div><div class="line">      System.out.println(&quot;key= &quot; + entry.getKey() + &quot; and value= &quot; + entry.getValue());</div><div class="line">     &#125;</div><div class="line">     </div><div class="line"> </div><div class="line">     for (Map.Entry&lt;String, String&gt; entry : map.entrySet()) &#123;</div><div class="line">      System.out.println(&quot;key= &quot; + entry.getKey() + &quot; and value= &quot; + entry.getValue());</div><div class="line">     &#125;</div></pre></td></tr></table></figure>
+<p>如果只想获取Map中value的话，可以使用foreach对Map.values()进行遍历。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">for (String v : map.values()) &#123;</div><div class="line">     System.out.println(&quot;value= &quot; + v);</div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
+<p>在上述遍历中，我们最多使用的是第一种Map.keySet，因为写起来比较简单。不过在容量大的时候，推荐使用第三种，效率会更高!</p>
+<h2 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h2><blockquote>
+<p>Set是一种不包含重复的元素的Collection，即任意的两个元素e1和e2都有e1.equals(e2)=false，Set最多有一个null元素。因为Set是一个抽象的接口，所以是不能直接实例化一个set对象。<code>Set s = new Set()</code> 这种写法是错误的。</p>
+</blockquote>
+<p>Set接口主要是由HashSet、TreeSet和LinkedHashSet来实现。<br>它们简单的使用如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Set hashSet = new HashSet();</div><div class="line">Set treeSet = new TreeSet();</div><div class="line">Set linkedSet = new LinkedHashSet();</div></pre></td></tr></table></figure></p>
+<p>因为Set是无法拥有重复元素的，所以也经常用它来去重。例如在一个list集合中有两条相同的数据，想去掉一条，这时便可以使用Set的机制来去重。<br>代码示例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">public static void set()&#123;</div><div class="line">       List&lt;String&gt; list = new ArrayList&lt;String&gt;();</div><div class="line">       list.add(&quot;Java&quot;);</div><div class="line">       list.add(&quot;C&quot;);</div><div class="line">       list.add(&quot;C++&quot;);</div><div class="line">       list.add(&quot;JavaScript&quot;);</div><div class="line">       list.add(&quot;Java&quot;);</div><div class="line">       Set&lt;String&gt; set = new HashSet&lt;String&gt;();</div><div class="line">       for (int i = 0; i &lt; list.size(); i++) &#123;</div><div class="line">           String items = list.get(i);</div><div class="line">           System.out.println(&quot;items:&quot;+items);</div><div class="line">           if (!set.add(items)) &#123;</div><div class="line">               System.out.println(&quot;重复的数据: &quot; + items);</div><div class="line">           &#125;</div><div class="line">       &#125;</div><div class="line">       System.out.println(&quot;list:&quot;+list);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>输出结果:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">items:Java</div><div class="line">items:C</div><div class="line">items:C++</div><div class="line">items:JavaScript</div><div class="line">items:Java</div><div class="line">重复的数据: Java</div><div class="line">list:[Java, C, C++, JavaScript, Java]</div></pre></td></tr></table></figure>
+<p><strong>注意:如果是将对象进行去重的话，是需要重写set中的equals和hashcode方法的。</strong></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>关于集合中List、Map、Set这三个的总结如下:</p>
+<ul>
+<li><p>List：List和数组类似，可以动态增长，根据实际存储的数据的长度自动增长List的长度。查找元素效率高，插入删除效率低，因为会引起其他元素位置改变 &lt;实现类有ArrayList,LinkedList,Vector&gt;</p>
+<ul>
+<li>ArrayList：非线程安全，适合随机查找和遍历，不适合插入和删除。</li>
+<li>LinkedList : 非线程安全，适合插入和删除，不适合查找。</li>
+<li>Vector : 线程安全。不过不推荐。</li>
+</ul>
+</li>
+<li><p>Map：一个key到value的映射的类 。</p>
+<ul>
+<li>HashMap：非线程安全，键和值都允许有null值存在。</li>
+<li>TreeMap：非线程安全，按自然顺序或自定义顺序遍历键(key)。</li>
+<li>LinkedHashMap：非线程安全，维护一个双链表，可以将里面的数据按写入的顺序读出。写入比HashMap强，新增和删除比HashMap差。</li>
+<li>Hashtable：线程安全，键和值不允许有null值存在。不推荐使用。</li>
+<li>ConcurrentHashMap：线程安全，Hashtable的升级版。推荐多线程使用。</li>
+</ul>
+</li>
+<li><p>Set：不允许重复的数据 。检索效率低下，删除和插入效率高。</p>
+<ul>
+<li>HashSet： 非线程安全、无序、数据可为空。</li>
+<li>TreeSet： 非线程安全、有序、数据不可为空。</li>
+<li>LinkedHashSet：非线程安全、无序、数据可为空。写入比HashSet强，新增和删除比HashSet差。</li>
+</ul>
+</li>
+</ul>
+<p> 到此，本文结束，谢谢阅读。</p>
+<p>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a><br>原创不易，转载请标明出处，谢谢！</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/08/pancm79/" rel="next" title="写了一年的博客，我收获了什么">
+                <i class="fa fa-chevron-left"></i> 写了一年的博客，我收获了什么
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/27/pancm81/" rel="prev" title="SpringBoot+Mybatis+ Druid+PageHelper 实现多数据源并分页">
+                SpringBoot+Mybatis+ Druid+PageHelper 实现多数据源并分页 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">80</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">47</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集合介绍"><span class="nav-number">2.</span> <span class="nav-text">集合介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#List"><span class="nav-number">3.</span> <span class="nav-text">List</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Map"><span class="nav-number">4.</span> <span class="nav-text">Map</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Set"><span class="nav-number">5.</span> <span class="nav-text">Set</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
