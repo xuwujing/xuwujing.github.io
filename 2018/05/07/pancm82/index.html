@@ -1,0 +1,911 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,springboot,elasticsearch,jestclient," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言在上一篇学习SpringBoot中，整合了Mybatis、Druid和PageHelper并实现了多数据源的操作。本篇主要是介绍和使用目前最火的搜索引擎ElastiSearch，并和SpringBoot进行结合使用。 ElasticSearch介绍 ElasticSearch是一个基于Lucene的搜索服务器，其实就是对Lucene进行封装，提供了 REST API 的操作接口 Elasti">
+<meta name="keywords" content="java,springboot,elasticsearch,jestclient">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot整合ElasticSearch实现多版本的兼容">
+<meta property="og:url" content="http://yoursite.com/2018/05/07/pancm82/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言在上一篇学习SpringBoot中，整合了Mybatis、Druid和PageHelper并实现了多数据源的操作。本篇主要是介绍和使用目前最火的搜索引擎ElastiSearch，并和SpringBoot进行结合使用。 ElasticSearch介绍 ElasticSearch是一个基于Lucene的搜索服务器，其实就是对Lucene进行封装，提供了 REST API 的操作接口 Elasti">
+<meta property="og:image" content="https://images2018.cnblogs.com/blog/1138196/201805/1138196-20180506142652222-291586969.png">
+<meta property="og:image" content="https://images2018.cnblogs.com/blog/1138196/201805/1138196-20180507083048964-1166294840.png">
+<meta property="og:image" content="https://images2018.cnblogs.com/blog/1138196/201805/1138196-20180506142749925-2023150893.png">
+<meta property="og:image" content="https://images2018.cnblogs.com/blog/1138196/201805/1138196-20180506142759362-1461159443.png">
+<meta property="og:updated_time" content="2018-05-07T12:35:53.689Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringBoot整合ElasticSearch实现多版本的兼容">
+<meta name="twitter:description" content="前言在上一篇学习SpringBoot中，整合了Mybatis、Druid和PageHelper并实现了多数据源的操作。本篇主要是介绍和使用目前最火的搜索引擎ElastiSearch，并和SpringBoot进行结合使用。 ElasticSearch介绍 ElasticSearch是一个基于Lucene的搜索服务器，其实就是对Lucene进行封装，提供了 REST API 的操作接口 Elasti">
+<meta name="twitter:image" content="https://images2018.cnblogs.com/blog/1138196/201805/1138196-20180506142652222-291586969.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/05/07/pancm82/"/>
+
+
+
+
+
+
+  <title>SpringBoot整合ElasticSearch实现多版本的兼容 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/07/pancm82/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SpringBoot整合ElasticSearch实现多版本的兼容</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-07T08:32:00+08:00">
+                2018-05-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在<a href="http://www.panchengming.com/2018/04/27/pancm81/" target="_blank" rel="external">上一篇</a>学习<strong>SpringBoot</strong>中，整合了Mybatis、Druid和PageHelper并实现了多数据源的操作。本篇主要是介绍和使用目前最火的搜索引擎<strong>ElastiSearch</strong>，并和<strong>SpringBoot</strong>进行结合使用。</p>
+<h2 id="ElasticSearch介绍"><a href="#ElasticSearch介绍" class="headerlink" title="ElasticSearch介绍"></a>ElasticSearch介绍</h2><blockquote>
+<p><strong>ElasticSearch</strong>是一个基于<strong>Lucene</strong>的搜索服务器，其实就是对<strong>Lucene</strong>进行封装，提供了 REST API 的操作接口 <strong>ElasticSearch</strong>作为一个高度可拓展的开源全文搜索和分析引擎，可用于快速地对大数据进行存储，搜索和分析。<br><strong>ElasticSearch</strong>主要特点：分布式、高可用、异步写入、多API、面向文档 。<br><strong>ElasticSearch</strong>核心概念：近实时，集群，节点（保存数据），索引，分片（将索引分片），副本（分片可设置多个副本） 。它可以快速地储存、搜索和分析海量数据。<br><strong>ElasticSearch</strong>使用案例:维基百科、Stack Overflow、Github 等等。</p>
+</blockquote>
+<h2 id="SpringBoot整合Elasticsearch"><a href="#SpringBoot整合Elasticsearch" class="headerlink" title="SpringBoot整合Elasticsearch"></a>SpringBoot整合Elasticsearch</h2><p>在使用<strong>SpringBoot</strong>整合<strong>Elasticsearch</strong> 之前，我们应该了解下它们之间<a href="https://github.com/spring-projects/spring-data-elasticsearch/wiki/Spring-Data-Elasticsearch---Spring-Boot---version-matrix" target="_blank" rel="external">对应版本</a>的关系。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Spring Boot Version (x)</th>
+<th style="text-align:center">Spring Data Elasticsearch Version (y)</th>
+<th style="text-align:center">Elasticsearch Version (z)  </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">x &lt;= 1.3.5</td>
+<td style="text-align:center">y &lt;= 1.3.4</td>
+<td style="text-align:center">z &lt;= 1.7.2*</td>
+</tr>
+<tr>
+<td style="text-align:center">x &gt;= 1.4.x</td>
+<td style="text-align:center">2.0.0 &lt;=y &lt; 5.0.0**</td>
+<td style="text-align:center">2.0.0 &lt;= z &lt; 5.0.0**</td>
+</tr>
+</tbody>
+</table>
+<p>这里我们使用的<strong>SpringBoot</strong>的版本是1.5.9，<strong>Elasticsearch</strong>的版本是2.3.5。</p>
+<p>使用<strong>SpringBoot</strong>整合<strong>Elasticsearch</strong>，一般都是使用 <strong>SpringData</strong> 进行封装的，然后再dao层接口继承<strong>ElasticsearchRepository</strong> 类，该类实现了很多的方法，比如常用的CRUD方法。</p>
+<h3 id="SpringData的使用"><a href="#SpringData的使用" class="headerlink" title="SpringData的使用"></a>SpringData的使用</h3><p>首先，在使用之前，先做好相关的准备。</p>
+<h4 id="Maven的配置如下"><a href="#Maven的配置如下" class="headerlink" title="Maven的配置如下:"></a>Maven的配置如下:</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;</div><div class="line">             &lt;version&gt;1.5.9.RELEASE&lt;/version&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line">  &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;spring-boot-starter-data-elasticsearch&lt;/artifactId&gt;</div><div class="line">             &lt;version&gt;1.5.9.RELEASE&lt;/version&gt;</div><div class="line">        &lt;/dependency&gt;</div></pre></td></tr></table></figure>
+<h4 id="application-properties的配置"><a href="#application-properties的配置" class="headerlink" title="application.properties的配置"></a><strong>application.properties</strong>的配置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">spring.data.elasticsearch.repositories.enabled = true</div><div class="line">spring.data.elasticsearch.cluster-nodes =127.0.0.1\:9300</div></pre></td></tr></table></figure>
+<p><strong>注: 9300 是 Java 客户端的端口。9200 是支持 Restful HTTP 的接口。</strong></p>
+<p>更多的配置:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">spring.data.elasticsearch.cluster-name Elasticsearch 集群名。(默认值: elasticsearch)</div><div class="line">spring.data.elasticsearch.cluster-nodes 集群节点地址列表，用逗号分隔。如果没有指定，就启动一个客户端节点。</div><div class="line">spring.data.elasticsearch.propertie 用来配置客户端的额外属性。</div><div class="line">spring.data.elasticsearch.repositories.enabled 开启 Elasticsearch 仓库。(默认值:true。)</div></pre></td></tr></table></figure></p>
+<h4 id="代码编写"><a href="#代码编写" class="headerlink" title="代码编写"></a>代码编写</h4><p><strong>实体类</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">@Document(indexName = &quot;userindex&quot;, type = &quot;user&quot;)</div><div class="line">public class User implements Serializable&#123;</div><div class="line">	 /**</div><div class="line">	 * </div><div class="line">	 */</div><div class="line">	private static final long serialVersionUID = 1L;</div><div class="line">	/** 编号 */</div><div class="line">	 private Long id;</div><div class="line">	 /** 姓名 */</div><div class="line">	 private String name;</div><div class="line">	 </div><div class="line">	 /** 年龄 */</div><div class="line">	 private Integer age;</div><div class="line">	 </div><div class="line">	 /** 描述 */  </div><div class="line">	 private String description;</div><div class="line">	 </div><div class="line">	 /** 创建时间 */</div><div class="line">	 private String createtm;</div><div class="line"></div><div class="line">	// getter和setter 略</div><div class="line">｝</div></pre></td></tr></table></figure>
+<p>使用<strong>SpringData</strong>的时候，它需要在实体类中设置<strong>indexName</strong> 和<strong>type</strong> ，如果和传统型数据库比较的话，就相当于<strong>库</strong>和<strong>表</strong>。需要注意的是<strong>indexName</strong>和<strong>type</strong>都必须是小写!!!</p>
+<p><strong>dao层</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">public interface UserDao extends ElasticsearchRepository&lt;User, Long&gt;&#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>dao层这里就比较简单了，只需继承<strong>ElasticsearchRepository</strong>该类就行了。其中主要的方法就是 save、delete和search。其中save方法相当如insert和update，没有就新增，有就覆盖。delete方法主要就是删除数据以及索引库。至于search就是查询了，包括一些常用的查询，如分页、权重之类的。</p>
+<p><strong>Service层</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line">@Service</div><div class="line">public class UserServiceImpl implements UserService &#123;</div><div class="line">	@Autowired</div><div class="line">    private UserDao userDao;</div><div class="line">	@Override</div><div class="line">	public boolean insert(User user) &#123;</div><div class="line">		boolean falg=false;</div><div class="line">		try&#123;</div><div class="line">			userDao.save(user);</div><div class="line">			falg=true;</div><div class="line">		&#125;catch(Exception e)&#123;</div><div class="line">			e.printStackTrace();</div><div class="line">		&#125;</div><div class="line">		return falg;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public List&lt;User&gt; search(String searchContent) &#123;</div><div class="line">		  QueryStringQueryBuilder builder = new QueryStringQueryBuilder(searchContent);</div><div class="line">		  System.out.println(&quot;查询的语句:&quot;+builder);</div><div class="line">          Iterable&lt;User&gt; searchResult = userDao.search(builder);</div><div class="line">          Iterator&lt;User&gt; iterator = searchResult.iterator();</div><div class="line">          List&lt;User&gt; list=new ArrayList&lt;User&gt;();</div><div class="line">          while (iterator.hasNext()) &#123;</div><div class="line">       	   	list.add(iterator.next());</div><div class="line">          &#125;</div><div class="line">       return list;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	</div><div class="line">	</div><div class="line">	@Override</div><div class="line">	public List&lt;User&gt; searchUser(Integer pageNumber, Integer pageSize,String searchContent) &#123;</div><div class="line">		 // 分页参数</div><div class="line">        Pageable pageable = new PageRequest(pageNumber, pageSize);</div><div class="line">        QueryStringQueryBuilder builder = new QueryStringQueryBuilder(searchContent);</div><div class="line">        SearchQuery searchQuery = new NativeSearchQueryBuilder().withPageable(pageable).withQuery(builder).build();</div><div class="line">        System.out.println(&quot;查询的语句:&quot; + searchQuery.getQuery().toString());</div><div class="line">        Page&lt;User&gt; searchPageResults = userDao.search(searchQuery);</div><div class="line">        return searchPageResults.getContent();</div><div class="line">	&#125;</div><div class="line">	</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public List&lt;User&gt; searchUserByWeight(String searchContent) &#123;</div><div class="line">	 // 根据权重进行查询</div><div class="line">        FunctionScoreQueryBuilder functionScoreQueryBuilder = QueryBuilders.functionScoreQuery()</div><div class="line">                .add(QueryBuilders.boolQuery().should(QueryBuilders.matchQuery(&quot;name&quot;, searchContent)),</div><div class="line">                    ScoreFunctionBuilders.weightFactorFunction(10))</div><div class="line">                .add(QueryBuilders.boolQuery().should(QueryBuilders.matchQuery(&quot;description&quot;, searchContent)),</div><div class="line">                        ScoreFunctionBuilders.weightFactorFunction(100)).setMinScore(2);</div><div class="line">        System.out.println(&quot;查询的语句:&quot; + functionScoreQueryBuilder.toString());</div><div class="line">        Iterable&lt;User&gt; searchResult = userDao.search(functionScoreQueryBuilder);</div><div class="line">        Iterator&lt;User&gt; iterator = searchResult.iterator();</div><div class="line">        List&lt;User&gt; list=new ArrayList&lt;User&gt;();</div><div class="line">        while (iterator.hasNext()) &#123;</div><div class="line">     	   	list.add(iterator.next());</div><div class="line">        &#125;</div><div class="line">        return list;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这里我就简单的写了几个方法，其中主要的方法是查询。查询包括全文搜索，分页查询和权重查询。其中需要说明的是权重查询这块，权重的分值越高，查询的结果也越靠前，如果没有对其它的数据设置分值，它们默认的分值就是1，如果不想查询这些语句，只需使用<strong>setMinScore</strong>将其设为大于1即可。</p>
+<p><strong>代码测试</strong></p>
+<p>调用接口进行添加数据</p>
+<p>新增数据:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">POST http://localhost:8086/api/user</div><div class="line"></div><div class="line">&#123;&quot;id&quot;:1,&quot;name&quot;:&quot;张三&quot;,&quot;age&quot;:20,&quot;description&quot;:&quot;张三是个Java开发工程师&quot;,&quot;createtm&quot;:&quot;2018-4-25 11:07:42&quot;&#125;</div><div class="line">&#123;&quot;id&quot;:2,&quot;name&quot;:&quot;李四&quot;,&quot;age&quot;:24,&quot;description&quot;:&quot;李四是个测试工程师&quot;,&quot;createtm&quot;:&quot;1980-2-15 19:01:32&quot;&#125;</div><div class="line">&#123;&quot;id&quot;:3,&quot;name&quot;:&quot;王五&quot;,&quot;age&quot;:25,&quot;description&quot;:&quot;王五是个运维工程师&quot;,&quot;createtm&quot;:&quot;2016-8-21 06:11:32&quot;&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>进行全文查询</strong><br>请求<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://localhost:8086/api/user?searchContent=工程师</div></pre></td></tr></table></figure></p>
+<p>返回<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[&#123;&quot;id&quot;:2,&quot;name&quot;:&quot;李四&quot;,&quot;age&quot;:14,&quot;description&quot;:&quot;李四是个测试工程师&quot;,&quot;createtm&quot;: &quot;1980-2-15 19:01:32&quot;&#125;,</div><div class="line">&#123;&quot;id&quot;:1,&quot;name&quot;:&quot;张三&quot;,&quot;age&quot;:20,&quot;description&quot;:&quot;张三是个Java开发工程师&quot;, &quot;createtm&quot;: &quot;2018-4-25 11:07:42&quot;&#125;,</div><div class="line">&#123;&quot;id&quot;:3,&quot;name&quot;:&quot;王五&quot;,&quot;age&quot;:25,&quot;description&quot;:&quot;王五是个运维工程师&quot;,&quot;createtm&quot;: &quot;2016-8-21 06:11:32&quot;&#125;]</div></pre></td></tr></table></figure></p>
+<p><strong>进行分页查询</strong><br>请求<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://localhost:8086/api/user?pageNumber=0&amp;pageSize=2&amp;searchContent=工程师</div></pre></td></tr></table></figure></p>
+<p>返回<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[&#123;&quot;id&quot;:2,&quot;name&quot;:&quot;李四&quot;,&quot;age&quot;:14,&quot;description&quot;:&quot;李四是个测试工程师&quot;&#125;,&#123;&quot;id&quot;:1,&quot;name&quot;:&quot;张三&quot;,&quot;age&quot;:20,&quot;description&quot;:&quot;张三是个Java开发工程师&quot;&#125;]</div></pre></td></tr></table></figure></p>
+<p><strong>进行权重查询</strong><br>请求<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://localhost:8086/api/user2?searchContent=李四</div></pre></td></tr></table></figure></p>
+<p>返回<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[&#123;&quot;id&quot;:2,&quot;name&quot;:&quot;李四&quot;,&quot;age&quot;:24,&quot;description&quot;:&quot;李四是个测试工程师&quot;,&quot;createtm&quot;:&quot;1980-2-15 19:01:32&quot;&#125;]</div></pre></td></tr></table></figure></p>
+<p>权重查询打印的语句:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">查询的语句:&#123;&#123;</div><div class="line">  &quot;function_score&quot; : &#123;</div><div class="line">    &quot;functions&quot; : [ &#123;</div><div class="line">      &quot;filter&quot; : &#123;</div><div class="line">        &quot;bool&quot; : &#123;</div><div class="line">          &quot;should&quot; : &#123;</div><div class="line">            &quot;match&quot; : &#123;</div><div class="line">              &quot;name&quot; : &#123;</div><div class="line">                &quot;query&quot; : &quot;李四&quot;,</div><div class="line">                &quot;type&quot; : &quot;boolean&quot;</div><div class="line">              &#125;</div><div class="line">            &#125;</div><div class="line">          &#125;</div><div class="line">        &#125;</div><div class="line">      &#125;,</div><div class="line">      &quot;weight&quot; : 10.0</div><div class="line">    &#125;, &#123;</div><div class="line">      &quot;filter&quot; : &#123;</div><div class="line">        &quot;bool&quot; : &#123;</div><div class="line">          &quot;should&quot; : &#123;</div><div class="line">            &quot;match&quot; : &#123;</div><div class="line">              &quot;description&quot; : &#123;</div><div class="line">                &quot;query&quot; : &quot;李四&quot;,</div><div class="line">                &quot;type&quot; : &quot;boolean&quot;</div><div class="line">              &#125;</div><div class="line">            &#125;</div><div class="line">          &#125;</div><div class="line">        &#125;</div><div class="line">      &#125;,</div><div class="line">      &quot;weight&quot; : 100.0</div><div class="line">    &#125; ],</div><div class="line">    &quot;min_score&quot; : 2.0</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>注:测试中，因为设置了setMinScore最小权重分为2的，所以无关的数据是不会显示出来的。如果想显示的话，在代码中去掉即可。</strong></p>
+<p>新增完数据之后，可以在浏览器输入:<a href="http://localhost:9200/_plugin/head/" target="_blank" rel="external">http://localhost:9200/_plugin/head/</a><br>然后点击基本查询，便可以查看添加的数据。如果想用语句查询，可以将程序中控制台打印的查询语句粘贴到查询界面上进行查询!<br><img src="https://images2018.cnblogs.com/blog/1138196/201805/1138196-20180506142652222-291586969.png" alt=""></p>
+<p><strong>注:这里的ElasticSearch是我在windows上安装的，并安装了ES插件head，具体安装步骤在文章末尾。</strong></p>
+<p>除了SpringData之外，其实还有其它的方法操作<strong>ElasticSearch</strong>的。<br>比如使用原生<strong>ElasticSearch</strong>的Api，使用<strong>TransportClient</strong>类实现。<br>或者使用由Spring封装，只需在Service层，进行注入Bean即可。<br>示例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">@Autowired</div><div class="line"> ElasticsearchTemplate elasticsearchTemplate;</div></pre></td></tr></table></figure>
+<p>但是，上述方法中都有其局限性，也就是随着<strong>ElasticSearch</strong>的版本变更，相关的Java API也在做不断的调整，就是<strong>ElasticSearch</strong>服务端版本进行更改之后，客户端的代码可能需要重新编写。<br>因此介绍一个相当好用的第三方工具<strong>JestClient</strong>，它对<strong>ElasticSearch</strong>进行封装，填补了 <strong>ElasticSearch</strong> HttpRest接口 客户端的空白，它适用于<strong>ElasticSearch</strong>2.x以上的版本，无需因为<strong>ElasticSearch</strong>服务端版本更改而对代码进行更改！</p>
+<h3 id="JestClient"><a href="#JestClient" class="headerlink" title="JestClient"></a>JestClient</h3><p>首先在Maven中添加如下依赖:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">   	&lt;groupId&gt;io.searchbox&lt;/groupId&gt; </div><div class="line">  		 &lt;artifactId&gt;jest&lt;/artifactId&gt;</div><div class="line">   	&lt;version&gt;5.3.3&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>
+<p>然后编写相关的测试代码。<br>代码中的注释应该很完整，所以这里就不再对代码过多的讲述了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div><div class="line">222</div><div class="line">223</div></pre></td><td class="code"><pre><div class="line">import java.util.ArrayList;</div><div class="line">import java.util.List;</div><div class="line">import org.elasticsearch.index.query.QueryBuilders;</div><div class="line">import org.elasticsearch.search.builder.SearchSourceBuilder;</div><div class="line">import com.pancm.pojo.User;</div><div class="line">import io.searchbox.client.JestClient;</div><div class="line">import io.searchbox.client.JestClientFactory;</div><div class="line">import io.searchbox.client.JestResult;</div><div class="line">import io.searchbox.client.config.HttpClientConfig;</div><div class="line">import io.searchbox.core.Bulk;</div><div class="line">import io.searchbox.core.BulkResult;</div><div class="line">import io.searchbox.core.Delete;</div><div class="line">import io.searchbox.core.DocumentResult;</div><div class="line">import io.searchbox.core.Index;</div><div class="line">import io.searchbox.core.Search;</div><div class="line">import io.searchbox.indices.CreateIndex;</div><div class="line">import io.searchbox.indices.DeleteIndex;</div><div class="line">import io.searchbox.indices.mapping.GetMapping;</div><div class="line">import io.searchbox.indices.mapping.PutMapping;</div><div class="line"></div><div class="line">public class JestTest &#123;  </div><div class="line">	    private static JestClient jestClient;  </div><div class="line">	    private static String indexName = &quot;userindex&quot;;  </div><div class="line">//	    private static String indexName = &quot;userindex2&quot;;  </div><div class="line">	    private static String typeName = &quot;user&quot;;  </div><div class="line">	    private static String elasticIps=&quot;http://192.169.2.98:9200&quot;;</div><div class="line">//	    private static String elasticIps=&quot;http://127.0.0.1:9200&quot;;</div><div class="line">		</div><div class="line">	    </div><div class="line">	    public static void main(String[] args) throws Exception &#123;</div><div class="line">	        jestClient = getJestClient();  </div><div class="line">	        insertBatch();</div><div class="line">	        serach1();</div><div class="line">	        serach2();</div><div class="line">	        serach3();</div><div class="line">	        jestClient.close();  </div><div class="line">	        </div><div class="line">		&#125;</div><div class="line">	    </div><div class="line">	    private static  JestClient getJestClient() &#123;  </div><div class="line">	    	JestClientFactory factory = new JestClientFactory();  </div><div class="line">			factory.setHttpClientConfig(new HttpClientConfig.Builder(elasticIps).connTimeout(60000).readTimeout(60000).multiThreaded(true).build());  </div><div class="line">	        return factory.getObject();  </div><div class="line">	    &#125;  </div><div class="line">	    </div><div class="line">	    public static void insertBatch() &#123;</div><div class="line">			List&lt;Object&gt; objs = new ArrayList&lt;Object&gt;();</div><div class="line">			objs.add(new User(1L, &quot;张三&quot;, 20, &quot;张三是个Java开发工程师&quot;,&quot;2018-4-25 11:07:42&quot;));</div><div class="line">			objs.add(new User(2L, &quot;李四&quot;, 24, &quot;李四是个测试工程师&quot;,&quot;1980-2-15 19:01:32&quot;));</div><div class="line">			objs.add(new User(3L, &quot;王五&quot;, 25, &quot;王五是个运维工程师&quot;,&quot;2016-8-21 06:11:32&quot;));</div><div class="line">			boolean result = false;</div><div class="line">			try &#123;</div><div class="line">				result = insertBatch(jestClient,indexName, typeName,objs);</div><div class="line">			&#125; catch (Exception e) &#123;</div><div class="line">				e.printStackTrace();</div><div class="line">			&#125;</div><div class="line">			System.out.println(&quot;批量新增:&quot;+result);</div><div class="line">		&#125;</div><div class="line">	    </div><div class="line">	    </div><div class="line">	    /**</div><div class="line">	     * 全文搜索</div><div class="line">	     */</div><div class="line">	    public static void serach1() &#123;</div><div class="line">			String query =&quot;工程师&quot;;</div><div class="line">			try &#123;</div><div class="line">				SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder(); </div><div class="line">		    	 searchSourceBuilder.query(QueryBuilders.queryStringQuery(query)); </div><div class="line">		    	 //分页设置</div><div class="line">		    	 searchSourceBuilder.from(0).size(2); </div><div class="line">		        System.out.println(&quot;全文搜索查询语句:&quot;+searchSourceBuilder.toString());</div><div class="line">				System.out.println(&quot;全文搜索返回结果:&quot;+search(jestClient,indexName, typeName, searchSourceBuilder.toString()));</div><div class="line">			&#125; catch (Exception e) &#123;</div><div class="line">				e.printStackTrace();</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	    </div><div class="line">	    /**</div><div class="line">	     * 精确搜索</div><div class="line">	     */</div><div class="line">	    public static void serach2() &#123;</div><div class="line">			try &#123;</div><div class="line">				SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder(); </div><div class="line">		    	searchSourceBuilder.query(QueryBuilders.termQuery(&quot;age&quot;, 24)); </div><div class="line">		    	System.out.println(&quot;精确搜索查询语句:&quot;+searchSourceBuilder.toString());</div><div class="line">				System.out.println(&quot;精确搜索返回结果:&quot;+search(jestClient,indexName, typeName, searchSourceBuilder.toString()));</div><div class="line">			&#125; catch (Exception e) &#123;</div><div class="line">				e.printStackTrace();</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	    </div><div class="line">	    </div><div class="line">	    /**</div><div class="line">	     * 区间搜索</div><div class="line">	     */</div><div class="line">	    public static void serach3() &#123;</div><div class="line">			String createtm=&quot;createtm&quot;;</div><div class="line">			String from=&quot;2016-8-21 06:11:32&quot;;</div><div class="line">			String to=&quot;2018-8-21 06:11:32&quot;;</div><div class="line">			</div><div class="line">			try &#123;</div><div class="line">				SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder(); </div><div class="line">		    	searchSourceBuilder.query(QueryBuilders.rangeQuery(createtm).gte(from).lte(to)); </div><div class="line">		    	System.out.println(&quot;区间搜索语句:&quot;+searchSourceBuilder.toString());</div><div class="line">				System.out.println(&quot;区间搜索返回结果:&quot;+search(jestClient,indexName, typeName, searchSourceBuilder.toString()));</div><div class="line">			&#125; catch (Exception e) &#123;</div><div class="line">				e.printStackTrace();</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	    </div><div class="line">	    </div><div class="line">	    /**</div><div class="line">	     * 创建索引</div><div class="line">	     * @param indexName</div><div class="line">	     * @return</div><div class="line">	     * @throws Exception</div><div class="line">	     */</div><div class="line">	    public boolean createIndex(JestClient jestClient,String indexName) throws Exception &#123;  </div><div class="line">	        JestResult jr = jestClient.execute(new CreateIndex.Builder(indexName).build());  </div><div class="line">	        return jr.isSucceeded();  </div><div class="line">	    &#125;  </div><div class="line">	      </div><div class="line">	    /**</div><div class="line">	     * 新增数据</div><div class="line">	     * @param indexName</div><div class="line">	     * @param typeName</div><div class="line">	     * @param source</div><div class="line">	     * @return</div><div class="line">	     * @throws Exception</div><div class="line">	     */</div><div class="line">	    public boolean insert(JestClient jestClient,String indexName, String typeName, String source) throws Exception &#123;  </div><div class="line">	        PutMapping putMapping = new PutMapping.Builder(indexName, typeName, source).build();  </div><div class="line">	        JestResult jr = jestClient.execute(putMapping);  </div><div class="line">	        return jr.isSucceeded();  </div><div class="line">	    &#125;  </div><div class="line">	      </div><div class="line">	    </div><div class="line">	     /**</div><div class="line">	      * 查询数据</div><div class="line">	      * @param indexName</div><div class="line">	      * @param typeName</div><div class="line">	      * @return</div><div class="line">	      * @throws Exception</div><div class="line">	      */</div><div class="line">	    public static String getIndexMapping(JestClient jestClient,String indexName, String typeName) throws Exception &#123;  </div><div class="line">	        GetMapping getMapping = new GetMapping.Builder().addIndex(indexName).addType(typeName).build();  </div><div class="line">	        JestResult jr =jestClient.execute(getMapping);  </div><div class="line">	        return jr.getJsonString();  </div><div class="line">	     &#125;  </div><div class="line">	      </div><div class="line">	    </div><div class="line">	    </div><div class="line">	   /**</div><div class="line">	    * 批量新增数据</div><div class="line">	    * @param indexName</div><div class="line">	    * @param typeName</div><div class="line">	    * @param objs</div><div class="line">	    * @return</div><div class="line">	    * @throws Exception</div><div class="line">	    */</div><div class="line">	    public static boolean insertBatch(JestClient jestClient,String indexName, String typeName, List&lt;Object&gt; objs) throws Exception &#123;  </div><div class="line">	        Bulk.Builder bulk = new Bulk.Builder().defaultIndex(indexName).defaultType(typeName);  </div><div class="line">	        for (Object obj : objs) &#123;  </div><div class="line">	            Index index = new Index.Builder(obj).build();  </div><div class="line">	             bulk.addAction(index);  </div><div class="line">	        &#125;  </div><div class="line">	        BulkResult br = jestClient.execute(bulk.build());  </div><div class="line">	        return br.isSucceeded();  </div><div class="line">	       &#125;  </div><div class="line">	      </div><div class="line">	    /**</div><div class="line">	     * 全文搜索</div><div class="line">	     * @param indexName</div><div class="line">	     * @param typeName</div><div class="line">	     * @param query</div><div class="line">	     * @return</div><div class="line">	     * @throws Exception</div><div class="line">	     */</div><div class="line">	    public static String search(JestClient jestClient,String indexName, String typeName, String query) throws Exception &#123;  </div><div class="line">	    	 Search search = new Search.Builder(query)</div><div class="line">	    	 .addIndex(indexName)</div><div class="line">	    	 .addType(typeName)  </div><div class="line">	    	 .build(); </div><div class="line">	        JestResult jr = jestClient.execute(search);  </div><div class="line">//	        System.out.println(&quot;--&quot;+jr.getJsonString());</div><div class="line">//	        System.out.println(&quot;--&quot;+jr.getSourceAsObject(User.class));</div><div class="line">	        return jr.getSourceAsString();  </div><div class="line">	     &#125;  </div><div class="line">	      </div><div class="line">	      </div><div class="line">	    </div><div class="line">	   </div><div class="line">	      </div><div class="line">	   /**</div><div class="line">	    * 删除索引</div><div class="line">	    * @param indexName</div><div class="line">	    * @return</div><div class="line">	    * @throws Exception</div><div class="line">	    */</div><div class="line">	    public boolean delete(JestClient jestClient,String indexName) throws Exception &#123;  </div><div class="line">	        JestResult jr = jestClient.execute(new DeleteIndex.Builder(indexName).build());  </div><div class="line">	        return jr.isSucceeded();  </div><div class="line">	    &#125;  </div><div class="line">	      </div><div class="line">	   /**</div><div class="line">	    * 删除数据</div><div class="line">	    * @param indexName</div><div class="line">	    * @param typeName</div><div class="line">	    * @param id</div><div class="line">	    * @return</div><div class="line">	    * @throws Exception</div><div class="line">	    */</div><div class="line">	    public boolean delete(JestClient jestClient,String indexName, String typeName, String id) throws Exception &#123;  </div><div class="line">	        DocumentResult dr = jestClient.execute(new Delete.Builder(id).index(indexName).type(typeName).build());  </div><div class="line">	        return dr.isSucceeded();  </div><div class="line">	    &#125;  </div><div class="line">```	</div><div class="line">	</div><div class="line">**注:测试之前先说明下，本地windows系统安装的是ElasticSearch版本是2.3.5，linux服务器上安装的ElasticSearch版本是6.2。**      </div><div class="line"></div><div class="line">#### 测试结果</div><div class="line"></div><div class="line">**全文搜索**</div></pre></td></tr></table></figure>
+<p>全文搜索查询语句:{<br>  “from” : 0,<br>  “size” : 2,<br>  “query” : {<br>    “query_string” : {<br>      “query” : “工程师”<br>    }<br>  }<br>}</p>
+<p>全文搜索返回结果:{“id”:1,”name”:”张三”,”age”:20,”description”:”张三是个Java开发工程师”,”createtm”:”2018-4-25 11:07:42”},{“id”:2,”name”:”李四”,”age”:24,”description”:”李四是个测试工程师”,”createtm”:”1980-2-15 19:01:32”}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">**匹配搜索**</div></pre></td></tr></table></figure></p>
+<p>精确搜索查询语句:{<br>  “query” : {<br>    “term” : {<br>      “age” : 24<br>    }<br>  }<br>}</p>
+<p>精确搜索返回结果:{“id”:2,”name”:”李四”,”age”:24,”description”:”李四是个测试工程师”,”createtm”:”1980-2-15 19:01:32”}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">**时间区间搜索**</div></pre></td></tr></table></figure></p>
+<p>区间搜索语句:{<br>  “query” : {<br>    “range” : {<br>      “createtm” : {<br>        “from” : “2016-8-21 06:11:32”,<br>        “to” : “2018-8-21 06:11:32”,<br>        “include_lower” : true,<br>        “include_upper” : true<br>      }<br>    }<br>  }<br>}<br>区间搜索返回结果:{“id”:1,”name”:”张三”,”age”:20,”description”:”张三是个Java开发工程师”,”createtm”:”2018-4-25 11:07:42”}<br>```</p>
+<p>新增完数据之后，我们可以上linux的 <strong>Kibana</strong>中进行相关的查询，查询结果如下:</p>
+<p><img src="https://images2018.cnblogs.com/blog/1138196/201805/1138196-20180507083048964-1166294840.png" alt=""></p>
+<p><strong>注:Kibana 是属于ELK中一个开源软件。Kibana可以为 Logstash 和 ElasticSearch 提供的日志分析友好的 Web 界面，可以帮助汇总、分析和搜索重要数据日志。</strong></p>
+<p>上述代码中测试返回的结果符合我们的预期。其中关于JestClient只是用到了很少的一部分，更多的使用可以查看JestClient的官方文档。</p>
+<h2 id="Windows安装ElasticSearch"><a href="#Windows安装ElasticSearch" class="headerlink" title="Windows安装ElasticSearch"></a>Windows安装ElasticSearch</h2><p>1，文件准备<br>下载地址:<br><a href="https://www.elastic.co/downloads" target="_blank" rel="external">https://www.elastic.co/downloads</a><br>选择ElasticSearch相关版本， 然后选择后缀名为ZIP文件进行下载，下载之后进行解压。</p>
+<p>2，启动Elasticsearch<br>进入bin目录下，运行 elasticsearch.bat<br>然后在浏览上输入: localhost:9200<br>成功显示一下界面表示成功！<br><img src="https://images2018.cnblogs.com/blog/1138196/201805/1138196-20180506142749925-2023150893.png" alt=""></p>
+<p>3，安装ES插件<br>web管理界面head 安装<br>进入bin目录下，打开cmd，进入dos界面<br>输入:<code>plugin install mobz/elasticsearch-head</code><br>进行下载<br>成功下载之后，在浏览器输入：<a href="http://localhost:9200/_plugin/head/" target="_blank" rel="external">http://localhost:9200/_plugin/head/</a><br>若显示一下界面，则安装成功!<br><img src="https://images2018.cnblogs.com/blog/1138196/201805/1138196-20180506142759362-1461159443.png" alt=""></p>
+<p>4，注册服务<br>进入bin目录下，打开cmd，进入dos界面<br>依次输入:<br>service.bat install<br>service.bat start<br>成功之后，再输入<br>services.msc<br>跳转到Service服务界面，可以直接查看es的运行状态!</p>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><p>ElasticSearch官网API地址：<br><a href="https://www.elastic.co/guide/en/elasticsearch/client/java-api/2.3/index.html" target="_blank" rel="external">https://www.elastic.co/guide/en/elasticsearch/client/java-api/2.3/index.html</a> </p>
+<p>JestClientGithub地址：<br><a href="https://github.com/searchbox-io/Jest" target="_blank" rel="external">https://github.com/searchbox-io/Jest</a> </p>
+<p>项目我放到github上面去了。<br><a href="https://github.com/xuwujing/springBoot" target="_blank" rel="external">https://github.com/xuwujing/springBoot</a></p>
+<p>如果觉得不错，希望顺便给个star。<br>到此，本文结束，谢谢阅读。</p>
+<p>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a><br>原创不易，转载请标明出处，谢谢！</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/springboot/" rel="tag"># springboot</a>
+          
+            <a href="/tags/elasticsearch/" rel="tag"># elasticsearch</a>
+          
+            <a href="/tags/jestclient/" rel="tag"># jestclient</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/27/pancm81/" rel="next" title="SpringBoot+Mybatis+ Druid+PageHelper 实现多数据源并分页">
+                <i class="fa fa-chevron-left"></i> SpringBoot+Mybatis+ Druid+PageHelper 实现多数据源并分页
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">81</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">49</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ElasticSearch介绍"><span class="nav-number">2.</span> <span class="nav-text">ElasticSearch介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringBoot整合Elasticsearch"><span class="nav-number">3.</span> <span class="nav-text">SpringBoot整合Elasticsearch</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SpringData的使用"><span class="nav-number">3.1.</span> <span class="nav-text">SpringData的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Maven的配置如下"><span class="nav-number">3.1.1.</span> <span class="nav-text">Maven的配置如下:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#application-properties的配置"><span class="nav-number">3.1.2.</span> <span class="nav-text">application.properties的配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#代码编写"><span class="nav-number">3.1.3.</span> <span class="nav-text">代码编写</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JestClient"><span class="nav-number">3.2.</span> <span class="nav-text">JestClient</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Windows安装ElasticSearch"><span class="nav-number">4.</span> <span class="nav-text">Windows安装ElasticSearch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它"><span class="nav-number">5.</span> <span class="nav-text">其它</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
