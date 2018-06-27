@@ -1,0 +1,856 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言在上一篇文章中，回顾了Java的多线程。而在本篇文章中主要介绍Java IO的相关知识。 IO的介绍什么是IO？  IO的名称又来是Input与Output的缩写，也就是输入流和输出流。输入流用于从源读取数据，输出流用于向目标写数据。  可以从下列示例图来了解IO流: IO流使用IO流对文件的操作主要分为字符流和字节流。 字符流字符流有两个抽象类：Writer和Reader类。其对应子类Fi">
+<meta name="keywords" content="java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java基础知识回顾之六 ----- IO流">
+<meta property="og:url" content="http://yoursite.com/2018/06/16/pancm85/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言在上一篇文章中，回顾了Java的多线程。而在本篇文章中主要介绍Java IO的相关知识。 IO的介绍什么是IO？  IO的名称又来是Input与Output的缩写，也就是输入流和输出流。输入流用于从源读取数据，输出流用于向目标写数据。  可以从下列示例图来了解IO流: IO流使用IO流对文件的操作主要分为字符流和字节流。 字符流字符流有两个抽象类：Writer和Reader类。其对应子类Fi">
+<meta property="og:image" content="https://img-blog.csdn.net/2018061618085697?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:updated_time" content="2018-06-27T14:18:52.413Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java基础知识回顾之六 ----- IO流">
+<meta name="twitter:description" content="前言在上一篇文章中，回顾了Java的多线程。而在本篇文章中主要介绍Java IO的相关知识。 IO的介绍什么是IO？  IO的名称又来是Input与Output的缩写，也就是输入流和输出流。输入流用于从源读取数据，输出流用于向目标写数据。  可以从下列示例图来了解IO流: IO流使用IO流对文件的操作主要分为字符流和字节流。 字符流字符流有两个抽象类：Writer和Reader类。其对应子类Fi">
+<meta name="twitter:image" content="https://img-blog.csdn.net/2018061618085697?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/06/16/pancm85/"/>
+
+
+
+
+
+
+  <title>Java基础知识回顾之六 ----- IO流 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/16/pancm85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java基础知识回顾之六 ----- IO流</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-16T21:52:10+08:00">
+                2018-06-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在<a href="http://www.panchengming.com/2018/05/28/pancm84/" target="_blank" rel="external">上一篇</a>文章中，回顾了Java的多线程。而在本篇文章中主要介绍<strong>Java IO</strong>的相关知识。</p>
+<h2 id="IO的介绍"><a href="#IO的介绍" class="headerlink" title="IO的介绍"></a>IO的介绍</h2><p><strong>什么是IO？</strong></p>
+<blockquote>
+<p>IO的名称又来是Input与Output的缩写，也就是输入流和输出流。输入流用于从源读取数据，输出流用于向目标写数据。</p>
+</blockquote>
+<p>可以从下列示例图来了解IO流:<br><img src="https://img-blog.csdn.net/2018061618085697?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"></p>
+<h2 id="IO流使用"><a href="#IO流使用" class="headerlink" title="IO流使用"></a>IO流使用</h2><p><strong>IO流对文件的操作主要分为字符流和字节流。</strong></p>
+<h3 id="字符流"><a href="#字符流" class="headerlink" title="字符流"></a><strong>字符流</strong></h3><p>字符流有两个抽象类：<strong>Writer</strong>和<strong>Reader</strong>类。<br>其对应子类<strong>FileWriter</strong>和<strong>FileReader</strong>可实现文件的读写操作。<br><strong>BufferedWriter</strong>和<strong>BufferedReader</strong>能够提供缓冲区功能，用以提高效率。</p>
+<p>我记得在开始学习Java不久的时候， 在教程中会使用 字符流来进行字符的读取和写入。比较常见的就是，运行一个main方法，然后再控制台输入字符，获取输入的字符做一些逻辑控制之类。<br>例如: 在控制台输入字符，输入<strong>quit</strong>退出，输入其它的字符打印。</p>
+<p><strong>代码示例:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">public static void main(String[] args)  &#123;</div><div class="line">	try &#123;</div><div class="line">		test();</div><div class="line">	&#125; catch (IOException e) &#123;</div><div class="line">		e.printStackTrace();</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">private static void test() throws IOException &#123;</div><div class="line">	  String str;</div><div class="line">	    // 使用 System.in 创建 BufferedReader </div><div class="line">	    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));</div><div class="line">	    System.out.println(&quot;输入字符, 输入 &apos;quit&apos; 退出。&quot;);</div><div class="line">	    // 读取字符</div><div class="line">	    do &#123;</div><div class="line">	       str=br.readLine();</div><div class="line">	       System.out.println(&quot;您输入的字符是:&quot;+str);</div><div class="line">	    &#125; while(!str.equals(&quot;quit&quot;));</div><div class="line">		 br.close();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后我们输入 <strong>hello</strong> 和<strong>quit</strong>。<br><strong>结果如下:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">输入字符, 输入 &apos;quit&apos; 退出。</div><div class="line">hello</div><div class="line">您输入的字符是:hello</div><div class="line">您输入的字符是:</div><div class="line">quit</div><div class="line">您输入的字符是:quit</div></pre></td></tr></table></figure></p>
+<p>通过上述示例我们可以简单的了解下了字符流。<br>一般来说，我们主要用字符流的情况是读写文件，大部分也是文本文件，比如.txt后缀的。这里我们也顺便介绍下如何使用。</p>
+<p><strong>代码示例:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> *</div><div class="line"> * 写入和读取文件</div><div class="line"> * @throws IOException</div><div class="line"> */</div><div class="line">private static void test2() throws IOException &#123;</div><div class="line">	//创建要操作的文件路径和名称  </div><div class="line">       String path =&quot;E:/test/hello.txt&quot;;</div><div class="line">       String str=&quot;hello world&quot;;</div><div class="line">       FileWriter fw = new FileWriter(path);  </div><div class="line">       fw.write(str);  </div><div class="line">       fw.close();  </div><div class="line">       </div><div class="line">       FileReader fr = new FileReader(path);  </div><div class="line">       StringBuffer sb=new StringBuffer();</div><div class="line"> 		while(fr.ready())&#123;</div><div class="line"> 			sb.append((char)fr.read());</div><div class="line"> 		&#125;</div><div class="line">       System.out.println(&quot;输出:&quot;+sb.toString());</div><div class="line">       fr.close();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>注：如果在不同的系统上运行，可以使用 <strong>File.separator</strong>方法，该方法表示系统的分隔符。</p>
+<p><strong>输出结果:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">输出:hello word</div></pre></td></tr></table></figure></p>
+<p>上述代码示例中，我们使用<strong>FileWriter</strong> 和<strong>FileReader</strong> 这两个类对文件进行读写，虽然可以实现字符的写入和读取，但是效率并不高，因为是对磁盘的直接读写。一般对于文件的读写，我们会使用缓冲。使用缓冲的好处就像 倒垃圾一样，将垃圾进行整理堆积，然后到了一定的规模在丢弃，而不是有一点垃圾就倒一次。</p>
+<p>那么在上述的代码中加上<strong>BufferedWriter</strong>和<strong>BufferedReader</strong>类来进行缓冲。</p>
+<p><strong>代码示例:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * 写入和读取文件</div><div class="line"> * @throws IOException</div><div class="line"> */</div><div class="line">private static void test3() throws IOException &#123;</div><div class="line">	//创建要操作的文件路径和名称  </div><div class="line">       String path =&quot;E:/test/hello.txt&quot;;</div><div class="line">       String str=&quot;你好!&quot;;</div><div class="line">       FileWriter fw = new FileWriter(path);  </div><div class="line">       BufferedWriter bw=new BufferedWriter(fw);</div><div class="line">       bw.write(str);  </div><div class="line">       bw.close();</div><div class="line">       fw.close();  </div><div class="line">       </div><div class="line">       FileReader fr = new FileReader(path);  </div><div class="line">       BufferedReader br=new BufferedReader(fr);</div><div class="line">       StringBuffer sb=new StringBuffer();</div><div class="line"> 		while(br.ready())&#123;</div><div class="line"> 			sb.append((char)br.read());</div><div class="line"> 		&#125;</div><div class="line">       System.out.println(&quot;输出:&quot;+sb.toString());</div><div class="line">       br.close();</div><div class="line">       fr.close();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>注:需要注意的是关闭的顺序，先关闭缓冲，再关闭文件。</strong></p>
+<h3 id="字节流"><a href="#字节流" class="headerlink" title="字节流"></a><strong>字节流</strong></h3><p>字节流也有两个抽象类：<strong>InputStream</strong>和<strong>OutputStream</strong>类。<br>其对应子类有<strong>FileInputStream</strong>和<strong>FileOutputStream</strong>实现文件读写操作。<br><strong>BufferedInputStream</strong>和<strong>BufferedOutputStream</strong>提供缓冲区功能</p>
+<p>字节流也能对文本进行读取，但是它的主要使用的场景是读取无法直接获取文本信息的二进制文件，比如音乐文件、视频文件、图片文件等等。<br>这里我们依旧对文件进行读取和写入，不过我们把之前写入到hello.txt文件的内容加上 ‘你好’ 写入到新的文件中。由于这里使用的了中文，所以需要设置相应的编码。</p>
+<p><strong>代码示例:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * 创建一个文件并读取记录 </div><div class="line"> * @throws IOException</div><div class="line"> */</div><div class="line">private static void test4() throws IOException &#123;</div><div class="line">	String path=&quot;E:/test/hello.txt&quot;;</div><div class="line">	String path2=&quot;E:/test/你好.txt&quot;;</div><div class="line">	String str=&quot;你好!&quot;;</div><div class="line">	//从文件读取数据</div><div class="line">	InputStream input = new FileInputStream(path);</div><div class="line">	InputStreamReader reader = new InputStreamReader(input, &quot;UTF-8&quot;);</div><div class="line">    StringBuffer sb=new StringBuffer();</div><div class="line">	while(reader.ready())&#123;</div><div class="line">		sb.append((char)reader.read());</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	input.close();</div><div class="line">	reader.close();</div><div class="line">	</div><div class="line">	//创建一个文件并向文件中写数据</div><div class="line">	OutputStream output = new FileOutputStream(path2);</div><div class="line">	OutputStreamWriter writer = new OutputStreamWriter(output, &quot;UTF-8&quot;);</div><div class="line">	writer.write(sb+str);</div><div class="line">	</div><div class="line">	writer.close();</div><div class="line">	output.close();</div><div class="line">	</div><div class="line">	//从文件读取数据</div><div class="line">	InputStream input2 = new FileInputStream(path2);</div><div class="line">	InputStreamReader reader2 = new InputStreamReader(input2, &quot;UTF-8&quot;);</div><div class="line">    StringBuffer sb2=new StringBuffer();</div><div class="line">	while(reader2.ready())&#123;</div><div class="line">		sb2.append((char)reader2.read());</div><div class="line">	&#125;</div><div class="line">	System.out.println(&quot;输出:&quot;+sb2);</div><div class="line">	input2.close();</div><div class="line">	reader2.close();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>结果:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">输出:hello world你好!</div></pre></td></tr></table></figure></p>
+<p>可以看到结果符合我们的预期。</p>
+<h3 id="File"><a href="#File" class="headerlink" title="File"></a>File</h3><p>学习IO流中，我们也会接触<strong>File</strong>类。<br>File类中主要是对文件夹的一些操作。比如，文件夹的创建、删除、查看等等。<br>这里我们就简单的介绍下File类的相关使用，还是使用代码配合注释来进行说明。</p>
+<p><strong>代码示例:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">private static void test5() throws IOException &#123;</div><div class="line">		String path=&quot;E:/test/test2&quot;;</div><div class="line">		String path2=&quot;E:/test/test3/test3&quot;;</div><div class="line">		String path3=&quot;E:/test/test2/test2.txt&quot;;</div><div class="line">		File f = new File(path);</div><div class="line">		File f2 = new File(path2);</div><div class="line">		File f3 = new File(path3);</div><div class="line">		//创建文件夹</div><div class="line">		System.out.println(&quot;=&quot;+f.mkdir());</div><div class="line">		//创建文件夹和所有父文件夹</div><div class="line">		System.out.println(&quot;==&quot;+f2.mkdirs());</div><div class="line">		//创建一个文本</div><div class="line">		System.out.println(&quot;===&quot;+f3.createNewFile());</div><div class="line">		//获取名称</div><div class="line">		System.out.println(&quot;===&quot;+f3.getName());</div><div class="line">		//获取父级名称</div><div class="line">		System.out.println(&quot;===&quot;+f3.getParent());</div><div class="line">		//获取当前路径</div><div class="line">		System.out.println(&quot;===&quot;+f3.getPath());</div><div class="line">		//判断是否是目录</div><div class="line">		System.out.println(&quot;==&quot;+f2.isDirectory());</div><div class="line">		System.out.println(&quot;===&quot;+f3.isDirectory());</div><div class="line">		//删除该文件</div><div class="line">		System.out.println(&quot;===&quot;+f3.delete());	</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>输出结果:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">=true</div><div class="line">==true</div><div class="line">===true</div><div class="line">===test2.txt</div><div class="line">===E:\test\test2</div><div class="line">===E:\test\test2\test2.txt</div><div class="line">==true</div><div class="line">===false</div><div class="line">===true</div></pre></td></tr></table></figure></p>
+<p>关于File类的相关只是简单的介绍了下，具体的使用还需要配置实际的场景。需要注意的是，在进行文件创建和删除的时候，需要先判断是否存在，否则将抛出异常。</p>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><p>到此，本文就结束了，谢谢阅读！欢迎留言和点赞，你的支持是我写作最大的动力！ </p>
+<p>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a> </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/28/pancm84/" rel="next" title="Java基础知识回顾之五 ----- 多线程">
+                <i class="fa fa-chevron-left"></i> Java基础知识回顾之五 ----- 多线程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">84</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">49</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IO的介绍"><span class="nav-number">2.</span> <span class="nav-text">IO的介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IO流使用"><span class="nav-number">3.</span> <span class="nav-text">IO流使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#字符流"><span class="nav-number">3.1.</span> <span class="nav-text">字符流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字节流"><span class="nav-number">3.2.</span> <span class="nav-text">字节流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#File"><span class="nav-number">3.3.</span> <span class="nav-text">File</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它"><span class="nav-number">4.</span> <span class="nav-text">其它</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

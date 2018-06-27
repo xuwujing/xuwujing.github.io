@@ -1,0 +1,916 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言在上一篇文章中，回顾了Java的集合。而在本篇文章中主要介绍多线程的相关知识。主要介绍的知识点为线程的介绍、多线程的使用、以及在多线程中使用的一些方法。 线程和进程线程表示进程中负责程序执行的执行单元，依靠程序进行运行。线程是程序中的顺序控制流，只能使用分配给程序的资源和环境。 进程表示资源的分配和调度的一个独立单元，通常表示为执行中的程序。一个进程至少包含一个线程。 进程和线程的区别 进程">
+<meta name="keywords" content="java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java基础知识回顾之五 ----- 多线程">
+<meta property="og:url" content="http://yoursite.com/2018/05/28/pancm84/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言在上一篇文章中，回顾了Java的集合。而在本篇文章中主要介绍多线程的相关知识。主要介绍的知识点为线程的介绍、多线程的使用、以及在多线程中使用的一些方法。 线程和进程线程表示进程中负责程序执行的执行单元，依靠程序进行运行。线程是程序中的顺序控制流，只能使用分配给程序的资源和环境。 进程表示资源的分配和调度的一个独立单元，通常表示为执行中的程序。一个进程至少包含一个线程。 进程和线程的区别 进程">
+<meta property="og:image" content="https://img-blog.csdn.net/20180520155944328?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+<meta property="og:updated_time" content="2018-06-10T03:37:04.165Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java基础知识回顾之五 ----- 多线程">
+<meta name="twitter:description" content="前言在上一篇文章中，回顾了Java的集合。而在本篇文章中主要介绍多线程的相关知识。主要介绍的知识点为线程的介绍、多线程的使用、以及在多线程中使用的一些方法。 线程和进程线程表示进程中负责程序执行的执行单元，依靠程序进行运行。线程是程序中的顺序控制流，只能使用分配给程序的资源和环境。 进程表示资源的分配和调度的一个独立单元，通常表示为执行中的程序。一个进程至少包含一个线程。 进程和线程的区别 进程">
+<meta name="twitter:image" content="https://img-blog.csdn.net/20180520155944328?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/05/28/pancm84/"/>
+
+
+
+
+
+
+  <title>Java基础知识回顾之五 ----- 多线程 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/28/pancm84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java基础知识回顾之五 ----- 多线程</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-28T23:17:39+08:00">
+                2018-05-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在<a href="http://www.panchengming.com/2018/04/19/pancm80/" target="_blank" rel="external">上一篇</a>文章中，回顾了Java的集合。而在本篇文章中主要介绍<strong>多线程</strong>的相关知识。主要介绍的知识点为线程的介绍、多线程的使用、以及在多线程中使用的一些方法。</p>
+<h2 id="线程和进程"><a href="#线程和进程" class="headerlink" title="线程和进程"></a>线程和进程</h2><h4 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h4><p>表示进程中负责程序执行的执行单元，依靠程序进行运行。线程是程序中的顺序控制流，只能使用分配给程序的资源和环境。</p>
+<h4 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h4><p>表示资源的分配和调度的一个独立单元，通常表示为执行中的程序。一个进程至少包含一个线程。</p>
+<h4 id="进程和线程的区别"><a href="#进程和线程的区别" class="headerlink" title="进程和线程的区别"></a>进程和线程的区别</h4><ol>
+<li>进程至少有一个线程;它们共享进程的地址空间;而进程有自己独立的地址空间；</li>
+<li>进程是资源分配和拥有的单位,而同一个进程内的线程共享进程的资源；</li>
+<li>线程是处理器调度的基本单位,但进程不是；</li>
+</ol>
+<h4 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h4><p>线程和进程一样分为五个阶段：<strong>创建</strong>、<strong>就绪</strong>、<strong>运行</strong>、<strong>阻塞</strong>和<strong>终止</strong>。</p>
+<ul>
+<li>新建状态:使用 new 关键字和 Thread 类或其子类建立一个线程对象后，该线程对象就处于新建状态。它保持这个状态直到程序start() 这个线程。</li>
+<li>就绪状态:当线程对象调用了start()方法之后，该线程就进入就绪状态。就绪状态的线程处于就绪队列中，要等待JVM里线程调度器的调度。</li>
+<li>运行状态:如果就绪状态的线程获取 CPU 资源，就可以执行 run()，此时线程便处于运行状态。处于运行状态的线程最为复杂，它可以变为阻塞状态、就绪状态和死亡状态。</li>
+<li>阻塞状态:如果一个线程执行了sleep（睡眠）、suspend（挂起）等方法，失去所占用资源之后，该线程就从运行状态进入阻塞状态。在睡眠时间已到或获得设备资源后可以重新进入就绪状态。可以分为三种：<ul>
+<li>等待阻塞：运行状态中的线程执行 wait() 方法，使线程进入到等待阻塞状态。</li>
+<li>同步阻塞：线程在获取 synchronized 同步锁失败(因为同步锁被其他线程占用)。</li>
+<li>其他阻塞：通过调用线程的 sleep() 或 join() 发出了 I/O 请求时，线程就会进入到阻塞状态。当sleep() 状态超时，join() 等待线程终止或超时，或者 I/O 处理完毕，线程重新转入就绪状态。</li>
+</ul>
+</li>
+<li>死亡状态:一个运行状态的线程完成任务或者其他终止条件发生时，该线程就切换到终止状态。</li>
+</ul>
+<p>可以用下述图来进行理解线程的生命周期:<br>　<img src="https://img-blog.csdn.net/20180520155944328?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="这里写图片描述"><br><strong>注:上述图来自<a href="http://www.runoob.com/wp-content/uploads/2014/01/java-thread.jpg。" target="_blank" rel="external">http://www.runoob.com/wp-content/uploads/2014/01/java-thread.jpg。</a></strong></p>
+<p>在了解了线程和进程之后，我们再来简单的了解下单线程和多线程。<br> <strong>单线程</strong><br>程序中只存在一个线程，实际上主方法就是一个主线程。</p>
+<p> <strong>多线程</strong><br>多线程是指在同一程序中有多个顺序流在执行。 简单的说就是在一个程序中有多个任务运行。</p>
+<p><strong>那么在什么情况下用多线程呢?</strong></p>
+<blockquote>
+<p>一般来说，程序中有两个以上的子系统需要并发执行的，这时候就需要利用多线程编程。通过对多线程的使用，可以编写出高效的程序。</p>
+</blockquote>
+<p><strong>那么是不是使用很多线程就能提高效率呢？</strong></p>
+<blockquote>
+<p>不一定的。因为程序中上下文的切换开销也很重要，如果创建了太多的线程，CPU<br>花费在上下文的切换的时间将多于执行程序的时间！这时是会降低程序执行效率的。</p>
+</blockquote>
+<p>所以有效利用多线程的关键是理解程序是并发执行而不是串行执行的。</p>
+<h2 id="线程的创建"><a href="#线程的创建" class="headerlink" title="线程的创建"></a>线程的创建</h2><p>一般来说，我们在对线程进行创建的时候，一般是继承Thread 类或实现Runnable 接口。其实还有一种方式是实现 Callable接口，然后与Future 或线程池结合使用， 类似于Runnable接口，但是就功能上来说更为强大一些，也就是被执行之后，可以拿到返回值。</p>
+<p>这里我们分别一个例子使用继承Thread 类、实现Runnable 接口和实现Callable接口与Future结合来进行创建线程。<br>代码示例:<br><strong>注：线程启动的方法是start而不是run。因为使用start方法整个线程处于就绪状态，等待虚拟机来进行调度。而使用run，也就是当作了一个普通的方法进行启动，这样虚拟机不会进行线程调度，虚拟机会执行这个方法直到结束后自动退出。</strong></p>
+<p>代码示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		ThreadTest threadTest=new ThreadTest();</div><div class="line">		threadTest.start();</div><div class="line"></div><div class="line">		RunalbeTest runalbeTest=new RunalbeTest();</div><div class="line">		Thread thread=new Thread(runalbeTest);</div><div class="line">		thread.start();</div><div class="line">		</div><div class="line">		CallableTest callableTest=new CallableTest();</div><div class="line">		FutureTask&lt;Integer&gt; ft = new FutureTask&lt;Integer&gt;(callableTest);  </div><div class="line">		Thread thread2=new Thread(ft);</div><div class="line">		thread2.start();</div><div class="line">		try &#123;</div><div class="line">			System.out.println(&quot;返回值:&quot;+ft.get());</div><div class="line">		&#125; catch (InterruptedException e) &#123;</div><div class="line">			e.printStackTrace();</div><div class="line">		&#125; catch (ExecutionException e) &#123;</div><div class="line">			e.printStackTrace();</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class ThreadTest extends Thread&#123;</div><div class="line">	 @Override</div><div class="line">     public void run() &#123;</div><div class="line">        System.out.println(&quot;这是一个Thread的线程!&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class RunalbeTest implements Runnable&#123;</div><div class="line">	 @Override</div><div class="line">     public void run() &#123;</div><div class="line">        System.out.println(&quot;这是一个Runnable的线程!&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class CallableTest implements Callable&lt;Integer&gt;&#123;</div><div class="line">	@Override</div><div class="line">	public Integer call() throws Exception &#123;</div><div class="line">		 System.out.println(&quot;这是一个Callable的线程!&quot;);  </div><div class="line">		return 2;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>运行结果:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">这是一个Thread的线程!</div><div class="line">这是一个Runnable的线程!</div><div class="line">这是一个Callable的线程!</div><div class="line">返回值:2</div></pre></td></tr></table></figure></p>
+<p>通过上述示例代码中，我们发现使用继承 Thread 类的方式创建线程时，编写最为简单。而使用Runnable、Callable 接口的方式创建线程的时候，需要通过Thread类的构造方法Thread(Runnable target) 构造出对象，然后调用start方法来运行线程代码。顺便说下，其实Thread类实际上也是实现了Runnable接口的一个类。</p>
+<p>但是在这里，我推荐大家创建单线程的时候使用继承 Thread 类方式创建，多线线程的时候使用Runnable、Callable 接口的方式来创建创建线程。<br>至于为什么呢?在下面中的描述已给出理由。</p>
+<ul>
+<li>继承 Thread 类创建的线程，可以直接使用Thread类中的方法，比如休眠直接就可以使用<strong>sleep</strong>方法，而不必在前面加个<strong>Thread</strong>；获取当前线程Id，只需调用getId就行，而不必使用<strong>Thread.currentThread().getId()</strong> 这么一长串的代码。但是使用Thread 类创建的线程，也有其局限性。比如资源不能共享，无法放入线程池中等等。</li>
+<li><p>使用Runnable、Callable 接口的方式创建的线程，可以实现资源共享，增强代码的复用性，并且可以避免单继承的局限性，可以和线程池完美结合。但是也有不好的，就是写起来不太方便，使用其中的方法不够简介。</p>
+<p>总的来说就是，单线程建议用继承 Thread 类创建，多线程建议- 使用Runnable、Callable 接口的方式创建。</p>
+</li>
+</ul>
+<h2 id="线程的一些常用方法"><a href="#线程的一些常用方法" class="headerlink" title="线程的一些常用方法"></a>线程的一些常用方法</h2><h3 id="yield"><a href="#yield" class="headerlink" title="yield"></a>yield</h3><p>使用<strong>yield</strong>方法表示暂停当前正在执行的线程对象，并执行其他线程。</p>
+<p>代码示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">public class YieldTest &#123;</div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		Test1 t1 = new Test1(&quot;张三&quot;);</div><div class="line">		Test1 t2 = new Test1(&quot;李四&quot;);</div><div class="line">		new Thread(t1).start();</div><div class="line">		new Thread(t2).start();</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class Test1 implements Runnable &#123;</div><div class="line">	private String name;</div><div class="line">	public Test1(String name) &#123;</div><div class="line">		this.name=name;</div><div class="line">	&#125;</div><div class="line">	@Override</div><div class="line">	public void run() &#123;</div><div class="line">        System.out.println(this.name + &quot; 线程运行开始!&quot;);  </div><div class="line">		for (int i = 1; i &lt;= 5; i++) &#123;</div><div class="line">            System.out.println(&quot;&quot;+this.name + &quot;-----&quot; + i);  </div><div class="line">			// 当为3的时候，让出资源</div><div class="line">			if (i == 3) &#123;</div><div class="line">				Thread.yield();</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">        System.out.println(this.name + &quot; 线程运行结束!&quot;);  </div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>执行结果一:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">张三 线程运行开始!</div><div class="line">张三-----1</div><div class="line">张三-----2</div><div class="line">张三-----3</div><div class="line">李四 线程运行开始!</div><div class="line">李四-----1</div><div class="line">李四-----2</div><div class="line">李四-----3</div><div class="line">张三-----4</div><div class="line">张三-----5</div><div class="line">张三 线程运行结束!</div><div class="line">李四-----4</div><div class="line">李四-----5</div><div class="line">李四 线程运行结束!</div></pre></td></tr></table></figure></p>
+<p>执行结果二:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">张三 线程运行开始!</div><div class="line">李四 线程运行开始!</div><div class="line">李四-----1</div><div class="line">李四-----2</div><div class="line">李四-----3</div><div class="line">张三-----1</div><div class="line">张三-----2</div><div class="line">张三-----3</div><div class="line">李四-----4</div><div class="line">李四-----5</div><div class="line">李四 线程运行结束!</div><div class="line">张三-----4</div><div class="line">张三-----5</div><div class="line">张三 线程运行结束!</div></pre></td></tr></table></figure></p>
+<p>上述中的例子我们可以看到，启动两个线程之后，哪个线程先执行到3，就会让出资源，让另一个线程执行。<br>在这里顺便说下，<strong>yield</strong>和<strong>sleep</strong>的区别。</p>
+<ul>
+<li>yield： yield只是使当前线程重新回到可执行状态，所以执行yield()的线程有可能在进入到可执行状态后马上又被执行。</li>
+<li>sleep：sleep使当前线程进入停滞状态，所以执行sleep()的线程在指定的时间内肯定不会被执行；</li>
+</ul>
+<h3 id="join"><a href="#join" class="headerlink" title="join"></a>join</h3><p>使用<strong>join</strong>方法指等待某个线程终止。也就是说当子线程调用了join方法之后，后面的代码只有等待该线程执行完毕之后才会执行。</p>
+<p>如果不好理解，这里依旧使用一段代码来进行说明。<br>这里我们创建两个线程，并使用main方法执行。顺便提一下，其实main方法也是个线程。如果直接执行的话，可能main方法执行完毕了，子线程还没执行完毕，这里我们就让子线程使用join方法使main方法最后执行。</p>
+<p>代码示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">public class JoinTest &#123;</div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		 System.out.println(Thread.currentThread().getName()+ &quot;主线程开始运行!&quot;);  </div><div class="line">		 Test2 t1=new Test2(&quot;A&quot;);  </div><div class="line">		 Test2 t2=new Test2(&quot;B&quot;);  </div><div class="line">		 t1.start();  </div><div class="line">	     t2.start();  </div><div class="line">	      try &#123;  </div><div class="line">	    	  t1.join();  </div><div class="line">	        &#125; catch (InterruptedException e) &#123;  </div><div class="line">	            e.printStackTrace();  </div><div class="line">	        &#125;  </div><div class="line">	        try &#123;  </div><div class="line">	        	t2.join();  </div><div class="line">	        &#125; catch (InterruptedException e) &#123;  </div><div class="line">	            e.printStackTrace();  </div><div class="line">	        &#125;    </div><div class="line">	     System.out.println(Thread.currentThread().getName()+ &quot;主线程运行结束!&quot;);  </div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">class Test2 extends Thread&#123;  </div><div class="line">    public Test2(String name) &#123;  </div><div class="line">        super(name);  </div><div class="line">    &#125;  </div><div class="line">    public void run() &#123;  </div><div class="line">         System.out.println(this.getName() + &quot; 线程运行开始!&quot;);  </div><div class="line">       for (int i = 0; i &lt; 5; i++) &#123;  </div><div class="line">           System.out.println(&quot;子线程&quot;+this.getName() + &quot;运行 : &quot; + i);  </div><div class="line">           try &#123;  </div><div class="line">               sleep(new Random().nextInt(10));  </div><div class="line">           &#125; catch (InterruptedException e) &#123;  </div><div class="line">               e.printStackTrace();  </div><div class="line">           &#125;  </div><div class="line">       &#125;  </div><div class="line">       System.out.println(this.getName() + &quot; 线程运行结束!&quot;);  </div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>执行结果:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">main主线程开始运行!</div><div class="line">B 线程运行开始!</div><div class="line">子线程B运行 : 0</div><div class="line">A 线程运行开始!</div><div class="line">子线程A运行 : 0</div><div class="line">子线程A运行 : 1</div><div class="line">子线程B运行 : 1</div><div class="line">子线程B运行 : 2</div><div class="line">子线程B运行 : 3</div><div class="line">子线程B运行 : 4</div><div class="line">B 线程运行结束!</div><div class="line">子线程A运行 : 2</div><div class="line">子线程A运行 : 3</div><div class="line">子线程A运行 : 4</div><div class="line">A 线程运行结束!</div><div class="line">main主线程运行结束!</div></pre></td></tr></table></figure></p>
+<p>上述示例中的结果显然符合我们的预期。</p>
+<h3 id="priority"><a href="#priority" class="headerlink" title="priority"></a>priority</h3><p>使用setPriority表示设置线程的优先级。<br>每个线程都有默认的优先级。主线程的默认优先级为Thread.NORM_PRIORITY。<br>线程的优先级有继承关系，比如A线程中创建了B线程，那么B将和A具有相同的优先级。<br>JVM提供了10个线程优先级，但与常见的操作系统都不能很好的映射。如果希望程序能移植到各个操作系统中，应该仅仅使用Thread类有以下三个静态常量作为优先级，这样能保证同样的优先级采用了同样的调度方式</p>
+<ul>
+<li>static int MAX_PRIORITY 线程可以具有的最高优先级，取值为10。  </li>
+<li>static int MIN_PRIORITY  线程可以具有的最低优先级，取值为1。  </li>
+<li>static int NORM_PRIORITY   分配给线程的默认优先级，取值为5。  </li>
+</ul>
+<p>但是设置优先级并不能保证线程一定先执行。我们可以通过一下代码来验证。</p>
+<p>代码示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">public class PriorityTest &#123;</div><div class="line">  public static void main(String[] args) &#123;</div><div class="line">		Test3 t1 = new Test3(&quot;张三&quot;);</div><div class="line">		Test3 t2 = new Test3(&quot;李四&quot;);</div><div class="line">		t1.setPriority(Thread.MIN_PRIORITY);</div><div class="line">		t2.setPriority(Thread.MAX_PRIORITY);</div><div class="line">		t1.start();</div><div class="line">		t2.start();</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class Test3 extends Thread &#123;</div><div class="line">	public Test3(String name) &#123;</div><div class="line">		super(name);</div><div class="line">	&#125;</div><div class="line">	@Override</div><div class="line">	public void run() &#123;</div><div class="line">        System.out.println(this.getName() + &quot; 线程运行开始!&quot;);  </div><div class="line">		for (int i = 1; i &lt;= 5; i++) &#123;</div><div class="line">            System.out.println(&quot;子线程&quot;+this.getName() + &quot;运行 : &quot; + i); </div><div class="line">            try &#123;  </div><div class="line">                sleep(new Random().nextInt(10));  </div><div class="line">            &#125; catch (InterruptedException e) &#123;  </div><div class="line">                e.printStackTrace();  </div><div class="line">            &#125; </div><div class="line">		&#125;</div><div class="line">        System.out.println(this.getName() + &quot; 线程运行结束!&quot;);  </div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>执行结果一:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">李四 线程运行开始!</div><div class="line">子线程李四运行 : 1</div><div class="line">张三 线程运行开始!</div><div class="line">子线程张三运行 : 1</div><div class="line">子线程张三运行 : 2</div><div class="line">子线程李四运行 : 2</div><div class="line">子线程李四运行 : 3</div><div class="line">子线程李四运行 : 4</div><div class="line">子线程张三运行 : 3</div><div class="line">子线程李四运行 : 5</div><div class="line">李四 线程运行结束!</div><div class="line">子线程张三运行 : 4</div><div class="line">子线程张三运行 : 5</div><div class="line">张三 线程运行结束!</div></pre></td></tr></table></figure></p>
+<p>执行结果二:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">张三 线程运行开始!</div><div class="line">子线程张三运行 : 1</div><div class="line">李四 线程运行开始!</div><div class="line">子线程李四运行 : 1</div><div class="line">子线程张三运行 : 2</div><div class="line">子线程张三运行 : 3</div><div class="line">子线程李四运行 : 2</div><div class="line">子线程张三运行 : 4</div><div class="line">子线程李四运行 : 3</div><div class="line">子线程张三运行 : 5</div><div class="line">子线程李四运行 : 4</div><div class="line">张三 线程运行结束!</div><div class="line">子线程李四运行 : 5</div><div class="line">李四 线程运行结束!</div></pre></td></tr></table></figure></p>
+<p>执行结果三:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">李四 线程运行开始!</div><div class="line">子线程李四运行 : 1</div><div class="line">张三 线程运行开始!</div><div class="line">子线程张三运行 : 1</div><div class="line">子线程李四运行 : 2</div><div class="line">子线程李四运行 : 3</div><div class="line">子线程李四运行 : 4</div><div class="line">子线程张三运行 : 2</div><div class="line">子线程张三运行 : 3</div><div class="line">子线程张三运行 : 4</div><div class="line">子线程李四运行 : 5</div><div class="line">子线程张三运行 : 5</div><div class="line">李四 线程运行结束!</div><div class="line">张三 线程运行结束!</div></pre></td></tr></table></figure></p>
+<h3 id="线程中一些常用的方法"><a href="#线程中一些常用的方法" class="headerlink" title="线程中一些常用的方法"></a>线程中一些常用的方法</h3><p> 线程中还有许多方法，但是这里并不会全部细说。只简单的列举了几个方法使用。更多的方法使用可以查看相关的API文档。这里我也顺便总结了一些关于这些方法的描述。</p>
+<ol>
+<li>sleep：在指定的毫秒数内让当前正在执行的线程休眠（暂停执行）;不会释放对象锁。</li>
+<li>join：指等待t线程终止。</li>
+<li>yield：暂停当前正在执行的线程对象，并执行其他线程。</li>
+<li>setPriority：设置一个线程的优先级。</li>
+<li>interrupt：一个线程是否为守护线程。</li>
+<li>wait：强迫一个线程等待。它是Object的方法，也常常和sleep作为比较。需要注意的是wait会释放对象锁，让其它的线程可以访问；使用wait必须要进行异常捕获，并且要对当前所调用，即必须采用synchronized中的对象。</li>
+<li>isAlive: 判断一个线程是否存活。</li>
+<li>activeCount: 程序中活跃的线程数。 </li>
+<li>enumerate: 枚举程序中的线程。</li>
+<li>currentThread: 得到当前线程。</li>
+<li>setDaemon: 设置一个线程为守护线程。(用户线程和守护线程的区别在于，是否等待主线程依赖于主线程结束而结束)。</li>
+<li>setName: 为线程设置一个名称。</li>
+<li>notify(): 通知一个线程继续运行。它也是Object的一个方法，经常和wait方法一起使用。</li>
+</ol>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>其实这篇文章很久之前都已经打好草稿了，但是由于各种原因，只到今天才写完。虽然也只是简单的介绍了一下多线程的相关知识，也只能算个入门级的教程吧。不过写完之后，感觉自己又重新复习了一遍多线程，对多线程的理解又加深了一些。<br>话已尽此，不在多说。<br>原创不易，如果感觉不错，希望给个推荐！您的支持是我写作的最大动力！</p>
+<p>参考:<a href="https://blog.csdn.net/evankaka/article/details/44153709#t1" target="_blank" rel="external">https://blog.csdn.net/evankaka/article/details/44153709#t1</a></p>
+<p>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a> </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/10/pancm83/" rel="next" title="SpringBoot整合Kafka和Storm">
+                <i class="fa fa-chevron-left"></i> SpringBoot整合Kafka和Storm
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/06/16/pancm85/" rel="prev" title="Java基础知识回顾之六 ----- IO流">
+                Java基础知识回顾之六 ----- IO流 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">84</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">49</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程和进程"><span class="nav-number">2.</span> <span class="nav-text">线程和进程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#线程"><span class="nav-number">2.0.1.</span> <span class="nav-text">线程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#进程"><span class="nav-number">2.0.2.</span> <span class="nav-text">进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#进程和线程的区别"><span class="nav-number">2.0.3.</span> <span class="nav-text">进程和线程的区别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#生命周期"><span class="nav-number">2.0.4.</span> <span class="nav-text">生命周期</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程的创建"><span class="nav-number">3.</span> <span class="nav-text">线程的创建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程的一些常用方法"><span class="nav-number">4.</span> <span class="nav-text">线程的一些常用方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#yield"><span class="nav-number">4.1.</span> <span class="nav-text">yield</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#join"><span class="nav-number">4.2.</span> <span class="nav-text">join</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#priority"><span class="nav-number">4.3.</span> <span class="nav-text">priority</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程中一些常用的方法"><span class="nav-number">4.4.</span> <span class="nav-text">线程中一些常用的方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结语"><span class="nav-number">5.</span> <span class="nav-text">结语</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
