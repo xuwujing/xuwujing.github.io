@@ -1,0 +1,864 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,设计模式," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言在上一篇中我们学习了单例模式，介绍了单例模式创建的几种方法以及最优的方法。本篇则介绍设计模式中的工厂模式，主要分为简单工厂模式、工厂方法和抽象工厂模式。 简单工厂模式 简单工厂模式是属于创建型模式，又叫做静态工厂方法模式。简单工厂模式是由一个工厂对象决定创建出哪一种产品类的实例。调用只需要告诉工厂类所需要的类型，工厂类就会返回需要的产品类工厂的子类。 可以说是工厂模式中最简单的一种。  打个">
+<meta name="keywords" content="java,设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java进阶篇设计模式之二 ----- 工厂模式">
+<meta property="og:url" content="http://yoursite.com/2018/07/24/pancm90/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言在上一篇中我们学习了单例模式，介绍了单例模式创建的几种方法以及最优的方法。本篇则介绍设计模式中的工厂模式，主要分为简单工厂模式、工厂方法和抽象工厂模式。 简单工厂模式 简单工厂模式是属于创建型模式，又叫做静态工厂方法模式。简单工厂模式是由一个工厂对象决定创建出哪一种产品类的实例。调用只需要告诉工厂类所需要的类型，工厂类就会返回需要的产品类工厂的子类。 可以说是工厂模式中最简单的一种。  打个">
+<meta property="og:updated_time" content="2018-08-19T14:27:39.619Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java进阶篇设计模式之二 ----- 工厂模式">
+<meta name="twitter:description" content="前言在上一篇中我们学习了单例模式，介绍了单例模式创建的几种方法以及最优的方法。本篇则介绍设计模式中的工厂模式，主要分为简单工厂模式、工厂方法和抽象工厂模式。 简单工厂模式 简单工厂模式是属于创建型模式，又叫做静态工厂方法模式。简单工厂模式是由一个工厂对象决定创建出哪一种产品类的实例。调用只需要告诉工厂类所需要的类型，工厂类就会返回需要的产品类工厂的子类。 可以说是工厂模式中最简单的一种。  打个">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/07/24/pancm90/"/>
+
+
+
+
+
+
+  <title>Java进阶篇设计模式之二 ----- 工厂模式 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/24/pancm90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java进阶篇设计模式之二 ----- 工厂模式</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-24T22:42:18+08:00">
+                2018-07-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在<a href="https://www.cnblogs.com/xuwujing/p/9277266.html" target="_blank" rel="external">上一篇</a>中我们学习了单例模式，介绍了单例模式创建的几种方法以及最优的方法。本篇则介绍设计模式中的工厂模式，主要分为简单工厂模式、工厂方法和抽象工厂模式。</p>
+<h2 id="简单工厂模式"><a href="#简单工厂模式" class="headerlink" title="简单工厂模式"></a>简单工厂模式</h2><blockquote>
+<p>简单工厂模式是属于创建型模式，又叫做静态工厂方法模式。简单工厂模式是由一个工厂对象决定创建出哪一种产品类的实例。调用只需要告诉工厂类所需要的类型，工厂类就会返回需要的产品类工厂的子类。 可以说是工厂模式中最简单的一种。</p>
+</blockquote>
+<p>打个比方，我们在电脑经常玩游戏，我们只需要告诉电脑我们要玩什么游戏，电脑就会打开这个游戏，我们并不需要关心游戏是怎么运作的。<br>我们可以在以下的代码中进行相应的说明。</p>
+<p>我们首先创建一个游戏总类接口，包含一个玩游戏的方法； 然后再由各自的游戏类继承该类并实现该类的方法，最后在创建一个工程类根据不同的游戏进行创建对象。<br>那么实现的代码如下：</p>
+<p><strong>代码示例：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">	private static final String LOL=&quot;LOL&quot;; </div><div class="line">	private static final String DNF=&quot;DNF&quot;; </div><div class="line">	</div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		Game game= ComputerFactory.playGame(LOL);</div><div class="line">		Game game2= ComputerFactory.playGame(DNF);</div><div class="line">		game.play();</div><div class="line">		game2.play();</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">interface Game&#123;</div><div class="line">	void play();</div><div class="line">&#125;</div><div class="line"></div><div class="line">class LOL implements Game&#123;</div><div class="line">	@Override</div><div class="line">	public void play() &#123;</div><div class="line">		System.out.println(&quot;正在玩LOL...&quot;);</div><div class="line">	&#125;	</div><div class="line">&#125;</div><div class="line"></div><div class="line">class DNF implements Game&#123;</div><div class="line">	@Override</div><div class="line">	public void play() &#123;</div><div class="line">		System.out.println(&quot;正在玩DNF...&quot;);</div><div class="line">	&#125;	</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">class ComputerFactory&#123;</div><div class="line">	private static final String LOL=&quot;LOL&quot;; </div><div class="line">	private static final String DNF=&quot;DNF&quot;; </div><div class="line">	 public static Game playGame(String game)&#123;</div><div class="line">		 if(LOL.equalsIgnoreCase(game))&#123;</div><div class="line">			 return new LOL();</div><div class="line">		 &#125;else if(DNF.equalsIgnoreCase(game))&#123;</div><div class="line">			 return new DNF();</div><div class="line">		 &#125;</div><div class="line">		 return null;</div><div class="line">	 &#125;</div></pre></td></tr></table></figure>
+<p><strong>输出结果：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">正在玩LOL...</div><div class="line">正在玩DNF...</div></pre></td></tr></table></figure>
+<p>我们在使用简单工厂模式进行实现该功能之后，会发现我们将游戏类的实例化放到了工厂类中实现，隐藏了对象创建的细节，并且不需要知道是怎么玩的，只需要知道调用该工厂类就行了。而且方便切换，因为只需更改工厂类传递的类型值就行了。<br>但是我们也发现一个问题，如果我们需要新增一个游戏类，那么需要新定义一个接口，然后还要在工厂类中添加一个判断分支，如果少量的话还好，但是大量的话就比较麻烦了，并且这也违背了开放-封闭原则。</p>
+<h2 id="工厂方法模式"><a href="#工厂方法模式" class="headerlink" title="工厂方法模式"></a>工厂方法模式</h2><blockquote>
+<p>工厂方法模式是 Java 中最常用的设计模式之一，属于创建型模式。定义一个创建对象的接口，让其子类自己决定实例化哪一个工厂类，工厂模式使其创建过程延迟到子类进行。</p>
+</blockquote>
+<p>在简单工厂模式中，我们发现在添加子类的时候，相应的也需要在工厂类中添加一个判断分支，是违背了开放-封闭原则的。而工厂方法模式就是主要解决这个问题的。</p>
+<p>这里还是用上述的玩游戏示例，只不过这里每个游戏都是由各自的游戏工厂类实现。主要区别就是由一个 工厂类变成了多个了，降低了耦合度。如果新增一个游戏类，相应的也只需在新增一个工厂类而已， 并且完美的遵循了开放-封闭原则。</p>
+<p>将上述代码更改之后，相应的代码实现如下：</p>
+<p><strong>代码示例：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div></pre></td><td class="code"><pre><div class="line">	private static final String LOL=&quot;LOL&quot;; </div><div class="line">	private static final String DNF=&quot;DNF&quot;; </div><div class="line">	private static final String WOW=&quot;WOW&quot;; </div><div class="line"></div><div class="line">	public static void main(String[] args) &#123;</div><div class="line"></div><div class="line">		Game game3=new LOLFactory().playGame(LOL);</div><div class="line">		Game game4=new DNFFactory().playGame(DNF);</div><div class="line">		Game game5=new WOWFactory().playGame(WOW);</div><div class="line">		game3.play();</div><div class="line">		game4.play();</div><div class="line">		game5.play();		</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">interface Game&#123;</div><div class="line">	void play();</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">class LOL implements Game&#123;</div><div class="line">	@Override</div><div class="line">	public void play() &#123;</div><div class="line">		System.out.println(&quot;正在玩LOL...&quot;);</div><div class="line">	&#125;	</div><div class="line">&#125;</div><div class="line"></div><div class="line">class DNF implements Game&#123;</div><div class="line">	@Override</div><div class="line">	public void play() &#123;</div><div class="line">		System.out.println(&quot;正在玩DNF...&quot;);</div><div class="line">	&#125;	</div><div class="line">&#125;</div><div class="line"></div><div class="line">class WOW  implements Game&#123;</div><div class="line">	@Override</div><div class="line">	public void play() &#123;</div><div class="line">		System.out.println(&quot;正在玩WOW...&quot;);</div><div class="line">	&#125;	</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">interface ComputerFactory2&#123;</div><div class="line">	Game playGame(String game);</div><div class="line">&#125;</div><div class="line"></div><div class="line">class LOLFactory implements ComputerFactory2&#123;</div><div class="line">	@Override</div><div class="line">	public Game playGame(String game) &#123;</div><div class="line">		return new LOL();</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class DNFFactory implements ComputerFactory2&#123;</div><div class="line">	@Override</div><div class="line">	public Game playGame(String game) &#123;</div><div class="line">		return new DNF();</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class WOWFactory implements ComputerFactory2&#123;</div><div class="line">	@Override</div><div class="line">	public Game playGame(String game) &#123;</div><div class="line">		return new WOW();</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">正在玩LOL...</div><div class="line">正在玩DNF...</div><div class="line">正在玩WOW...</div></pre></td></tr></table></figure>
+<p>可以看到使用工厂方法模式之后，我们的代码更加清晰了，扩展性也变高了，如果想增加一个产品，只要扩展一个工厂类就可以。但是随之而来的是在系统中增加了复杂度，每增加一个产品时，都需要增加一个具体类和对象实现工厂类。<br>所以在是否使用该模式需注意。<br>使用该模式比较经典的使用案例是大名鼎鼎的<strong>hibernate</strong>框架在选择数据库方言这块。但是如果直接简单的new一个对象的话，则不必使用了，若使用反而会增加系统的复杂度。</p>
+<h2 id="抽象工厂模式"><a href="#抽象工厂模式" class="headerlink" title="抽象工厂模式"></a>抽象工厂模式</h2><blockquote>
+<p>抽象工厂模式是围绕一个超级工厂创建其他工厂。该超级工厂又称为其他工厂的工厂。这种类型的设计模式属于创建型模式，它提供了一种创建对象的最佳方式。也就是提供一个创建一系列相关或相互依赖对象的接口，而无需指定它们具体的类。</p>
+</blockquote>
+<p>抽象工厂模式相比工厂方法模式来说更加复杂，也更难理解，但是更容易扩展。<br>抽象工厂模式就将同一类的产品子类归为一类，让他们继承同一个抽象子类，然后把它们当作一组，然后再把多个组组成一个族。<br>打个比方，还是上述的玩游戏，我们可以把<strong>LOL</strong>和<strong>WOW</strong>当作<strong>PVP</strong>类型的游戏，也可以把<strong>DNF</strong>和<strong>WOW</strong>当作<strong>PVE</strong>类型的游戏。</p>
+<p>那么相应更改的代码如下：</p>
+<p><strong>代码示例：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div></pre></td><td class="code"><pre><div class="line">	private static final String LOL=&quot;LOL&quot;; </div><div class="line">	private static final String DNF=&quot;DNF&quot;; </div><div class="line">	private static final String WOW=&quot;WOW&quot;; </div><div class="line">	</div><div class="line">	public static void main(String[] args) &#123;</div><div class="line"></div><div class="line">		ComputerFactory3 cf3=new PVPFactory();</div><div class="line">		cf3.playGame().play();</div><div class="line">		cf3.playGame2().play();</div><div class="line">		ComputerFactory3 cf4=new PVEFactory();</div><div class="line">		cf4.playGame().play();</div><div class="line">		cf4.playGame2().play();			</div><div class="line">	&#125;		</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">interface Game&#123;</div><div class="line">	void play();</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">class LOL implements Game&#123;</div><div class="line">	@Override</div><div class="line">	public void play() &#123;</div><div class="line">		System.out.println(&quot;正在玩LOL...&quot;);</div><div class="line">	&#125;	</div><div class="line">&#125;</div><div class="line"></div><div class="line">class DNF implements Game&#123;</div><div class="line">	@Override</div><div class="line">	public void play() &#123;</div><div class="line">		System.out.println(&quot;正在玩DNF...&quot;);</div><div class="line">	&#125;	</div><div class="line">&#125;</div><div class="line"></div><div class="line">class WOW  implements Game&#123;</div><div class="line">	@Override</div><div class="line">	public void play() &#123;</div><div class="line">		System.out.println(&quot;正在玩WOW...&quot;);</div><div class="line">	&#125;	</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">interface ComputerFactory3&#123;</div><div class="line">	 Game playGame();</div><div class="line">     Game playGame2();</div><div class="line">&#125;</div><div class="line"></div><div class="line">class PVPFactory implements ComputerFactory3&#123;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public Game playGame() &#123;</div><div class="line">		return new LOL();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public Game playGame2() &#123;</div><div class="line">		return new WOW();</div><div class="line">	&#125;	</div><div class="line">&#125;</div><div class="line"></div><div class="line">class PVEFactory implements ComputerFactory3&#123;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public Game playGame() &#123;</div><div class="line">		return new DNF();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public Game playGame2() &#123;</div><div class="line">		return new WOW();</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>输出结果：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">正在玩LOL...</div><div class="line">正在玩WOW...</div><div class="line">正在玩DNF...</div><div class="line">正在玩WOW...</div></pre></td></tr></table></figure>
+<p>在抽象工厂模式中，可以在不需要知道产品是怎么样的，只需知道是哪个工厂类就行了。我们也可以根据子类的共同的特性而将它们设计在一起，组成一个相同类型组，可以很方便的直接调用。但是相对的，产品族比较难以扩展，增加一个产品，需要增加相应的接口和实现类。例如某个品牌的手机，有不同系列，每个系列有不同的型号，如果只是增加型号的话，比较容易，但是相对的，增加某个系列就比较麻烦了。<br>所以我们在使用抽象工厂模式，也需要相应的结合实际场景来使用。</p>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><h3 id="音乐推荐"><a href="#音乐推荐" class="headerlink" title="音乐推荐"></a>音乐推荐</h3><p>在这浮躁的社会，也会受其影响，从而无法静下心来。因此出门走走，静静的听下音乐，会感觉心情慢慢的舒缓起来，整个人也会轻松不少。于是便分享一首纯音乐，希望能够给读者带来轻松和微笑。</p>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=27580689&auto=0&height=66"></iframe>
+
+
+<p>原创不易，如果感觉不错，希望给个推荐！您的支持是我写作的最大动力！<br>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a> </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/17/pancm89/" rel="next" title="SpringBoot整合Netty并使用Protobuf进行数据传输(附工程)">
+                <i class="fa fa-chevron-left"></i> SpringBoot整合Netty并使用Protobuf进行数据传输(附工程)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/13/pancm91/" rel="prev" title="SpringBoot简单打包部署(附工程)">
+                SpringBoot简单打包部署(附工程) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">91</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单工厂模式"><span class="nav-number">2.</span> <span class="nav-text">简单工厂模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工厂方法模式"><span class="nav-number">3.</span> <span class="nav-text">工厂方法模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#抽象工厂模式"><span class="nav-number">4.</span> <span class="nav-text">抽象工厂模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它"><span class="nav-number">5.</span> <span class="nav-text">其它</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#音乐推荐"><span class="nav-number">5.1.</span> <span class="nav-text">音乐推荐</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,950 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,netty,springboot," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言本篇文章主要介绍的是SpringBoot整合Netty以及使用Protobuf进行数据传输的相关内容。Protobuf会简单的介绍下用法，至于Netty在之前的文章中已经简单的介绍过了，这里就不再过多细说了。 Protobuf介绍 protocolbuffer(以下简称PB)是google 的一种数据交换的格式，它独立于语言，独立于平台。google 提供了多种语言的实现：java、c#、c">
+<meta name="keywords" content="java,netty,springboot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot整合Netty并使用Protobuf进行数据传输(附工程)">
+<meta property="og:url" content="http://yoursite.com/2018/07/17/pancm89/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言本篇文章主要介绍的是SpringBoot整合Netty以及使用Protobuf进行数据传输的相关内容。Protobuf会简单的介绍下用法，至于Netty在之前的文章中已经简单的介绍过了，这里就不再过多细说了。 Protobuf介绍 protocolbuffer(以下简称PB)是google 的一种数据交换的格式，它独立于语言，独立于平台。google 提供了多种语言的实现：java、c#、c">
+<meta property="og:updated_time" content="2018-08-19T14:26:32.918Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringBoot整合Netty并使用Protobuf进行数据传输(附工程)">
+<meta name="twitter:description" content="前言本篇文章主要介绍的是SpringBoot整合Netty以及使用Protobuf进行数据传输的相关内容。Protobuf会简单的介绍下用法，至于Netty在之前的文章中已经简单的介绍过了，这里就不再过多细说了。 Protobuf介绍 protocolbuffer(以下简称PB)是google 的一种数据交换的格式，它独立于语言，独立于平台。google 提供了多种语言的实现：java、c#、c">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/07/17/pancm89/"/>
+
+
+
+
+
+
+  <title>SpringBoot整合Netty并使用Protobuf进行数据传输(附工程) | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/17/pancm89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SpringBoot整合Netty并使用Protobuf进行数据传输(附工程)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-17T08:17:34+08:00">
+                2018-07-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本篇文章主要介绍的是SpringBoot整合Netty以及使用Protobuf进行数据传输的相关内容。Protobuf会简单的介绍下用法，至于Netty在<a href="https://blog.csdn.net/qazwsxpcm/article/details/77750865" target="_blank" rel="external">之前的文章</a>中已经简单的介绍过了，这里就不再过多细说了。</p>
+<h2 id="Protobuf"><a href="#Protobuf" class="headerlink" title="Protobuf"></a>Protobuf</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><blockquote>
+<p>protocolbuffer(以下简称PB)是google 的一种数据交换的格式，它独立于语言，独立于平台。google 提供了多种语言的实现：java、c#、c++、go 和python，每一种实现都包含了相应语言的编译器以及库文件。由于它是一种二进制的格式，比使用 xml进行数据交换快许多。可以把它用于分布式应用之间的数据通信或者异构环境下的数据交换。作为一种效率和兼容性都很优秀的二进制数据传输格式，可以用于诸如网络传输、配置文件、数据存储等诸多领域。</p>
+</blockquote>
+<p>官方地址： <a href="https://github.com/google/protobuf" target="_blank" rel="external">https://github.com/google/protobuf</a> </p>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>这里的使用就只介绍Java相关的使用。<br>首先我们需要建立一个<strong>proto</strong>文件，在该文件定义我们需要传输的文件。<br>例如我们需要定义一个用户的信息，包含的字段主要有编号、名称、年龄。<br>那么该<strong>protobuf</strong>文件的格式如下:<br><strong>注</strong>：这里使用的是<strong>proto3</strong>，相关的注释我已写了，这里便不再过多讲述了。需要注意一点的是<strong>proto</strong>文件和生成的<strong>Java</strong>文件名称不能一致!<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">syntax = &quot;proto3&quot;;</div><div class="line">// 生成的包名</div><div class="line">option java_package=&quot;com.pancm.protobuf&quot;;</div><div class="line">//生成的java名</div><div class="line">option java_outer_classname = &quot;UserInfo&quot;;</div><div class="line"></div><div class="line">message UserMsg &#123;  </div><div class="line">      </div><div class="line">     // ID  </div><div class="line">     int32 id = 1;  </div><div class="line">      </div><div class="line">    // 姓名  </div><div class="line">     string name = 2;  </div><div class="line">      </div><div class="line">    // 年龄  </div><div class="line">      int32 age = 3;  </div><div class="line">	  </div><div class="line">	 // 状态 </div><div class="line">     int32 state = 4;  </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>创建好该文件之后，我们把该文件和<strong>protoc.exe</strong>(生成Java文件的软件)放到E盘目录下的protobuf文件夹下，然后再到该目录的dos界面下输入:<code>protoc.exe --java_out=文件绝对路径名称</code>。<br>例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">protoc.exe --java_out=E:\protobuf User.proto</div></pre></td></tr></table></figure>
+<p>输入完之后，回车即可在同级目录看到已经生成好的Java文件，然后将该文件放到项目中该文件指定的路径下即可。</p>
+<p><strong>注：生成protobuf的文件软件和测试的protobuf文件我也整合到该项目中了，可以直接获取的。</strong></p>
+<p>Java文件生成好之后，我们再来看怎么使用。<br>这里我就直接贴代码了，并且将注释写在代码中，应该更容易理解些吧。。。<br><strong>代码示例:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">// 按照定义的数据结构，创建一个对象  </div><div class="line">  	UserInfo.UserMsg.Builder userInfo = UserInfo.UserMsg.newBuilder();  </div><div class="line">  	userInfo.setId(1);</div><div class="line">  	userInfo.setName(&quot;xuwujing&quot;);</div><div class="line">  	userInfo.setAge(18);</div><div class="line">  	UserInfo.UserMsg userMsg = userInfo.build();  </div><div class="line">      // 将数据写到输出流 </div><div class="line">      ByteArrayOutputStream output = new ByteArrayOutputStream();  </div><div class="line">      userMsg.writeTo(output);  </div><div class="line">      // 将数据序列化后发送 </div><div class="line">      byte[] byteArray = output.toByteArray();  </div><div class="line">      // 接收到流并读取</div><div class="line">      ByteArrayInputStream input = new ByteArrayInputStream(byteArray);  </div><div class="line">      // 反序列化  </div><div class="line">      UserInfo.UserMsg userInfo2 = UserInfo.UserMsg.parseFrom(input);  </div><div class="line">      System.out.println(&quot;id:&quot; + userInfo2.getId());  </div><div class="line">      System.out.println(&quot;name:&quot; + userInfo2.getName());  </div><div class="line">      System.out.println(&quot;age:&quot; + userInfo2.getAge());</div></pre></td></tr></table></figure></p>
+<p>注：这里说明一点，因为<strong>protobuf</strong>是通过二进制进行传输，所以需要注意下相应的编码。还有使用<strong>protobuf</strong>也需要注意一下一次传输的最大字节长度。</p>
+<p><strong>输出结果：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">id:1</div><div class="line">name:xuwujing</div><div class="line">age:18</div></pre></td></tr></table></figure></p>
+<h2 id="SpringBoot整合Netty"><a href="#SpringBoot整合Netty" class="headerlink" title="SpringBoot整合Netty"></a>SpringBoot整合Netty</h2><p><strong>说明：如果想直接获取工程那么可以直接跳到底部，通过链接下载工程代码。</strong></p>
+<h3 id="开发准备"><a href="#开发准备" class="headerlink" title="开发准备"></a>开发准备</h3><p><strong>环境要求</strong><br><strong>JDK</strong>:：1.8<br><strong>Netty</strong>:：4.0或以上(不包括5)<br><strong>Protobuf</strong>：3.0或以上</p>
+<p>如果对Netty不熟的话，可以看看我之前写的一些文章。大神请无视~。~<br>地址：<a href="https://blog.csdn.net/column/details/17640.html" target="_blank" rel="external">https://blog.csdn.net/column/details/17640.html</a></p>
+<p>首先还是Maven的相关依赖:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div></pre></td><td class="code"><pre><div class="line">&lt;properties&gt;</div><div class="line">		&lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;</div><div class="line">		&lt;java.version&gt;1.8&lt;/java.version&gt;</div><div class="line">		&lt;netty.version&gt;4.1.22.Final&lt;/netty.version&gt;</div><div class="line">		&lt;protobuf.version&gt;3.5.1&lt;/protobuf.version&gt;</div><div class="line">		&lt;springboot&gt;1.5.9.RELEASE&lt;/springboot&gt;</div><div class="line">		&lt;fastjson&gt;1.2.41&lt;/fastjson&gt;</div><div class="line">		&lt;maven.compiler.source&gt;1.8&lt;/maven.compiler.source&gt;</div><div class="line">   		&lt;maven.compiler.target&gt;1.8&lt;/maven.compiler.target&gt;</div><div class="line">	&lt;/properties&gt;</div><div class="line"></div><div class="line"></div><div class="line">	&lt;dependencies&gt;</div><div class="line"></div><div class="line">		&lt;dependency&gt;</div><div class="line">			&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">			&lt;artifactId&gt;spring-boot-starter&lt;/artifactId&gt;</div><div class="line">			&lt;version&gt;$&#123;springboot&#125;&lt;/version&gt;</div><div class="line">		&lt;/dependency&gt;</div><div class="line"></div><div class="line"></div><div class="line">		&lt;dependency&gt;</div><div class="line">			&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">			&lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;</div><div class="line">			&lt;version&gt;$&#123;springboot&#125;&lt;/version&gt;</div><div class="line">			&lt;scope&gt;test&lt;/scope&gt;</div><div class="line">		&lt;/dependency&gt;</div><div class="line"></div><div class="line">		&lt;dependency&gt;</div><div class="line">			&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">			&lt;artifactId&gt;spring-boot-devtools&lt;/artifactId&gt;</div><div class="line">			&lt;version&gt;$&#123;springboot&#125;&lt;/version&gt;</div><div class="line">			&lt;optional&gt;true&lt;/optional&gt;</div><div class="line">		&lt;/dependency&gt;</div><div class="line"></div><div class="line">		</div><div class="line">		&lt;dependency&gt;</div><div class="line">			&lt;groupId&gt;io.netty&lt;/groupId&gt;</div><div class="line">			&lt;artifactId&gt;netty-all&lt;/artifactId&gt;</div><div class="line">			&lt;version&gt;$&#123;netty.version&#125;&lt;/version&gt;</div><div class="line">		&lt;/dependency&gt;</div><div class="line"></div><div class="line">		&lt;dependency&gt;</div><div class="line">			&lt;groupId&gt;com.google.protobuf&lt;/groupId&gt;</div><div class="line">			&lt;artifactId&gt;protobuf-java&lt;/artifactId&gt;</div><div class="line">			&lt;version&gt;$&#123;protobuf.version&#125;&lt;/version&gt;</div><div class="line">		&lt;/dependency&gt;</div><div class="line"></div><div class="line">		&lt;dependency&gt;</div><div class="line">			&lt;groupId&gt;com.alibaba&lt;/groupId&gt;</div><div class="line">			&lt;artifactId&gt;fastjson&lt;/artifactId&gt;</div><div class="line">			&lt;version&gt;$&#123;fastjson&#125;&lt;/version&gt;</div><div class="line">		&lt;/dependency&gt;</div><div class="line"></div><div class="line">		</div><div class="line">	&lt;dependency&gt;</div><div class="line">			&lt;groupId&gt;junit&lt;/groupId&gt;</div><div class="line">			&lt;artifactId&gt;junit&lt;/artifactId&gt;</div><div class="line">			&lt;version&gt;4.12&lt;/version&gt;</div><div class="line">			&lt;scope&gt;test&lt;/scope&gt;</div><div class="line">		&lt;/dependency&gt; </div><div class="line">&lt;/dependencies&gt;</div></pre></td></tr></table></figure></p>
+<p>添加了相应的maven依赖之后，配置文件这块暂时没有什么可以添加的，因为暂时就一个监听的端口而已。</p>
+<h3 id="代码编写"><a href="#代码编写" class="headerlink" title="代码编写"></a>代码编写</h3><p>代码模块主要分为服务端和客户端。<br>主要实现的业务逻辑：<br>服务端启动成功之后，客户端也启动成功，这时服务端会发送一条<strong>protobuf</strong>格式的信息给客户端，然后客户端给予相应的应答。客户端与服务端连接成功之后，客户端每个一段时间会发送心跳指令给服务端，告诉服务端该客户端还存过中，如果客户端没有在指定的时间发送信息，服务端会关闭与该客户端的连接。当客户端无法连接到服务端之后，会每隔一段时间去尝试重连，只到重连成功!</p>
+<h5 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h5><p>首先是编写服务端的启动类，相应的注释在代码中写得很详细了，这里也不再过多讲述了。不过需要注意的是，在之前的我写的Netty文章中，是通过main方法直接启动服务端，因此是直接new一个对象的。而在和SpringBoot整合之后，我们需要将Netty交给springBoot去管理，所以这里就用了相应的注解。<br><strong>代码如下:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">@Service(&quot;nettyServer&quot;)</div><div class="line">public class NettyServer &#123;</div><div class="line">	private static final int port = 9876; // 设置服务端端口</div><div class="line">	private static EventLoopGroup boss = new NioEventLoopGroup(); // 通过nio方式来接收连接和处理连接</div><div class="line">	private static EventLoopGroup work = new NioEventLoopGroup(); // 通过nio方式来接收连接和处理连接</div><div class="line">	private static ServerBootstrap b = new ServerBootstrap();</div><div class="line">	</div><div class="line">	@Autowired</div><div class="line">	private NettyServerFilter nettyServerFilter;</div><div class="line">	</div><div class="line">	</div><div class="line">	public void run() &#123;</div><div class="line">		try &#123;</div><div class="line">			b.group(boss, work);</div><div class="line">			b.channel(NioServerSocketChannel.class);</div><div class="line">			b.childHandler(nettyServerFilter); // 设置过滤器</div><div class="line">			// 服务器绑定端口监听</div><div class="line">			ChannelFuture f = b.bind(port).sync();</div><div class="line">			System.out.println(&quot;服务端启动成功,端口是:&quot; + port);</div><div class="line">			// 监听服务器关闭监听</div><div class="line">			f.channel().closeFuture().sync();</div><div class="line">		&#125; catch (InterruptedException e) &#123;</div><div class="line">			e.printStackTrace();</div><div class="line">		&#125; finally &#123;</div><div class="line">			// 关闭EventLoopGroup，释放掉所有资源包括创建的线程</div><div class="line">			work.shutdownGracefully();</div><div class="line">			boss.shutdownGracefully();</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>服务端主类编写完毕之后，我们再来设置下相应的过滤条件。<br>这里需要继承Netty中<strong>ChannelInitializer</strong>类，然后重写<strong>initChannel</strong>该方法，进行添加相应的设置，如心跳超时设置，传输协议设置，以及相应的业务实现类。<br><strong>代码如下:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">@Component</div><div class="line"> public class NettyServerFilter extends ChannelInitializer&lt;SocketChannel&gt; &#123;</div><div class="line"></div><div class="line">@Autowired</div><div class="line">private NettyServerHandler nettyServerHandler;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    protected void initChannel(SocketChannel ch) throws Exception &#123;</div><div class="line">        ChannelPipeline ph = ch.pipeline();</div><div class="line">     </div><div class="line">        //入参说明: 读超时时间、写超时时间、所有类型的超时时间、时间格式</div><div class="line">        ph.addLast(new IdleStateHandler(5, 0, 0, TimeUnit.SECONDS));</div><div class="line">        // 解码和编码，应和客户端一致</div><div class="line">        //传输的协议 Protobuf</div><div class="line">        ph.addLast(new ProtobufVarint32FrameDecoder());</div><div class="line">        ph.addLast(new ProtobufDecoder(UserMsg.getDefaultInstance()));</div><div class="line">        ph.addLast(new ProtobufVarint32LengthFieldPrepender());</div><div class="line">        ph.addLast(new ProtobufEncoder());</div><div class="line">        </div><div class="line">        //业务逻辑实现类</div><div class="line">        ph.addLast(&quot;nettyServerHandler&quot;, nettyServerHandler);</div><div class="line">      &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>服务相关的设置的代码写完之后，我们再来编写主要的业务代码。<br>使用Netty编写业务层的代码，我们需要继承<strong>ChannelInboundHandlerAdapter</strong> 或<strong>SimpleChannelInboundHandler</strong>类，在这里顺便说下它们两的区别吧。<br>继承<strong>SimpleChannelInboundHandler</strong>类之后，会在接收到数据后会自动<strong>release</strong>掉数据占用的<strong>Bytebuffer</strong>资源。并且继承该类需要指定数据格式。<br>而继承<strong>ChannelInboundHandlerAdapter</strong>则不会自动释放，需要手动调用<strong>ReferenceCountUtil.release()</strong>等方法进行释放。继承该类不需要指定数据格式。<br>所以在这里，个人推荐服务端继承<strong>ChannelInboundHandlerAdapter</strong>，手动进行释放，防止数据未处理完就自动释放了。而且服务端可能有多个客户端进行连接，并且每一个客户端请求的数据格式都不一致，这时便可以进行相应的处理。<br>客户端根据情况可以继承<strong>SimpleChannelInboundHandler</strong>类。好处是直接指定好传输的数据格式，就不需要再进行格式的转换了。</p>
+<p><strong>代码如下:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div></pre></td><td class="code"><pre><div class="line">@Service(&quot;nettyServerHandler&quot;)</div><div class="line">public class NettyServerHandler extends ChannelInboundHandlerAdapter &#123;</div><div class="line"></div><div class="line">	/** 空闲次数 */</div><div class="line">	private int idle_count = 1;</div><div class="line">	/** 发送次数 */</div><div class="line">	private int count = 1;</div><div class="line"></div><div class="line"></div><div class="line">	/**</div><div class="line">	 * 建立连接时，发送一条消息</div><div class="line">	 */</div><div class="line">	@Override</div><div class="line">	public void channelActive(ChannelHandlerContext ctx) throws Exception &#123;</div><div class="line">		System.out.println(&quot;连接的客户端地址:&quot; + ctx.channel().remoteAddress());</div><div class="line">		UserInfo.UserMsg userMsg = UserInfo.UserMsg.newBuilder().setId(1).setAge(18).setName(&quot;xuwujing&quot;).setState(0)</div><div class="line">				.build();</div><div class="line">		ctx.writeAndFlush(userMsg);</div><div class="line">		super.channelActive(ctx);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	/**</div><div class="line">	 * 超时处理 如果5秒没有接受客户端的心跳，就触发; 如果超过两次，则直接关闭;</div><div class="line">	 */</div><div class="line">	@Override</div><div class="line">	public void userEventTriggered(ChannelHandlerContext ctx, Object obj) throws Exception &#123;</div><div class="line">		if (obj instanceof IdleStateEvent) &#123;</div><div class="line">			IdleStateEvent event = (IdleStateEvent) obj;</div><div class="line">			if (IdleState.READER_IDLE.equals(event.state())) &#123; // 如果读通道处于空闲状态，说明没有接收到心跳命令</div><div class="line">				System.out.println(&quot;已经5秒没有接收到客户端的信息了&quot;);</div><div class="line">				if (idle_count &gt; 1) &#123;</div><div class="line">					System.out.println(&quot;关闭这个不活跃的channel&quot;);</div><div class="line">					ctx.channel().close();</div><div class="line">				&#125;</div><div class="line">				idle_count++;</div><div class="line">			&#125;</div><div class="line">		&#125; else &#123;</div><div class="line">			super.userEventTriggered(ctx, obj);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	/**</div><div class="line">	 * 业务逻辑处理</div><div class="line">	 */</div><div class="line">	@Override</div><div class="line">	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception &#123;</div><div class="line">		System.out.println(&quot;第&quot; + count + &quot;次&quot; + &quot;,服务端接受的消息:&quot; + msg);</div><div class="line">		try &#123;</div><div class="line">			// 如果是protobuf类型的数据</div><div class="line">		  if (msg instanceof UserMsg) &#123;</div><div class="line">				UserInfo.UserMsg userState = (UserInfo.UserMsg) msg;</div><div class="line">				if (userState.getState() == 1) &#123;</div><div class="line">					System.out.println(&quot;客户端业务处理成功!&quot;);</div><div class="line">				&#125; else if(userState.getState() == 2)&#123;</div><div class="line">					System.out.println(&quot;接受到客户端发送的心跳!&quot;);</div><div class="line">				&#125;else&#123;</div><div class="line">					System.out.println(&quot;未知命令!&quot;);</div><div class="line">				&#125;</div><div class="line">			&#125; else &#123;</div><div class="line">				System.out.println(&quot;未知数据!&quot; + msg);</div><div class="line">				return;</div><div class="line">			&#125;</div><div class="line">		&#125; catch (Exception e) &#123;</div><div class="line">			e.printStackTrace();</div><div class="line">		&#125; finally &#123;</div><div class="line">			ReferenceCountUtil.release(msg);</div><div class="line">		&#125;</div><div class="line">		count++;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	/**</div><div class="line">	 * 异常处理</div><div class="line">	 */</div><div class="line">	@Override</div><div class="line">	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception &#123;</div><div class="line">		cause.printStackTrace();</div><div class="line">		ctx.close();</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>还有个服务端的启动类，之前是通过main方法直接启动， 不过这里改成了通过springBoot进行启动，差别不大。<br><strong>代码如下：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">@SpringBootApplication</div><div class="line">public class NettyServerApp &#123;</div><div class="line"></div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		// 启动嵌入式的 Tomcat 并初始化 Spring 环境及其各 Spring 组件</div><div class="line">		ApplicationContext context = SpringApplication.run(NettyServerApp.class, args);</div><div class="line">		NettyServer nettyServer = context.getBean(NettyServer.class);</div><div class="line">		nettyServer.run();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>到这里服务端相应的代码就编写完毕了。</p>
+<h4 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h4><p>客户端这边的代码和服务端的很多地方都类似，我就不再过多细说了，主要将一些不同的代码拿出来简单的讲述下。<br>首先是客户端的主类，基本和服务端的差不多，也就是多了监听的端口和一个监听器(用来监听是否和服务端断开连接，用于重连)。<br>主要实现的代码逻辑如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">public void doConnect(Bootstrap bootstrap, EventLoopGroup eventLoopGroup) &#123;</div><div class="line">	ChannelFuture f = null;</div><div class="line">	try &#123;</div><div class="line">		if (bootstrap != null) &#123;</div><div class="line">			bootstrap.group(eventLoopGroup);</div><div class="line">			bootstrap.channel(NioSocketChannel.class);</div><div class="line">			bootstrap.option(ChannelOption.SO_KEEPALIVE, true);</div><div class="line">			bootstrap.handler(nettyClientFilter);</div><div class="line">			bootstrap.remoteAddress(host, port);</div><div class="line">			f = bootstrap.connect().addListener((ChannelFuture futureListener) -&gt; &#123;</div><div class="line">				final EventLoop eventLoop = futureListener.channel().eventLoop();</div><div class="line">				if (!futureListener.isSuccess()) &#123;</div><div class="line">					System.out.println(&quot;与服务端断开连接!在10s之后准备尝试重连!&quot;);</div><div class="line">					eventLoop.schedule(() -&gt; doConnect(new Bootstrap(), eventLoop), 10, TimeUnit.SECONDS);</div><div class="line">				&#125;</div><div class="line">			&#125;);</div><div class="line">			if(initFalg)&#123;</div><div class="line">				System.out.println(&quot;Netty客户端启动成功!&quot;);</div><div class="line">				initFalg=false;</div><div class="line">			&#125;</div><div class="line">			// 阻塞</div><div class="line">			f.channel().closeFuture().sync();</div><div class="line">		&#125;</div><div class="line">	&#125; catch (Exception e) &#123;</div><div class="line">		System.out.println(&quot;客户端连接失败!&quot;+e.getMessage());</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>注：监听器这块的实现用的是JDK1.8的写法。</strong></p>
+<p>客户端过滤其这块基本和服务端一直。不过需要注意的是，传输协议、编码和解码应该一致，还有心跳的读写时间应该小于服务端所设置的时间。<br>改动的代码如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">	ChannelPipeline ph = ch.pipeline();</div><div class="line">        /*</div><div class="line">         * 解码和编码，应和服务端一致</div><div class="line">         * */</div><div class="line">        //入参说明: 读超时时间、写超时时间、所有类型的超时时间、时间格式</div><div class="line">        ph.addLast(new IdleStateHandler(0, 4, 0, TimeUnit.SECONDS)); </div><div class="line">``` </div><div class="line"></div><div class="line">客户端的业务代码逻辑。</div><div class="line">主要实现的几点逻辑是心跳按时发送以及解析服务发送的**protobuf**格式的数据。  </div><div class="line">这里比服务端多个个注解， 该注解**Sharable**主要是为了多个handler可以被多个channel安全地共享，也就是保证线程安全。</div><div class="line">废话就不多说了，代码如下：</div></pre></td></tr></table></figure></p>
+<pre><code>@Service(&quot;nettyClientHandler&quot;)
+@ChannelHandler.Sharable
+public class NettyClientHandler extends ChannelInboundHandlerAdapter {
+@Autowired
+private NettyClient nettyClient;
+
+/** 循环次数 */
+private int fcount = 1;
+
+/**
+ * 建立连接时
+ */
+@Override
+public void channelActive(ChannelHandlerContext ctx) throws Exception {
+    System.out.println(&quot;建立连接时：&quot; + new Date());
+    ctx.fireChannelActive();
+}
+
+/**
+ * 关闭连接时
+ */
+@Override
+public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+    System.out.println(&quot;关闭连接时：&quot; + new Date());
+    final EventLoop eventLoop = ctx.channel().eventLoop();
+    nettyClient.doConnect(new Bootstrap(), eventLoop);
+    super.channelInactive(ctx);
+}
+
+/**
+ * 心跳请求处理 每4秒发送一次心跳请求;
+ * 
+ */
+@Override
+public void userEventTriggered(ChannelHandlerContext ctx, Object obj) throws Exception {
+    System.out.println(&quot;循环请求的时间：&quot; + new Date() + &quot;，次数&quot; + fcount);
+    if (obj instanceof IdleStateEvent) {
+        IdleStateEvent event = (IdleStateEvent) obj;
+        if (IdleState.WRITER_IDLE.equals(event.state())) { // 如果写通道处于空闲状态,就发送心跳命令
+            UserMsg.Builder userState = UserMsg.newBuilder().setState(2);
+            ctx.channel().writeAndFlush(userState);
+            fcount++;
+        }
+    }
+}
+
+/**
+ * 业务逻辑处理
+ */
+@Override
+public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+    // 如果不是protobuf类型的数据
+    if (!(msg instanceof UserMsg)) {
+        System.out.println(&quot;未知数据!&quot; + msg);
+        return;
+    }
+    try {
+
+        // 得到protobuf的数据
+        UserInfo.UserMsg userMsg = (UserInfo.UserMsg) msg;
+        // 进行相应的业务处理。。。
+        // 这里就从简了，只是打印而已
+        System.out.println(
+                &quot;客户端接受到的用户信息。编号:&quot; + userMsg.getId() + &quot;,姓名:&quot; + userMsg.getName() + &quot;,年龄:&quot; + userMsg.getAge());
+
+        // 这里返回一个已经接受到数据的状态
+        UserMsg.Builder userState = UserMsg.newBuilder().setState(1);
+        ctx.writeAndFlush(userState);
+        System.out.println(&quot;成功发送给服务端!&quot;);
+    } catch (Exception e) {
+        e.printStackTrace();
+    } finally {
+        ReferenceCountUtil.release(msg);
+    }
+ }
+}
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">那么到这里客户端的代码也编写完毕了。</div><div class="line"></div><div class="line">### 功能测试</div><div class="line"></div><div class="line">首先启动服务端，然后再启动客户端。</div><div class="line">我们来看看结果是否如上述所说。</div><div class="line"></div><div class="line">**服务端输出结果:**</div></pre></td></tr></table></figure>
+<p>服务端启动成功,端口是:9876<br>连接的客户端地址:/127.0.0.1:53319<br>第1次,服务端接受的消息:state: 1</p>
+<p>客户端业务处理成功!<br>第2次,服务端接受的消息:state: 2</p>
+<p>接受到客户端发送的心跳!<br>第3次,服务端接受的消息:state: 2</p>
+<p>接受到客户端发送的心跳!<br>第4次,服务端接受的消息:state: 2</p>
+<p>接受到客户端发送的心跳!<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">**客户端输入结果:**</div></pre></td></tr></table></figure></p>
+<p>Netty客户端启动成功!<br>建立连接时：Mon Jul 16 23:31:58 CST 2018<br>客户端接受到的用户信息。编号:1,姓名:xuwujing,年龄:18<br>成功发送给服务端!<br>循环请求的时间：Mon Jul 16 23:32:02 CST 2018，次数1<br>循环请求的时间：Mon Jul 16 23:32:06 CST 2018，次数2<br>循环请求的时间：Mon Jul 16 23:32:10 CST 2018，次数3<br>循环请求的时间：Mon Jul 16 23:32:14 CST 2018，次数4<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">通过打印信息可以看出如上述所说。</div><div class="line"></div><div class="line">接下来我们再来看看客户端是否能够实现重连。</div><div class="line">先启动客户端，再启动服务端。</div><div class="line"></div><div class="line"></div><div class="line">**客户端输入结果:**</div></pre></td></tr></table></figure></p>
+<p>Netty客户端启动成功!<br>与服务端断开连接!在10s之后准备尝试重连!<br>客户端连接失败!AbstractChannel$CloseFuture@1fbaa3ac(incomplete)<br>建立连接时：Mon Jul 16 23:41:33 CST 2018<br>客户端接受到的用户信息。编号:1,姓名:xuwujing,年龄:18<br>成功发送给服务端!<br>循环请求的时间：Mon Jul 16 23:41:38 CST 2018，次数1<br>循环请求的时间：Mon Jul 16 23:41:42 CST 2018，次数2<br>循环请求的时间：Mon Jul 16 23:41:46 CST 2018，次数3<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">**服务端输出结果:**</div></pre></td></tr></table></figure></p>
+<p>服务端启动成功,端口是:9876<br>连接的客户端地址:/127.0.0.1:53492<br>第1次,服务端接受的消息:state: 1</p>
+<p>客户端业务处理成功!<br>第2次,服务端接受的消息:state: 2</p>
+<p>接受到客户端发送的心跳!<br>第3次,服务端接受的消息:state: 2</p>
+<p>接受到客户端发送的心跳!<br>第4次,服务端接受的消息:state: 2<br>```</p>
+<p>结果也如上述所说！</p>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><p>关于SpringBoot整合Netty使用Protobuf进行数据传输到这里就结束了。<br>SpringBoot整合Netty使用Protobuf进行数据传输的项目工程地址:<br><a href="https://github.com/xuwujing/springBoot-study/tree/master/springboot-netty-protobuf" target="_blank" rel="external">https://github.com/xuwujing/springBoot-study/tree/master/springboot-netty-protobuf</a></p>
+<p>对了，也有不使用springBoot整合的Netty项目工程地址:<br><a href="https://github.com/xuwujing/Netty-study/tree/master/Netty-protobuf" target="_blank" rel="external">https://github.com/xuwujing/Netty-study/tree/master/Netty-protobuf</a></p>
+<p>原创不易，如果感觉不错，希望给个推荐！您的支持是我写作的最大动力！<br>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a> </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/netty/" rel="tag"># netty</a>
+          
+            <a href="/tags/springboot/" rel="tag"># springboot</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/11/pancm88/" rel="next" title="SpringBoot整合Jsp和Thymeleaf(附工程)">
+                <i class="fa fa-chevron-left"></i> SpringBoot整合Jsp和Thymeleaf(附工程)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/24/pancm90/" rel="prev" title="Java进阶篇设计模式之二 ----- 工厂模式">
+                Java进阶篇设计模式之二 ----- 工厂模式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">91</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Protobuf"><span class="nav-number">2.</span> <span class="nav-text">Protobuf</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">2.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用"><span class="nav-number">2.2.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringBoot整合Netty"><span class="nav-number">3.</span> <span class="nav-text">SpringBoot整合Netty</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#开发准备"><span class="nav-number">3.1.</span> <span class="nav-text">开发准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码编写"><span class="nav-number">3.2.</span> <span class="nav-text">代码编写</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#服务端"><span class="nav-number">3.2.0.1.</span> <span class="nav-text">服务端</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#客户端"><span class="nav-number">3.2.1.</span> <span class="nav-text">客户端</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它"><span class="nav-number">4.</span> <span class="nav-text">其它</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

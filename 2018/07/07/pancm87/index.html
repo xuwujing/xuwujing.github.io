@@ -1,0 +1,925 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,设计模式," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言在刚学编程没多久就听说过设计模式的大名，不过由于当时还是个彻彻底底的菜鸟，并没有去触碰。直到在开始工作中对简单的业务代码较为熟悉之后，才正式的接触设计模式。当时最早接触的设计模式是工厂模式，不过本文讲的是单例模式，这里就留着下篇文章中在讲解。至于为什么先讲解单例模式? 那是因为单例模式是设计模式中最简单的… 。凡事总有个先后顺序，所以就先易后难了。好了，废话不多说了，开始进入正片。 设计模式">
+<meta name="keywords" content="java,设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java进阶篇设计模式之一 ----- 单例模式">
+<meta property="og:url" content="http://yoursite.com/2018/07/07/pancm87/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言在刚学编程没多久就听说过设计模式的大名，不过由于当时还是个彻彻底底的菜鸟，并没有去触碰。直到在开始工作中对简单的业务代码较为熟悉之后，才正式的接触设计模式。当时最早接触的设计模式是工厂模式，不过本文讲的是单例模式，这里就留着下篇文章中在讲解。至于为什么先讲解单例模式? 那是因为单例模式是设计模式中最简单的… 。凡事总有个先后顺序，所以就先易后难了。好了，废话不多说了，开始进入正片。 设计模式">
+<meta property="og:updated_time" content="2018-08-19T14:27:21.882Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java进阶篇设计模式之一 ----- 单例模式">
+<meta name="twitter:description" content="前言在刚学编程没多久就听说过设计模式的大名，不过由于当时还是个彻彻底底的菜鸟，并没有去触碰。直到在开始工作中对简单的业务代码较为熟悉之后，才正式的接触设计模式。当时最早接触的设计模式是工厂模式，不过本文讲的是单例模式，这里就留着下篇文章中在讲解。至于为什么先讲解单例模式? 那是因为单例模式是设计模式中最简单的… 。凡事总有个先后顺序，所以就先易后难了。好了，废话不多说了，开始进入正片。 设计模式">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/07/07/pancm87/"/>
+
+
+
+
+
+
+  <title>Java进阶篇设计模式之一 ----- 单例模式 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/07/pancm87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java进阶篇设计模式之一 ----- 单例模式</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-07T14:48:09+08:00">
+                2018-07-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在刚学编程没多久就听说过<strong>设计模式</strong>的大名，不过由于当时还是个彻彻底底的菜鸟，并没有去触碰。直到在开始工作中对简单的业务代码较为熟悉之后，才正式的接触<strong>设计模式</strong>。当时最早接触的设计模式是<strong>工厂模式</strong>，不过本文讲的是<strong>单例模式</strong>，这里就留着下篇文章中在讲解。至于为什么先讲解<strong>单例模式</strong>? 那是因为<strong>单例模式</strong>是设计模式中最简单的… 。凡事总有个先后顺序，所以就先易后难了。好了，废话不多说了，开始进入正片。</p>
+<h2 id="设计模式简介"><a href="#设计模式简介" class="headerlink" title="设计模式简介"></a>设计模式简介</h2><p><strong>说明：这里说了的简介就是真的 “简介”。</strong></p>
+<h3 id="什么是设计模式"><a href="#什么是设计模式" class="headerlink" title="什么是设计模式"></a>什么是设计模式</h3><blockquote>
+<p>设计模式是一套被反复使用的、多数人知晓的、经过分类编目的、代码设计经验的总结。</p>
+</blockquote>
+<h3 id="为什么使用设计模式"><a href="#为什么使用设计模式" class="headerlink" title="为什么使用设计模式"></a>为什么使用设计模式</h3><blockquote>
+<p>使用设计模式是为了重用代码、让代码更容易被他人理解、保证代码可靠性。</p>
+</blockquote>
+<h3 id="设计模式类型"><a href="#设计模式类型" class="headerlink" title="设计模式类型"></a>设计模式类型</h3><p>设计模式有23种类型。按照主要分类可以分为三大类:</p>
+<p><strong>一、创建型模式</strong></p>
+<blockquote>
+<p>这些设计模式提供了一种在创建对象的同时隐藏创建逻辑的方式，而不是使用 new运算符直接实例化对象。这使得程序在判断针对某个给定实例需要创建哪些对象时更加灵活。</p>
+</blockquote>
+<ul>
+<li>单例模式</li>
+<li>工厂模式 </li>
+<li>抽象工厂模式 </li>
+<li>建造者模式 </li>
+<li>原型模式</li>
+</ul>
+<p><strong>二、结构型模式</strong></p>
+<blockquote>
+<p>这些设计模式关注类和对象的组合。继承的概念被用来组合接口和定义组合对象获得新功能的方式。</p>
+</blockquote>
+<ul>
+<li>适配器模式</li>
+<li>桥接模式</li>
+<li>过滤器模式</li>
+<li>组合模式</li>
+<li>装饰器模式</li>
+<li>外观模式</li>
+<li>享元模式</li>
+<li>代理模式</li>
+</ul>
+<p><strong>三、行为型模式</strong></p>
+<blockquote>
+<p>这些设计模式特别关注对象之间的通信。</p>
+</blockquote>
+<ul>
+<li>责任链模式</li>
+<li>命令模式</li>
+<li>解释器模式</li>
+<li>迭代器模式</li>
+<li>中介者模式  </li>
+<li>备忘录模式</li>
+<li>观察者模式</li>
+<li>状态模式 </li>
+<li>空对象模式 </li>
+<li>策略模式 </li>
+<li>模板模式 </li>
+<li>访问者模式</li>
+</ul>
+<h3 id="设计模式的原则"><a href="#设计模式的原则" class="headerlink" title="设计模式的原则"></a>设计模式的原则</h3><p>设计模式的六大原则</p>
+<ol>
+<li>开闭原则：对扩展开放，对修改关闭。</li>
+<li>里氏代换原则：对开闭原则的补充。任何基类可以出现的地方，子类一定可以出现。LSP 是继承复用的基石，只有当派生类可以替换掉基类，且软件单位的功能不受到影响时，基类才能真正被复用，而派生类也能够在基类的基础上增加新的行为。</li>
+<li>依赖倒转原则：针对接口编程，依赖于抽象而不依赖于具体。</li>
+<li>接口隔离原则：尽量使用多个隔离的接口，为了降低类之间的耦合度。</li>
+<li>迪米特法则：一个实体应当尽量少地与其他实体之间发生相互作用，使得系统功能模块相对独立。</li>
+<li>合成复用原则：尽量使用合成/聚合的方式，而不是使用继承。</li>
+</ol>
+<h2 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h2><h3 id="什么是单例模式"><a href="#什么是单例模式" class="headerlink" title="什么是单例模式"></a>什么是单例模式</h3><p>保证一个系统中的某个类只有一个实例而且该实例易于外界访问。例如Windows界面的任务管理器就可以看做是一个单例。</p>
+<h3 id="单例模式的使用场景"><a href="#单例模式的使用场景" class="headerlink" title="单例模式的使用场景"></a>单例模式的使用场景</h3><p>在程序中比较常用的是<strong>数据库连接池</strong>、<strong>线程池</strong>、<strong>日志对象</strong>等等。</p>
+<h3 id="单例模式使用"><a href="#单例模式使用" class="headerlink" title="单例模式使用"></a>单例模式使用</h3><p>最早我们在学习<strong>单例模式</strong>的时候，基本都会接触这两种模式：饿汉式和饱汉式(懒汉式)。<br>那我们先来看看这两个模式的实现。</p>
+<p><strong>饿汉式</strong><br>定义一个私有的构造方法，并将自身的实例对象设置为一个私有属性,并加上static和final修饰符，然后通过公共的静态方法调用返回实例。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"> class SingletonTest1 &#123;  </div><div class="line"></div><div class="line">    private SingletonTest1() &#123;  </div><div class="line">    &#125;  </div><div class="line">    private static final SingletonTest1 instance = new SingletonTest1();  </div><div class="line"></div><div class="line">    public static SingletonTest1 getInstance() &#123;  </div><div class="line">        return instance;  </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>饱汉式</strong><br>定义一个私有的构造方法，定义一个该类静态私有的变量，然后定义一个公共的静态方法，对该类的值进行空判断，不为空直接返回，否则重新构建一个。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">class SingletonTest2 &#123;</div><div class="line"></div><div class="line">     private SingletonTest2() &#123;   </div><div class="line">     &#125;   </div><div class="line"></div><div class="line">     private static SingletonTest2 instance;   </div><div class="line"></div><div class="line">     public static SingletonTest2 getInstance() &#123;   </div><div class="line">         if (instance == null) &#123;</div><div class="line">			instance = new SingletonTest2();</div><div class="line">		&#125;   </div><div class="line">         return instance;   </div><div class="line">     &#125;   </div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p> 简单的介绍了这两种的模式，然后我们再来看看这两种模式的优缺点吧。<br> <strong>饿汉式</strong></p>
+<ul>
+<li>优点：写起来很简单，并且不会因为不加<strong>synchronized</strong>关键字而造成的线程不安全问题。</li>
+<li>缺点：当该类被加载的时候，会初始化该实例和静态变量并被创建并分配内存空间，并且会一直占用内存。</li>
+</ul>
+<p><strong>饱汉式</strong></p>
+<ul>
+<li>优点：写起来很简单，在第一次调用的时候才会初始化，节省了内存。</li>
+<li>缺点：线程不安全，多个线程调用可能会出现多个实例。</li>
+<li>总结：书写简单，线程不安全，效率还行。</li>
+</ul>
+<p>虽然 <strong>饱汉式</strong>可以通过加上<strong>synchronized</strong>关键字保证线程安全。但是效率方法来说还不说是最优。</p>
+<p>这里在介绍下个人认为在JDK1.5之前最优的两种写法，一种是<strong>静态内部类</strong>，另一种是<strong>双重锁检查</strong>。</p>
+<p><strong>静态内部类</strong><br>定义一个私有的构造方法，定义一个该类私有静态的内部类，然后在内部类中定义一个该类的静态变量，然后通过公共的final修饰的静态方法调用返回实例。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">class  SingletonTest4 &#123;</div><div class="line"> private SingletonTest4()&#123;</div><div class="line">   &#125;</div><div class="line">  private static class SingletonTest5&#123;</div><div class="line">      private static SingletonTest4 instance = new SingletonTest4();</div><div class="line">   &#125;</div><div class="line">   public static final SingletonTest4 getInstance()&#123;</div><div class="line">       return SingletonTest5.instance;</div><div class="line">   &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>因为该类的内部类是私有的，除了对外公布的公共静态方法getInstance()，是无法访问的。因为它是延迟加载，所以读取读取实例的时候不会进行同步，几乎没有性能的缺陷，而且还是线程安全的，并且不依赖JDK的版本。</p>
+<p><strong>双重锁检查</strong><br>定义一个私有构造方法，通过<strong>volatile</strong>定义静态私有变量，保证了该变量的可见性，然后定义一个共有的静态方法，第一次对该对象实例化时与否判断，不为空直接返回，提升效率；然后使用<strong>synchronized</strong> 进行同步代码块，防止对象未初始化时，在多线程访问该对象在第一次创建后，再次重复的被创建；然后第二次对该对象实例化时与否判断，如果未初始化，则初始化，否则直接返回该实例。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">class SingletonTest6 &#123; </div><div class="line">      private SingletonTest6() &#123; </div><div class="line">      &#125;   </div><div class="line">      private static volatile SingletonTest6 instance;  </div><div class="line">      public static SingletonTest6 getIstance() &#123; </div><div class="line">          if (instance == null) &#123;</div><div class="line">              synchronized (SingletonTest6.class) &#123;</div><div class="line">                  if (instance == null) &#123;</div><div class="line">                      instance = new SingletonTest6();   </div><div class="line">                  &#125;   </div><div class="line">              &#125;   </div><div class="line">          &#125;   </div><div class="line">          return instance;   </div><div class="line">      &#125;   </div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>这种模式在很长的一段时间内可以说是最优的了，内存占用低，效率高，线程安全，多线程操作原子性。但是有个缺点就是书写麻烦，对新手不太友好。</p>
+<p>JDK1.5之后出现了枚举，并且完美支持单例模式，并且线程安全、效率高！但是这些不是最重要的，最重要的是书写超级简单！究竟有多简单，看下面的示例应该就可以了解一下了。。。</p>
+<p><strong>枚举单例</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">enum SingletonTest7&#123;</div><div class="line">   	INSTANCE;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>对的，你没看错，就这点代码，其它不需要了。。。<br>枚举需要在JDK1.5之后的版本，它无偿提供序列化机制，绝对防止多次实例化，即使在面对复杂的序列化或者反射攻击的时候。这种方法也被Effective Java作者Josh Bloch 所提倡。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>单例模式的几种使用就到这了，那么我们来总结下使用单例模式需要注意什么(不包括枚举)。</p>
+<ol>
+<li>构造方法私有化（private）;</li>
+<li>定义一个私有(private)静态(static)实例化对象;</li>
+<li>对外提供一个公共(public)静态(static)的方法得到该实例;</li>
+</ol>
+<p>原创不易，如果感觉不错，希望给个推荐！您的支持是我写作的最大动力！<br>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a> </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/27/pancm86/" rel="next" title="Java基础知识回顾之七 ----- 总结篇">
+                <i class="fa fa-chevron-left"></i> Java基础知识回顾之七 ----- 总结篇
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/11/pancm88/" rel="prev" title="SpringBoot整合Jsp和Thymeleaf(附工程)">
+                SpringBoot整合Jsp和Thymeleaf(附工程) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">91</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设计模式简介"><span class="nav-number">2.</span> <span class="nav-text">设计模式简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是设计模式"><span class="nav-number">2.1.</span> <span class="nav-text">什么是设计模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么使用设计模式"><span class="nav-number">2.2.</span> <span class="nav-text">为什么使用设计模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设计模式类型"><span class="nav-number">2.3.</span> <span class="nav-text">设计模式类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设计模式的原则"><span class="nav-number">2.4.</span> <span class="nav-text">设计模式的原则</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单例模式"><span class="nav-number">3.</span> <span class="nav-text">单例模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是单例模式"><span class="nav-number">3.1.</span> <span class="nav-text">什么是单例模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单例模式的使用场景"><span class="nav-number">3.2.</span> <span class="nav-text">单例模式的使用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单例模式使用"><span class="nav-number">3.3.</span> <span class="nav-text">单例模式使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

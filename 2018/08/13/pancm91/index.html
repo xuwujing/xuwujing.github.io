@@ -1,0 +1,903 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,springboot," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言本文主要介绍SpringBoot的一些打包事项和项目部署以及在其中遇到一些问题的解决方案。 SpringBoot打包在SpringBoot打包这块，我们就用之前的一个web项目来进行打包。首先需要明确的是，该项目打包的形态是可执行的jar包，还是在tomcat下运行的war包。虽然本项目是用maven构建的，用maven打包也更加方便，但是这里也说明普通非maven打包的项目如何打包。 Ma">
+<meta name="keywords" content="java,springboot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot简单打包部署(附工程)">
+<meta property="og:url" content="http://yoursite.com/2018/08/13/pancm91/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言本文主要介绍SpringBoot的一些打包事项和项目部署以及在其中遇到一些问题的解决方案。 SpringBoot打包在SpringBoot打包这块，我们就用之前的一个web项目来进行打包。首先需要明确的是，该项目打包的形态是可执行的jar包，还是在tomcat下运行的war包。虽然本项目是用maven构建的，用maven打包也更加方便，但是这里也说明普通非maven打包的项目如何打包。 Ma">
+<meta property="og:updated_time" content="2018-08-19T14:28:14.131Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringBoot简单打包部署(附工程)">
+<meta name="twitter:description" content="前言本文主要介绍SpringBoot的一些打包事项和项目部署以及在其中遇到一些问题的解决方案。 SpringBoot打包在SpringBoot打包这块，我们就用之前的一个web项目来进行打包。首先需要明确的是，该项目打包的形态是可执行的jar包，还是在tomcat下运行的war包。虽然本项目是用maven构建的，用maven打包也更加方便，但是这里也说明普通非maven打包的项目如何打包。 Ma">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/08/13/pancm91/"/>
+
+
+
+
+
+
+  <title>SpringBoot简单打包部署(附工程) | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/13/pancm91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SpringBoot简单打包部署(附工程)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-13T23:45:44+08:00">
+                2018-08-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文主要介绍SpringBoot的一些打包事项和项目部署以及在其中遇到一些问题的解决方案。</p>
+<h2 id="SpringBoot打包"><a href="#SpringBoot打包" class="headerlink" title="SpringBoot打包"></a>SpringBoot打包</h2><p>在SpringBoot打包这块，我们就用之前的一个web项目来进行打包。<br>首先需要明确的是，该项目打包的形态是可执行的<strong>jar</strong>包，还是在<strong>tomcat</strong>下运行的<strong>war</strong>包。<br>虽然本项目是用<strong>maven</strong>构建的，用<strong>maven</strong>打包也更加方便，但是这里也说明普通非<strong>maven</strong>打包的项目如何打包。</p>
+<h3 id="Maven打包"><a href="#Maven打包" class="headerlink" title="Maven打包"></a>Maven打包</h3><p>首先是<strong>maven</strong>方式打包:<br>如果是<strong>jar</strong>包<br>需在<code>pom.xml</code>指定打成的包为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;packaging&gt;jar&lt;/packaging&gt;</div></pre></td></tr></table></figure>
+<p>如果是<strong>war</strong>包。<br>需在<code>pom.xml</code>指定打成的包为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;packaging&gt;war&lt;/packaging&gt;</div></pre></td></tr></table></figure>
+<p>并通过<code>&lt;scope&gt;</code>标签在打包的时候排除<strong>tomcat</strong>依赖</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">	&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">	&lt;artifactId&gt;spring-boot-starter-tomcat&lt;/artifactId&gt;</div><div class="line">	&lt;scope&gt;provided&lt;/scope&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>
+<p>然后添加<strong>SpringBoot</strong>自带的打包方式<br><strong>示例如下:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">&lt;build&gt;</div><div class="line">		&lt;defaultGoal&gt;compile&lt;/defaultGoal&gt;</div><div class="line">		&lt;sourceDirectory&gt;src&lt;/sourceDirectory&gt;</div><div class="line">		&lt;finalName&gt;springboot-package&lt;/finalName&gt;</div><div class="line">		&lt;plugins&gt;</div><div class="line">			&lt;plugin&gt;</div><div class="line">				&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">				&lt;artifactId&gt;spring-boot-maven-plugin &lt;/artifactId&gt;</div><div class="line">				&lt;configuration&gt;</div><div class="line">					&lt;fork&gt;true&lt;/fork&gt;</div><div class="line">					&lt;mainClass&gt;com.pancm.App&lt;/mainClass&gt;</div><div class="line">				&lt;/configuration&gt;</div><div class="line">				&lt;executions&gt;</div><div class="line">					&lt;execution&gt;</div><div class="line">						&lt;goals&gt;</div><div class="line">							&lt;goal&gt;repackage&lt;/goal&gt;</div><div class="line">						&lt;/goals&gt;</div><div class="line">					&lt;/execution&gt;</div><div class="line">				&lt;/executions&gt;</div><div class="line">			&lt;/plugin&gt;</div><div class="line">		&lt;/plugins&gt;</div><div class="line">	&lt;/build&gt;</div></pre></td></tr></table></figure></p>
+<p><strong>注：<code>&lt;finalName&gt;</code>标签是指定打包之后的名称，<code>&lt;mainClass&gt;</code>是指定main函数。</strong></p>
+<p>也可以不用<strong>SpringBoot</strong>自带的打包方式，使用<strong>maven</strong>的<strong>assembly</strong>插件进行打包。<br><strong>示例如下:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">&lt;build&gt;</div><div class="line">    &lt;plugins&gt;</div><div class="line">		  &lt;plugin&gt;</div><div class="line">            &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;  </div><div class="line">            &lt;artifactId&gt;maven-assembly-plugin&lt;/artifactId&gt;  </div><div class="line">            &lt;version&gt;2.5.5&lt;/version&gt;  </div><div class="line">            &lt;configuration&gt;</div><div class="line">                &lt;archive&gt;  </div><div class="line">                    &lt;manifest&gt;  </div><div class="line">                        &lt;mainClass&gt;com.pancm.App&lt;/mainClass&gt;  </div><div class="line">                    &lt;/manifest&gt;  </div><div class="line">                &lt;/archive&gt;  </div><div class="line">                &lt;descriptorRefs&gt;  </div><div class="line">                    &lt;descriptorRef&gt;jar-with-dependencies&lt;/descriptorRef&gt;  </div><div class="line">                &lt;/descriptorRefs&gt;  </div><div class="line">            &lt;/configuration&gt;  </div><div class="line">        &lt;/plugin&gt; </div><div class="line">       &lt;/plugins&gt;</div><div class="line">	&lt;/build&gt;</div></pre></td></tr></table></figure>
+<p>在<strong>pom.xml</strong>中添加完相应的标签之后，我们只需在项目同级（pom.xml同级）输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mvn clean package</div></pre></td></tr></table></figure>
+<p>即可完成打包<br>如果想排除测试代码，则可以输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mvn clean package  -Dmaven.test.skip=true</div></pre></td></tr></table></figure>
+<p>来进行打包。</p>
+<p>一般我们是把<strong>application.properties</strong>和<strong>logback.xml</strong>文件放在resources文件夹中，但是进行打包之后，它们也会包含在<strong>jar</strong>或<strong>war</strong>包中，如果我们想更改配置，则会比较麻烦。<br>如果想将它们和项目放在同级目录下，<strong>application.properties</strong>可以直接移出和项目同级的目录下，因为Spring程序会按优先级从下面这些路径来加载<strong>application.properties</strong>配置文件：</p>
+<ul>
+<li>当前目录下的/config目录 </li>
+<li>当前目录 </li>
+<li>classpath里的/config目录 </li>
+<li>classpath 根目录</li>
+</ul>
+<p><strong>springboot</strong>默认加载的<strong>logback</strong>是在<strong>classpath</strong>目录下，这时我们只需要在<strong>application.properties</strong>配置文件指定<strong>logback.xml</strong>的路径即可。<br>添加如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">logging.config=logback.xml</div></pre></td></tr></table></figure></p>
+<p>如果引入了第三方的<strong>jar</strong>包，但是又无法通过<strong>maven</strong>私服进行下载，这时可以手动进行编译。<br>例如，我写了一个工具类为<strong>Mytools</strong>，然后把它打成了一个<strong>jar</strong>包，然后放在我的这个项目中<strong>lib</strong>目录下，并且需要引用它，那么此时便可以对该<strong>jar</strong>包进行编译到本地仓库中，然后再<strong>pom.xml</strong>添加相应的名称和版本号。<br>命令示例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mvn install:install-file -Dfile=lib/pancmtools.jar -DgroupId=com.panncm.utils -DartifactId=pancm-utils -Dversion=1.0 -Dpackaging=jar</div></pre></td></tr></table></figure>
+<p><strong>pom.xml</strong>添加</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">			&lt;groupId&gt;com.panncm.utils&lt;/groupId&gt;</div><div class="line">			&lt;artifactId&gt;pancm-utils&lt;/artifactId&gt;</div><div class="line">			&lt;version&gt;1.0&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>
+<p>便可以进行打包了。</p>
+<h3 id="普通项目打包"><a href="#普通项目打包" class="headerlink" title="普通项目打包"></a>普通项目打包</h3><p>如果是普通的项目，没有使用<strong>maven</strong>构建的话，可以使用<strong>eclipse</strong>等工具进行打包。<br>如果是<strong>jar</strong>包<br>首先在<strong>eclipse</strong>中运行该项目(<strong>main</strong>方法运行)，然后在<strong>eclipse</strong>中右键项目 <code>export -&gt;java -&gt; runnable jar file-&gt; package required libraries into generated jar</code>  指定<strong>main</strong>方法，然后选择打包的名称以及打包的路径。点击<strong>finish</strong>完成打包。</p>
+<p>如果是<strong>war</strong>包<br>在<strong>eclipse</strong>中右键项目 <code>export -&gt;web -&gt; war file</code>，然后选择打包的名称以及打包的路径。点击<strong>finish</strong>完成打包。</p>
+<h3 id="Ant打包"><a href="#Ant打包" class="headerlink" title="Ant打包"></a>Ant打包</h3><p>介绍了上述两种打包之后，这里介绍下通过<strong>ant</strong>方法进行打包(需要安装<strong>ant</strong>环境，安装方式基本和maven一致，指定路径，配置环境变量，这里就不在过多讲述了)。<br>一般打包之后，我们需要将包和配置文件放在一个目录下，这时我们又不想手动进行复制粘贴的话，就可以用<strong>ant</strong>来进行打包，将打包的文件整合在一起。<br>这里我们就编写一个<strong>build.xml</strong>的配置文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</div><div class="line">&lt;project name=&quot;springboot-package&quot; default=&quot;copyAll&quot; basedir=&quot;.&quot;&gt;</div><div class="line">	&lt;property name=&quot;build&quot; value=&quot;build&quot; /&gt;</div><div class="line">	&lt;property name=&quot;target&quot; value=&quot;target&quot; /&gt;</div><div class="line">	&lt;target name=&quot;clean&quot;&gt;</div><div class="line">		&lt;delete dir=&quot;$&#123;target&#125;&quot; /&gt;</div><div class="line">		&lt;delete dir=&quot;$&#123;build&#125;&quot; /&gt;</div><div class="line">	&lt;/target&gt;</div><div class="line"></div><div class="line">	&lt;target name=&quot;create-path&quot; depends=&quot;clean&quot;&gt;</div><div class="line">		&lt;mkdir dir=&quot;$&#123;build&#125;&quot; /&gt;</div><div class="line">	&lt;/target&gt;</div><div class="line"></div><div class="line">	&lt;target name=&quot;mvn_package&quot; depends=&quot;create-path&quot;&gt;</div><div class="line">		&lt;exec executable=&quot;cmd&quot; failonerror=&quot;true&quot;&gt;</div><div class="line">			&lt;arg line=&quot;/c mvn install:install-file -Dfile=lib/pancmtools.jar -DgroupId=com.panncm.utils -DartifactId=pancm-utils -Dversion=1.0 -Dpackaging=jar&quot; /&gt;</div><div class="line">		&lt;/exec&gt;</div><div class="line">		&lt;exec executable=&quot;cmd&quot; failonerror=&quot;true&quot;&gt;</div><div class="line">			&lt;arg line=&quot;/c mvn clean package&quot; /&gt;</div><div class="line">		&lt;/exec&gt;</div><div class="line">	&lt;/target&gt;</div><div class="line"></div><div class="line">	&lt;target name=&quot;copyAll&quot; depends=&quot;mvn_package&quot;&gt;</div><div class="line">		&lt;copy todir=&quot;$&#123;build&#125;&quot; file=&quot;$&#123;target&#125;/springboot-package.jar&quot;&gt;&lt;/copy&gt; </div><div class="line">		&lt;copy todir=&quot;$&#123;build&#125;&quot; file=&quot;logback.xml&quot;&gt;&lt;/copy&gt;</div><div class="line">		&lt;copy todir=&quot;$&#123;build&#125;&quot; file=&quot;application.properties&quot;&gt;&lt;/copy&gt;</div><div class="line">		&lt;copy todir=&quot;$&#123;build&#125;&quot; file=&quot;run.bat&quot;&gt;&lt;/copy&gt;</div><div class="line">	&lt;/target&gt;</div><div class="line">&lt;/project&gt;</div></pre></td></tr></table></figure>
+<p>注：<code>&lt;mkdir dir=&quot;${build}&quot; /&gt;</code>是指定文件存放的文件夹，<strong>executable</strong>是使用cmd命令，<strong>line</strong>是执行的语句，<strong><copy></copy></strong> 标签是将文件复制到指定的文件夹中。</p>
+<p>然后再新建一个 <strong>build.bat</strong>文件，里面只需要填写 <code>ant</code>就行了。<br>准备完之后，只需双击<strong>build.bat</strong>，项目和配置文件就自动到<strong>build</strong>文件中了，省去了很多操作。</p>
+<p>虽然现在流行通过<strong>jenkins</strong>进行打包部署，不过使用ant加maven进行打包也不错的，比较简单。</p>
+<h2 id="打包遇到的一些问题"><a href="#打包遇到的一些问题" class="headerlink" title="打包遇到的一些问题"></a>打包遇到的一些问题</h2><h3 id="问题-source-1-5-中不支持-diamond运算符"><a href="#问题-source-1-5-中不支持-diamond运算符" class="headerlink" title="问题:source-1.5 中不支持 diamond运算符"></a>问题:source-1.5 中不支持 diamond运算符</h3><p><strong>解决办法一:</strong><br>在properties添加<br><code>&lt;maven.compiler.source&gt;1.8&lt;/maven.compiler.source&gt;</code>和<code>&lt;maven.compiler.target&gt;1.8&lt;/maven.compiler.target&gt;</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;properties&gt;</div><div class="line">  &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;</div><div class="line">  &lt;project.reporting.outputEncoding&gt;UTF-8&lt;/project.reporting.outputEncoding&gt;</div><div class="line">  &lt;java.version&gt;1.8&lt;/java.version&gt;</div><div class="line">  &lt;fastjson&gt;1.2.41&lt;/fastjson&gt;</div><div class="line">  &lt;maven.compiler.source&gt;1.8&lt;/maven.compiler.source&gt;</div><div class="line">  &lt;maven.compiler.target&gt;1.8&lt;/maven.compiler.target&gt;</div><div class="line">&lt;/properties&gt;</div></pre></td></tr></table></figure></p>
+<p><strong>解决方案二:</strong><br>在plugin中添加 <code>&lt;source&gt;1.8&lt;/source&gt;</code>  和 <code>&lt;target&gt;1.8&lt;/target&gt;</code> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&lt;build&gt;  </div><div class="line">        &lt;plugins&gt;  </div><div class="line">            &lt;plugin&gt;  </div><div class="line">                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;  </div><div class="line">                &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;  </div><div class="line">                &lt;version&gt;3.3&lt;/version&gt;  </div><div class="line">                &lt;configuration&gt;  </div><div class="line">                    &lt;source&gt;1.8&lt;/source&gt;  </div><div class="line">                    &lt;target&gt;1.8&lt;/target&gt;  </div><div class="line">                &lt;/configuration&gt;  </div><div class="line">            &lt;/plugin&gt;  </div><div class="line">        &lt;/plugins&gt;  </div><div class="line">    &lt;/build&gt;</div></pre></td></tr></table></figure>
+<h3 id="问题二-打包出现某jar包无法打入"><a href="#问题二-打包出现某jar包无法打入" class="headerlink" title="问题二:打包出现某jar包无法打入"></a>问题二:打包出现某jar包无法打入</h3><p>实际是可以下载，但是无法将此打入包中</p>
+<p><strong>解决办法:</strong><br>在<strong>pom.xml</strong>中添加<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;repositories&gt;  </div><div class="line">   &lt;repository&gt;  </div><div class="line">          &lt;id&gt;spring-milestone&lt;/id&gt;  </div><div class="line">          &lt;url&gt;http://repo.spring.io/libs-release&lt;/url&gt;  </div><div class="line">   &lt;/repository&gt;  </div><div class="line"> &lt;/repositories&gt;</div></pre></td></tr></table></figure></p>
+<h3 id="问题三-mvn-clean-失败，出现Failed-to-execute-goal"><a href="#问题三-mvn-clean-失败，出现Failed-to-execute-goal" class="headerlink" title="问题三:mvn  clean 失败，出现Failed to execute goal"></a>问题三:mvn  clean 失败，出现Failed to execute goal</h3><p>原因: 在clean的时候，target里面的文件被占用了。<br>解决办法: 不占用就行了。</p>
+<h2 id="SpringBoot部署"><a href="#SpringBoot部署" class="headerlink" title="SpringBoot部署"></a>SpringBoot部署</h2><p>如果是<strong>jar</strong>项目<br><strong>Windows</strong>系统在项目同级目录下输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">java -jar springboot-package</div></pre></td></tr></table></figure>
+<p>即可启动项目。<br>关闭项目，只需关掉<strong>dos</strong>界面就可以了。<br>也可以写一个<strong>bat</strong>文件进行运行。<br><strong>示例:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">@echo off</div><div class="line">title &quot;springboot-package&quot;</div><div class="line">java -jar springboot-package.jar</div></pre></td></tr></table></figure></p>
+<p><strong>Linux</strong>系统在项目同级目录下输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nohup -jar springboot-package &amp;</div></pre></td></tr></table></figure>
+<p>即可启动。<br>关闭输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">kill -9 pid（jar的进程id）</div></pre></td></tr></table></figure>
+<p>也可以在<code>init.d</code>注册一个服务<br>示例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ln -s /home/jars/app/springboot-package.jar /etc/init.d/springboot-package</div><div class="line">chmod +x /etc/init.d/springboot-package</div></pre></td></tr></table></figure>
+<p>然后输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service springboot-package start|stop|restart</div></pre></td></tr></table></figure>
+<p>进行启动或者停止。<br>当然也可以编写<strong>xshell</strong>脚本进行启动和关闭。<br><strong>示例:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line">APPDIR=`pwd`</div><div class="line">PIDFILE=$APPDIR/springboot-package.pid</div><div class="line">if [ -f &quot;$PIDFILE&quot; ] &amp;&amp; kill -0 $(cat &quot;$PIDFILE&quot;); then</div><div class="line">echo &quot;springboot-package is already running...&quot;</div><div class="line">exit 1</div><div class="line">fi</div><div class="line">nohup java -jar $APPDIR/springboot-package.jar &gt;/dev/null 2&gt;&amp;1 &amp;</div><div class="line">echo $! &gt; $PIDFILE</div><div class="line">echo &quot;start springboot-package...&quot;</div></pre></td></tr></table></figure>
+<p>如果是<strong>war</strong>项目<br>将<strong>war</strong>放在<strong>tomcat/webapp</strong>目录下，然后启动<strong>tomcat</strong>就可以了。<strong>Windows</strong>系统 在<strong>tomcat/bin</strong>目录下双击<strong>startup.bat</strong>即可启动，双击<strong>shutdown.bat</strong>关闭。<br><strong>Linux</strong>系统则在<strong>tomcat/bin</strong> 目录下输入<strong>startup.sh</strong>即可启动， 输入<strong>shutdown.sh</strong>关闭。</p>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><p>关于SpringBoot打包部署就讲解到这里了，如有不妥，欢迎指正！<br>SpringBoot打包部署的项目工程地址:<br><a href="https://github.com/xuwujing/springBoot-study/tree/master/springboot-package" target="_blank" rel="external">https://github.com/xuwujing/springBoot-study/tree/master/springboot-package</a></p>
+<p>SpringBoot整合系列:</p>
+<ul>
+<li><p><a href="http://www.panchengming.com/2018/02/28/pancm73/" target="_blank" rel="external">springBoot配置文件的读取以及过滤器和拦截器的使用</a></p>
+</li>
+<li><p><a href="http://www.panchengming.com/2018/01/10/pancm67/" target="_blank" rel="external">SpringBoot的Restful风格的服务</a></p>
+</li>
+<li><p><a href="http://www.panchengming.com/2018/04/27/pancm81/" target="_blank" rel="external">SpringBoot+Mybatis+ Druid+PageHelper实现多数据源并分页</a></p>
+</li>
+<li><p><a href="http://www.panchengming.com/2018/05/07/pancm82/" target="_blank" rel="external">SpringBoot整合ElasticSearch实现多版本的兼容</a></p>
+</li>
+<li><p><a href="http://www.panchengming.com/2018/05/10/pancm83/" target="_blank" rel="external">SpringBoot整合Kafka和Storm</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/9297165.html" target="_blank" rel="external">SpringBoot整合Jsp和Thymeleaf</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/9321395.html" target="_blank" rel="external">SpringBoot整合Netty并使用Protobuf进行数据传输</a></p>
+</li>
+</ul>
+<p>原创不易，如果感觉不错，希望给个推荐！您的支持是我写作的最大动力！<br>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/springboot/" rel="tag"># springboot</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/24/pancm90/" rel="next" title="Java进阶篇设计模式之二 ----- 工厂模式">
+                <i class="fa fa-chevron-left"></i> Java进阶篇设计模式之二 ----- 工厂模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/18/pancm92/" rel="prev" title="Java进阶篇设计模式之三 ----- 建造者模式和原型模式">
+                Java进阶篇设计模式之三 ----- 建造者模式和原型模式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">91</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringBoot打包"><span class="nav-number">2.</span> <span class="nav-text">SpringBoot打包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Maven打包"><span class="nav-number">2.1.</span> <span class="nav-text">Maven打包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#普通项目打包"><span class="nav-number">2.2.</span> <span class="nav-text">普通项目打包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ant打包"><span class="nav-number">2.3.</span> <span class="nav-text">Ant打包</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#打包遇到的一些问题"><span class="nav-number">3.</span> <span class="nav-text">打包遇到的一些问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题-source-1-5-中不支持-diamond运算符"><span class="nav-number">3.1.</span> <span class="nav-text">问题:source-1.5 中不支持 diamond运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题二-打包出现某jar包无法打入"><span class="nav-number">3.2.</span> <span class="nav-text">问题二:打包出现某jar包无法打入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题三-mvn-clean-失败，出现Failed-to-execute-goal"><span class="nav-number">3.3.</span> <span class="nav-text">问题三:mvn  clean 失败，出现Failed to execute goal</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringBoot部署"><span class="nav-number">4.</span> <span class="nav-text">SpringBoot部署</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它"><span class="nav-number">5.</span> <span class="nav-text">其它</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
