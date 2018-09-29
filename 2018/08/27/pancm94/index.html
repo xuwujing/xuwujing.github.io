@@ -1,0 +1,890 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,设计模式," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言在上一篇中我们学习了结构型模式的适配器模式和桥接模式。本篇则来学习下结构型模式的外观模式和装饰器模式。 外观模式简介  外观模式隐藏系统的复杂性，并向客户端提供了一个客户端可以访问系统的接口。这种类型的设计模式属于结构型模式，它向现有的系统添加一个接口，来隐藏系统的复杂性。  简单的来说就是对外提供一个简单接口，隐藏实现的逻辑。比如常用电脑的电源键，我们只需按电源键，就可以让它启动或者关闭，">
+<meta name="keywords" content="java,设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java进阶篇设计模式之五-----外观模式和装饰器模式">
+<meta property="og:url" content="http://yoursite.com/2018/08/27/pancm94/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言在上一篇中我们学习了结构型模式的适配器模式和桥接模式。本篇则来学习下结构型模式的外观模式和装饰器模式。 外观模式简介  外观模式隐藏系统的复杂性，并向客户端提供了一个客户端可以访问系统的接口。这种类型的设计模式属于结构型模式，它向现有的系统添加一个接口，来隐藏系统的复杂性。  简单的来说就是对外提供一个简单接口，隐藏实现的逻辑。比如常用电脑的电源键，我们只需按电源键，就可以让它启动或者关闭，">
+<meta property="og:updated_time" content="2018-09-29T03:25:59.185Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java进阶篇设计模式之五-----外观模式和装饰器模式">
+<meta name="twitter:description" content="前言在上一篇中我们学习了结构型模式的适配器模式和桥接模式。本篇则来学习下结构型模式的外观模式和装饰器模式。 外观模式简介  外观模式隐藏系统的复杂性，并向客户端提供了一个客户端可以访问系统的接口。这种类型的设计模式属于结构型模式，它向现有的系统添加一个接口，来隐藏系统的复杂性。  简单的来说就是对外提供一个简单接口，隐藏实现的逻辑。比如常用电脑的电源键，我们只需按电源键，就可以让它启动或者关闭，">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/08/27/pancm94/"/>
+
+
+
+
+
+
+  <title>Java进阶篇设计模式之五-----外观模式和装饰器模式 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/27/pancm94/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java进阶篇设计模式之五-----外观模式和装饰器模式</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-27T22:34:27+08:00">
+                2018-08-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在<a href="https://www.cnblogs.com/xuwujing/p/9496346.html" target="_blank" rel="external">上一篇</a>中我们学习了结构型模式的适配器模式和桥接模式。本篇则来学习下结构型模式的外观模式和装饰器模式。</p>
+<h2 id="外观模式"><a href="#外观模式" class="headerlink" title="外观模式"></a>外观模式</h2><p><strong>简介</strong></p>
+<blockquote>
+<p>外观模式隐藏系统的复杂性，并向客户端提供了一个客户端可以访问系统的接口。这种类型的设计模式属于结构型模式，它向现有的系统添加一个接口，来隐藏系统的复杂性。</p>
+</blockquote>
+<p>简单的来说就是对外提供一个简单接口，隐藏实现的逻辑。比如常用电脑的电源键，我们只需按电源键，就可以让它启动或者关闭，无需知道它是怎么启动的(启动CPU、启动内存、启动硬盘)，怎么关闭的(关闭硬盘、关闭内存、关闭CPU)；</p>
+<p>这里我们还是可以用电脑玩游戏的例子来<strong>外观模式</strong>进行简单的讲解。<br>电脑上有一些网络游戏，分别是DNF、LOL和WOW，我们只需双击电脑上的图标就可以启动并玩游戏了，无需关心游戏是怎么启动和运行的了。</p>
+<p>需要实现的步骤如下:</p>
+<ol>
+<li>建立游戏的接口；</li>
+<li>建立LOL、DNF和WOW的类并实现游戏的接口；</li>
+<li>定义一个外观类，提供给客户端调用。</li>
+<li>调用外观类。</li>
+</ol>
+<p><strong>代码示例:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">interface Game&#123;</div><div class="line">	void play();</div><div class="line">&#125;</div><div class="line"></div><div class="line">class DNF implements Game&#123;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public void play() &#123;</div><div class="line">		System.out.println(&quot;正在玩DNF...&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class LOL implements Game&#123;</div><div class="line">	@Override</div><div class="line">	public void play() &#123;</div><div class="line">		System.out.println(&quot;正在玩LOL...&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class WOW implements Game&#123;</div><div class="line">	@Override</div><div class="line">	public void play() &#123;</div><div class="line">		System.out.println(&quot;正在玩WOW...&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class Computer&#123;</div><div class="line">	</div><div class="line">	private Game dnf;</div><div class="line">	private Game lol;</div><div class="line">	private Game wow;</div><div class="line">	</div><div class="line">	public Computer() &#123;</div><div class="line">		dnf=new DNF();</div><div class="line">		lol=new LOL();</div><div class="line">		wow=new WOW();</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	public void playDNF()&#123;</div><div class="line">		dnf.play();</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	public void playLOL()&#123;</div><div class="line">		lol.play();</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	public void playWOW()&#123;</div><div class="line">		wow.play();</div><div class="line">	&#125;	</div><div class="line">&#125;</div><div class="line"></div><div class="line">public static void main(String[] args) &#123;</div><div class="line">		Computer computer=new Computer();</div><div class="line">		computer.playDNF();</div><div class="line">		computer.playLOL();</div><div class="line">		computer.playWOW();</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<p><strong>运行结果:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">正在玩DNF...</div><div class="line">正在玩LOL...</div><div class="line">正在玩WOW...</div></pre></td></tr></table></figure></p>
+<p>在上述代码示例中，我们在想玩游戏的时候，只用实例化<strong>外观类</strong>调用其中的游戏方法即可，无需关心游戏是怎么启动和运行的。而且每个游戏之间也相互独立，互不影响，不会因为某个游戏玩不了导致其它的游戏也无法运行。其实感觉外观模式和我们平时使用<strong>接口</strong>很相像，都是对外提供接口，并不需要关心是如何实现的。</p>
+<p><strong>外观模式的优点:</strong></p>
+<blockquote>
+<p>降低了耦合，从某种方面来说也提升了安全性。</p>
+</blockquote>
+<p><strong>外观模式的缺点:</strong></p>
+<blockquote>
+<p>不符合开闭原则，不易更改。</p>
+</blockquote>
+<p><strong>使用场景</strong></p>
+<blockquote>
+<p>系统中有多个复杂的模块或者子系统的时候。</p>
+</blockquote>
+<h2 id="装饰器模式"><a href="#装饰器模式" class="headerlink" title="装饰器模式"></a>装饰器模式</h2><p><strong>简介</strong></p>
+<blockquote>
+<p>装饰器模式允许向一个现有的对象添加新的功能，同时又不改变其结构。这种类型的设计模式属于结构型模式，它是作为现有的类的一个包装。</p>
+</blockquote>
+<p>装饰器模式，顾名思义，也就是把某个东西进行装饰起来，让它可以提供一些额外的功能。比如对人进行装饰，做不同的事情的时候穿上不同的服装。比如穿上球衣是准备去打球，穿上泳衣是准备去游泳之类的。</p>
+<blockquote>
+<p>装饰器模式可以动态地给一个对象添加一些额外的职责。</p>
+</blockquote>
+<p>这里我们依旧用一个示例来进行说明。<br>在现在的玩具模型中，有两种模型很受欢迎，<strong>高达(GUNDAM)模型</strong>和<strong>扎古(MrGu)模型</strong>，在我们拼接模型的时候，一般都是先将模型拼接好，然后再来添加一些额外的配件，比如武器。在这里我们在拼接好<strong>高达(GUNDAM)模型</strong>和<strong>扎古(MrGu)模型</strong>之后，给它们装上各自的武器。</p>
+<p>具体实现的步骤如下:</p>
+<ol>
+<li>创建一个抽象构件的模型接口，有组装这个方法；</li>
+<li>创建具体构件的类(GUNDAM类和MrGu类)，并实现上述的模型接口；</li>
+<li>定义一个装饰器，用于接受客户端的请求，并根据客户端的请求进行相应的调用；</li>
+<li>定义个具体实现装饰的类，用于给对象添加相应的功能。</li>
+</ol>
+<p><strong>代码示例:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">interface Model&#123;</div><div class="line">	void  assemble();</div><div class="line">&#125;</div><div class="line"></div><div class="line">class GUNDAM implements Model&#123;</div><div class="line">	@Override</div><div class="line">	public void  assemble() &#123;</div><div class="line">		System.out.println(&quot;组装一个高达模型&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class MrGu implements Model&#123;</div><div class="line">	@Override</div><div class="line">	public void  assemble() &#123;</div><div class="line">		System.out.println(&quot;组装一个扎古模型&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">abstract class  AddExtra implements Model&#123;</div><div class="line">	protected  Model model;</div><div class="line">	</div><div class="line">	public AddExtra(Model model)&#123;</div><div class="line">		this.model=model;</div><div class="line">	&#125;</div><div class="line">	public  void assemble()&#123;</div><div class="line">		model.assemble();</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class LightSaber extends AddExtra&#123;</div><div class="line"></div><div class="line">	public LightSaber(Model model) &#123;</div><div class="line">		super(model);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	public  void assemble()&#123;</div><div class="line">		model.assemble();</div><div class="line">		addLightSaber();</div><div class="line">	&#125;</div><div class="line">	public void addLightSaber()&#123;</div><div class="line">		System.out.println(&quot;添加光剑&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">class RocketLauncher extends AddExtra&#123;</div><div class="line"></div><div class="line">	public RocketLauncher(Model model) &#123;</div><div class="line">		super(model);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	public  void assemble()&#123;</div><div class="line">		model.assemble();</div><div class="line">		addRocketLauncher();</div><div class="line">	&#125;</div><div class="line">	public void addRocketLauncher()&#123;</div><div class="line">		System.out.println(&quot;添加火箭筒&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public static void main(String[] args) &#123;</div><div class="line">	</div><div class="line">		Model gundam=new GUNDAM();</div><div class="line">		Model mrgu=new MrGu();</div><div class="line">		gundam.assemble();</div><div class="line">		mrgu.assemble();</div><div class="line">			</div><div class="line">		Model gModel=new LightSaber(new GUNDAM());</div><div class="line">		gModel.assemble();</div><div class="line">		Model mModel=new RocketLauncher(new MrGu());</div><div class="line">		mModel.assemble();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>运行结果:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">组装一个高达模型</div><div class="line">组装一个扎古模型</div><div class="line"></div><div class="line">组装一个高达模型</div><div class="line">添加光剑</div><div class="line">组装一个扎古模型</div><div class="line">添加火箭筒</div></pre></td></tr></table></figure></p>
+<p>在上述的代码中，我们如果只想组装高达或这扎古的模型的话，可以直接实例化模型类，调用其中的方法即可。假若需要在组装模型的时候，添加一个武器，只需通过装饰器的类进行相应添加相应的功能即可。<br>通过这个示例，我们发现，在使用<strong>装饰器模式</strong>的试试，可以对一些类进行扩展，并且不影响之前的功能，提升了灵活度。</p>
+<p><strong>装饰器模式的优点:</strong></p>
+<blockquote>
+<p>装饰类和被装饰类可以独立发展，耦合度低，易于扩展，灵活方便。</p>
+</blockquote>
+<p><strong>装饰器模式的缺点:</strong></p>
+<blockquote>
+<p>过多的对某个类进行装饰，会增加复杂度。</p>
+</blockquote>
+<p><strong>使用场景</strong><br><strong>原型不变，动态增加一些功能的时候。</strong></p>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><h3 id="音乐推荐"><a href="#音乐推荐" class="headerlink" title="音乐推荐"></a>音乐推荐</h3><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=801827&auto=0&height=66"></iframe>
+
+
+<p>原创不易，如果感觉不错，希望给个推荐！您的支持是我写作的最大动力！<br>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a> </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/22/pancm93/" rel="next" title="Java进阶篇设计模式之四 -----适配器模式和桥接模式">
+                <i class="fa fa-chevron-left"></i> Java进阶篇设计模式之四 -----适配器模式和桥接模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/18/pancm96/" rel="prev" title="给刚工作不久的程序猿同学的一封信">
+                给刚工作不久的程序猿同学的一封信 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">96</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#外观模式"><span class="nav-number">2.</span> <span class="nav-text">外观模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#装饰器模式"><span class="nav-number">3.</span> <span class="nav-text">装饰器模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它"><span class="nav-number">4.</span> <span class="nav-text">其它</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#音乐推荐"><span class="nav-number">4.1.</span> <span class="nav-text">音乐推荐</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

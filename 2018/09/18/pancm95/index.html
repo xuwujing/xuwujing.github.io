@@ -1,0 +1,887 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,设计模式," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言在上一篇中我们学习了结构型模式的外观模式和装饰器模式。本篇则来学习下组合模式和过滤器模式。 组合模式简介  组合模式是用于把一组相似的对象当作一个单一的对象。组合模式依据树形结构来组合对象，用来表示部分以及整体层次。这种类型的设计模式属于结构型模式，它创建了对象组的树形结构。  简单来说的话，就是根据树形结构把相似的对象进行组合，然后表示该部分是用来做啥的。在&amp;lt;大话设计模式&amp;gt;中有">
+<meta name="keywords" content="java,设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java进阶篇设计模式之六 ----- 组合模式和过滤器模式">
+<meta property="og:url" content="http://yoursite.com/2018/09/18/pancm95/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言在上一篇中我们学习了结构型模式的外观模式和装饰器模式。本篇则来学习下组合模式和过滤器模式。 组合模式简介  组合模式是用于把一组相似的对象当作一个单一的对象。组合模式依据树形结构来组合对象，用来表示部分以及整体层次。这种类型的设计模式属于结构型模式，它创建了对象组的树形结构。  简单来说的话，就是根据树形结构把相似的对象进行组合，然后表示该部分是用来做啥的。在&amp;lt;大话设计模式&amp;gt;中有">
+<meta property="og:updated_time" content="2018-09-29T03:26:32.489Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java进阶篇设计模式之六 ----- 组合模式和过滤器模式">
+<meta name="twitter:description" content="前言在上一篇中我们学习了结构型模式的外观模式和装饰器模式。本篇则来学习下组合模式和过滤器模式。 组合模式简介  组合模式是用于把一组相似的对象当作一个单一的对象。组合模式依据树形结构来组合对象，用来表示部分以及整体层次。这种类型的设计模式属于结构型模式，它创建了对象组的树形结构。  简单来说的话，就是根据树形结构把相似的对象进行组合，然后表示该部分是用来做啥的。在&amp;lt;大话设计模式&amp;gt;中有">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/09/18/pancm95/"/>
+
+
+
+
+
+
+  <title>Java进阶篇设计模式之六 ----- 组合模式和过滤器模式 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/18/pancm95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java进阶篇设计模式之六 ----- 组合模式和过滤器模式</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-18T00:55:29+08:00">
+                2018-09-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在<a href="https://www.cnblogs.com/xuwujing/p/9545272.html" target="_blank" rel="external">上一篇</a>中我们学习了结构型模式的外观模式和装饰器模式。本篇则来学习下组合模式和过滤器模式。</p>
+<h2 id="组合模式"><a href="#组合模式" class="headerlink" title="组合模式"></a>组合模式</h2><p><strong>简介</strong></p>
+<blockquote>
+<p>组合模式是用于把一组相似的对象当作一个单一的对象。组合模式依据树形结构来组合对象，用来表示部分以及整体层次。这种类型的设计模式属于结构型模式，它创建了对象组的树形结构。</p>
+</blockquote>
+<p>简单来说的话，就是根据树形结构把相似的对象进行组合，然后表示该部分是用来做啥的。在&lt;大话设计模式&gt;中有个很形象的例子，就是电脑中的 <strong>文件系统</strong>。</p>
+<blockquote>
+<p>文件系统由目录和文件组成。每个目录都可以装内容。目录的内容可以是文件，也可以是目录。按照这种方式，计算机的文件系统就是以递归结构来组织的。</p>
+</blockquote>
+<p>当然，这里我们也可以使用一个简单的示例来对组合模式进行讲解。</p>
+<p>在学校中，有很多学生，但是这些学生中又有不同的身份，有的学生是学生会主席，有的是学生会委员，有的是班长，有的是体育委员等等， 当然大部分都是普通的学生，并没有担当其它的职位。这时我们就可以使用组合模式来进行组合。</p>
+<p>按照管理层来看，学生职位中最大的是学生会主席，学生会主席下有学生会委员，然后学生会委员又管理着普通的学生，他们之间相互独立，可以成为一个部分，也可以最终成为一个整体。可以说非常符合组合模式中的<code>树形结构以表示‘部分-整体’的层次结构</code>。</p>
+<p>废话不在多说了，下面进行代码的开发。<br>首先定义一个学生类，有学生姓名和职位属性。<br>然后在学生类中在添加 add()、remove()、get()方法，最后进行层级调用。</p>
+<p><strong>代码示例:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line">class Student&#123;</div><div class="line">	private String name;</div><div class="line">	</div><div class="line">	private String position;</div><div class="line">	</div><div class="line">	private List&lt;Student&gt; students;</div><div class="line"></div><div class="line">	public Student(String name, String position) &#123;</div><div class="line">		this.name = name;</div><div class="line">		this.position = position;</div><div class="line">		students=new ArrayList&lt;Student&gt;();</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	</div><div class="line">	public void add(Student student)&#123;</div><div class="line">		students.add(student);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	public void remove(Student student)&#123;</div><div class="line">		students.remove(student);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	public List&lt;Student&gt; get()&#123;</div><div class="line">		return students;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	@Override</div><div class="line">	public String toString() &#123;</div><div class="line">		return &quot;Student [name=&quot; + name + &quot;, position=&quot; + position + &quot;]&quot;;</div><div class="line">	&#125;	</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">public class CompositeTest &#123;</div><div class="line"></div><div class="line">	public static void main(String[] args) &#123;</div><div class="line"></div><div class="line">		Student studentLeader=new Student(&quot;小明&quot;,&quot;学生会主席&quot;);</div><div class="line"></div><div class="line">		Student committeeMember=new Student(&quot;小刚&quot;,&quot;学生会委员&quot;);</div><div class="line">		</div><div class="line">		Student student=new Student(&quot;小红&quot;,&quot;学生&quot;);</div><div class="line">		</div><div class="line">		committeeMember.add(student);</div><div class="line">		studentLeader.add(committeeMember);</div><div class="line">		</div><div class="line">		System.out.println(&quot;-&quot;+studentLeader);</div><div class="line">		studentLeader.get().forEach(sl-&gt;&#123;</div><div class="line">			System.out.println(&quot;--&quot;+sl);</div><div class="line">			sl.get().forEach(cm-&gt;&#123;</div><div class="line">				System.out.println(&quot;---&quot;+cm);</div><div class="line">			&#125;);</div><div class="line">		&#125;);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>输出结果:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">-Student [name=小明, position=学生会主席]</div><div class="line">--Student [name=小刚, position=学生会委员]</div><div class="line">---Student [name=小红, position=学生]</div></pre></td></tr></table></figure></p>
+<p>在上述示例中，我们添加了三个学生(更多也一样，主要是思路)，在学校中分别扮演 学生会主席、学生会委员以及学生。其中学生会主席管理着学生会委员，学生会委员管理着学生，他们之间属于层级关系，一层层的包含。在这之中，我们也发现一点，其实组合模式就是把某个对象去包含另一个对象，然后通过组合的方式来进行一些布局。</p>
+<p><strong>组合模式的优点:</strong></p>
+<blockquote>
+<p>高层模块调用较为简单，增加某个节点方便。</p>
+</blockquote>
+<p><strong>组合模式的缺点:</strong></p>
+<blockquote>
+<p>因为其子节点的声明都是实现类，而不是接口，违反了依赖倒置原则。</p>
+</blockquote>
+<p><strong>使用场景:</strong><br>可以表示为 ‘<strong>部分-整体</strong>’的层级结构。</p>
+<h2 id="过滤器模式"><a href="#过滤器模式" class="headerlink" title="过滤器模式"></a>过滤器模式</h2><p><strong>简介</strong></p>
+<blockquote>
+<p>过滤器模式允许开发人员使用不同的标准来过滤一组对象，通过逻辑运算以解耦的方式把它们连接起来。这种类型的设计模式属于结构型模式，它结合多个标准来获得单一标准。</p>
+</blockquote>
+<p>简单的来说该模式的功能就是如其名，做一个过滤的作用。我们在一般在进行后台接口开发的时候，也会根据过滤掉一些请求。其实过滤器模式主要实现也是这种功能，废话不多说，开始用代码进行相应的说明。</p>
+<p>这里依旧用学生来进行讲解，学校的学生中有男生和女生，学校又有不同的年级，这时我们相统计下学生的相关信息，就可以使用过滤器模式来进行分组了。比如，统计该学校有多少男生，一年级的女生有多少，三年级的学生或者女生有多少之类等等。</p>
+<p><strong>代码示例:</strong><br>由于代码有点多，这里就分开进行讲解。<br>首先定义一个实体类，有姓名、性别、年级这三个属性。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">class Student&#123;</div><div class="line">	private String name; </div><div class="line">	private String gender; </div><div class="line">	private Integer grade;</div><div class="line">	public Student(String name, String gender, Integer grade) &#123;</div><div class="line">		super();</div><div class="line">		this.name = name;</div><div class="line">		this.gender = gender;</div><div class="line">		this.grade = grade;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	public String getName() &#123;</div><div class="line">		return name;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	public void setName(String name) &#123;</div><div class="line">		this.name = name;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	public String getGender() &#123;</div><div class="line">		return gender;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	public void setGender(String gender) &#123;</div><div class="line">		this.gender = gender;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	public Integer getGrade() &#123;</div><div class="line">		return grade;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	public void setGrade(Integer grade) &#123;</div><div class="line">		this.grade = grade;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public String toString() &#123;</div><div class="line">		return &quot;Student [name=&quot; + name + &quot;, gender=&quot; + gender + &quot;, grade=&quot; + grade + &quot;]&quot;;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后再定义一个公用的接口，指定实现的方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">interface FilterinGrule &#123;</div><div class="line">	List&lt;Student&gt;  filter(List&lt;Student&gt; students);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后再实现该接口，制定不同的过滤规则。这里主要是三种规则，普通的过滤，且过滤，或过滤。<br>具体实现的方法如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div></pre></td><td class="code"><pre><div class="line">class MaleStudents implements FilterinGrule&#123;</div><div class="line">	@Override</div><div class="line">	public List&lt;Student&gt; filter(List&lt;Student&gt; students) &#123;</div><div class="line">		List&lt;Student&gt; maleStudents = new ArrayList&lt;Student&gt;(); </div><div class="line">		students.forEach(student-&gt;&#123;</div><div class="line">			 if(student.getGender().equalsIgnoreCase(&quot;male&quot;))&#123;</div><div class="line">	        	 maleStudents.add(student);</div><div class="line">	         &#125;</div><div class="line">		&#125;);</div><div class="line">	    return maleStudents;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class FemaleStudents implements FilterinGrule&#123;</div><div class="line">	@Override</div><div class="line">	public List&lt;Student&gt; filter(List&lt;Student&gt; students) &#123;</div><div class="line">		List&lt;Student&gt; femaleStudents = new ArrayList&lt;Student&gt;(); </div><div class="line">		students.forEach(student-&gt;&#123;</div><div class="line">			 if(student.getGender().equalsIgnoreCase(&quot;female&quot;))&#123;</div><div class="line">				 femaleStudents.add(student);</div><div class="line">	         &#125;</div><div class="line">		&#125;);</div><div class="line">	    return femaleStudents;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class SecondGrade implements FilterinGrule&#123;</div><div class="line">	@Override</div><div class="line">	public List&lt;Student&gt; filter(List&lt;Student&gt; students) &#123;</div><div class="line">		List&lt;Student&gt; secondGradeStudents = new ArrayList&lt;Student&gt;(); </div><div class="line">		students.forEach(student-&gt;&#123;</div><div class="line">			 if(student.getGrade() == 2)&#123;</div><div class="line">				 secondGradeStudents.add(student);</div><div class="line">	         &#125;</div><div class="line">		&#125;);</div><div class="line">		</div><div class="line">	    return secondGradeStudents;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">class And implements FilterinGrule&#123;</div><div class="line">	 private FilterinGrule filter;</div><div class="line">	 private FilterinGrule filter2;</div><div class="line">	</div><div class="line">	 public And(FilterinGrule filter,FilterinGrule filter2) &#123;</div><div class="line">		 this.filter=filter;</div><div class="line">		 this.filter2=filter2;</div><div class="line">	 &#125;</div><div class="line">	</div><div class="line">	@Override</div><div class="line">	public List&lt;Student&gt; filter(List&lt;Student&gt; students) &#123;</div><div class="line">		List&lt;Student&gt; students2=filter.filter(students);</div><div class="line">		return filter2.filter(students2);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class Or implements FilterinGrule&#123;</div><div class="line">	 private FilterinGrule filter;</div><div class="line">	 private FilterinGrule filter2;</div><div class="line">	</div><div class="line">	 public Or(FilterinGrule filter,FilterinGrule filter2) &#123;</div><div class="line">		 this.filter=filter;</div><div class="line">		 this.filter2=filter2;</div><div class="line">	 &#125;</div><div class="line">	</div><div class="line">	@Override</div><div class="line">	public List&lt;Student&gt; filter(List&lt;Student&gt; students) &#123;</div><div class="line">		List&lt;Student&gt; students1=filter.filter(students);</div><div class="line">		List&lt;Student&gt; students2=filter2.filter(students);</div><div class="line">		students2.forEach(student-&gt;&#123;</div><div class="line">			 if(!students1.contains(student))&#123;</div><div class="line">				 students1.add(student);</div><div class="line">	         &#125;</div><div class="line">		&#125;);</div><div class="line">		return students1;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最后再来进行调用测试，添加一些学生，并且指定性别以及班级。然后根据不同的条件来进行过滤。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">public class FilterTest &#123;</div><div class="line"></div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		List&lt;Student&gt; list=new ArrayList&lt;Student&gt;();</div><div class="line">		list.add(new Student(&quot;小明&quot;, &quot;male&quot;, 1));</div><div class="line">		list.add(new Student(&quot;小红&quot;, &quot;female&quot;, 2));</div><div class="line">		list.add(new Student(&quot;小刚&quot;, &quot;male&quot;, 2));</div><div class="line">		list.add(new Student(&quot;小霞&quot;, &quot;female&quot;, 3));</div><div class="line">		list.add(new Student(&quot;小智&quot;, &quot;male&quot;, 3));</div><div class="line">		list.add(new Student(&quot;虚无境&quot;, &quot;male&quot;, 1));</div><div class="line">		</div><div class="line">		</div><div class="line">		FilterinGrule male = new MaleStudents();</div><div class="line">		FilterinGrule female = new FemaleStudents();</div><div class="line">		FilterinGrule secondGrade = new SecondGrade();</div><div class="line">		FilterinGrule secondGradeMale = new And(secondGrade, male);</div><div class="line">		FilterinGrule secondGradeOrFemale = new Or(secondGrade, female);</div><div class="line">	    </div><div class="line">		System.out.println(&quot;男生:&quot;+male.filter(list));</div><div class="line">		System.out.println(&quot;女生:&quot;+female.filter(list));</div><div class="line">		System.out.println(&quot;二年级学生:&quot;+secondGrade.filter(list));</div><div class="line">		System.out.println(&quot;二年级男生:&quot;+secondGradeMale.filter(list));</div><div class="line">		System.out.println(&quot;二年级的学生或女生:&quot;+secondGradeOrFemale.filter(list));		</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>输出结果:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">男生:[Student [name=小明, gender=male, grade=1], Student [name=小刚, gender=male, grade=2], Student [name=小智, gender=male, grade=3], Student [name=虚无境, gender=male, grade=1]]</div><div class="line">女生:[Student [name=小红, gender=female, grade=2], Student [name=小霞, gender=female, grade=3]]</div><div class="line">二年级学生:[Student [name=小红, gender=female, grade=2], Student [name=小刚, gender=male, grade=2]]</div><div class="line">二年级男生:[Student [name=小刚, gender=male, grade=2]]</div><div class="line">二年级的学生或女生:[Student [name=小红, gender=female, grade=2], Student [name=小刚, gender=male, grade=2], Student [name=小霞, gender=female, grade=3]]</div></pre></td></tr></table></figure></p>
+<p>通过上述示例，我们发现过滤器模式其实很简单，制定过滤规则，然后再根据制定的标准来进行过滤，得到符合条件的数据。过滤器模式虽然简单，但是在构建过滤规则的时候，有点繁琐，不过在jdk1.8之后，我们可以使用<strong>stream</strong>流更方便的进行规则的制定（这一点留在以后再讲）。</p>
+<p><strong>过滤器模式的优点：</strong></p>
+<blockquote>
+<p>简单，解耦，使用方便。</p>
+</blockquote>
+<p><strong>过滤器模式的缺点：</strong></p>
+<blockquote>
+<p>好像没有。。。</p>
+</blockquote>
+<p><strong>使用场景：</strong></p>
+<blockquote>
+<p>需要进行筛选的时候。</p>
+</blockquote>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><h3 id="音乐推荐"><a href="#音乐推荐" class="headerlink" title="音乐推荐"></a>音乐推荐</h3><p>其实边听音乐便看博客很享受的~_~</p>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=493911&auto=0&height=66"></iframe>
+
+
+
+<p>原创不易，如果感觉不错，希望给个推荐！您的支持是我写作的最大动力！<br>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a> </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/18/pancm96/" rel="next" title="给刚工作不久的程序猿同学的一封信">
+                <i class="fa fa-chevron-left"></i> 给刚工作不久的程序猿同学的一封信
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/25/pancm97/" rel="prev" title="Java进阶篇设计模式之七 ----- 享元模式和代理模式">
+                Java进阶篇设计模式之七 ----- 享元模式和代理模式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">96</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组合模式"><span class="nav-number">2.</span> <span class="nav-text">组合模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#过滤器模式"><span class="nav-number">3.</span> <span class="nav-text">过滤器模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它"><span class="nav-number">4.</span> <span class="nav-text">其它</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#音乐推荐"><span class="nav-number">4.1.</span> <span class="nav-text">音乐推荐</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

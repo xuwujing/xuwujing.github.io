@@ -1,0 +1,904 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,设计模式," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言在上一篇中我们学习了创建型模式的建造者模式和原型模式。本篇则来学习下结构型模式的适配器模式和桥接模式。 适配器模式简介  适配器模式是作为两个不兼容的接口之间的桥梁。这种类型的设计模式属于结构型模式，它结合了两个独立接口的功能。  简单的来说就是通过某个接口将不兼容的两个类进行兼容，俗称转换器。生活比较典型的例子是电器的电压，美国的电压是110V左右， 而中国的电压普片是220V，如果我们想">
+<meta name="keywords" content="java,设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java进阶篇设计模式之四 -----适配器模式和桥接模式">
+<meta property="og:url" content="http://yoursite.com/2018/08/22/pancm93/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言在上一篇中我们学习了创建型模式的建造者模式和原型模式。本篇则来学习下结构型模式的适配器模式和桥接模式。 适配器模式简介  适配器模式是作为两个不兼容的接口之间的桥梁。这种类型的设计模式属于结构型模式，它结合了两个独立接口的功能。  简单的来说就是通过某个接口将不兼容的两个类进行兼容，俗称转换器。生活比较典型的例子是电器的电压，美国的电压是110V左右， 而中国的电压普片是220V，如果我们想">
+<meta property="og:updated_time" content="2018-09-29T03:24:49.513Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java进阶篇设计模式之四 -----适配器模式和桥接模式">
+<meta name="twitter:description" content="前言在上一篇中我们学习了创建型模式的建造者模式和原型模式。本篇则来学习下结构型模式的适配器模式和桥接模式。 适配器模式简介  适配器模式是作为两个不兼容的接口之间的桥梁。这种类型的设计模式属于结构型模式，它结合了两个独立接口的功能。  简单的来说就是通过某个接口将不兼容的两个类进行兼容，俗称转换器。生活比较典型的例子是电器的电压，美国的电压是110V左右， 而中国的电压普片是220V，如果我们想">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/08/22/pancm93/"/>
+
+
+
+
+
+
+  <title>Java进阶篇设计模式之四 -----适配器模式和桥接模式 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/22/pancm93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java进阶篇设计模式之四 -----适配器模式和桥接模式</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-22T22:30:31+08:00">
+                2018-08-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在<a href="https://www.cnblogs.com/xuwujing/p/9496346.html" target="_blank" rel="external">上一篇</a>中我们学习了创建型模式的建造者模式和原型模式。本篇则来学习下结构型模式的适配器模式和桥接模式。</p>
+<h2 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h2><p><strong>简介</strong></p>
+<blockquote>
+<p>适配器模式是作为两个不兼容的接口之间的桥梁。这种类型的设计模式属于结构型模式，它结合了两个独立接口的功能。</p>
+</blockquote>
+<p>简单的来说就是通过某个接口将不兼容的两个类进行兼容，俗称转换器。<br>生活比较典型的例子是电器的电压，美国的电压是110V左右， 而中国的电压普片是220V，如果我们想用美国或日本的电器，则需要一个转换器，将110V转换成220V。还有一个很典型例子就是曾经的万能充，基本可以充各种手机的电池。</p>
+<p>这里我们用一个简单的示例来进行说明。<br>某个视频播放器，只能播放MP4格式的视频，但是主流的视频格式除了MP4，还有AVI、RVMB等，这时就有个软件，格式工厂用于对视频格式的转换(适配器)，从而进行播放视频。这时我们就可以使用适配器模式来进行完成该代码的编写。</p>
+<p>适配器模式主要有两种类型，一种是类适配器模式，主要通过继承来实现适配器功能；一种是对象适配器模式，通过组合来实现适配器功能。</p>
+<p>首先是<strong>类适配器模式</strong>，它需要完成一下步骤：</p>
+<ol>
+<li>建立MP4、AVI、RVMB视频格式的接口；</li>
+<li>建立一个视频播放器的类实现MP4视频格式的类；</li>
+<li>编写一个格式工厂类，将AVI、RVMB等格式的视频文件转换成MP4格式的文件。</li>
+<li>播放这些视频。</li>
+</ol>
+<p>那么代码如下:</p>
+<p><strong>代码示例:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">interface Mp4&#123;</div><div class="line">	void playMp4();</div><div class="line">&#125;</div><div class="line"></div><div class="line">interface Avi&#123;</div><div class="line">	void playAvi();</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">interface Rvmb&#123;</div><div class="line">	void playRvmb();</div><div class="line">&#125;</div><div class="line"></div><div class="line">class VideoPlayer implements Mp4&#123;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public void playMp4() &#123;</div><div class="line">		System.out.println(&quot;播放Mp4格式的视频文件.&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">class FormatFactory extends VideoPlayer  implements Avi&#123;	</div><div class="line">	@Override</div><div class="line">	public void playAvi() &#123;</div><div class="line">		//转换成MP4格式的视频</div><div class="line">		playMp4();</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">public static void main(String[] args) &#123;		</div><div class="line">		Mp4 mp4=new VideoPlayer();</div><div class="line">		mp4.playMp4();</div><div class="line">		Avi avi=new FormatFactory();</div><div class="line">		avi.playAvi();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>运行结果:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">播放Mp4格式的视频文件.</div><div class="line">播放Mp4格式的视频文件.</div></pre></td></tr></table></figure>
+<p>通过上述代码以及运行结果，我们可以得到想要的结果了，如果还有新增的视频格式，也需要使用该视频播放器播放的话，只需在增加一个接口以及格式工厂类就可以了。</p>
+<p><strong>对象适配器模式</strong><br>通过组合来实现适配器功能。<br>所以这里我们只需将格式工厂中继承改为创建对象即可。<br>更改之后的代码如下:<br><strong>代码示例</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">class FormatFactory2  implements Rvmb&#123;</div><div class="line">		private Mp4 mp4;</div><div class="line">		</div><div class="line">		 public FormatFactory2(Mp4 mp4) &#123;</div><div class="line">			this.mp4=mp4;</div><div class="line">	   	&#125;</div><div class="line">		</div><div class="line">		@Override</div><div class="line">		public void playRvmb() &#123;</div><div class="line">			mp4.playMp4();</div><div class="line">		&#125;	</div><div class="line">	&#125;</div><div class="line"></div><div class="line"></div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">	</div><div class="line">			Rvmb rvmb=new FormatFactory2(new VideoPlayer());</div><div class="line">			rvmb.playRvmb();</div><div class="line">			</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<p><strong>运行结果:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">播放Mp4格式的视频文件.</div></pre></td></tr></table></figure></p>
+<p>这两种适配器模式中，都实现了该功能，不过在这里推荐使用<strong>对象适配器模式</strong>，相比<strong>类适配器模式</strong>，它更加灵活，也符合设计原则中的合成复用原则:</p>
+<blockquote>
+<p>尽量使用合成/聚合的方式，而不是使用继承。</p>
+</blockquote>
+<p><strong>适配器模式的优点:</strong></p>
+<blockquote>
+<p>提升了类的复用和灵活度。</p>
+</blockquote>
+<p><strong>适配器模式的缺点:</strong></p>
+<blockquote>
+<p>使用过多，系统会比较杂乱，难以把握。</p>
+</blockquote>
+<p><strong>注意事项:</strong></p>
+<blockquote>
+<p>适配器不是在详细设计时添加的，而是解决正在服役的项目的问题。</p>
+</blockquote>
+<h2 id="桥接模式"><a href="#桥接模式" class="headerlink" title="桥接模式"></a>桥接模式</h2><p><strong>简介</strong></p>
+<blockquote>
+<p>桥接是用于把抽象化与实现化解耦，使得二者可以独立变化。这种类型的设计模式属于结构型模式，它通过提供抽象化和实现化之间的桥接结构，来实现二者的解耦。</p>
+</blockquote>
+<p>字面的意思解读就是通过一个中间的桥梁对两边的东西进行关联起来，但是关联的两者之间又不相互影响。对这个印象比较深的是<code>&lt;大话设计模式&gt;</code>中的手机品牌和手机软件，手机有很多品牌，市场有很多软件，每个手机装的软件又各不相同，手机品牌包含包含软件，但是软件并不是手机的一部分，它们是聚合关系。如果A品牌手机装了a，b软件，B品牌手机装了b，c软件，如果A品牌手机需要新安装一个c软件，那么它只需添加该软件即可，无需知道该软件是如何生产的。相同的，如果新增了一个C品牌手机，那么它也只需安装所需的a、b或c软件即可。</p>
+<p>好了，废话不在多说，依旧用一个示例来进行说明。<br>市面上有很多种笔，比如铅笔、黑色的圆珠笔和红色的圆珠笔等等， 也有很多种类型的纸，比如考试的卷子用的纸，报纸用的纸等等。一般来说，报纸上的字颜色是黑色的，这里我们就用黑色的圆珠笔来进行书写，考试卷子上的打分字颜色是红色的，这里我们就用红色的圆珠笔来进行书写。笔类和纸类相互独立，但是在纸上写字又将它们关联起来，这里我们就可以使用桥接模式。</p>
+<p><strong>实现步骤如下:</strong></p>
+<ol>
+<li>定义一个笔类的接口，有写的这个方法；</li>
+<li>定义红笔和黑笔的类，实现笔类的接口；</li>
+<li>定义一个纸类的抽象类，设置笔的种类，并需要实现被写的方法；</li>
+<li>定义卷子纸和新闻纸类，继承纸类并实现该方法；</li>
+<li>进行书写。</li>
+</ol>
+<p><strong>代码示例</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">interface Pen&#123;</div><div class="line">	void write();</div><div class="line">&#125;</div><div class="line"></div><div class="line">class RedPen implements Pen&#123;</div><div class="line">	@Override</div><div class="line">	public void write() &#123;</div><div class="line">		System.out.println(&quot;红色的字&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class BlackPen implements Pen&#123;</div><div class="line">	@Override</div><div class="line">	public void write() &#123;</div><div class="line">		System.out.println(&quot;黑色的字&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">abstract class  Paper&#123;</div><div class="line">	protected  Pen pen;</div><div class="line">	</div><div class="line">	void setPen(Pen pen)&#123;</div><div class="line">		this.pen=pen;</div><div class="line">	&#125;	</div><div class="line">	abstract void writing();</div><div class="line">&#125;</div><div class="line"></div><div class="line">class ExaminationPaper extends Paper&#123;</div><div class="line">	@Override</div><div class="line">	void writing() &#123;</div><div class="line">		pen.write();</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class NewsPaper extends Paper&#123;</div><div class="line">	@Override</div><div class="line">	void writing() &#123;</div><div class="line">		pen.write();</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public static void main(String[] args) &#123;</div><div class="line">		Paper paper=new ExaminationPaper();</div><div class="line">		paper.setPen(new RedPen());</div><div class="line">		paper.writing();</div><div class="line">		</div><div class="line">		Paper paper2=new NewsPaper();</div><div class="line">		paper2.setPen(new BlackPen());</div><div class="line">		paper2.writing();</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<p><strong>运行结果</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">红色的字</div><div class="line">黑色的字</div></pre></td></tr></table></figure></p>
+<p>从上述结果中我们可以得出我们想要的结果。如果新增一个<strong>笔类</strong>或者一个<strong>纸类</strong>，那么只需新增相应的接口和实现即可，并不会因为结构化改变而相互直接影响。</p>
+<p><strong>桥接模式的优点:</strong></p>
+<blockquote>
+<p>1、抽象和实现的分离，实现了解耦；<br> 2、提升的扩展能力。</p>
+</blockquote>
+<p><strong>桥接模式的缺点:</strong></p>
+<blockquote>
+<p>会使系统看起复杂，对新手不友好，没有一定的抽象进行设计能力难以理解。</p>
+</blockquote>
+<p><strong>使用场景:</strong></p>
+<blockquote>
+<p>一个类存在两个独立变化的维度，且这两个维度都需要进行扩展。</p>
+</blockquote>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><h3 id="音乐推荐"><a href="#音乐推荐" class="headerlink" title="音乐推荐"></a>音乐推荐</h3><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=32648074&auto=0&height=66"></iframe>
+
+<p>网易云网友评价(ps:原版无法生成外链，建议听原版）:</p>
+<blockquote>
+<p>扶桑画师浅溪，居泰安，喜绘鲤。院前一方荷塘，锦鲤游曳，溪常与嬉戏。 其时正武德之乱，藩镇割据，战事频仍，魑魅魍魉，肆逆于道。兵戈逼泰安，街邻皆逃亡，独溪不舍锦鲤，未去。 是夜，院室倏火。有人入火护溪，言其本鲤中妖，欲取溪命，却生情愫，遂不忍为之。翌日天明，火势渐歇，人已不见。</p>
+</blockquote>
+<p>原创不易，如果感觉不错，希望给个推荐！您的支持是我写作的最大动力！<br>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a> </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/18/pancm92/" rel="next" title="Java进阶篇设计模式之三 ----- 建造者模式和原型模式">
+                <i class="fa fa-chevron-left"></i> Java进阶篇设计模式之三 ----- 建造者模式和原型模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/27/pancm94/" rel="prev" title="Java进阶篇设计模式之五-----外观模式和装饰器模式">
+                Java进阶篇设计模式之五-----外观模式和装饰器模式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">96</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#适配器模式"><span class="nav-number">2.</span> <span class="nav-text">适配器模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#桥接模式"><span class="nav-number">3.</span> <span class="nav-text">桥接模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它"><span class="nav-number">4.</span> <span class="nav-text">其它</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#音乐推荐"><span class="nav-number">4.1.</span> <span class="nav-text">音乐推荐</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
