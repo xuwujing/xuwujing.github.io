@@ -1,0 +1,911 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,设计模式," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言在上一篇中我们学习了行为型模式的访问者模式(Visitor Pattern)和中介者模式（Mediator Pattern）。本篇则来学习下行为型模式的两个模式，策略模式(Strategy Pattern)和模板模式（Template Pattern）。 策略模式简介  策略模式（Strategy Pattern）属于对象的行为模式。其用意是针对一组算法，将每一个算法封装到具有共同接口的独立">
+<meta name="keywords" content="java,设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java进阶篇设计模式之十一 ---- 策略模式和模板方法模式">
+<meta property="og:url" content="http://yoursite.com/2018/11/13/pancm101/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言在上一篇中我们学习了行为型模式的访问者模式(Visitor Pattern)和中介者模式（Mediator Pattern）。本篇则来学习下行为型模式的两个模式，策略模式(Strategy Pattern)和模板模式（Template Pattern）。 策略模式简介  策略模式（Strategy Pattern）属于对象的行为模式。其用意是针对一组算法，将每一个算法封装到具有共同接口的独立">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181111152930787.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181113194037589.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2018-12-24T13:42:11.770Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java进阶篇设计模式之十一 ---- 策略模式和模板方法模式">
+<meta name="twitter:description" content="前言在上一篇中我们学习了行为型模式的访问者模式(Visitor Pattern)和中介者模式（Mediator Pattern）。本篇则来学习下行为型模式的两个模式，策略模式(Strategy Pattern)和模板模式（Template Pattern）。 策略模式简介  策略模式（Strategy Pattern）属于对象的行为模式。其用意是针对一组算法，将每一个算法封装到具有共同接口的独立">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20181111152930787.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/11/13/pancm101/"/>
+
+
+
+
+
+
+  <title>Java进阶篇设计模式之十一 ---- 策略模式和模板方法模式 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/13/pancm101/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java进阶篇设计模式之十一 ---- 策略模式和模板方法模式</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-13T19:47:00+08:00">
+                2018-11-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在<a href="https://www.cnblogs.com/xuwujing/p/9873514.html" target="_blank" rel="external">上一篇</a>中我们学习了行为型模式的访问者模式(Visitor Pattern)和中介者模式（Mediator Pattern）。本篇则来学习下行为型模式的两个模式，策略模式(Strategy Pattern)和模板模式（Template Pattern）。</p>
+<h2 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h2><p><strong>简介</strong></p>
+<blockquote>
+<p>策略模式（Strategy Pattern）属于对象的行为模式。其用意是针对一组算法，将每一个算法封装到具有共同接口的独立的类中，从而使得它们可以相互替换。策略模式使得算法可以在不影响到客户端的情况下发生变化。<br>其主要目的是通过定义相似的算法，替换if else 语句写法，并且可以随时相互替换。</p>
+</blockquote>
+<p><strong>策略模式</strong>主要由这三个角色组成，环境角色(Context)、抽象策略角色(Strategy)和具体策略角色(ConcreteStrategy)。</p>
+<ul>
+<li>环境角色(Context)：持有一个策略类的引用，提供给客户端使用。</li>
+<li>抽象策略角色(Strategy)：这是一个抽象角色，通常由一个接口或抽象类实现。此角色给出所有的具体策略类所需的接口。</li>
+<li>具体策略角色(ConcreteStrategy)：包装了相关的算法或行为。</li>
+</ul>
+<p>示例图如下:<br><img src="https://img-blog.csdnimg.cn/20181111152930787.png" alt="在这里插入图片描述"></p>
+<p>这里为了方便理解，我们就拿刚学习Java的时候使用计算方法来说吧。<br>在使用计算器进行计算的时候，会经常用到加减乘除方法。如果我们想得到两个数字相加的和，我们需要用到“+”符号，得到相减的差，需要用到“-”符号等等。虽然我们可以通过字符串比较使用if/else写成通用方法，但是计算的符号每次增加，我们就不得不加在原先的方法中进行增加相应的代码，如果后续计算方法增加、修改或删除，那么会使后续的维护变得困难。<br>但是在这些方法中，我们发现其基本方法是固定的，这时我们就可以通过策略模式来进行开发，可以有效避免通过if/else来进行判断，即使后续增加其他的计算规则也可灵活进行调整。</p>
+<p>首先定义一个抽象策略角色，并拥有一个计算的方法。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"> </div><div class="line">interface CalculateStrategy &#123;</div><div class="line">	int doOperation(int num1, int num2);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后再定义加减乘除这些具体策略角色并实现方法。</p>
+<p>那么代码如下:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">class OperationAdd implements CalculateStrategy &#123;</div><div class="line">	@Override</div><div class="line">	public int doOperation(int num1, int num2) &#123;</div><div class="line">		return num1 + num2;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class OperationSub implements CalculateStrategy &#123;</div><div class="line">	@Override</div><div class="line">	public int doOperation(int num1, int num2) &#123;</div><div class="line">		return num1 - num2;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class OperationMul implements CalculateStrategy &#123;</div><div class="line">	@Override</div><div class="line">	public int doOperation(int num1, int num2) &#123;</div><div class="line">		return num1 * num2;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class OperationDiv implements CalculateStrategy &#123;</div><div class="line">	@Override</div><div class="line">	public int doOperation(int num1, int num2) &#123;</div><div class="line">		return num1 / num2;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最后在定义一个环境角色，提供一个计算的接口供客户端使用。<br>代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">class  CalculatorContext &#123;</div><div class="line">	private CalculateStrategy strategy;</div><div class="line"></div><div class="line">	public CalculatorContext(CalculateStrategy strategy) &#123;</div><div class="line">		this.strategy = strategy;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public int executeStrategy(int num1, int num2) &#123;</div><div class="line">		return strategy.doOperation(num1, num2);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>编写好之后，那么我们来进行测试。<br>测试代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">	public static void main(String[] args) &#123;</div><div class="line">  		   int a=4,b=2;</div><div class="line">		  CalculatorContext context = new CalculatorContext(new OperationAdd());    </div><div class="line">	      System.out.println(&quot;a + b = &quot;+context.executeStrategy(a, b));</div><div class="line">	 </div><div class="line">	      CalculatorContext context2 = new CalculatorContext(new OperationSub());      </div><div class="line">	      System.out.println(&quot;a - b = &quot;+context2.executeStrategy(a, b));</div><div class="line">	 </div><div class="line">	      CalculatorContext context3 = new CalculatorContext(new OperationMul());    </div><div class="line">	      System.out.println(&quot;a * b = &quot;+context3.executeStrategy(a, b));</div><div class="line">	</div><div class="line">	      CalculatorContext context4 = new CalculatorContext(new OperationDiv());    </div><div class="line">	      System.out.println(&quot;a / b = &quot;+context4.executeStrategy(a, b));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>输出结果:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">	    a + b = 6</div><div class="line">a - b = 2</div><div class="line">a * b = 8</div><div class="line">a / b = 2</div></pre></td></tr></table></figure></p>
+<p> <strong>策略模式优点：</strong></p>
+<blockquote>
+<p> 扩展性好，可以在不修改对象结构的情况下，为新的算法进行添加新的类进行实现；<br> 灵活性好，可以对算法进行自由切换；</p>
+</blockquote>
+<p><strong>策略模式缺点：</strong></p>
+<blockquote>
+<p>使用策略类变多，会增加系统的复杂度。；<br>客户端必须知道所有的策略类才能进行调用；</p>
+</blockquote>
+<p><strong>使用场景：</strong> </p>
+<blockquote>
+<p>如果在一个系统里面有许多类，它们之间的区别仅在于它们的行为，那么使用策略模式可以动态地让一个对象在许多行为中选择一种行为；<br>一个系统需要动态地在几种算法中选择一种;<br>如果一个对象有很多的行为，如果不用恰当的模式，这些行为就只好使用多重的条件选择语句来实现;</p>
+</blockquote>
+<h2 id="模板模式"><a href="#模板模式" class="headerlink" title="模板模式"></a>模板模式</h2><p><strong>简介</strong></p>
+<blockquote>
+<p>模板模式（Template Pattern）中，一个抽象类公开定义了执行它的方法的方式/模板。它的子类可以按需要重写方法实现，但调用将以抽象类中定义的方式进行。 这种类型的设计模式属于行为型模式。定义一个操作中的算法的骨架，而将一些步骤延迟到子类中。</p>
+</blockquote>
+<p>模板模式，其主要的的思想就是做一个模板，提供给客户端进行调用。除去生活中我们经常用到的简历模板、合同模板等等，Java中也有很经典的模板使用，那就是Servlet，HttpService类提供了一个service()方法，这个方法调用七个do方法中的一个或几个，完成对客户端调用的响应。这些do方法需要由HttpServlet的具体则由子类提供。</p>
+<p><strong>模板模式</strong>主要由抽象模板(Abstract Template)角色和具体模板(Concrete Template)角色组成。</p>
+<ul>
+<li><p>抽象模板(Abstract Template): 定义了一个或多个抽象操作，以便让子类实现。这些抽象操作叫做基本操作，它们是一个顶级逻辑的组成步骤;定义并实现了一个模板方法。这个模板方法一般是一个具体方法，它给出了一个顶级逻辑的骨架，而逻辑的组成步骤在相应的抽象操作中，推迟到子类实现。顶级逻辑也有可能调用一些具体方法。</p>
+</li>
+<li><p>具体模板(Concrete Template): 实现父类所定义的一个或多个抽象方法，它们是一个顶级逻辑的组成步骤;每一个抽象模板角色都可以有任意多个具体模板角色与之对应，而每一个具体模板角色都可以给出这些抽象方法（也就是顶级逻辑的组成步骤）的不同实现，从而使得顶级逻辑的实现各不相同。</p>
+</li>
+</ul>
+<p>示例图如下:<br><img src="https://img-blog.csdnimg.cn/20181113194037589.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="https://www.dofactory.com/images/diagrams/net/template.gif"></p>
+<p>这里为了方便理解，我们依旧使用一个简单的示例来加以说明。<br>我们以前在玩魂斗罗、双截龙、热血物语、忍者神龟等等游戏的时候，都需要在小霸王游戏机上插卡，然后启动游戏才能玩，其中魂斗罗这种游戏，启动游戏之后就可以直接玩了，但是忍者神龟这种游戏则在启动游戏之后，需要选择其中一个角色才能开始玩。那么我们可以根据这个场景写出一个通用的模板，主要包含启动游戏，玩游戏，结束游戏这几个必须实现的方法，选择人物这个方法改成可选。</p>
+<p>那么这个抽象类的代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">abstract class  Game&#123;</div><div class="line">	</div><div class="line">	//启动游戏</div><div class="line">	protected abstract void  runGame();</div><div class="line">	//选择人物</div><div class="line">	protected  void choosePerson() &#123;&#125;;</div><div class="line">	//开始玩游戏</div><div class="line">	protected abstract void startPlayGame();</div><div class="line">	//结束游戏</div><div class="line">	protected abstract void endPlayGame();</div><div class="line">	</div><div class="line">	//模板方法</div><div class="line">	public final void play() &#123;</div><div class="line">		runGame();</div><div class="line">		choosePerson();</div><div class="line">		startPlayGame();</div><div class="line">		endPlayGame();</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>定义好该抽象类之后，我们再来定义具体模板实现类。这里定义两个游戏类，一个是魂斗罗，一个忍者神龟。</p>
+<p>那么代码如下:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">class ContraGame extends Game&#123;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	protected void runGame() &#123;</div><div class="line">		System.out.println(&quot;启动魂斗罗II...&quot;);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	protected void startPlayGame() &#123;</div><div class="line">		System.out.println(&quot;1P正在使用S弹打aircraft...&quot;);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	protected void endPlayGame() &#123;</div><div class="line">		System.out.println(&quot;1P被流弹打死了，游戏结束！&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class TMNTGame extends Game&#123;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	protected void runGame() &#123;</div><div class="line">		System.out.println(&quot;启动忍者神龟III...&quot;);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	protected void choosePerson() &#123;</div><div class="line">		System.out.println(&quot;1P选择了Raph ！&quot;);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	protected void startPlayGame() &#123;</div><div class="line">		System.out.println(&quot;Raph正在使用绝技 “火箭头槌” &quot;);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	protected void endPlayGame() &#123;</div><div class="line">		System.out.println(&quot;Raph 掉进井盖里死了，游戏结束了！ &quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最后再来进行测试，测试代码如下:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"> </div><div class="line">public static void main(String[] args) &#123;</div><div class="line">		Game game = new ContraGame();</div><div class="line">		game.play();</div><div class="line">		System.out.println();</div><div class="line">		game = new TMNTGame();</div><div class="line">		game.play();</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>输出结果:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">启动魂斗罗II...</div><div class="line">1P正在使用S弹打aircraft...</div><div class="line">1P被流弹打死了，游戏结束！</div><div class="line"></div><div class="line">启动忍者神龟III...</div><div class="line">1P选择了Raph ！</div><div class="line">Raph正在使用绝技 “火箭头槌” </div><div class="line">Raph 掉进井盖里死了，游戏结束了！</div></pre></td></tr></table></figure></p>
+<p><strong>模板模式优点：</strong></p>
+<blockquote>
+<p>扩展性好，对不变的代码进行封装，对可变的进行扩展；<br>可维护性好，因为将公共代码进行了提取，使用的时候直接调用即可；</p>
+</blockquote>
+<p><strong>模板模式缺点：</strong></p>
+<blockquote>
+<p>因为每一个不同的实现都需要一个子类来实现，导致类的个数增加，会使系统变得复杂；</p>
+</blockquote>
+<p><strong>使用场景：</strong> </p>
+<blockquote>
+<p>有多个子类共有逻辑相同的方法；<br>重要的、复杂的方法，可以考虑作为模板方法。</p>
+</blockquote>
+<p><strong>注意事项：</strong> </p>
+<blockquote>
+<p>为防止恶意操作，一般模板方法都加上 final 关键词！</p>
+</blockquote>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><h3 id="音乐推荐"><a href="#音乐推荐" class="headerlink" title="音乐推荐"></a>音乐推荐</h3><p>分享一首非常好听的轻音乐！<br>网易云网友评论:</p>
+<blockquote>
+<p>简单，重复，毫无华丽旋律，也无厚重悲凉的伴奏。但心偏偏就被紧紧的抓住了。一种茫然却被迫紧凑的感觉。一种不知何所处的心虚。what for？</p>
+</blockquote>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=25731432&auto=0&height=66"></iframe>
+
+<h3 id="项目的代码"><a href="#项目的代码" class="headerlink" title="项目的代码"></a>项目的代码</h3><p> <a href="https://github.com/xuwujing/java-study" target="_blank" rel="external">java-study </a>是本人在学习Java过程中记录的一些代码，也包括之前博文中使用的代码。如果感觉不错，希望顺手给个start，当然如果有不足，也希望提出。<br>github地址:  <a href="https://github.com/xuwujing/java-study" target="_blank" rel="external">https://github.com/xuwujing/java-study</a></p>
+<p>原创不易，如果感觉不错，希望给个推荐！您的支持是我写作的最大动力！<br>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/05/pancm100/" rel="next" title="Java进阶篇设计模式之十 ---- 访问者模式和中介者模式">
+                <i class="fa fa-chevron-left"></i> Java进阶篇设计模式之十 ---- 访问者模式和中介者模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/22/pancm102/" rel="prev" title="Java进阶篇设计模式之十二 ---- 备忘录模式和状态模式">
+                Java进阶篇设计模式之十二 ---- 备忘录模式和状态模式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">104</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#策略模式"><span class="nav-number">2.</span> <span class="nav-text">策略模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模板模式"><span class="nav-number">3.</span> <span class="nav-text">模板模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它"><span class="nav-number">4.</span> <span class="nav-text">其它</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#音乐推荐"><span class="nav-number">4.1.</span> <span class="nav-text">音乐推荐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#项目的代码"><span class="nav-number">4.2.</span> <span class="nav-text">项目的代码</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

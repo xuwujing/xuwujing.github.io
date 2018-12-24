@@ -1,0 +1,1521 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,设计模式," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言本篇是讲述之前学习设计模式的一个总结篇，其目的是为了对这些设计模式的进行一个提炼总结，能够通过查看看此篇就可以理解一些设计模式的核心思想。 设计模式简介什么是设计模式 设计模式是一套被反复使用的、多数人知晓的、经过分类编目的、代码设计经验的总结。  为什么使用设计模式 使用设计模式是为了重用代码、让代码更容易被他人理解、保证代码可靠性。  设计模式类型设计模式有23种类型。按照主要分类可以分">
+<meta name="keywords" content="java,设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java进阶篇 设计模式之十四 ----- 总结篇">
+<meta property="og:url" content="http://yoursite.com/2018/12/17/pancm104/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言本篇是讲述之前学习设计模式的一个总结篇，其目的是为了对这些设计模式的进行一个提炼总结，能够通过查看看此篇就可以理解一些设计模式的核心思想。 设计模式简介什么是设计模式 设计模式是一套被反复使用的、多数人知晓的、经过分类编目的、代码设计经验的总结。  为什么使用设计模式 使用设计模式是为了重用代码、让代码更容易被他人理解、保证代码可靠性。  设计模式类型设计模式有23种类型。按照主要分类可以分">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181217163803866.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181217163820234.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181217202935684.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181217203523292.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181217203439887.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181217213007743.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181217213235420.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181217213605109.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181217213743508.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181217213927721.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181217214208674.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181217214413922.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181217215202385.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181217215608661.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181217215816696.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181217215953885.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2018121722020782.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2018121722045025.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181105203837733.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181105211356878.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181111152930787.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181113194037589.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181122192355292.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181122192503391.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181128203250148.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2018-12-24T13:42:42.046Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java进阶篇 设计模式之十四 ----- 总结篇">
+<meta name="twitter:description" content="前言本篇是讲述之前学习设计模式的一个总结篇，其目的是为了对这些设计模式的进行一个提炼总结，能够通过查看看此篇就可以理解一些设计模式的核心思想。 设计模式简介什么是设计模式 设计模式是一套被反复使用的、多数人知晓的、经过分类编目的、代码设计经验的总结。  为什么使用设计模式 使用设计模式是为了重用代码、让代码更容易被他人理解、保证代码可靠性。  设计模式类型设计模式有23种类型。按照主要分类可以分">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20181217163803866.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/17/pancm104/"/>
+
+
+
+
+
+
+  <title>Java进阶篇 设计模式之十四 ----- 总结篇 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/17/pancm104/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java进阶篇 设计模式之十四 ----- 总结篇</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-17T22:47:02+08:00">
+                2018-12-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本篇是讲述之前学习设计模式的一个总结篇，其目的是为了对这些设计模式的进行一个提炼总结，能够通过查看看此篇就可以理解一些设计模式的核心思想。</p>
+<h2 id="设计模式简介"><a href="#设计模式简介" class="headerlink" title="设计模式简介"></a>设计模式简介</h2><h3 id="什么是设计模式"><a href="#什么是设计模式" class="headerlink" title="什么是设计模式"></a>什么是设计模式</h3><blockquote>
+<p>设计模式是一套被反复使用的、多数人知晓的、经过分类编目的、代码设计经验的总结。</p>
+</blockquote>
+<h3 id="为什么使用设计模式"><a href="#为什么使用设计模式" class="headerlink" title="为什么使用设计模式"></a>为什么使用设计模式</h3><blockquote>
+<p>使用设计模式是为了重用代码、让代码更容易被他人理解、保证代码可靠性。</p>
+</blockquote>
+<h3 id="设计模式类型"><a href="#设计模式类型" class="headerlink" title="设计模式类型"></a>设计模式类型</h3><p>设计模式有23种类型。按照主要分类可以分为三大类:</p>
+<p><strong>一、创建型模式</strong></p>
+<blockquote>
+<p>这些设计模式提供了一种在创建对象的同时隐藏创建逻辑的方式，而不是使用 new运算符直接实例化对象。这使得程序在判断针对某个给定实例需要创建哪些对象时更加灵活。</p>
+</blockquote>
+<ul>
+<li>单例模式</li>
+<li>工厂模式 </li>
+<li>抽象工厂模式 </li>
+<li>建造者模式 </li>
+<li>原型模式</li>
+</ul>
+<p><strong>二、结构型模式</strong></p>
+<blockquote>
+<p>这些设计模式关注类和对象的组合。继承的概念被用来组合接口和定义组合对象获得新功能的方式。</p>
+</blockquote>
+<ul>
+<li>适配器模式</li>
+<li>桥接模式</li>
+<li>过滤器模式</li>
+<li>组合模式</li>
+<li>装饰器模式</li>
+<li>外观模式</li>
+<li>享元模式</li>
+<li>代理模式</li>
+</ul>
+<p><strong>三、行为型模式</strong></p>
+<blockquote>
+<p>这些设计模式特别关注对象之间的通信。</p>
+</blockquote>
+<ul>
+<li>责任链模式</li>
+<li>命令模式</li>
+<li>解释器模式</li>
+<li>迭代器模式</li>
+<li>中介者模式  </li>
+<li>备忘录模式</li>
+<li>观察者模式</li>
+<li>状态模式 </li>
+<li>空对象模式 </li>
+<li>策略模式 </li>
+<li>模板模式 </li>
+<li>访问者模式</li>
+</ul>
+<h3 id="设计模式的原则"><a href="#设计模式的原则" class="headerlink" title="设计模式的原则"></a>设计模式的原则</h3><p>设计模式的六大原则</p>
+<ol>
+<li>开闭原则：对扩展开放，对修改关闭。</li>
+<li>里氏代换原则：对开闭原则的补充。任何基类可以出现的地方，子类一定可以出现。LSP 是继承复用的基石，只有当派生类可以替换掉基类，且软件单位的功能不受到影响时，基类才能真正被复用，而派生类也能够在基类的基础上增加新的行为。</li>
+<li>依赖倒转原则：针对接口编程，依赖于抽象而不依赖于具体。</li>
+<li>接口隔离原则：尽量使用多个隔离的接口，为了降低类之间的耦合度。</li>
+<li>迪米特法则：一个实体应当尽量少地与其他实体之间发生相互作用，使得系统功能模块相对独立。</li>
+<li>合成复用原则：尽量使用合成/聚合的方式，而不是使用继承。</li>
+</ol>
+<p>设计模式之间的关系图:</p>
+<p><img src="https://img-blog.csdnimg.cn/20181217163803866.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>设计模式总概况:<br><img src="https://img-blog.csdnimg.cn/20181217163820234.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><strong>设计模式相关文章:</strong></p>
+<ul>
+<li><a href="https://www.cnblogs.com/xuwujing/p/9277266.html" target="_blank" rel="external">单例模式</a></li>
+<li><a href="https://www.cnblogs.com/xuwujing/p/9363142.html" target="_blank" rel="external">工厂方法和抽象工厂模式</a></li>
+<li><a href="https://www.cnblogs.com/xuwujing/p/9496346.html" target="_blank" rel="external">建造者模式和原型模式</a></li>
+<li><a href="https://www.cnblogs.com/xuwujing/p/9520851.html" target="_blank" rel="external">适配器模式和桥接模式</a></li>
+<li><a href="https://www.cnblogs.com/xuwujing/p/9545272.html" target="_blank" rel="external">外观模式和装饰器模式</a></li>
+<li><a href="https://www.cnblogs.com/xuwujing/p/9630850.html" target="_blank" rel="external">组合模式和过滤器模式</a></li>
+<li><a href="https://www.cnblogs.com/xuwujing/p/9704228.html" target="_blank" rel="external">享元模式和代理模式</a></li>
+<li><a href="https://www.cnblogs.com/xuwujing/p/9794886.html" target="_blank" rel="external">责任链模式和命令模式</a></li>
+<li><a href="https://www.cnblogs.com/xuwujing/p/9873514.html" target="_blank" rel="external">解释器模式和迭代器模式</a></li>
+<li><a href="https://www.cnblogs.com/xuwujing/p/9911997.html" target="_blank" rel="external">访问者模式和中介者模式</a></li>
+<li><a href="https://www.cnblogs.com/xuwujing/p/9954263.html" target="_blank" rel="external">策略模式和模板方法模式</a></li>
+<li><a href="https://www.cnblogs.com/xuwujing/p/10036204.html" target="_blank" rel="external">观察者模式和空对象模式</a></li>
+</ul>
+<h2 id="创建型模式"><a href="#创建型模式" class="headerlink" title="创建型模式"></a>创建型模式</h2><h3 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h3><h4 id="单例模式介绍"><a href="#单例模式介绍" class="headerlink" title="单例模式介绍"></a>单例模式介绍</h4><p>核心就是保证一个系统中的某个类只有一个实例而且该实例易于外界访问。</p>
+<h4 id="单例模式的使用场景"><a href="#单例模式的使用场景" class="headerlink" title="单例模式的使用场景"></a>单例模式的使用场景</h4><p>在程序中比较常用的是<strong>数据库连接池</strong>、<strong>线程池</strong>、<strong>日志对象</strong>等等。</p>
+<h4 id="单例模式使用"><a href="#单例模式使用" class="headerlink" title="单例模式使用"></a>单例模式使用</h4><p>单例模式的写法主要有5种，分别是：</p>
+<ul>
+<li><strong>饿汉式</strong>: 简单安全, 效率低;</li>
+<li><strong>饱汉式</strong>: 简单不安全, 效率高 ;</li>
+<li><strong>静态内部类</strong>: 安全, 效率高;</li>
+<li><strong>双重锁检查</strong>: 复杂安全, 效率高;</li>
+<li><strong>枚举单例</strong>：简单安全, 效率高；</li>
+</ul>
+<h4 id="单例模式示例图"><a href="#单例模式示例图" class="headerlink" title="单例模式示例图"></a>单例模式示例图</h4><p><img src="https://img-blog.csdnimg.cn/20181217202935684.png" alt="在这里插入图片描述"></p>
+<h4 id="单例模式总结"><a href="#单例模式总结" class="headerlink" title="单例模式总结"></a>单例模式总结</h4><ol>
+<li>构造方法私有化（private）;</li>
+<li>定义一个私有(private)静态(static)实例化对象;</li>
+<li>对外提供一个公共(public)静态(static)的方法得到该实例;</li>
+</ol>
+<h3 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h3><p>工厂模式主要有三种，简单工厂模式、工厂方法模式和抽象工厂模式。但是一般的情况下我们主要用到的是工厂方法模式和抽象工厂模式。</p>
+<h4 id="工厂方法模式介绍"><a href="#工厂方法模式介绍" class="headerlink" title="工厂方法模式介绍"></a>工厂方法模式介绍</h4><blockquote>
+<p>其核心是定义一个创建对象的接口，让其子类自己决定实例化哪一个工厂类，工厂模式使其创建过程延迟到子类进行。</p>
+</blockquote>
+<h4 id="工厂方法模式使用场景"><a href="#工厂方法模式使用场景" class="headerlink" title="工厂方法模式使用场景"></a>工厂方法模式使用场景</h4><p>比如生活中的汽车制造，大名鼎鼎的<strong>hibernate</strong>框架在选择数据库方言这块。</p>
+<h4 id="工厂方法模式示例图"><a href="#工厂方法模式示例图" class="headerlink" title="工厂方法模式示例图"></a>工厂方法模式示例图</h4><p><img src="https://img-blog.csdnimg.cn/20181217203523292.png" alt="在这里插入图片描述"></p>
+<h4 id="抽象工厂模式介绍"><a href="#抽象工厂模式介绍" class="headerlink" title="抽象工厂模式介绍"></a>抽象工厂模式介绍</h4><blockquote>
+<p>主要核心是提供一个创建一系列相关或相互依赖对象的接口，而无需指定它们具体的类。</p>
+</blockquote>
+<h4 id="抽象工厂模式使用场景"><a href="#抽象工厂模式使用场景" class="headerlink" title="抽象工厂模式使用场景"></a>抽象工厂模式使用场景</h4><p>比如生活中的服装制造厂，可以单独制造衣服、裤子、袜子等等，也可以生产一套服装。</p>
+<h4 id="抽象工厂模式示例图"><a href="#抽象工厂模式示例图" class="headerlink" title="抽象工厂模式示例图"></a>抽象工厂模式示例图</h4><p><img src="https://img-blog.csdnimg.cn/20181217203439887.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="建造者模式"><a href="#建造者模式" class="headerlink" title="建造者模式"></a>建造者模式</h3><h4 id="建造者模式介绍"><a href="#建造者模式介绍" class="headerlink" title="建造者模式介绍"></a>建造者模式介绍</h4><blockquote>
+<p>使用多个简单的对象一步一步构建成一个复杂的对象。这种类型的设计模式属于创建型模式，它提供了一种创建对象的最佳方式。<br>简单的来说就是将一个复杂的东西抽离出来，对外提供一个简单的调用，可以在同样的构建过程创建不同的表示。和工厂模式很相似，不过相比而言更加注重组件的装配。</p>
+</blockquote>
+<h4 id="建造者模式使用场景"><a href="#建造者模式使用场景" class="headerlink" title="建造者模式使用场景"></a>建造者模式使用场景</h4><p>适用一些基本组件不便，但是组合经常变化的时候。比如超市促销的大礼包。</p>
+<h4 id="建造者模式角色"><a href="#建造者模式角色" class="headerlink" title="建造者模式角色"></a>建造者模式角色</h4><ol>
+<li><p>Builder：指定一个抽象的接口，规定该产品所需实现部件的创建，并不涉及具体的对象部件的创建。</p>
+</li>
+<li><p>ConcreteBuilder：需实现Builder接口，并且针对不同的逻辑，进行不同方法的创建，最终提供该产品的实例。</p>
+</li>
+<li><p>Director：用来创建复杂对象的部分，对该部分进行完整的创建或者按照一定的规则进行创建。</p>
+</li>
+<li><p>Product：示被构造的复杂对象。</p>
+</li>
+</ol>
+<h4 id="建造者模式优缺点"><a href="#建造者模式优缺点" class="headerlink" title="建造者模式优缺点"></a>建造者模式优缺点</h4><p><strong>优点:</strong></p>
+<ol>
+<li>建造者独立，易扩展。</li>
+<li>便于控制细节风险。</li>
+</ol>
+<p><strong>缺点</strong></p>
+<ol>
+<li>内部结构复杂，不易于理解。</li>
+<li>产品直接需要有共同点，范围有控制。</li>
+</ol>
+<h4 id="建造者模式示例图"><a href="#建造者模式示例图" class="headerlink" title="建造者模式示例图"></a>建造者模式示例图</h4><p><img src="https://img-blog.csdnimg.cn/20181217213007743.png" alt="在这里插入图片描述"></p>
+<h3 id="原型模式"><a href="#原型模式" class="headerlink" title="原型模式"></a>原型模式</h3><h4 id="原型模式介绍"><a href="#原型模式介绍" class="headerlink" title="原型模式介绍"></a>原型模式介绍</h4><blockquote>
+<p>用于创建重复的对象，同时又能保证性能。这种类型的设计模式属于创建型模式，它提供了一种创建对象的最佳方式。核心是克隆。</p>
+</blockquote>
+<h4 id="原型模式使用场景"><a href="#原型模式使用场景" class="headerlink" title="原型模式使用场景"></a>原型模式使用场景</h4><ol>
+<li>类初始化的时候需要消耗大量资源的时候；</li>
+<li>获取数据库连接繁琐的时候；</li>
+<li>一个对象，有很多个修改者的时候；</li>
+</ol>
+<h4 id="原型模式优缺点"><a href="#原型模式优缺点" class="headerlink" title="原型模式优缺点"></a>原型模式优缺点</h4><p><strong>优点:</strong><br>1.可以提升性能；</p>
+<p><strong>缺点:</strong><br>1.因为必须实现Cloneable 接口，所以用起来可能不太方便。</p>
+<h4 id="原型模式示例图"><a href="#原型模式示例图" class="headerlink" title="原型模式示例图"></a>原型模式示例图</h4><p><img src="https://img-blog.csdnimg.cn/20181217213235420.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h2 id="结构型模式"><a href="#结构型模式" class="headerlink" title="结构型模式"></a>结构型模式</h2><h3 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h3><h4 id="适配器模式介绍"><a href="#适配器模式介绍" class="headerlink" title="适配器模式介绍"></a>适配器模式介绍</h4><blockquote>
+<p>适配器模式是作为两个不兼容的接口之间的桥梁。这种类型的设计模式属于结构型模式，它结合了两个独立接口的功能。简单的来说就是通过某个接口将不兼容的两个类进行兼容，俗称转换器。</p>
+</blockquote>
+<h4 id="适配器模式使用"><a href="#适配器模式使用" class="headerlink" title="适配器模式使用"></a>适配器模式使用</h4><blockquote>
+<p>适配器模式主要有两种类型，一种是类适配器模式，主要通过继承来实现适配器功能；一种是对象适配器模式，通过组合来实现适配器功能。</p>
+</blockquote>
+<h4 id="适配器模式使用场景"><a href="#适配器模式使用场景" class="headerlink" title="适配器模式使用场景"></a>适配器模式使用场景</h4><p>电器的电压，经典的jdbc使用。</p>
+<h4 id="适配器模式优缺点"><a href="#适配器模式优缺点" class="headerlink" title="适配器模式优缺点"></a>适配器模式优缺点</h4><p><strong>优点:</strong></p>
+<blockquote>
+<p>提升了类的复用和灵活度。</p>
+</blockquote>
+<p><strong>缺点:</strong></p>
+<blockquote>
+<p>使用过多，系统会比较杂乱，难以把握。</p>
+</blockquote>
+<h4 id="适配器模式示例图"><a href="#适配器模式示例图" class="headerlink" title="适配器模式示例图"></a>适配器模式示例图</h4><p><img src="https://img-blog.csdnimg.cn/20181217213605109.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="桥接模式"><a href="#桥接模式" class="headerlink" title="桥接模式"></a>桥接模式</h3><h4 id="桥接模式介绍"><a href="#桥接模式介绍" class="headerlink" title="桥接模式介绍"></a>桥接模式介绍</h4><blockquote>
+<p>桥接是用于把抽象化与实现化解耦，使得二者可以独立变化。这种类型的设计模式属于结构型模式，它通过提供抽象化和实现化之间的桥接结构，来实现二者的解耦。通过一个中间的桥梁对两边的东西进行关联起来，但是关联的两者之间又不相互影响。</p>
+</blockquote>
+<h4 id="桥接模式场景"><a href="#桥接模式场景" class="headerlink" title="桥接模式场景"></a>桥接模式场景</h4><blockquote>
+<p>一个类存在两个独立变化的维度，且这两个维度都需要进行扩展。</p>
+</blockquote>
+<h4 id="桥接模式优缺点"><a href="#桥接模式优缺点" class="headerlink" title="桥接模式优缺点"></a>桥接模式优缺点</h4><p><strong>优点:</strong></p>
+<blockquote>
+<p>1、抽象和实现的分离，实现了解耦；<br> 2、提升的扩展能力。</p>
+</blockquote>
+<p><strong>缺点:</strong></p>
+<blockquote>
+<p>会使系统看起复杂，对新手不友好，没有一定的抽象进行设计能力难以理解。</p>
+</blockquote>
+<h4 id="桥接模式示例图"><a href="#桥接模式示例图" class="headerlink" title="桥接模式示例图"></a>桥接模式示例图</h4><p><img src="https://img-blog.csdnimg.cn/20181217213743508.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="外观模式"><a href="#外观模式" class="headerlink" title="外观模式"></a>外观模式</h3><h4 id="外观模式介绍"><a href="#外观模式介绍" class="headerlink" title="外观模式介绍"></a>外观模式介绍</h4><blockquote>
+<p>外观模式隐藏系统的复杂性，并向客户端提供了一个客户端可以访问系统的接口。它向现有的系统添加一个接口，来隐藏系统的复杂性。对外提供一个简单接口，隐藏实现的逻辑。</p>
+</blockquote>
+<h4 id="外观模式使用场景"><a href="#外观模式使用场景" class="headerlink" title="外观模式使用场景"></a>外观模式使用场景</h4><blockquote>
+<p>系统中有多个复杂的模块或者子系统的时候。</p>
+</blockquote>
+<h4 id="外观模式优缺点"><a href="#外观模式优缺点" class="headerlink" title="外观模式优缺点"></a>外观模式优缺点</h4><p><strong>优点:</strong></p>
+<blockquote>
+<p>降低了耦合，从某种方面来说也提升了安全性。</p>
+</blockquote>
+<p><strong>缺点:</strong></p>
+<blockquote>
+<p>不符合开闭原则，不易更改。</p>
+</blockquote>
+<h4 id="外观模式示例图"><a href="#外观模式示例图" class="headerlink" title="外观模式示例图"></a>外观模式示例图</h4><p><img src="https://img-blog.csdnimg.cn/20181217213927721.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="装饰器模式"><a href="#装饰器模式" class="headerlink" title="装饰器模式"></a>装饰器模式</h3><h4 id="装饰器模式介绍"><a href="#装饰器模式介绍" class="headerlink" title="装饰器模式介绍"></a>装饰器模式介绍</h4><blockquote>
+<p>装饰器模式允许向一个现有的对象添加新的功能，同时又不改变其结构。这种类型的设计模式属于结构型模式，它是作为现有的类的一个包装。<br>把某个东西进行装饰起来，让它可以提供一些额外的功能。</p>
+</blockquote>
+<h4 id="装饰器模式使用场景"><a href="#装饰器模式使用场景" class="headerlink" title="装饰器模式使用场景"></a>装饰器模式使用场景</h4><blockquote>
+<p>原型不变，动态增加一些功能的时候。</p>
+</blockquote>
+<h4 id="装饰器模式优缺点"><a href="#装饰器模式优缺点" class="headerlink" title="装饰器模式优缺点"></a>装饰器模式优缺点</h4><p><strong>优点:</strong></p>
+<blockquote>
+<p>装饰类和被装饰类可以独立发展，耦合度低，易于扩展，灵活方便。</p>
+</blockquote>
+<p><strong>缺点:</strong></p>
+<blockquote>
+<p>过多的对某个类进行装饰，会增加复杂度。</p>
+</blockquote>
+<h4 id="装饰器模式示例图"><a href="#装饰器模式示例图" class="headerlink" title="装饰器模式示例图"></a>装饰器模式示例图</h4><p><img src="https://img-blog.csdnimg.cn/20181217214208674.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="组合模式"><a href="#组合模式" class="headerlink" title="组合模式"></a>组合模式</h3><h4 id="组合模式介绍"><a href="#组合模式介绍" class="headerlink" title="组合模式介绍"></a>组合模式介绍</h4><blockquote>
+<p>组合模式是用于把一组相似的对象当作一个单一的对象。组合模式依据树形结构来组合对象，用来表示部分以及整体层次。这种类型的设计模式属于结构型模式，它创建了对象组的树形结构。</p>
+</blockquote>
+<h4 id="组合模式使用场景"><a href="#组合模式使用场景" class="headerlink" title="组合模式使用场景"></a>组合模式使用场景</h4><blockquote>
+<p>可以表示为 ‘<strong>部分-整体</strong>’的层级结构。</p>
+</blockquote>
+<h4 id="组合模式优缺点"><a href="#组合模式优缺点" class="headerlink" title="组合模式优缺点"></a>组合模式优缺点</h4><p><strong>优点:</strong></p>
+<blockquote>
+<p>高层模块调用较为简单，增加某个节点方便。</p>
+</blockquote>
+<p><strong>缺点:</strong></p>
+<blockquote>
+<p>因为其子节点的声明都是实现类，而不是接口，违反了依赖倒置原则。</p>
+</blockquote>
+<h4 id="组合模式示例图"><a href="#组合模式示例图" class="headerlink" title="组合模式示例图"></a>组合模式示例图</h4><p><img src="https://img-blog.csdnimg.cn/20181217214413922.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="过滤器模式"><a href="#过滤器模式" class="headerlink" title="过滤器模式"></a>过滤器模式</h3><h4 id="过滤器模式介绍"><a href="#过滤器模式介绍" class="headerlink" title="过滤器模式介绍"></a>过滤器模式介绍</h4><blockquote>
+<p>过滤器模式允许开发人员使用不同的标准来过滤一组对象，通过逻辑运算以解耦的方式把它们连接起来。这种类型的设计模式属于结构型模式，它结合多个标准来获得单一标准。</p>
+</blockquote>
+<h4 id="过滤器模式使用场景"><a href="#过滤器模式使用场景" class="headerlink" title="过滤器模式使用场景"></a>过滤器模式使用场景</h4><blockquote>
+<p>需要进行筛选的时候。</p>
+</blockquote>
+<h4 id="过滤器模式优缺点"><a href="#过滤器模式优缺点" class="headerlink" title="过滤器模式优缺点"></a>过滤器模式优缺点</h4><p><strong>优点：</strong></p>
+<blockquote>
+<p>简单，解耦，使用方便。</p>
+</blockquote>
+<p><strong>缺点：</strong></p>
+<blockquote>
+<p>过多使用需要注意性能。</p>
+</blockquote>
+<h4 id="过滤器模式注意事项"><a href="#过滤器模式注意事项" class="headerlink" title="过滤器模式注意事项"></a>过滤器模式注意事项</h4><blockquote>
+<p>在jdk1.8以后可以使用steam的方法进行过滤分组，可以根据指定的条件进行过滤分组筛选。</p>
+</blockquote>
+<h3 id="享元模式"><a href="#享元模式" class="headerlink" title="享元模式"></a>享元模式</h3><h4 id="享元模式介绍"><a href="#享元模式介绍" class="headerlink" title="享元模式介绍"></a>享元模式介绍</h4><blockquote>
+<p>享元模式主要用于减少创建对象的数量，以减少内存占用和提高性能。这种类型的设计模式属于结构型模式，它提供了减少对象数量从而改善应用所需的对象结构的方式。</p>
+</blockquote>
+<h4 id="享元模式角色"><a href="#享元模式角色" class="headerlink" title="享元模式角色"></a>享元模式角色</h4><p>享元模式的角色主要分为三大类，抽象享元类、具体享元类以及享元工厂类。</p>
+<ul>
+<li>抽象享元类：所有具体享元类的超类或者接口，通过这个接口，可以接受并作用于外部专题。</li>
+<li>具体享元类：实现抽象享元类接口的功能并增加存储空间。</li>
+<li>享元工厂类：用来创建并管理抽象享元类对象，它主要用来确保合理地共享。每当接受到一个请求是，便会提供一个已经创建的抽象享元类对象或者新建一个。 享元模式的核心在于享元工厂类，享元工厂类的作用在于提供一个用于存储享元对象的享元池，用户需要对象时，首先从享元池中获取，如果享元池中不存在 ，则创建一个新的享元对象返回给用户，并在享元池中保存该新增对象。</li>
+</ul>
+<h4 id="享元模式使用场景"><a href="#享元模式使用场景" class="headerlink" title="享元模式使用场景"></a>享元模式使用场景</h4><blockquote>
+<p>系统有大量相似对象。        </p>
+</blockquote>
+<h4 id="享元模式优缺点"><a href="#享元模式优缺点" class="headerlink" title="享元模式优缺点"></a>享元模式优缺点</h4><p><strong>优点：</strong></p>
+<blockquote>
+<p>极大的减少对象的创建，从而降低了系统的内存，提升了效率。</p>
+</blockquote>
+<p><strong>缺点：</strong></p>
+<blockquote>
+<p>提高了系统的复杂度，因为需要将状态进行分离成内部和外部，并且也使外部状态固有化，使得随着内部状态的变化而变化，会造成系统的混乱。</p>
+</blockquote>
+<h4 id="享元模式注意事项"><a href="#享元模式注意事项" class="headerlink" title="享元模式注意事项"></a>享元模式注意事项</h4><blockquote>
+<p>需要注意划分外部状态和内部状态，否则可能会引起线程安全问题。  这些类必须有一个工厂对象加以控制。</p>
+</blockquote>
+<h4 id="与单例模式比较"><a href="#与单例模式比较" class="headerlink" title="与单例模式比较"></a>与单例模式比较</h4><blockquote>
+<p>虽然它们在某些方面很像，但是实际上却是不同的东西，单例模式的目的是限制创建多个对象，避免冲突，比如使用数据库连接池。而享元模式享元模式的目的是共享，避免多次创建耗费资源，比如使用String类。</p>
+</blockquote>
+<h4 id="享元模式示例图"><a href="#享元模式示例图" class="headerlink" title="享元模式示例图"></a>享元模式示例图</h4><p><img src="https://img-blog.csdnimg.cn/20181217215202385.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h3><h4 id="代理模式介绍"><a href="#代理模式介绍" class="headerlink" title="代理模式介绍"></a>代理模式介绍</h4><blockquote>
+<p>主要是通过一个类代表另一个类的功能。通常，我们创建具有现有对象的对象，以便向外界提供功能接口。</p>
+</blockquote>
+<h4 id="代理模式角色"><a href="#代理模式角色" class="headerlink" title="代理模式角色"></a>代理模式角色</h4><p>代理模式主要由这三个角色组成，抽象角色、代理角色和真实角色。</p>
+<ul>
+<li>抽象角色：通过接口或抽象类声明真实角色实现的业务方法。</li>
+<li>代理角色：实现抽象角色，是真实角色的代理，通过真实角色的业务逻辑方法来实现抽象方法，并可以附加自己的操作。</li>
+<li>真实角色：实现抽象角色，定义真实角色所要实现的业务逻辑，供代理角色调用。</li>
+</ul>
+<h4 id="代理模式使用"><a href="#代理模式使用" class="headerlink" title="代理模式使用"></a>代理模式使用</h4><p>代理模式又分为静态代理、动态代理。</p>
+<ul>
+<li>静态代理是由程序员创建或工具生成代理类的源码，再编译代理类。所谓静态也就是在程序运行前就已经存在代理类的字节码文件，代理类和委托类的关系在运行前就确定了。</li>
+<li>动态代理是在实现阶段不用关心代理类，而在运行阶段才指定哪一个对象。可以使用JDK中<code>java.lang.reflect</code>来进行开发。</li>
+</ul>
+<h4 id="代理模式使用场景"><a href="#代理模式使用场景" class="headerlink" title="代理模式使用场景"></a>代理模式使用场景</h4><blockquote>
+<p> 1、远程代理。<br> 2、虚拟代理。<br> 3、Copy-on-Write 代理。<br>  4、保护（Protect or Access）代理。<br>5、Cache代理。<br> 6、防火墙（Firewall）代理。<br>  7、同步化（Synchronization）代理。<br>   8、智能引用（SmartReference）代理。</p>
+</blockquote>
+<h4 id="代理模式优缺点"><a href="#代理模式优缺点" class="headerlink" title="代理模式优缺点"></a>代理模式优缺点</h4><p><strong>优点：</strong></p>
+<blockquote>
+<p> 1、职责清晰。<br> 2、高扩展性。<br>  3、智能化。</p>
+</blockquote>
+<p><strong>缺点：</strong> </p>
+<blockquote>
+<p>1、由于在客户端和真实主题之间增加了代理对象，因此有些类型的代理模式可能会造成请求的处理速度变慢。<br>2、实现代理模式需要额外的工作，有些代理模式的实现非常复杂。</p>
+</blockquote>
+<h4 id="代理模式注意事项"><a href="#代理模式注意事项" class="headerlink" title="代理模式注意事项"></a>代理模式注意事项</h4><blockquote>
+<p>和适配器模式的区别：适配器模式主要改变所考虑对象的接口，而代理模式不能改变所代理类的接口。<br>和装饰器模式的区别：装饰器模式为了增强功能，而代理模式是为了加以控制。</p>
+</blockquote>
+<h4 id="代理模式示例图"><a href="#代理模式示例图" class="headerlink" title="代理模式示例图"></a>代理模式示例图</h4><p><img src="https://img-blog.csdnimg.cn/20181217215608661.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h2 id="行为型模式"><a href="#行为型模式" class="headerlink" title="行为型模式"></a>行为型模式</h2><h3 id="责任链模式"><a href="#责任链模式" class="headerlink" title="责任链模式"></a>责任链模式</h3><h4 id="责任链模式介绍"><a href="#责任链模式介绍" class="headerlink" title="责任链模式介绍"></a>责任链模式介绍</h4><blockquote>
+<p>责任链模式顾名思义，就是为请求创建了一个接收者对象的链。这种模式给予请求的类型，对请求的发送者和接收者进行解耦。这种类型的设计模式属于行为型模式。在这种模式中，通常每个接收者都包含对另一个接收者的引用。如果一个对象不能处理该请求，那么它会把相同的请求传给下一个接收者，依此类推。<br>简单的理解的话就是进行层级处理。</p>
+</blockquote>
+<h4 id="责任链模式角色"><a href="#责任链模式角色" class="headerlink" title="责任链模式角色"></a>责任链模式角色</h4><p>责任链模式主要由这三个角色组成，请求接收者接口(Handler)、请求实现者类(ConcreteHandler)和请求发送者(Client)。</p>
+<ul>
+<li>请求接收者接口：定义可以处理客户端请求事项的接口，包含“可链接下一个同样能处理请求”的对象引用。</li>
+<li>请求实现者类：实现请求处理接口，并判断对象本身是否能够处理本次请求，如果不能完成请求，则交由后继者来处理。</li>
+<li>请求发送者：将请求发送给第一个接收者对象，并等待请求的回复。</li>
+</ul>
+<h4 id="责任链模式使用场景"><a href="#责任链模式使用场景" class="headerlink" title="责任链模式使用场景"></a>责任链模式使用场景</h4><blockquote>
+<p>需要动态指定处理某一组请求时，在不确定接受者的的情况下，向多个对象发送请求时。</p>
+</blockquote>
+<h4 id="责任链模式优缺点"><a href="#责任链模式优缺点" class="headerlink" title="责任链模式优缺点"></a>责任链模式优缺点</h4><p><strong>优点：</strong></p>
+<blockquote>
+<p> 耦合度低，请求者和执行者并没有必然的联系；<br> 灵活度高，可以通过内部成员来进行更改它们执行的次序；<br> 扩展性好，Handler的子类扩展非常方便。</p>
+</blockquote>
+<p><strong>缺点：</strong></p>
+<blockquote>
+<p>会在某程度上降低程序的性能，设置不当的话可能会出现循环调用。<br>在链过长时，会降低代码的阅读性以及增加代码的复杂度。</p>
+</blockquote>
+<h4 id="责任链模式注意事项"><a href="#责任链模式注意事项" class="headerlink" title="责任链模式注意事项"></a>责任链模式注意事项</h4><blockquote>
+<p>虽然责任链模式很灵活，但是牺牲的是一定的性能，因为责任链模式是层级处理，在处理数据的有一定的延迟，所所以需要低延迟的情况下，不推荐使用责任链模式。</p>
+</blockquote>
+<h4 id="责任链模式示例图"><a href="#责任链模式示例图" class="headerlink" title="责任链模式示例图"></a>责任链模式示例图</h4><p><img src="https://img-blog.csdnimg.cn/20181217215816696.png" alt="在这里插入图片描述"></p>
+<h3 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h3><h4 id="命令模式介绍"><a href="#命令模式介绍" class="headerlink" title="命令模式介绍"></a>命令模式介绍</h4><blockquote>
+<p> 命令模式顾名思义，是一种数据驱动的设计模式，它属于行为型模式。请求以命令的形式包裹在对象中，并传给调用对象。调用对象寻找可以处理该命令的合适的对象，并把该命令传给相应的对象，该对象执行命令。<br> 也就是将一个请求封装成一个对象，从而可以用不同的请求对客户进行参数化。</p>
+</blockquote>
+<h4 id="命令模式角色"><a href="#命令模式角色" class="headerlink" title="命令模式角色"></a>命令模式角色</h4><p>命令模式主要由这三个角色组成，命令对象(command)、命令执行对象(received)和命令请求对象(invoker)。</p>
+<ul>
+<li>命令对象：通过接口或抽象类声明实现的方法。</li>
+<li>命令执行对象：实现命令对象的方法，并将一个接收者和动作进行绑定，调用接收者相应的操作。</li>
+<li>命令请求对象：用于执行这个请求，可以动态的对命令进行控制。</li>
+</ul>
+<h4 id="命令模式使用场景"><a href="#命令模式使用场景" class="headerlink" title="命令模式使用场景"></a>命令模式使用场景</h4><blockquote>
+<p> 如果在有类似<code>命令</code>需要指定的，就可以用命令模式，比如记录日志、撤销操作命令等。 </p>
+</blockquote>
+<h4 id="命令模式优缺点"><a href="#命令模式优缺点" class="headerlink" title="命令模式优缺点"></a>命令模式优缺点</h4><p><strong>优点：</strong></p>
+<blockquote>
+<p> 耦合度低，请求者和执行者并没有必然的联系；<br> 扩展性好，Command的子类可以非常容易地扩展。</p>
+</blockquote>
+<p><strong>缺点：</strong> </p>
+<blockquote>
+<p>如果命令过多的话，会增加系统的复杂度 。 </p>
+</blockquote>
+<h4 id="命令模式示例图"><a href="#命令模式示例图" class="headerlink" title="命令模式示例图"></a>命令模式示例图</h4><p><img src="https://img-blog.csdnimg.cn/20181217215953885.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="解释器模式"><a href="#解释器模式" class="headerlink" title="解释器模式"></a>解释器模式</h3><h4 id="解释器模式介绍"><a href="#解释器模式介绍" class="headerlink" title="解释器模式介绍"></a>解释器模式介绍</h4><blockquote>
+<p>解释器模式顾名思义，就是对某事物进行解释。给定一个语言之后，解释器模式可以定义出其文法的一种表示，并同时提供一个解释器。客户端可以使用这个解释器来解释这个语言中的句子。<br>解释器模式其实就是对某事物进行解释。</p>
+</blockquote>
+<h4 id="解释器模式角色"><a href="#解释器模式角色" class="headerlink" title="解释器模式角色"></a>解释器模式角色</h4><p>解释器模式主要由这四个角色组成，抽象表达式(Expression)角色、终结符表达式(Terminal Expression)角色、非终结符表达式(Nonterminal Expression)角色和环境(Context)角色。</p>
+<ul>
+<li>抽象解释器：声明一个所有具体表达式都要实现的抽象接口（或者抽象类），接口中主要是一个interpret()方法，称为解释操作。具体解释任务由它的各个实现类来完成，具体的解释器分别由终结符解释器TerminalExpression和非终结符解释器NonterminalExpression完成。</li>
+<li>终结符表达式：实现与文法中的元素相关联的解释操作，通常一个解释器模式中只有一个终结符表达式，但有多个实例，对应不同的终结符。终结符一半是文法中的运算单元，比如有一个简单的公式R=R1+R2，在里面R1和R2就是终结符，对应的解析R1和R2的解释器就是终结符表达式。 </li>
+<li>非终结符表达式：文法中的每条规则对应于一个非终结符表达式，非终结符表达式一般是文法中的运算符或者其他关键字，比如公式R=R1+R2中，+就是非终结符，解析+的解释器就是一个非终结符表达式。非终结符表达式根据逻辑的复杂程度而增加，原则上每个文法规则都对应一个非终结符表达式。</li>
+<li>环境角色：这个角色的任务一般是用来存放文法中各个终结符所对应的具体值，比如R=R1+R2，我们给R1赋值100，给R2赋值200。这些信息需要存放到环境角色中，很多情况下我们使用Map来充当环境角色就足够了。</li>
+</ul>
+<h4 id="解释器模式使用场景"><a href="#解释器模式使用场景" class="headerlink" title="解释器模式使用场景"></a>解释器模式使用场景</h4><blockquote>
+<p>一个简单的语法规则需要解释的场景，比如sql。<br>有重复的问题的时候。</p>
+</blockquote>
+<h4 id="解释器模式优缺点"><a href="#解释器模式优缺点" class="headerlink" title="解释器模式优缺点"></a>解释器模式优缺点</h4><p><strong>优点：</strong></p>
+<blockquote>
+<p> 扩展性好，子类扩展非常方便。<br> 实现简单。</p>
+</blockquote>
+<p><strong>缺点：</strong></p>
+<blockquote>
+<p>可使用的场景比较少；<br>类过多的话，会使代码臃肿，难以维护；</p>
+</blockquote>
+<h4 id="解释器模式示例图"><a href="#解释器模式示例图" class="headerlink" title="解释器模式示例图"></a>解释器模式示例图</h4><p><img src="https://img-blog.csdnimg.cn/2018121722020782.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="迭代器模式"><a href="#迭代器模式" class="headerlink" title="迭代器模式"></a>迭代器模式</h3><h4 id="迭代器模式介绍"><a href="#迭代器模式介绍" class="headerlink" title="迭代器模式介绍"></a>迭代器模式介绍</h4><blockquote>
+<p>  迭代器模式用于顺序访问集合对象的元素，不需要知道集合对象的底层表示，属于行为型模式。 它提供一种方法顺序访问一个聚合对象中各个元素, 而又无须暴露该对象的内部表示。</p>
+</blockquote>
+<h4 id="迭代器模式角色"><a href="#迭代器模式角色" class="headerlink" title="迭代器模式角色"></a>迭代器模式角色</h4><p> 迭代器模式主要由这四个角色组成，迭代器角色（Iterator）、具体迭代器角色（Concrete Iterator）、容器角色（Container）和具体容器角色（Concrete Container）。</p>
+<ul>
+<li>迭代器角色（Iterator）：通过接口或抽象类声明实现的方法。</li>
+<li>具体迭代器角色（Concrete Iterator）：具体迭代器角色要实现迭代器接口，并要记录遍历中的当前位置。</li>
+<li>容器角色（Container）：容器角色负责提供创建具体迭代器角色的接口。 </li>
+<li>具体容器角色（Concrete Container）：具体容器角色实现创建具体迭代器角色的接口——这个具体迭代器角色于该容器的结构相关。</li>
+</ul>
+<h4 id="迭代器模式使用场景"><a href="#迭代器模式使用场景" class="headerlink" title="迭代器模式使用场景"></a>迭代器模式使用场景</h4><blockquote>
+<p>需要为聚合对象提供遍历的功能的时候。 </p>
+</blockquote>
+<h4 id="迭代器模式优缺点"><a href="#迭代器模式优缺点" class="headerlink" title="迭代器模式优缺点"></a>迭代器模式优缺点</h4><p><strong>优点：</strong></p>
+<blockquote>
+<p> 灵活度高，可以通过不同的方式遍历对象；<br> 扩展性好，可以很方便的增加新的聚合类和迭代器类而不用修改之前的代码。</p>
+</blockquote>
+<p><strong>缺点：</strong> </p>
+<blockquote>
+<p>由于迭代器模式将存储数据和遍历数据的职责分离，增加新的聚合类需要对应增加新的迭代器类，类的个数成对增加，这在一定程度上增加了系统的复杂性。 </p>
+</blockquote>
+<h4 id="迭代器模式示例图"><a href="#迭代器模式示例图" class="headerlink" title="迭代器模式示例图"></a>迭代器模式示例图</h4><p><img src="https://img-blog.csdnimg.cn/2018121722045025.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="访问者模式"><a href="#访问者模式" class="headerlink" title="访问者模式"></a>访问者模式</h3><h4 id="访问者模式介绍"><a href="#访问者模式介绍" class="headerlink" title="访问者模式介绍"></a>访问者模式介绍</h4><blockquote>
+<p>访问者模式（VisitorPattern），顾名思义使用了这个模式后就可以在不修改已有程序结构的前提下，通过添加额外的<strong>访问者</strong>来完成对已有代码功能的提升，它属于行为模式。访问者模式的目的是封装一些施加于某种数据结构元素之上的操作。一旦这些操作需要修改的话，接受这个操作的数据结构则可以保持不变。<br>其主要目的是将数据结构与数据操作分离。</p>
+</blockquote>
+<h4 id="访问者模式角色"><a href="#访问者模式角色" class="headerlink" title="访问者模式角色"></a>访问者模式角色</h4><p><strong>访问者模式</strong>主要由这五个角色组成，抽象访问者(Visitor)、具体访问者(ConcreteVisitor)、抽象节点(Node)、具体节点(ConcreteNode)和结构对象(ObjectStructure)。</p>
+<ul>
+<li>抽象访问者(Visitor)角色：声明了一个或者多个方法操作，形成所有的具体访问者角色必须实现的接口。</li>
+<li>具体访问者(ConcreteVisitor)角色：实现抽象访问者所声明的接口，也就是抽象访问者所声明的各个访问操作。</li>
+<li>抽象节点(Node)角色：声明一个接受操作，接受一个访问者对象作为一个参数。</li>
+<li>具体节点(ConcreteNode)角色：实现了抽象节点所规定的接受操作。</li>
+<li>结构对象(ObjectStructure)角色：有如下的责任，可以遍历结构中的所有元素。</li>
+</ul>
+<h4 id="访问者模式使用场景"><a href="#访问者模式使用场景" class="headerlink" title="访问者模式使用场景"></a>访问者模式使用场景</h4><blockquote>
+<p>对象结构中对象对应的类很少改变，但经常需要在此对象结构上定义新的操作；<br>需要对一个对象结构中的对象进行很多不同的并且不相关的操作，而需要避免让这些操作”污染”这些对象的类，也不希望在增加新操作时修改这些类。</p>
+</blockquote>
+<h4 id="访问者模式优缺点"><a href="#访问者模式优缺点" class="headerlink" title="访问者模式优缺点"></a>访问者模式优缺点</h4><p><strong>访问者模式优点：</strong></p>
+<blockquote>
+<p> 扩展性好，可以在不修改对象结构中的元素的情况下，为对象结构中的元素添加新的功能；<br> 符合单一职责原则，通过访问者将无关的行为分离，使职责单一；</p>
+</blockquote>
+<p><strong>访问者模式缺点：</strong></p>
+<blockquote>
+<p>违反了迪米特原则，因为具体元素对访问者公布细节；<br>违反了依赖倒置原则，依赖了具体类，没有依赖抽象；<br>对象结构变化困难，若对象结构发生了改变，访问者的接口和访问者的实现也都要发生相应的改变；</p>
+</blockquote>
+<h4 id="访问者模式示例图"><a href="#访问者模式示例图" class="headerlink" title="访问者模式示例图"></a>访问者模式示例图</h4><p><img src="https://img-blog.csdnimg.cn/20181105203837733.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="中介者模式"><a href="#中介者模式" class="headerlink" title="中介者模式"></a>中介者模式</h3><h4 id="中介者模式介绍"><a href="#中介者模式介绍" class="headerlink" title="中介者模式介绍"></a>中介者模式介绍</h4><blockquote>
+<p>中介者模式（Mediator Pattern），定义了一个中介对象来封装一系列对象之间的交互关系。中介者使各个对象之间不需要显式地相互引用，从而使耦合性降低，而且可以独立地改变它们之间的交互行为，属于行为型模式。<br>其主要的目的是用来降低多个对象和类之间的通信复杂性。</p>
+</blockquote>
+<h4 id="中介者模式角色"><a href="#中介者模式角色" class="headerlink" title="中介者模式角色"></a>中介者模式角色</h4><p><strong>中介者模式</strong>主要由这四个角色组成， 抽象中介者(Mediator)、具体中介者(ConcreteMediator)、 抽象同事类(Colleague)和具体同事类(ConcreteColleague) 。</p>
+<ul>
+<li>抽象中介者(Mediator): 定义了同事对象到中介者对象之间的接口。</li>
+<li>具体中介者(ConcreteMediator): 实现抽象中介者的方法，它需要知道所有的具体同事类，同时需要从具体的同事类那里接收信息，并且向具体的同事类发送信息。</li>
+<li>抽象同事类(Colleague): 定义了中介者对象的接口，它只知道中介者而不知道其他的同事对象。</li>
+<li>具体同事类(ConcreteColleague) : 每个具体同事类都只需要知道自己的行为即可，但是他们都需要认识中介者。</li>
+</ul>
+<h4 id="中介者模式使用场景"><a href="#中介者模式使用场景" class="headerlink" title="中介者模式使用场景"></a>中介者模式使用场景</h4><blockquote>
+<p>通过一个中间类来封装多个类中的行为，而又不想生成太多的子类。</p>
+</blockquote>
+<h4 id="中介者模式优缺点"><a href="#中介者模式优缺点" class="headerlink" title="中介者模式优缺点"></a>中介者模式优缺点</h4><p><strong>优点：</strong></p>
+<blockquote>
+<p>灵活性高，因为将同事类进行了解耦，使其不必有关联性；<br>降低了类的复杂度，将一对多转化成了一对一；</p>
+</blockquote>
+<p><strong>缺点：</strong></p>
+<blockquote>
+<p>中介者使用过多，会使系统变得复杂难以维护；</p>
+</blockquote>
+<h4 id="中介者模式注意事项"><a href="#中介者模式注意事项" class="headerlink" title="中介者模式注意事项"></a>中介者模式注意事项</h4><blockquote>
+<p>若不明确各个类的职责，那么就不要进行使用！</p>
+</blockquote>
+<p><strong>和外观模式、代理模式比较</strong> </p>
+<blockquote>
+<p>中介者模式和外观模式、代理模式比较类似，但是又有不同。<br>和外观模式比较，中介者模式中，同事类必须依赖与中介者，中介者也知道同事类；但是外观模式中，子系统是不需要知道外观类的存在，并且子系统是可以脱离外观模式的。<br>和代理模式，代理模式的核心就是代理作用，主要还是对原先的类进行扩展或增加控制，比如进行权限控制；而中介者模式主要目的是为了减少对象之前的耦合，也就是同事类直接相互独立，互不影响。</p>
+</blockquote>
+<h4 id="中介者模式示例图"><a href="#中介者模式示例图" class="headerlink" title="中介者模式示例图"></a>中介者模式示例图</h4><p><img src="https://img-blog.csdnimg.cn/20181105211356878.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h3><h4 id="策略模式介绍"><a href="#策略模式介绍" class="headerlink" title="策略模式介绍"></a>策略模式介绍</h4><blockquote>
+<p>策略模式（Strategy Pattern）属于对象的行为模式。其用意是针对一组算法，将每一个算法封装到具有共同接口的独立的类中，从而使得它们可以相互替换。策略模式使得算法可以在不影响到客户端的情况下发生变化。<br>其主要目的是通过定义相似的算法，替换if else 语句写法，并且可以随时相互替换。</p>
+</blockquote>
+<h4 id="策略模式角色"><a href="#策略模式角色" class="headerlink" title="策略模式角色"></a>策略模式角色</h4><p><strong>策略模式</strong>主要由这三个角色组成，环境角色(Context)、抽象策略角色(Strategy)和具体策略角色(ConcreteStrategy)。</p>
+<ul>
+<li>环境角色(Context)：持有一个策略类的引用，提供给客户端使用。</li>
+<li>抽象策略角色(Strategy)：这是一个抽象角色，通常由一个接口或抽象类实现。此角色给出所有的具体策略类所需的接口。</li>
+<li>具体策略角色(ConcreteStrategy)：包装了相关的算法或行为。</li>
+</ul>
+<h4 id="策略模式使用场景"><a href="#策略模式使用场景" class="headerlink" title="策略模式使用场景"></a>策略模式使用场景</h4><blockquote>
+<p>如果在一个系统里面有许多类，它们之间的区别仅在于它们的行为，那么使用策略模式可以动态地让一个对象在许多行为中选择一种行为；<br>一个系统需要动态地在几种算法中选择一种;<br>如果一个对象有很多的行为，如果不用恰当的模式，这些行为就只好使用多重的条件选择语句来实现;</p>
+</blockquote>
+<h4 id="策略模式优缺点"><a href="#策略模式优缺点" class="headerlink" title="策略模式优缺点"></a>策略模式优缺点</h4><p><strong>优点：</strong></p>
+<blockquote>
+<p> 扩展性好，可以在不修改对象结构的情况下，为新的算法进行添加新的类进行实现；<br> 灵活性好，可以对算法进行自由切换；</p>
+</blockquote>
+<p><strong>缺点：</strong></p>
+<blockquote>
+<p>使用策略类变多，会增加系统的复杂度。；<br>客户端必须知道所有的策略类才能进行调用；</p>
+</blockquote>
+<h4 id="策略模式示例图"><a href="#策略模式示例图" class="headerlink" title="策略模式示例图"></a>策略模式示例图</h4><p><img src="https://img-blog.csdnimg.cn/20181111152930787.png" alt="在这里插入图片描述"></p>
+<h3 id="模板模式"><a href="#模板模式" class="headerlink" title="模板模式"></a>模板模式</h3><h4 id="模板模式介绍"><a href="#模板模式介绍" class="headerlink" title="模板模式介绍"></a>模板模式介绍</h4><blockquote>
+<p>模板模式（Template Pattern）中，一个抽象类公开定义了执行它的方法的方式/模板。它的子类可以按需要重写方法实现，但调用将以抽象类中定义的方式进行。 这种类型的设计模式属于行为型模式。定义一个操作中的算法的骨架，而将一些步骤延迟到子类中。<br>模板模式，其主要的的思想就是做一个模板，提供给客户端进行调用。</p>
+</blockquote>
+<h4 id="模板模式角色"><a href="#模板模式角色" class="headerlink" title="模板模式角色"></a>模板模式角色</h4><p><strong>模板模式</strong>主要由抽象模板(Abstract Template)角色和具体模板(Concrete Template)角色组成。</p>
+<ul>
+<li><p>抽象模板(Abstract Template): 定义了一个或多个抽象操作，以便让子类实现。这些抽象操作叫做基本操作，它们是一个顶级逻辑的组成步骤;定义并实现了一个模板方法。这个模板方法一般是一个具体方法，它给出了一个顶级逻辑的骨架，而逻辑的组成步骤在相应的抽象操作中，推迟到子类实现。顶级逻辑也有可能调用一些具体方法。</p>
+</li>
+<li><p>具体模板(Concrete Template): 实现父类所定义的一个或多个抽象方法，它们是一个顶级逻辑的组成步骤;每一个抽象模板角色都可以有任意多个具体模板角色与之对应，而每一个具体模板角色都可以给出这些抽象方法（也就是顶级逻辑的组成步骤）的不同实现，从而使得顶级逻辑的实现各不相同。</p>
+</li>
+</ul>
+<h4 id="模板模式使用场景"><a href="#模板模式使用场景" class="headerlink" title="模板模式使用场景"></a>模板模式使用场景</h4><blockquote>
+<p>有多个子类共有逻辑相同的方法；<br>重要的、复杂的方法，可以考虑作为模板方法。</p>
+</blockquote>
+<h4 id="模板模式优缺点"><a href="#模板模式优缺点" class="headerlink" title="模板模式优缺点"></a>模板模式优缺点</h4><p><strong>优点：</strong></p>
+<blockquote>
+<p>扩展性好，对不变的代码进行封装，对可变的进行扩展；<br>可维护性好，因为将公共代码进行了提取，使用的时候直接调用即可；</p>
+</blockquote>
+<p><strong>缺点：</strong></p>
+<blockquote>
+<p>因为每一个不同的实现都需要一个子类来实现，导致类的个数增加，会使系统变得复杂；</p>
+</blockquote>
+<h4 id="模板模式注意事项"><a href="#模板模式注意事项" class="headerlink" title="模板模式注意事项"></a>模板模式注意事项</h4><blockquote>
+<p>为防止恶意操作，一般模板方法都加上 final 关键词！</p>
+</blockquote>
+<h4 id="模板模式示例图"><a href="#模板模式示例图" class="headerlink" title="模板模式示例图"></a>模板模式示例图</h4><p><img src="https://img-blog.csdnimg.cn/20181113194037589.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="https://www.dofactory.com/images/diagrams/net/template.gif"></p>
+<h3 id="备忘录模式"><a href="#备忘录模式" class="headerlink" title="备忘录模式"></a>备忘录模式</h3><h4 id="备忘录模式介绍"><a href="#备忘录模式介绍" class="headerlink" title="备忘录模式介绍"></a>备忘录模式介绍</h4><blockquote>
+<p>备忘录模式(Memento Pattern)用于保存一个对象的某个状态，以便在适当的时候恢复对象，该模式属于行为型模式。<br>其主要目的是在不破坏封装性的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态。<br>其主要的的思想就是备份。</p>
+</blockquote>
+<h4 id="备忘录模式角色"><a href="#备忘录模式角色" class="headerlink" title="备忘录模式角色"></a>备忘录模式角色</h4><p><strong>备忘录模式</strong>主要由这三个角色组成，备忘录角色(Memento)、发起人角色(Originator)和负责人(Caretaker)角色。</p>
+<ul>
+<li>备忘录(Memento)：主要的功能是包含要被恢复的对象的状态。</li>
+<li>发起人(Originator)：在创建的时候，会在备忘录对象中存储状态。</li>
+<li>负责人(Caretaker)：主要是负责从备忘录对象中恢复对象的状态。</li>
+</ul>
+<h4 id="备忘录模式使用场景"><a href="#备忘录模式使用场景" class="headerlink" title="备忘录模式使用场景"></a>备忘录模式使用场景</h4><blockquote>
+<p>需要保存/恢复数据的相关状态场景；</p>
+</blockquote>
+<h4 id="备忘录模式优缺点"><a href="#备忘录模式优缺点" class="headerlink" title="备忘录模式优缺点"></a>备忘录模式优缺点</h4><p><strong>优点</strong></p>
+<blockquote>
+<p> 给用户提供了一种可以恢复状态的机制，可以使用户能够比较方便地回到某个历史的状态；<br> 实现了信息的封装，使得用户不需要关心状态的保存细节；</p>
+</blockquote>
+<p><strong>缺点</strong></p>
+<blockquote>
+<p>非常的消耗资源；<br>客户端必须知道所有的策略类才能进行调用；</p>
+</blockquote>
+<h4 id="备忘录模示例图"><a href="#备忘录模示例图" class="headerlink" title="备忘录模示例图"></a>备忘录模示例图</h4><p><img src="https://img-blog.csdnimg.cn/20181122192355292.png" alt="在这里插入图片描述"></p>
+<h3 id="状态模式"><a href="#状态模式" class="headerlink" title="状态模式"></a>状态模式</h3><h4 id="状态模式介绍"><a href="#状态模式介绍" class="headerlink" title="状态模式介绍"></a>状态模式介绍</h4><blockquote>
+<p>状态模式（State Pattern）属于行为型模式，其状态的对象和一个行为随着状态对象改变而改变。<br>其主要目的解决的是当控制一个对象状态转换的条件表达式过于复杂是的情况。把状态的判断逻辑转移到表示不同状态一系列类中，可以把复杂的判断简单化。<br>主要的的思想就是提供一种状态，提供给客户端进行调用。</p>
+</blockquote>
+<h4 id="状态模式角色"><a href="#状态模式角色" class="headerlink" title="状态模式角色"></a>状态模式角色</h4><p><strong>状态模式</strong>主要由环境角色（Context）、 抽象状态（State）和具体状态（Concrete State）组成。</p>
+<ul>
+<li><p>环境角色（Context）: 它定义了客户程序需要的接口并维护一个具体状态角色的实例，将与状态相关的操作委托给当前的具体状态对象来处理。</p>
+</li>
+<li><p>抽象状态角色(State): 定义一个接口以封装使用上下文环境的的一个特定状态相关的行为。</p>
+</li>
+<li>具体状态角色（Concrete State）:实现抽象状态定义的接口。 </li>
+</ul>
+<h4 id="状态模式使用场景"><a href="#状态模式使用场景" class="headerlink" title="状态模式使用场景"></a>状态模式使用场景</h4><blockquote>
+<p>行为随状态改变而改变的场景；<br>条件、分支语句的代替者。</p>
+</blockquote>
+<h4 id="状态模式优缺点"><a href="#状态模式优缺点" class="headerlink" title="状态模式优缺点"></a>状态模式优缺点</h4><p><strong>优点：</strong></p>
+<blockquote>
+<p>扩展性好，将和状态有关的行为放到一起，增加新的的状态，只需要改变对象状态即可改变对象的行为即可；<br>复用性好，让多个环境对象共享一个状态对象，从而减少系统中对象的个数；</p>
+</blockquote>
+<p><strong>缺点：</strong></p>
+<blockquote>
+<p>使用状态模式会增加系统类和对象的个数，并且该模式的结构与实现都较为复杂，如果使用不当将导致程序结构和代码的混乱；<br>状态模式对”开闭原则”的支持并不太好，对于可以切换状态的状态模式，增加新的状态类需要修改那些负责状态转换的源代码，否则无法切换到新增状态，而且修改某个状态类的行为也需修改对应类的源代码。</p>
+</blockquote>
+<h4 id="状态模式注意事项"><a href="#状态模式注意事项" class="headerlink" title="状态模式注意事项"></a>状态模式注意事项</h4><blockquote>
+<p>在行为受状态约束的时候使用状态模式，而且状态不超过5个。</p>
+</blockquote>
+<p><strong>和策略模式比较</strong><br>在学习状态模式的时候，很容易和策略模式搞混，因为它们实在是太像了，很难区分，在查阅一番资料之后，整理了如下的相同点和区别点。</p>
+<p><strong>相同点:</strong></p>
+<ol>
+<li>它们很容易添加新的状态或策略，而且不需要修改使用它们的Context对象。</li>
+<li>它们都符合OCP原则，在状态模式和策略模式中，Context对象对修改是关闭的，添加新的状态或策略，都不需要修改Context。</li>
+<li>它们都会初始化。</li>
+<li>它们都依赖子类去实现相关行为。</li>
+</ol>
+<p><strong>区别点</strong></p>
+<ol>
+<li>状态模式的行为是平行性的，不可相互替换的；</li>
+<li>而策略模式的行为是平等性的，是可以相互替换的。</li>
+<li>最重要的一个不同之处是，策略模式的改变由客户端完成；</li>
+<li>而状态模式的改变，由环境角色或状态自己.</li>
+</ol>
+<h4 id="状态模式示例图"><a href="#状态模式示例图" class="headerlink" title="状态模式示例图"></a>状态模式示例图</h4><p><img src="https://img-blog.csdnimg.cn/20181122192503391.png" alt="在这里插入图片描述"></p>
+<h3 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h3><h4 id="观察者模式介绍"><a href="#观察者模式介绍" class="headerlink" title="观察者模式介绍"></a>观察者模式介绍</h4><blockquote>
+<p>观察者模式又叫发布-订阅(Publish/Subscribe)模式、模型-视图(Model/View)模式、源-监听器(Source/Listener)模式或从属者(Dependents)模式。观察者模式定义了一种一对多的依赖关系，让多个观察者对象同时监听某一个主题对象。这个主题对象在状态上发生变化时，会通知所有观察者对象，使它们能够自动更新自己。。<br>其主要目的是定义对象间的一种一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都得到通知并被自动更新。</p>
+</blockquote>
+<h4 id="观察者模式角色"><a href="#观察者模式角色" class="headerlink" title="观察者模式角色"></a>观察者模式角色</h4><p><strong>观察者模式</strong>主要由这四个角色组成，抽象主题角色（Subject）、具体主题角色（ConcreteSubject）、抽象观察者角色（Observer）和具体观察者角色（ConcreteObserver）。</p>
+<ul>
+<li>抽象主题角色（Subject）：它把所有观察者对象的引用保存到一个聚集里，每个主题都可以有任何数量的观察者。抽象主题提供一个接口，可以增加和删除观察者对象。</li>
+<li>具体主题角色（ConcreteSubject）：将有关状态存入具体观察者对象；在具体主题内部状态改变时，给所有登记过的观察者发出通知。</li>
+<li>抽象观察者角色（Observer）：主要是负责从备忘录对象中恢复对象的状态。</li>
+</ul>
+<h4 id="观察者模式使用场景"><a href="#观察者模式使用场景" class="headerlink" title="观察者模式使用场景"></a>观察者模式使用场景</h4><blockquote>
+<p>需要关联行为的场景；<br>事件需要创建一个触发链的场景，比如监控；<br>跨系统的消息交换场景，比如消息队列、事件总线的处理机制。</p>
+</blockquote>
+<h4 id="观察者模式优缺点"><a href="#观察者模式优缺点" class="headerlink" title="观察者模式优缺点"></a>观察者模式优缺点</h4><p><strong>优点:</strong></p>
+<blockquote>
+<p> 解除耦合，让耦合的双方都依赖于抽象，从而使得各自的变换都不会影响另一边的变换。</p>
+</blockquote>
+<p><strong>缺点</strong></p>
+<blockquote>
+<p>如果一个被观察者对象有很多的直接和间接的观察者的话，将所有的观察者都通知到会花费很多时间；<br>如果在观察者和观察目标之间有循环依赖的话，观察目标会触发它们之间进行循环调用，可能导致系统崩溃；<br>观察者模式没有相应的机制让观察者知道所观察的目标对象是怎么发生变化的，而仅仅只是知道观察目标发生了变化。</p>
+</blockquote>
+<h4 id="观察者模式注意事项"><a href="#观察者模式注意事项" class="headerlink" title="观察者模式注意事项"></a>观察者模式注意事项</h4><blockquote>
+<p>如果顺序执行，某一观察者错误会导致系统卡壳，建议采用异步方式。</p>
+</blockquote>
+<h4 id="观察者模式示例图"><a href="#观察者模式示例图" class="headerlink" title="观察者模式示例图"></a>观察者模式示例图</h4><p><img src="https://img-blog.csdnimg.cn/20181128203250148.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="空对象模式"><a href="#空对象模式" class="headerlink" title="空对象模式"></a>空对象模式</h3><h4 id="空对象模式介绍"><a href="#空对象模式介绍" class="headerlink" title="空对象模式介绍"></a>空对象模式介绍</h4><blockquote>
+<p>空对象模式（NullObject Pattern）主要是通过一个空对象取代 NULL 对象实例的检查。Null 对象不是检查空值，而是反应一个不做任何动作的关系。 这样的Null 对象也可以在数据不可用的时候提供默认的行为。<br>其主要目的是在进行调用是不返回Null，而是返回一个空对象，防止空指针异常。 </p>
+</blockquote>
+<h4 id="空对象模式使用场景"><a href="#空对象模式使用场景" class="headerlink" title="空对象模式使用场景"></a>空对象模式使用场景</h4><blockquote>
+<p> 需要大量对空值进行判断的时候；     </p>
+</blockquote>
+<h4 id="空对象模式优缺点"><a href="#空对象模式优缺点" class="headerlink" title="空对象模式优缺点"></a>空对象模式优缺点</h4><p><strong>优点：</strong></p>
+<blockquote>
+<p>可以加强系统的稳固性，能有效防止空指针报错对整个系统的影响；<br>不依赖客户端便可以保证系统的稳定性；</p>
+</blockquote>
+<p><strong>缺点：</strong></p>
+<blockquote>
+<p>需要编写较多的代码来实现空值的判断，从某种方面来说不划算；</p>
+</blockquote>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><p>在学习设计模式的时候，主要参考书籍是《大话设计模式》以及<a href="http://www.runoob.com/design-pattern/design-pattern-tutorial.html" target="_blank" rel="external">菜鸟教程</a>的设计模式介绍。<br>其实在我们学习了这么多的设计模式中，大部分可能只是听说了解过，真正经常使用的设计模式也无外乎就那几种，单例模式(数据库、线程池场景)、工厂模式(简单的crud操作中实例化的model)、策略模式(商城会员、优惠打折场景)、观察者模式(消息推送场景)、代理模式（主要是动态代理这块)、外观模式(一键调用)、装饰器模式(锦上添花场景)，但是也不全这样，使用设计模式最好根据实际的场景来使用，否则可能在不合适的场景使用了不适合的设计模式而导致代码混乱。</p>
+<h3 id="音乐推荐"><a href="#音乐推荐" class="headerlink" title="音乐推荐"></a>音乐推荐</h3><p><strong>往期音乐推荐</strong></p>
+<p>一、</p>
+<blockquote>
+<p>我们目送 那渐渐消失的行迹云 在晃眼间消逝 总是如此短暂 如像昨天起 不变的事 始终不会改变 不该存在的东西 带着遗憾消失在指间<br>那鸟儿还未能展翅高飞 但它总有一天会破风驰行 遥不可及的地方仍在远处 所以只能凝视深藏的愿望 孩子们走在盛夏的铁路上 流风轻抚着他们的赤脚  远离了童年</p>
+</blockquote>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=28606052&auto=0&height=66"></iframe>
+
+
+<p>二、</p>
+<blockquote>
+<p>这世上大部分失落，都是因为我们自己没成为更好的自己，却奢求别人成为更好的别人。</p>
+</blockquote>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=27580689&auto=0&height=66"></iframe>
+
+<p>三、</p>
+<blockquote>
+<p> 平静孤寂的调子起头，两个人分开之后的沉寂 颓废，慢慢的音阶起伏，我意识到不能这样下去，我开始改变现状，变得积极。到高潮部分 我不在颓废，我走了新的目标 我迎着太阳前进。我想这就是You的含义，你是我的一段过去</p>
+</blockquote>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=3932159&auto=0&height=66"></iframe>
+
+
+<p>四、</p>
+<blockquote>
+<p> 扶桑画师浅溪，居泰安，喜绘鲤。院前一方荷塘，锦鲤游曳，溪常与嬉戏。 其时正武德之乱，藩镇割据，战事频仍，魑魅魍魉，肆逆于道。兵戈逼泰安，街邻皆逃亡，独溪不舍锦鲤，未去。 是夜，院室倏火。有人入火护溪，言其本鲤中妖，欲取溪命，却生情愫，遂不忍为之。翌日天明，火势渐歇，人已不见。</p>
+</blockquote>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=32648074&auto=0&height=66"></iframe>
+
+<p>五、</p>
+<blockquote>
+<p>稚儿擎瓜柳棚下，细犬逐蝶窄巷中，人间繁华多笑语，惟我空余两鬓风。</p>
+</blockquote>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=801827&auto=0&height=66"></iframe>
+
+<p>六、</p>
+<blockquote>
+<p>散落的花，火的碎片 诱人的夏夜终结<br>渐渐 天空闪耀，带着谁许的愿<br>突然绽放的烟花<br>美丽如梦幻，迟来脆弱的夏天<br>夜空中，火花舞动在今夜<br>枝头落下的仲夏夜之梦<br>愉快的凉风，热带的夜<br>天空飘着细雨，在喧闹的蝉鸣时节<br>夏末，秋天指向路边。</p>
+</blockquote>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=493911&auto=0&height=66"></iframe>
+
+
+<p>七、</p>
+<blockquote>
+<p>论如何一个人在家嗨成狗。取下耳机无限的孤独感。带上耳机卧槽我是全世界。</p>
+</blockquote>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=34040716&auto=0&height=66"></iframe>
+
+
+
+
+
+<p>八、</p>
+<blockquote>
+<p>我渴望能见你一面，但请你记得，我不会开口要求见你。这不是因为骄傲，你知道我在你面前毫无骄傲可言，而是因为，唯有你也想见我的时候，我们见面才有意义。 ———《越洋情书》</p>
+</blockquote>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=5330830&auto=0&height=66"></iframe>
+
+<p>九、</p>
+<blockquote>
+<p>就算是Believe，中间也藏了一个lie；<br>就算是Friend，还是免不了end；<br>就算是Lover，还可能会over；<br>就算是Wife，心里也夹杂着if；<br>欣慰的是：即便是Forget，也曾经get，<br>就算impossible，但还藏着possible。</p>
+</blockquote>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=442016694&auto=0&height=66"></iframe>
+
+<p>十、</p>
+<blockquote>
+<p>人有三样东西是无法隐瞒的，咳嗽、穷困和爱；你想隐瞒越欲盖弥彰。人有三样东西是不该挥霍的，身体、金钱和爱；你想挥霍却得不偿失。人有三样东西是无法挽留的，时间、生命和爱；你想挽留却渐行渐远。人有三样东西是不该回忆的，灾难、死亡和爱；你想回忆却苦不堪言。 ——《洛丽塔》</p>
+</blockquote>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=31830308&auto=0&height=66"></iframe>
+
+<p>十一、</p>
+<blockquote>
+<p>简单，重复，毫无华丽旋律，也无厚重悲凉的伴奏。但心偏偏就被紧紧的抓住了。一种茫然却被迫紧凑的感觉。一种不知何所处的心虚。what for？</p>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=25731432&auto=0&height=66"></iframe>
+
+</blockquote>
+<p>十二、</p>
+<blockquote>
+<p>轻吟一句情话，执笔一副情画。 绽放一地情花，覆盖一片青瓦。 共饮一杯清茶，同研一碗青砂。<br>挽起一面轻纱，看清天边月牙。爱像水墨青花，何惧刹那芳华。</p>
+</blockquote>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=139718&auto=0&height=66"></iframe>
+
+<p>十三、</p>
+<blockquote>
+<p>所有人和事，自己问心无愧就好，不是你的也别强求，反正离去的，都是风景，留下的，才是人生。</p>
+</blockquote>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=5307982&auto=0&height=66"></iframe>
+
+
+<p>以上评论来自网易云！</p>
+<h3 id="项目的代码"><a href="#项目的代码" class="headerlink" title="项目的代码"></a>项目的代码</h3><p> <a href="https://github.com/xuwujing/java-study" target="_blank" rel="external">java-study </a>是本人在学习Java过程中记录的一些代码，也包括之前博文中使用的代码。如果感觉不错，希望顺手给个start，当然如果有不足，也希望提出。<br>github地址:  <a href="https://github.com/xuwujing/java-study" target="_blank" rel="external">https://github.com/xuwujing/java-study</a></p>
+<p>原创不易，如果感觉不错，希望给个推荐！您的支持是我写作的最大动力！<br>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/29/pancm103/" rel="next" title="Java进阶篇设计模式之十三 ---- 观察者模式和空对象模式">
+                <i class="fa fa-chevron-left"></i> Java进阶篇设计模式之十三 ---- 观察者模式和空对象模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/19/pancm105/" rel="prev" title="Java进阶篇之十五 ----- JDK1.8的Lambda、Stream和日期的使用详解(很详细)">
+                Java进阶篇之十五 ----- JDK1.8的Lambda、Stream和日期的使用详解(很详细) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">104</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设计模式简介"><span class="nav-number">2.</span> <span class="nav-text">设计模式简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是设计模式"><span class="nav-number">2.1.</span> <span class="nav-text">什么是设计模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么使用设计模式"><span class="nav-number">2.2.</span> <span class="nav-text">为什么使用设计模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设计模式类型"><span class="nav-number">2.3.</span> <span class="nav-text">设计模式类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设计模式的原则"><span class="nav-number">2.4.</span> <span class="nav-text">设计模式的原则</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建型模式"><span class="nav-number">3.</span> <span class="nav-text">创建型模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#单例模式"><span class="nav-number">3.1.</span> <span class="nav-text">单例模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#单例模式介绍"><span class="nav-number">3.1.1.</span> <span class="nav-text">单例模式介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单例模式的使用场景"><span class="nav-number">3.1.2.</span> <span class="nav-text">单例模式的使用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单例模式使用"><span class="nav-number">3.1.3.</span> <span class="nav-text">单例模式使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单例模式示例图"><span class="nav-number">3.1.4.</span> <span class="nav-text">单例模式示例图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单例模式总结"><span class="nav-number">3.1.5.</span> <span class="nav-text">单例模式总结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#工厂模式"><span class="nav-number">3.2.</span> <span class="nav-text">工厂模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#工厂方法模式介绍"><span class="nav-number">3.2.1.</span> <span class="nav-text">工厂方法模式介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#工厂方法模式使用场景"><span class="nav-number">3.2.2.</span> <span class="nav-text">工厂方法模式使用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#工厂方法模式示例图"><span class="nav-number">3.2.3.</span> <span class="nav-text">工厂方法模式示例图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#抽象工厂模式介绍"><span class="nav-number">3.2.4.</span> <span class="nav-text">抽象工厂模式介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#抽象工厂模式使用场景"><span class="nav-number">3.2.5.</span> <span class="nav-text">抽象工厂模式使用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#抽象工厂模式示例图"><span class="nav-number">3.2.6.</span> <span class="nav-text">抽象工厂模式示例图</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#建造者模式"><span class="nav-number">3.3.</span> <span class="nav-text">建造者模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#建造者模式介绍"><span class="nav-number">3.3.1.</span> <span class="nav-text">建造者模式介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#建造者模式使用场景"><span class="nav-number">3.3.2.</span> <span class="nav-text">建造者模式使用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#建造者模式角色"><span class="nav-number">3.3.3.</span> <span class="nav-text">建造者模式角色</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#建造者模式优缺点"><span class="nav-number">3.3.4.</span> <span class="nav-text">建造者模式优缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#建造者模式示例图"><span class="nav-number">3.3.5.</span> <span class="nav-text">建造者模式示例图</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原型模式"><span class="nav-number">3.4.</span> <span class="nav-text">原型模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#原型模式介绍"><span class="nav-number">3.4.1.</span> <span class="nav-text">原型模式介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#原型模式使用场景"><span class="nav-number">3.4.2.</span> <span class="nav-text">原型模式使用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#原型模式优缺点"><span class="nav-number">3.4.3.</span> <span class="nav-text">原型模式优缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#原型模式示例图"><span class="nav-number">3.4.4.</span> <span class="nav-text">原型模式示例图</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结构型模式"><span class="nav-number">4.</span> <span class="nav-text">结构型模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#适配器模式"><span class="nav-number">4.1.</span> <span class="nav-text">适配器模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#适配器模式介绍"><span class="nav-number">4.1.1.</span> <span class="nav-text">适配器模式介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#适配器模式使用"><span class="nav-number">4.1.2.</span> <span class="nav-text">适配器模式使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#适配器模式使用场景"><span class="nav-number">4.1.3.</span> <span class="nav-text">适配器模式使用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#适配器模式优缺点"><span class="nav-number">4.1.4.</span> <span class="nav-text">适配器模式优缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#适配器模式示例图"><span class="nav-number">4.1.5.</span> <span class="nav-text">适配器模式示例图</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#桥接模式"><span class="nav-number">4.2.</span> <span class="nav-text">桥接模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#桥接模式介绍"><span class="nav-number">4.2.1.</span> <span class="nav-text">桥接模式介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#桥接模式场景"><span class="nav-number">4.2.2.</span> <span class="nav-text">桥接模式场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#桥接模式优缺点"><span class="nav-number">4.2.3.</span> <span class="nav-text">桥接模式优缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#桥接模式示例图"><span class="nav-number">4.2.4.</span> <span class="nav-text">桥接模式示例图</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#外观模式"><span class="nav-number">4.3.</span> <span class="nav-text">外观模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#外观模式介绍"><span class="nav-number">4.3.1.</span> <span class="nav-text">外观模式介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#外观模式使用场景"><span class="nav-number">4.3.2.</span> <span class="nav-text">外观模式使用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#外观模式优缺点"><span class="nav-number">4.3.3.</span> <span class="nav-text">外观模式优缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#外观模式示例图"><span class="nav-number">4.3.4.</span> <span class="nav-text">外观模式示例图</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#装饰器模式"><span class="nav-number">4.4.</span> <span class="nav-text">装饰器模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#装饰器模式介绍"><span class="nav-number">4.4.1.</span> <span class="nav-text">装饰器模式介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#装饰器模式使用场景"><span class="nav-number">4.4.2.</span> <span class="nav-text">装饰器模式使用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#装饰器模式优缺点"><span class="nav-number">4.4.3.</span> <span class="nav-text">装饰器模式优缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#装饰器模式示例图"><span class="nav-number">4.4.4.</span> <span class="nav-text">装饰器模式示例图</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#组合模式"><span class="nav-number">4.5.</span> <span class="nav-text">组合模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#组合模式介绍"><span class="nav-number">4.5.1.</span> <span class="nav-text">组合模式介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#组合模式使用场景"><span class="nav-number">4.5.2.</span> <span class="nav-text">组合模式使用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#组合模式优缺点"><span class="nav-number">4.5.3.</span> <span class="nav-text">组合模式优缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#组合模式示例图"><span class="nav-number">4.5.4.</span> <span class="nav-text">组合模式示例图</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#过滤器模式"><span class="nav-number">4.6.</span> <span class="nav-text">过滤器模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#过滤器模式介绍"><span class="nav-number">4.6.1.</span> <span class="nav-text">过滤器模式介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#过滤器模式使用场景"><span class="nav-number">4.6.2.</span> <span class="nav-text">过滤器模式使用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#过滤器模式优缺点"><span class="nav-number">4.6.3.</span> <span class="nav-text">过滤器模式优缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#过滤器模式注意事项"><span class="nav-number">4.6.4.</span> <span class="nav-text">过滤器模式注意事项</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#享元模式"><span class="nav-number">4.7.</span> <span class="nav-text">享元模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#享元模式介绍"><span class="nav-number">4.7.1.</span> <span class="nav-text">享元模式介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#享元模式角色"><span class="nav-number">4.7.2.</span> <span class="nav-text">享元模式角色</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#享元模式使用场景"><span class="nav-number">4.7.3.</span> <span class="nav-text">享元模式使用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#享元模式优缺点"><span class="nav-number">4.7.4.</span> <span class="nav-text">享元模式优缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#享元模式注意事项"><span class="nav-number">4.7.5.</span> <span class="nav-text">享元模式注意事项</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#与单例模式比较"><span class="nav-number">4.7.6.</span> <span class="nav-text">与单例模式比较</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#享元模式示例图"><span class="nav-number">4.7.7.</span> <span class="nav-text">享元模式示例图</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代理模式"><span class="nav-number">4.8.</span> <span class="nav-text">代理模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代理模式介绍"><span class="nav-number">4.8.1.</span> <span class="nav-text">代理模式介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#代理模式角色"><span class="nav-number">4.8.2.</span> <span class="nav-text">代理模式角色</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#代理模式使用"><span class="nav-number">4.8.3.</span> <span class="nav-text">代理模式使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#代理模式使用场景"><span class="nav-number">4.8.4.</span> <span class="nav-text">代理模式使用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#代理模式优缺点"><span class="nav-number">4.8.5.</span> <span class="nav-text">代理模式优缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#代理模式注意事项"><span class="nav-number">4.8.6.</span> <span class="nav-text">代理模式注意事项</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#代理模式示例图"><span class="nav-number">4.8.7.</span> <span class="nav-text">代理模式示例图</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#行为型模式"><span class="nav-number">5.</span> <span class="nav-text">行为型模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#责任链模式"><span class="nav-number">5.1.</span> <span class="nav-text">责任链模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#责任链模式介绍"><span class="nav-number">5.1.1.</span> <span class="nav-text">责任链模式介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#责任链模式角色"><span class="nav-number">5.1.2.</span> <span class="nav-text">责任链模式角色</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#责任链模式使用场景"><span class="nav-number">5.1.3.</span> <span class="nav-text">责任链模式使用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#责任链模式优缺点"><span class="nav-number">5.1.4.</span> <span class="nav-text">责任链模式优缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#责任链模式注意事项"><span class="nav-number">5.1.5.</span> <span class="nav-text">责任链模式注意事项</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#责任链模式示例图"><span class="nav-number">5.1.6.</span> <span class="nav-text">责任链模式示例图</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#命令模式"><span class="nav-number">5.2.</span> <span class="nav-text">命令模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#命令模式介绍"><span class="nav-number">5.2.1.</span> <span class="nav-text">命令模式介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#命令模式角色"><span class="nav-number">5.2.2.</span> <span class="nav-text">命令模式角色</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#命令模式使用场景"><span class="nav-number">5.2.3.</span> <span class="nav-text">命令模式使用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#命令模式优缺点"><span class="nav-number">5.2.4.</span> <span class="nav-text">命令模式优缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#命令模式示例图"><span class="nav-number">5.2.5.</span> <span class="nav-text">命令模式示例图</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解释器模式"><span class="nav-number">5.3.</span> <span class="nav-text">解释器模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#解释器模式介绍"><span class="nav-number">5.3.1.</span> <span class="nav-text">解释器模式介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解释器模式角色"><span class="nav-number">5.3.2.</span> <span class="nav-text">解释器模式角色</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解释器模式使用场景"><span class="nav-number">5.3.3.</span> <span class="nav-text">解释器模式使用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解释器模式优缺点"><span class="nav-number">5.3.4.</span> <span class="nav-text">解释器模式优缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解释器模式示例图"><span class="nav-number">5.3.5.</span> <span class="nav-text">解释器模式示例图</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#迭代器模式"><span class="nav-number">5.4.</span> <span class="nav-text">迭代器模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#迭代器模式介绍"><span class="nav-number">5.4.1.</span> <span class="nav-text">迭代器模式介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#迭代器模式角色"><span class="nav-number">5.4.2.</span> <span class="nav-text">迭代器模式角色</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#迭代器模式使用场景"><span class="nav-number">5.4.3.</span> <span class="nav-text">迭代器模式使用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#迭代器模式优缺点"><span class="nav-number">5.4.4.</span> <span class="nav-text">迭代器模式优缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#迭代器模式示例图"><span class="nav-number">5.4.5.</span> <span class="nav-text">迭代器模式示例图</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#访问者模式"><span class="nav-number">5.5.</span> <span class="nav-text">访问者模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#访问者模式介绍"><span class="nav-number">5.5.1.</span> <span class="nav-text">访问者模式介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#访问者模式角色"><span class="nav-number">5.5.2.</span> <span class="nav-text">访问者模式角色</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#访问者模式使用场景"><span class="nav-number">5.5.3.</span> <span class="nav-text">访问者模式使用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#访问者模式优缺点"><span class="nav-number">5.5.4.</span> <span class="nav-text">访问者模式优缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#访问者模式示例图"><span class="nav-number">5.5.5.</span> <span class="nav-text">访问者模式示例图</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#中介者模式"><span class="nav-number">5.6.</span> <span class="nav-text">中介者模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#中介者模式介绍"><span class="nav-number">5.6.1.</span> <span class="nav-text">中介者模式介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#中介者模式角色"><span class="nav-number">5.6.2.</span> <span class="nav-text">中介者模式角色</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#中介者模式使用场景"><span class="nav-number">5.6.3.</span> <span class="nav-text">中介者模式使用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#中介者模式优缺点"><span class="nav-number">5.6.4.</span> <span class="nav-text">中介者模式优缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#中介者模式注意事项"><span class="nav-number">5.6.5.</span> <span class="nav-text">中介者模式注意事项</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#中介者模式示例图"><span class="nav-number">5.6.6.</span> <span class="nav-text">中介者模式示例图</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#策略模式"><span class="nav-number">5.7.</span> <span class="nav-text">策略模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#策略模式介绍"><span class="nav-number">5.7.1.</span> <span class="nav-text">策略模式介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#策略模式角色"><span class="nav-number">5.7.2.</span> <span class="nav-text">策略模式角色</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#策略模式使用场景"><span class="nav-number">5.7.3.</span> <span class="nav-text">策略模式使用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#策略模式优缺点"><span class="nav-number">5.7.4.</span> <span class="nav-text">策略模式优缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#策略模式示例图"><span class="nav-number">5.7.5.</span> <span class="nav-text">策略模式示例图</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模板模式"><span class="nav-number">5.8.</span> <span class="nav-text">模板模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#模板模式介绍"><span class="nav-number">5.8.1.</span> <span class="nav-text">模板模式介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模板模式角色"><span class="nav-number">5.8.2.</span> <span class="nav-text">模板模式角色</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模板模式使用场景"><span class="nav-number">5.8.3.</span> <span class="nav-text">模板模式使用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模板模式优缺点"><span class="nav-number">5.8.4.</span> <span class="nav-text">模板模式优缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模板模式注意事项"><span class="nav-number">5.8.5.</span> <span class="nav-text">模板模式注意事项</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模板模式示例图"><span class="nav-number">5.8.6.</span> <span class="nav-text">模板模式示例图</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#备忘录模式"><span class="nav-number">5.9.</span> <span class="nav-text">备忘录模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#备忘录模式介绍"><span class="nav-number">5.9.1.</span> <span class="nav-text">备忘录模式介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#备忘录模式角色"><span class="nav-number">5.9.2.</span> <span class="nav-text">备忘录模式角色</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#备忘录模式使用场景"><span class="nav-number">5.9.3.</span> <span class="nav-text">备忘录模式使用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#备忘录模式优缺点"><span class="nav-number">5.9.4.</span> <span class="nav-text">备忘录模式优缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#备忘录模示例图"><span class="nav-number">5.9.5.</span> <span class="nav-text">备忘录模示例图</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#状态模式"><span class="nav-number">5.10.</span> <span class="nav-text">状态模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#状态模式介绍"><span class="nav-number">5.10.1.</span> <span class="nav-text">状态模式介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#状态模式角色"><span class="nav-number">5.10.2.</span> <span class="nav-text">状态模式角色</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#状态模式使用场景"><span class="nav-number">5.10.3.</span> <span class="nav-text">状态模式使用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#状态模式优缺点"><span class="nav-number">5.10.4.</span> <span class="nav-text">状态模式优缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#状态模式注意事项"><span class="nav-number">5.10.5.</span> <span class="nav-text">状态模式注意事项</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#状态模式示例图"><span class="nav-number">5.10.6.</span> <span class="nav-text">状态模式示例图</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#观察者模式"><span class="nav-number">5.11.</span> <span class="nav-text">观察者模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#观察者模式介绍"><span class="nav-number">5.11.1.</span> <span class="nav-text">观察者模式介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#观察者模式角色"><span class="nav-number">5.11.2.</span> <span class="nav-text">观察者模式角色</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#观察者模式使用场景"><span class="nav-number">5.11.3.</span> <span class="nav-text">观察者模式使用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#观察者模式优缺点"><span class="nav-number">5.11.4.</span> <span class="nav-text">观察者模式优缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#观察者模式注意事项"><span class="nav-number">5.11.5.</span> <span class="nav-text">观察者模式注意事项</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#观察者模式示例图"><span class="nav-number">5.11.6.</span> <span class="nav-text">观察者模式示例图</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#空对象模式"><span class="nav-number">5.12.</span> <span class="nav-text">空对象模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#空对象模式介绍"><span class="nav-number">5.12.1.</span> <span class="nav-text">空对象模式介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#空对象模式使用场景"><span class="nav-number">5.12.2.</span> <span class="nav-text">空对象模式使用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#空对象模式优缺点"><span class="nav-number">5.12.3.</span> <span class="nav-text">空对象模式优缺点</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它"><span class="nav-number">6.</span> <span class="nav-text">其它</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#音乐推荐"><span class="nav-number">6.1.</span> <span class="nav-text">音乐推荐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#项目的代码"><span class="nav-number">6.2.</span> <span class="nav-text">项目的代码</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

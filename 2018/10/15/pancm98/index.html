@@ -1,0 +1,900 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,设计模式," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言在上一篇中我们学习了结构型模式的享元模式和代理模式。本篇则来学习下行为型模式的两个模式， 责任链模式(Chain of Responsibility Pattern)和命令模式（Command Pattern）。 责任链模式简介  责任链模式顾名思义，就是为请求创建了一个接收者对象的链。这种模式给予请求的类型，对请求的发送者和接收者进行解耦。这种类型的设计模式属于行为型模式。在这种模式中，通">
+<meta name="keywords" content="java,设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java进阶篇设计模式之八 ----- 责任链模式和命令模式">
+<meta property="og:url" content="http://yoursite.com/2018/10/15/pancm98/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言在上一篇中我们学习了结构型模式的享元模式和代理模式。本篇则来学习下行为型模式的两个模式， 责任链模式(Chain of Responsibility Pattern)和命令模式（Command Pattern）。 责任链模式简介  责任链模式顾名思义，就是为请求创建了一个接收者对象的链。这种模式给予请求的类型，对请求的发送者和接收者进行解耦。这种类型的设计模式属于行为型模式。在这种模式中，通">
+<meta property="og:updated_time" content="2018-12-24T13:41:36.719Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java进阶篇设计模式之八 ----- 责任链模式和命令模式">
+<meta name="twitter:description" content="前言在上一篇中我们学习了结构型模式的享元模式和代理模式。本篇则来学习下行为型模式的两个模式， 责任链模式(Chain of Responsibility Pattern)和命令模式（Command Pattern）。 责任链模式简介  责任链模式顾名思义，就是为请求创建了一个接收者对象的链。这种模式给予请求的类型，对请求的发送者和接收者进行解耦。这种类型的设计模式属于行为型模式。在这种模式中，通">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/15/pancm98/"/>
+
+
+
+
+
+
+  <title>Java进阶篇设计模式之八 ----- 责任链模式和命令模式 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/15/pancm98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java进阶篇设计模式之八 ----- 责任链模式和命令模式</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-15T21:39:36+08:00">
+                2018-10-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在<a href="https://www.cnblogs.com/xuwujing/p/9704228.html" target="_blank" rel="external">上一篇</a>中我们学习了结构型模式的享元模式和代理模式。本篇则来学习下行为型模式的两个模式， 责任链模式(Chain of Responsibility Pattern)和命令模式（Command Pattern）。</p>
+<h2 id="责任链模式"><a href="#责任链模式" class="headerlink" title="责任链模式"></a>责任链模式</h2><p><strong>简介</strong></p>
+<blockquote>
+<p>责任链模式顾名思义，就是为请求创建了一个接收者对象的链。这种模式给予请求的类型，对请求的发送者和接收者进行解耦。这种类型的设计模式属于行为型模式。在这种模式中，通常每个接收者都包含对另一个接收者的引用。如果一个对象不能处理该请求，那么它会把相同的请求传给下一个接收者，依此类推。</p>
+</blockquote>
+<p>简单的理解的话就是进行层级处理。生活中比较常见的是请假、出差、加薪等申请等等，而工作中比较常见的就是拦截器和过滤器。如果请假申请是用以前的那种方式，发起者需要和每个负责人进行申请，会比较麻烦，但是现在一般是走OA流程，只需发起一个OA申请即可。这也是一种  这种就是典型的责任链模式，发起者只需将请求请求发送到职责链上即可，无需关心处理细节和请求的传递。</p>
+<p>责任链模式主要由这三个角色组成，请求接收者接口(Handler)、请求实现者类(ConcreteHandler)和请求发送者(Client)。</p>
+<ul>
+<li>请求接收者接口：定义可以处理客户端请求事项的接口，包含“可链接下一个同样能处理请求”的对象引用。</li>
+<li>请求实现者类：实现请求处理接口，并判断对象本身是否能够处理本次请求，如果不能完成请求，则交由后继者来处理。</li>
+<li>请求发送者：将请求发送给第一个接收者对象，并等待请求的回复。</li>
+</ul>
+<p>这里为了方便理解，我们使用一个简单的示例来加以说明。<br>在某公司的某个部门中，为了活跃部门气氛，主管便征求部门成员的意见，于是部门的成员踊跃提出建议，最终，主管采纳了 xuwujing 提倡的建议，并将此建议进行上报，申请活动经费。<br>那么我们便可以根据这里例子来使用责任链模式进行开发，首先加速有三级的领导，他们有个共同的特性，就是可以处理各自级别的事情，那么我们便可以定义一个领导的抽象类，并定义一个抽象方法可以处理事情，并设置一个级别的参数，那么这个抽象类的代码如下:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"> </div><div class="line">abstract class Learder&#123;</div><div class="line"></div><div class="line">	protected Learder learder;</div><div class="line">	</div><div class="line">	protected void setLearder(Learder learder)&#123;</div><div class="line">		this.learder=learder;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	protected Learder getLearder()&#123;</div><div class="line">		return learder;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	abstract void handler(int  level);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>定义好该抽象类之后，我们需要设计不同的领导进行不同的处理，但是这些领导需要有个处理的能力，并且还要根据各自不同的权限进行处理，如果能够处理，到此流程就结束了，否则无法处理则转交给上级进行处理。<br>那么代码如下:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div></pre></td><td class="code"><pre><div class="line">class Supervisor extends Learder&#123;</div><div class="line">	 private String name;</div><div class="line">	 private String something;</div><div class="line">	 public Supervisor(String name,String something) &#123;</div><div class="line">		this.name=name;</div><div class="line">		this.something=something;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	@Override</div><div class="line">	void handler(int level) &#123;</div><div class="line">		//如果级别在自己的处理范围之内</div><div class="line">		if(level&gt;1)&#123;</div><div class="line">			System.out.println(&quot;主管同意了  &quot;+name+&quot;所述的&lt;&quot;+something+&quot;&gt;事情!&quot;);</div><div class="line">		&#125;else&#123;</div><div class="line">			System.out.println(&quot;主管未能处理  &quot;+name+&quot;所述的&lt;&quot;+something+&quot;&gt;事情!转交给上级!&quot;);</div><div class="line">			getLearder().handler(level);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">class BranchManager extends Learder&#123;</div><div class="line">	 private String name;</div><div class="line">	 private String something;</div><div class="line">	 public BranchManager(String name,String something) &#123;</div><div class="line">		this.name=name;</div><div class="line">		this.something=something;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	@Override</div><div class="line">	void handler(int level) &#123;</div><div class="line">		boolean flag=true;</div><div class="line">		//如果级别在自己的处理范围之内</div><div class="line">		if(level&gt;0)&#123;</div><div class="line">			//这就就直接设置同意了</div><div class="line">			if(flag)&#123;</div><div class="line">				System.out.println(&quot;部门经理同意了  &quot;+name+&quot;所述的&lt;&quot;+something+&quot;&gt;事情!&quot;);</div><div class="line">			&#125;else&#123;</div><div class="line">				System.out.println(&quot;部门经理不同意  &quot;+name+&quot;所述的&lt;&quot;+something+&quot;&gt;事情!&quot;);</div><div class="line">			&#125;</div><div class="line">		&#125;else&#123;</div><div class="line">			System.out.println(&quot;部门经理未能处理  &quot;+name+&quot;所述的&lt;&quot;+something+&quot;&gt;事情!转交给上级!&quot;);</div><div class="line">			getLearder().handler(level);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">class GeneralManager extends Learder&#123;</div><div class="line">	 private String name;</div><div class="line">	 private String something;</div><div class="line">	 public GeneralManager(String name,String something) &#123;</div><div class="line">		this.name=name;</div><div class="line">		this.something=something;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	@Override</div><div class="line">	void handler(int level) &#123;</div><div class="line">		boolean flag=false;</div><div class="line">		//如果级别在自己的处理范围之内</div><div class="line">		if(level&gt;-1)&#123;</div><div class="line">			//这就就直接设置不同意了</div><div class="line">			if(flag)&#123;</div><div class="line">				System.out.println(&quot;总经理同意了  &quot;+name+&quot;所述的&lt;&quot;+something+&quot;&gt;事情!&quot;);</div><div class="line">			&#125;else&#123;</div><div class="line">				System.out.println(&quot;总经理不同意  &quot;+name+&quot;所述的&lt;&quot;+something+&quot;&gt;事情!&quot;);</div><div class="line">			&#125;</div><div class="line">			</div><div class="line">		&#125;else&#123;</div><div class="line">			System.out.println(&quot;总经理未能处理  &quot;+name+&quot;所述的&lt;&quot;+something+&quot;&gt;事情!转交给上级!&quot;);</div><div class="line">			getLearder().handler(level);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最后我们再来根据所需要走的流程来进行代码测试。由于在编写请求类时，我们并未指定谁是谁的上级，所以这里我们需要指定上下级关系，让流程能够走下去。指定上级之后，我们再来设置处理该事件的级别，最后再来进行运行。<br>那么测试代码如下:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"> </div><div class="line">public static void main(String[] args) &#123;</div><div class="line">		String name = &quot;xuwujing&quot;;</div><div class="line">		String something = &quot;去聚餐&quot;;</div><div class="line">		String something2 = &quot;去旅游&quot;;</div><div class="line">		Learder learder1 =new Supervisor(name, something);</div><div class="line">		Learder learder2 =new BranchManager(name, something);</div><div class="line">		Learder learder3 =new GeneralManager(name, something);</div><div class="line">		learder1.setLearder(learder2);</div><div class="line">		learder2.setLearder(learder3);</div><div class="line">		learder1.handler(1);</div><div class="line">		</div><div class="line">		Learder learder4 =new Supervisor(name, something2);</div><div class="line">		Learder learder5 =new BranchManager(name, something2);</div><div class="line">		Learder learder6 =new GeneralManager(name, something2);</div><div class="line">		learder4.setLearder(learder5);</div><div class="line">		learder5.setLearder(learder6);</div><div class="line">		learder4.handler(0);</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>输出结果:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">主管未能处理  xuwujing所述的&lt;去聚餐&gt;事情!转交给上级!</div><div class="line">部门经理同意了  xuwujing所述的&lt;去聚餐&gt;事情!</div><div class="line">主管未能处理  xuwujing所述的&lt;去旅游&gt;事情!转交给上级!</div><div class="line">部门经理未能处理  xuwujing所述的&lt;去旅游&gt;事情!转交给上级!</div><div class="line">总经理不同意  xuwujing所述的&lt;去旅游&gt;事情!</div></pre></td></tr></table></figure></p>
+<p><strong>责任链模式优点：</strong></p>
+<blockquote>
+<p> 耦合度低，请求者和执行者并没有必然的联系；<br> 灵活度高，可以通过内部成员来进行更改它们执行的次序；<br> 扩展性好，Handler的子类扩展非常方便。</p>
+</blockquote>
+<p><strong>责任链模式缺点：</strong></p>
+<blockquote>
+<p>会在某程度上降低程序的性能，设置不当的话可能会出现循环调用。<br>在链过长时，会降低代码的阅读性以及增加代码的复杂度。</p>
+</blockquote>
+<p><strong>使用场景：</strong> </p>
+<blockquote>
+<p>需要动态指定处理某一组请求时，在不确定接受者的的情况下，向多个对象发送请求时。</p>
+</blockquote>
+<p><strong>注意事项：</strong> </p>
+<blockquote>
+<p>虽然责任链模式很灵活，但是牺牲的是一定的性能，因为责任链模式是层级处理，在处理数据的有一定的延迟，所所以需要低延迟的情况下，不推荐使用责任链模式。</p>
+</blockquote>
+<h2 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h2><p><strong>简介</strong></p>
+<blockquote>
+<p> 命令模式顾名思义，是一种数据驱动的设计模式，它属于行为型模式。请求以命令的形式包裹在对象中，并传给调用对象。调用对象寻找可以处理该命令的合适的对象，并把该命令传给相应的对象，该对象执行命令。<br> 也就是将一个请求封装成一个对象，从而可以用不同的请求对客户进行参数化。</p>
+</blockquote>
+<p>命令模式主要由这三个角色组成，命令对象(command)、命令执行对象(received)和命令请求对象(invoker)。</p>
+<ul>
+<li>命令对象：通过接口或抽象类声明实现的方法。</li>
+<li>命令执行对象：实现命令对象的方法，并将一个接收者和动作进行绑定，调用接收者相应的操作。</li>
+<li>命令请求对象：用于执行这个请求，可以动态的对命令进行控制。</li>
+</ul>
+<p>这里我们依旧用一个简单的示例来进行说明。<br>在某个学校中，学生需要听从老师的命令，比如老师可以让学生去打扫教室卫生，去完成未做完的作业等等命令，但是学生的时间有限，只能在某个时间范围内完成某一件事情，此时刚好有两个老师对学生 xuwujing 说出了命令，李老师先让 xuwujing 在放学后打扫教室，王老师让 xuwujing 在回家前把未做完的作业做完并交给他，但是学校的门禁的时间有限，于是 xuwujing 就只 打扫了教室，然后开溜了。。。<br>那么根据这个示例，我们可以使用命令模式来完成。<br>首先，先定义一个学生类，并指定该学生可以做的事情。<br>代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">class Student&#123;</div><div class="line">	void cleanClassRoom(String name)&#123;</div><div class="line">		System.out.println(name+&quot; 开始打扫教室...&quot;);</div><div class="line">	&#125;</div><div class="line">	void doHomeWork(String name)&#123;</div><div class="line">		System.out.println(name+&quot; 开始做作业...&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后定义一个 命令抽象类，并设置执行的方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">abstract class Command&#123;</div><div class="line">	protected Student student;</div><div class="line">	public Command(Student student)&#123;</div><div class="line">		this.student = student;</div><div class="line">	&#125;</div><div class="line">	abstract void execute(String name);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>继而再定义两个命令执行对象，分别设置所需执行的命令。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">class LiTeacher extends Command&#123;</div><div class="line">	public LiTeacher(Student student) &#123;</div><div class="line">		super(student);</div><div class="line">	&#125;</div><div class="line">	@Override</div><div class="line">	void execute(String name) &#123;</div><div class="line">		student.cleanClassRoom(name);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class WangTeacher extends Command&#123;</div><div class="line">	public WangTeacher(Student student) &#123;</div><div class="line">		super(student);</div><div class="line">	&#125;</div><div class="line">	@Override</div><div class="line">	void execute(String name) &#123;</div><div class="line">		student.doHomeWork(name);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最后再来定义一个命令请求对象，用于执行该请求，并对命令进行控制，比如新增命令、撤销命令和执行命令等等。<br>那么代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">class Invoker &#123;</div><div class="line">	private List&lt;Command&gt; commands = new ArrayList&lt;Command&gt;();</div><div class="line">	</div><div class="line">	public void setCommand(Command command) &#123;</div><div class="line">		if(commands.size()&gt;0) &#123;</div><div class="line">			System.out.println(&quot;不执行 WangTeacher 的命令!&quot;);</div><div class="line">		&#125;else &#123;</div><div class="line">			commands.add(command);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	public void executeCommand(String name) &#123;</div><div class="line">		commands.forEach(command-&gt;&#123;</div><div class="line">			command.execute(name);</div><div class="line">		&#125;);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	public void undoCommand(Command command) &#123;</div><div class="line">		commands.remove(command);</div><div class="line">		System.out.println(&quot;撤销该命令!&quot;);</div><div class="line">	&#125;	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最后再来进行代码的测试。<br>测试代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">public static void main(String[] args) &#123;</div><div class="line">		String name = &quot;xuwujing&quot;;</div><div class="line">		Student student = new  Student();</div><div class="line">		Command command1 = new LiTeacher(student);</div><div class="line">		Command command2 = new WangTeacher(student);</div><div class="line">		Invoker invoker =new Invoker();</div><div class="line">		invoker.setCommand(command1);</div><div class="line">		invoker.setCommand(command2);</div><div class="line">		invoker.executeCommand(name);</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<p><strong>输出结果:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">不执行 WangTeacher 的命令!</div><div class="line">xuwujing 开始打扫教室...</div></pre></td></tr></table></figure></p>
+<p><strong>命令模式优点：</strong></p>
+<blockquote>
+<p> 耦合度低，请求者和执行者并没有必然的联系；<br> 扩展性好，Command的子类可以非常容易地扩展。</p>
+</blockquote>
+<p><strong>命令模式缺点：</strong> </p>
+<blockquote>
+<p>如果命令过多的话，会增加系统的复杂度 。 </p>
+</blockquote>
+<p><strong>使用场景：</strong></p>
+<blockquote>
+<p> 如果在有类似<code>命令</code>需要指定的，就可以用命令模式，比如记录日志、撤销操作命令等。 </p>
+</blockquote>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><h3 id="音乐推荐"><a href="#音乐推荐" class="headerlink" title="音乐推荐"></a>音乐推荐</h3><p>分享一首很轻快的轻音乐！</p>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=5330830&auto=0&height=66"></iframe>
+
+<h3 id="项目的代码"><a href="#项目的代码" class="headerlink" title="项目的代码"></a>项目的代码</h3><p> <a href="https://github.com/xuwujing/java-study" target="_blank" rel="external">java-study </a>是本人在学习Java过程中记录的一些代码，也包括之前博文中使用的代码。如果感觉不错，希望顺手给个start，当然如果有不足，也希望提出。<br>github地址:  <a href="https://github.com/xuwujing/java-study" target="_blank" rel="external">https://github.com/xuwujing/java-study</a></p>
+<p>原创不易，如果感觉不错，希望给个推荐！您的支持是我写作的最大动力！<br>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a> </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/25/pancm97/" rel="next" title="Java进阶篇设计模式之七 ----- 享元模式和代理模式">
+                <i class="fa fa-chevron-left"></i> Java进阶篇设计模式之七 ----- 享元模式和代理模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/29/pancm99/" rel="prev" title="Java进阶篇设计模式之九----- 解释器模式和迭代器模式">
+                Java进阶篇设计模式之九----- 解释器模式和迭代器模式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">104</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#责任链模式"><span class="nav-number">2.</span> <span class="nav-text">责任链模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#命令模式"><span class="nav-number">3.</span> <span class="nav-text">命令模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它"><span class="nav-number">4.</span> <span class="nav-text">其它</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#音乐推荐"><span class="nav-number">4.1.</span> <span class="nav-text">音乐推荐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#项目的代码"><span class="nav-number">4.2.</span> <span class="nav-text">项目的代码</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,891 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,设计模式," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言在上一篇中我们学习了行为型模式的责任链模式(Chain of Responsibility Pattern)和命令模式（Command Pattern）。本篇则来学习下行为型模式的两个模式， 解释器模式(Interpreter Pattern)和迭代器模式（Iterator Pattern）。 解释器模式简介  解释器模式顾名思义，就是对某事物进行解释。给定一个语言之后，解释器模式可以定义出">
+<meta name="keywords" content="java,设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java进阶篇设计模式之九----- 解释器模式和迭代器模式">
+<meta property="og:url" content="http://yoursite.com/2018/10/29/pancm99/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言在上一篇中我们学习了行为型模式的责任链模式(Chain of Responsibility Pattern)和命令模式（Command Pattern）。本篇则来学习下行为型模式的两个模式， 解释器模式(Interpreter Pattern)和迭代器模式（Iterator Pattern）。 解释器模式简介  解释器模式顾名思义，就是对某事物进行解释。给定一个语言之后，解释器模式可以定义出">
+<meta property="og:updated_time" content="2018-12-24T13:41:51.555Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java进阶篇设计模式之九----- 解释器模式和迭代器模式">
+<meta name="twitter:description" content="前言在上一篇中我们学习了行为型模式的责任链模式(Chain of Responsibility Pattern)和命令模式（Command Pattern）。本篇则来学习下行为型模式的两个模式， 解释器模式(Interpreter Pattern)和迭代器模式（Iterator Pattern）。 解释器模式简介  解释器模式顾名思义，就是对某事物进行解释。给定一个语言之后，解释器模式可以定义出">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/29/pancm99/"/>
+
+
+
+
+
+
+  <title>Java进阶篇设计模式之九----- 解释器模式和迭代器模式 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/29/pancm99/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java进阶篇设计模式之九----- 解释器模式和迭代器模式</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-29T21:46:45+08:00">
+                2018-10-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在<a href="https://www.cnblogs.com/xuwujing/p/9794886.html" target="_blank" rel="external">上一篇</a>中我们学习了行为型模式的责任链模式(Chain of Responsibility Pattern)和命令模式（Command Pattern）。本篇则来学习下行为型模式的两个模式， 解释器模式(Interpreter Pattern)和迭代器模式（Iterator Pattern）。</p>
+<h2 id="解释器模式"><a href="#解释器模式" class="headerlink" title="解释器模式"></a>解释器模式</h2><p><strong>简介</strong></p>
+<blockquote>
+<p>解释器模式顾名思义，就是对某事物进行解释。给定一个语言之后，解释器模式可以定义出其文法的一种表示，并同时提供一个解释器。客户端可以使用这个解释器来解释这个语言中的句子。</p>
+</blockquote>
+<p>解释器模式其实就是对某事物进行解释。比如生活中经常用到的计算器，将我们用的语言转换成计算器预言，还有我们编写代码时用到的<strong>正则表达式</strong>等等。《大话设计模式》中对这个模式有个比较有意思的讲解，其中示例就是把老板对不同人说相同的话，不同的人会理解不同。这也说明的解释器模式核心就是进行解释。</p>
+<p>解释器模式主要由这四个角色组成，抽象表达式(Expression)角色、终结符表达式(Terminal Expression)角色、非终结符表达式(Nonterminal Expression)角色和环境(Context)角色。</p>
+<ul>
+<li>抽象解释器：声明一个所有具体表达式都要实现的抽象接口（或者抽象类），接口中主要是一个interpret()方法，称为解释操作。具体解释任务由它的各个实现类来完成，具体的解释器分别由终结符解释器TerminalExpression和非终结符解释器NonterminalExpression完成。</li>
+<li>终结符表达式：实现与文法中的元素相关联的解释操作，通常一个解释器模式中只有一个终结符表达式，但有多个实例，对应不同的终结符。终结符一半是文法中的运算单元，比如有一个简单的公式R=R1+R2，在里面R1和R2就是终结符，对应的解析R1和R2的解释器就是终结符表达式。 </li>
+<li>非终结符表达式：文法中的每条规则对应于一个非终结符表达式，非终结符表达式一般是文法中的运算符或者其他关键字，比如公式R=R1+R2中，+就是非终结符，解析+的解释器就是一个非终结符表达式。非终结符表达式根据逻辑的复杂程度而增加，原则上每个文法规则都对应一个非终结符表达式。</li>
+<li>环境角色：这个角色的任务一般是用来存放文法中各个终结符所对应的具体值，比如R=R1+R2，我们给R1赋值100，给R2赋值200。这些信息需要存放到环境角色中，很多情况下我们使用Map来充当环境角色就足够了。</li>
+</ul>
+<p>这里为了方便理解，我们使用一个简单的示例来加以说明。<br>平常我们在进行英语学习的时候，会自行翻译或者用到翻译工具。但是不同的翻译工具翻译的结果也可能不一样，这时我们只需要拿到自己想要的结果就行了。比如，使用百度和有道翻译“好好学习，天天向上！”，它们翻译的结果分别为“Study hard and keep up!”和“study hard and make progress every day！”，而xuwujing翻译的结果是“ Good good study, day day up！”。<br>那么我们便可以用解释器模式来实现这种场景。<br>首先定义一个抽象的解释器接口，有解释的这个方法，然后再定义不同的解释器实现该接口和方法，最后再来进行测试。那么代码如下:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">interface Expreeion&#123;</div><div class="line">	void interpert(String word);</div><div class="line">&#125;</div><div class="line"></div><div class="line">class  BaiduExpreeion implements Expreeion&#123;</div><div class="line">	String str =&quot;好好学习，天天向上!&quot;;</div><div class="line">	@Override</div><div class="line">	public void interpert(String word) &#123;</div><div class="line">		if(str.equals(word)) &#123;</div><div class="line">			System.out.println(&quot;百度翻译：&quot;+word+&quot; 的英文是  Study hard and keep up!&quot;);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class  YouDaoExpreeion implements Expreeion&#123;</div><div class="line">	String str =&quot;好好学习，天天向上!&quot;;</div><div class="line">	@Override</div><div class="line">	public void interpert(String word) &#123;</div><div class="line">		if(str.equals(word)) &#123;</div><div class="line">			System.out.println(&quot;有道翻译：&quot;+word+&quot; 的英文是  study hard and make progress every day！&quot;);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class  XuWuJingExpreeion implements Expreeion&#123;</div><div class="line">	String str =&quot;好好学习，天天向上!&quot;;</div><div class="line">	@Override</div><div class="line">	public void interpert(String word) &#123;</div><div class="line">		if(str.equals(word)) &#123;</div><div class="line">			System.out.println(&quot;xuwujing翻译：&quot;+word+&quot; 的英文是  Good good study, day day up！&quot;);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class InterpreterTest &#123;</div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		String word = &quot;好好学习，天天向上!&quot;;</div><div class="line">		Expreeion expreeion =new  BaiduExpreeion();</div><div class="line">		Expreeion expreeion2 =new  YouDaoExpreeion();</div><div class="line">		Expreeion expreeion3 =new  XuWuJingExpreeion();</div><div class="line">		expreeion.interpert(word);</div><div class="line">		expreeion2.interpert(word);</div><div class="line">		expreeion3.interpert(word);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>输出结果:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">百度翻译：好好学习，天天向上! 的英文是  Study hard and keep up!</div><div class="line">有道翻译：好好学习，天天向上! 的英文是  study hard and make progress every day！</div><div class="line">xuwujing翻译：好好学习，天天向上! 的英文是  Good good study, day day up！</div></pre></td></tr></table></figure></p>
+<p><strong>解释器模式优点：</strong></p>
+<blockquote>
+<p> 扩展性好，子类扩展非常方便。<br> 实现简单。</p>
+</blockquote>
+<p><strong>解释器模式缺点：</strong></p>
+<blockquote>
+<p>可使用的场景比较少；<br>类过多的话，会使代码臃肿，难以维护；</p>
+</blockquote>
+<p><strong>使用场景：</strong> </p>
+<blockquote>
+<p>一个简单的语法规则需要解释的场景，比如sql。<br>有重复的问题的时候。</p>
+</blockquote>
+<h2 id="迭代器模式"><a href="#迭代器模式" class="headerlink" title="迭代器模式"></a>迭代器模式</h2><p><strong>简介</strong></p>
+<blockquote>
+<p>  迭代器模式用于顺序访问集合对象的元素，不需要知道集合对象的底层表示，属于行为型模式。 它提供一种方法顺序访问一个聚合对象中各个元素, 而又无须暴露该对象的内部表示。</p>
+</blockquote>
+<p>我们对迭代器（Iterator）肯定不陌生，因为我们在Java开发中会经常用到，比如对List、Set和Map集合进行遍历或对数组进行遍历的时候。但是迭代器模式的话，可能就不太理解了，这里我们就简单讲讲迭代器模式。</p>
+<p> 迭代器模式主要由这四个角色组成，迭代器角色（Iterator）、具体迭代器角色（Concrete Iterator）、容器角色（Container）和具体容器角色（Concrete Container）。</p>
+<ul>
+<li>迭代器角色（Iterator）：通过接口或抽象类声明实现的方法。</li>
+<li>具体迭代器角色（Concrete Iterator）：具体迭代器角色要实现迭代器接口，并要记录遍历中的当前位置。</li>
+<li>容器角色（Container）：容器角色负责提供创建具体迭代器角色的接口。 </li>
+<li>具体容器角色（Concrete Container）：具体容器角色实现创建具体迭代器角色的接口——这个具体迭代器角色于该容器的结构相关。</li>
+</ul>
+<p>因为迭代器我们平时用的比较多，这里也不在过多描述了，这里就简单的介绍下迭代器模式的运作。<br>首先，定义一个迭代器角色（MyIterator ）和容器角色（MyIterable）的接口。<br>代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">interface MyIterator &#123;</div><div class="line">	boolean hasNext();</div><div class="line">	String next();</div><div class="line">&#125;</div><div class="line"></div><div class="line">interface MyIterable&#123;</div><div class="line">	MyIterator getIterator();</div><div class="line">	void add(String str);</div><div class="line">	String get(int index);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后定义一个 具体容器角色（ListContainer ）实现容器角色的接口，这里的实现方法通过List自带的进行实现；然后再定义一个具体迭代器角色（ListIterator ）实现迭代器角色的接口，这里的实现的方法由自己实现。<br>那么代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">class ListContainer implements MyIterable &#123;</div><div class="line">	</div><div class="line">	 private List&lt;String&gt; list =new ArrayList&lt;&gt;(); </div><div class="line"></div><div class="line">	 </div><div class="line">	@Override</div><div class="line">	public MyIterator getIterator() &#123;</div><div class="line">		return new ListIterator();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public void add(String str) &#123;</div><div class="line">		list.add(str);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public String get(int index) &#123;</div><div class="line">		return list.get(index);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	class ListIterator implements MyIterator&#123;</div><div class="line">		int index;</div><div class="line">		@Override</div><div class="line">		public boolean hasNext() &#123;</div><div class="line">			return index &lt; list.size();</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		@Override</div><div class="line">		public String next() &#123;</div><div class="line">			if (this.hasNext()) &#123;</div><div class="line">				return list.get(index++);</div><div class="line">			&#125;</div><div class="line">			return null;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最后再来进行代码的测试。<br>测试代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">public static void main(String[] args) &#123;</div><div class="line">		MyIterable myIterable = new ListContainer();</div><div class="line">		myIterable.add(&quot;1&quot;);</div><div class="line">		myIterable.add(&quot;zhangsan&quot;);</div><div class="line">		myIterable.add(&quot;2&quot;);</div><div class="line">		myIterable.add(&quot;lisi&quot;);</div><div class="line">		myIterable.add(&quot;3&quot;);</div><div class="line">		myIterable.add(&quot;xuwujing&quot;);	</div><div class="line">        MyIterator myIterator = myIterable.getIterator();</div><div class="line">        while (myIterator.hasNext())&#123;</div><div class="line">            String str = myIterator.next();</div><div class="line">            System.out.println(str);</div><div class="line">        &#125;      </div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<p><strong>输出结果:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">1</div><div class="line">zhangsan</div><div class="line">2</div><div class="line">lisi</div><div class="line">3</div><div class="line">xuwujing</div></pre></td></tr></table></figure></p>
+<p><strong>迭代器模式优点：</strong></p>
+<blockquote>
+<p> 灵活度高，可以通过不同的方式遍历对象；<br> 扩展性好，可以很方便的增加新的聚合类和迭代器类而不用修改之前的代码。</p>
+</blockquote>
+<p><strong>迭代器模式缺点：</strong> </p>
+<blockquote>
+<p>由于迭代器模式将存储数据和遍历数据的职责分离，增加新的聚合类需要对应增加新的迭代器类，类的个数成对增加，这在一定程度上增加了系统的复杂性。 </p>
+</blockquote>
+<p><strong>使用场景：</strong></p>
+<blockquote>
+<p>需要为聚合对象提供遍历的功能的时候。 </p>
+</blockquote>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><h3 id="音乐推荐"><a href="#音乐推荐" class="headerlink" title="音乐推荐"></a>音乐推荐</h3><p>分享一首很好听的日语歌曲！</p>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=442016694&auto=0&height=66"></iframe>
+
+<h3 id="项目的代码"><a href="#项目的代码" class="headerlink" title="项目的代码"></a>项目的代码</h3><p> <a href="https://github.com/xuwujing/java-study" target="_blank" rel="external">java-study </a>是本人在学习Java过程中记录的一些代码，也包括之前博文中使用的代码。如果感觉不错，希望顺手给个start，当然如果有不足，也希望提出。<br>github地址:  <a href="https://github.com/xuwujing/java-study" target="_blank" rel="external">https://github.com/xuwujing/java-study</a></p>
+<p>原创不易，如果感觉不错，希望给个推荐！您的支持是我写作的最大动力！<br>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a> </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/15/pancm98/" rel="next" title="Java进阶篇设计模式之八 ----- 责任链模式和命令模式">
+                <i class="fa fa-chevron-left"></i> Java进阶篇设计模式之八 ----- 责任链模式和命令模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/05/pancm100/" rel="prev" title="Java进阶篇设计模式之十 ---- 访问者模式和中介者模式">
+                Java进阶篇设计模式之十 ---- 访问者模式和中介者模式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">104</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解释器模式"><span class="nav-number">2.</span> <span class="nav-text">解释器模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#迭代器模式"><span class="nav-number">3.</span> <span class="nav-text">迭代器模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它"><span class="nav-number">4.</span> <span class="nav-text">其它</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#音乐推荐"><span class="nav-number">4.1.</span> <span class="nav-text">音乐推荐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#项目的代码"><span class="nav-number">4.2.</span> <span class="nav-text">项目的代码</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

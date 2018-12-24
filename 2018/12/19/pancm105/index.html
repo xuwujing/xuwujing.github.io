@@ -1,0 +1,1330 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,设计模式," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言本篇主要讲述是Java中JDK1.8的一些新语法特性使用，主要是Lambda、Stream和LocalDate日期的一些使用讲解。 LambdaLambda介绍 Lambda 表达式(lambda expression)是一个匿名函数，Lambda表达式基于数学中的λ演算得名，直接对应于其中的lambda抽象(lambda abstraction)，是一个匿名函数，即没有函数名的函数。  L">
+<meta name="keywords" content="java,设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java进阶篇之十五 ----- JDK1.8的Lambda、Stream和日期的使用详解(很详细)">
+<meta property="og:url" content="http://yoursite.com/2018/12/19/pancm105/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言本篇主要讲述是Java中JDK1.8的一些新语法特性使用，主要是Lambda、Stream和LocalDate日期的一些使用讲解。 LambdaLambda介绍 Lambda 表达式(lambda expression)是一个匿名函数，Lambda表达式基于数学中的λ演算得名，直接对应于其中的lambda抽象(lambda abstraction)，是一个匿名函数，即没有函数名的函数。  L">
+<meta property="og:updated_time" content="2018-12-24T13:42:53.009Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java进阶篇之十五 ----- JDK1.8的Lambda、Stream和日期的使用详解(很详细)">
+<meta name="twitter:description" content="前言本篇主要讲述是Java中JDK1.8的一些新语法特性使用，主要是Lambda、Stream和LocalDate日期的一些使用讲解。 LambdaLambda介绍 Lambda 表达式(lambda expression)是一个匿名函数，Lambda表达式基于数学中的λ演算得名，直接对应于其中的lambda抽象(lambda abstraction)，是一个匿名函数，即没有函数名的函数。  L">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/19/pancm105/"/>
+
+
+
+
+
+
+  <title>Java进阶篇之十五 ----- JDK1.8的Lambda、Stream和日期的使用详解(很详细) | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/19/pancm105/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java进阶篇之十五 ----- JDK1.8的Lambda、Stream和日期的使用详解(很详细)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-19T20:15:31+08:00">
+                2018-12-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本篇主要讲述是Java中JDK1.8的一些新语法特性使用，主要是Lambda、Stream和LocalDate日期的一些使用讲解。</p>
+<h2 id="Lambda"><a href="#Lambda" class="headerlink" title="Lambda"></a>Lambda</h2><h3 id="Lambda介绍"><a href="#Lambda介绍" class="headerlink" title="Lambda介绍"></a>Lambda介绍</h3><blockquote>
+<p>Lambda 表达式(lambda expression)是一个匿名函数，Lambda表达式基于数学中的λ演算得名，直接对应于其中的lambda抽象(lambda abstraction)，是一个匿名函数，即没有函数名的函数。</p>
+</blockquote>
+<h3 id="Lambda表达式的结构"><a href="#Lambda表达式的结构" class="headerlink" title="Lambda表达式的结构"></a>Lambda表达式的结构</h3><ul>
+<li>一个 Lambda 表达式可以有零个或多个参数</li>
+<li>参数的类型既可以明确声明，也可以根据上下文来推断。例如：(int a)与(a)效果相同</li>
+<li>所有参数需包含在圆括号内，参数之间用逗号相隔。例如：(a, b) 或 (int a, int b) 或 (String a, int b, float c)</li>
+<li>空圆括号代表参数集为空。例如：() -&gt; 42</li>
+<li>当只有一个参数，且其类型可推导时，圆括号（）可省略。例如：a -&gt; return a*a</li>
+<li>Lambda 表达式的主体可包含零条或多条语句</li>
+<li>如果 Lambda 表达式的主体只有一条语句，花括号{}可省略。匿名函数的返回类型与该主体表达式一致</li>
+<li>如果 Lambda 表达式的主体包含一条以上语句，则表达式必须包含在花括号{}中（形成代码块）。匿名函数的返回类型与代码块的返回类型一致，若没有返回则为空</li>
+</ul>
+<h3 id="Lambda-表达式的使用"><a href="#Lambda-表达式的使用" class="headerlink" title="Lambda 表达式的使用"></a>Lambda 表达式的使用</h3><p>下面我们先使用一个简单的例子来看看Lambda的效果吧。</p>
+<p>比如我们对Map 的遍历<br>传统方式遍历如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">Map&lt;String, String&gt; map = new HashMap&lt;&gt;();</div><div class="line">map.put(&quot;a&quot;, &quot;a&quot;);</div><div class="line">map.put(&quot;b&quot;, &quot;b&quot;);</div><div class="line">map.put(&quot;c&quot;, &quot;c&quot;);</div><div class="line">map.put(&quot;d&quot;, &quot;d&quot;);</div><div class="line"></div><div class="line">System.out.println(&quot;map普通方式遍历:&quot;);</div><div class="line">for (String key : map.keySet()) &#123;</div><div class="line">	System.out.println(&quot;k=&quot; + key + &quot;，v=&quot; + map.get(key));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>使用Lambda进行遍历:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">	System.out.println(&quot;map拉姆达表达式遍历:&quot;);</div><div class="line">	map.forEach((k, v) -&gt; &#123;</div><div class="line">		System.out.println(&quot;k=&quot; + k + &quot;，v=&quot; + v);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>List也同理，不过List还可以通过双冒号运算符遍历:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">List&lt;String&gt; list = new ArrayList&lt;String&gt;();</div><div class="line">list.add(&quot;a&quot;);</div><div class="line">list.add(&quot;bb&quot;);</div><div class="line">list.add(&quot;ccc&quot;);</div><div class="line">list.add(&quot;dddd&quot;);</div><div class="line">System.out.println(&quot;list拉姆达表达式遍历:&quot;);</div><div class="line">list.forEach(v -&gt; &#123;</div><div class="line">	System.out.println(v);</div><div class="line">&#125;);</div><div class="line">System.out.println(&quot;list双冒号运算符遍历:&quot;);</div><div class="line">list.forEach(System.out::println);</div></pre></td></tr></table></figure>
+<p>输出结果:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">map普通方式遍历:</div><div class="line">k=a，v=a</div><div class="line">k=b，v=b</div><div class="line">k=c，v=c</div><div class="line">k=d，v=d</div><div class="line">map拉姆达表达式遍历:</div><div class="line">k=a，v=a</div><div class="line">k=b，v=b</div><div class="line">k=c，v=c</div><div class="line">k=d，v=d</div><div class="line">list拉姆达表达式遍历:</div><div class="line">a</div><div class="line">bb</div><div class="line">ccc</div><div class="line">dddd</div><div class="line">list双冒号运算符遍历:</div><div class="line">a</div><div class="line">bb</div><div class="line">ccc</div><div class="line">dddd</div></pre></td></tr></table></figure>
+<p>Lambda除了在for循环遍历中使用外，它还可以代替匿名的内部类。<br>比如下面这个例子的线程创建:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">//使用普通的方式创建</div><div class="line">Runnable r1 = new Runnable() &#123;</div><div class="line">	@Override</div><div class="line">	public void run() &#123;</div><div class="line">		System.out.println(&quot;普通方式创建!&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">//使用拉姆达方式创建</div><div class="line">Runnable r2 = ()-&gt; System.out.println(&quot;拉姆达方式创建!&quot;);</div></pre></td></tr></table></figure>
+<p>注: 这个例子中使用Lambda表达式的时候，编译器会自动推断：根据线程类的构造函数签名 Runnable r { }，将该 Lambda 表达式赋Runnable 接口。</p>
+<p><strong>Lambda 表达式与匿名类的区别</strong><br>使用匿名类与 Lambda 表达式的一大区别在于关键词的使用。对于匿名类，关键词 this 解读为匿名类，而对于 Lambda 表达式，关键词 this 解读为写就 Lambda 的外部类。</p>
+<h3 id="Lambda表达式使用注意事项"><a href="#Lambda表达式使用注意事项" class="headerlink" title="Lambda表达式使用注意事项"></a>Lambda表达式使用注意事项</h3><blockquote>
+<p>Lambda虽然简化了代码的编写，但同时也减少了可读性。</p>
+</blockquote>
+<h2 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h2><h3 id="Stream介绍"><a href="#Stream介绍" class="headerlink" title="Stream介绍"></a>Stream介绍</h3><blockquote>
+<p>Stream 使用一种类似用 SQL 语句从数据库查询数据的直观方式来提供一种对 Java 集合运算和表达的高阶抽象。Stream API可以极大提高Java程序员的生产力，让程序员写出高效率、干净、简洁的代码。这种风格将要处理的元素集合看作一种流， 流在管道中传输， 并且可以在管道的节点上进行处理， 比如筛选， 排序，聚合等。</p>
+</blockquote>
+<p><strong>Stream特性：</strong></p>
+<ul>
+<li>不是数据结构： 它没有内部存储，它只是用操作管道从 source（数据结构、数组、generator function、IO channel）抓取数据。它也绝不修改自己所封装的底层数据结构的数据。例如 Stream 的 filter 操作会产生一个不包含被过滤元素的新 Stream，而不是从 source 删除那些元素。</li>
+<li>不支持索引访问： 但是很容易生成数组或者 List 。</li>
+<li>惰性化：很多 Stream 操作是向后延迟的，一直到它弄清楚了最后需要多少数据才会开始。Intermediate 操作永远是惰性化的。</li>
+<li>并行能力。当一个 Stream 是并行化的，就不需要再写多线程代码，所有对它的操作会自动并行进行的。</li>
+<li>可以是无限的：集合有固定大小，Stream 则不必。limit(n) 和 findFirst() 这类的 short-circuiting 操作可以对无限的 Stream 进行运算并很快完成。</li>
+<li><strong>注意事项：所有 Stream 的操作必须以 lambda 表达式为参数。</strong></li>
+</ul>
+<p><strong>Stream 流操作类型：</strong></p>
+<ul>
+<li>Intermediate：一个流可以后面跟随零个或多个 intermediate 操作。其目的主要是打开流，做出某种程度的数据映射/过滤，然后返回一个新的流，交给下一个操作使用。 这类操作都是惰性化的（lazy），就是说，仅仅调用到这类方法，并没有真正开始流的遍历。 </li>
+<li>Terminal：一个流只能有一个 terminal 操作，当这个操作执行后，流就被使用“光”了，无法再被操作。 所以这必定是流的最后一个操作。 Terminal操作的执行，才会真正开始流的遍历，并且会生成一个结果，或者一个 side effect。</li>
+</ul>
+<h3 id="Stream使用"><a href="#Stream使用" class="headerlink" title="Stream使用"></a>Stream使用</h3><p>这里我们依旧使用一个简单示例来看看吧。<br>在开发中，我们有时需要对一些数据进行过滤，如果是传统的方式，我们需要对这批数据进行遍历过滤，会显得比较繁琐，如果使用steam流方式的话，那么可以很方便的进行处理。</p>
+<p>首先通过普通的方式进行过滤:</p>
+<pre><code>List&lt;String&gt; list = Arrays.asList(&quot;张三&quot;, &quot;李四&quot;, &quot;王五&quot;, &quot;xuwujing&quot;);
+    System.out.println(&quot;过滤之前:&quot; + list);
+    List&lt;String&gt; result = new ArrayList&lt;&gt;();
+    for (String str : list) {
+        if (!&quot;李四&quot;.equals(str)) {
+            result.add(str);
+        }
+    }
+    System.out.println(&quot;过滤之后:&quot; + result);
+</code></pre><p>使用Steam方式进行过滤：</p>
+<pre><code>List&lt;String&gt; result2 = list.stream().filter(str -&gt; !&quot;李四&quot;.equals(str)).collect(Collectors.toList());
+System.out.println(&quot;stream 过滤之后:&quot; + result2);
+</code></pre><p>输出结果:</p>
+<pre><code>过滤之前:[张三, 李四, 王五, xuwujing]
+过滤之后:[张三, 王五, xuwujing]
+stream 过滤之后:[张三, 王五, xuwujing]
+</code></pre><p>是不是很简洁和方便呢。<br>其实Stream流还有更多的使用方法，filter只是其中的一角而已。那么在这里我们就来学习了解下这些用法吧。</p>
+<p><strong>1.构造Stream流的方式</strong></p>
+<pre><code>Stream stream = Stream.of(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;);
+String[] strArray = new String[] { &quot;a&quot;, &quot;b&quot;, &quot;c&quot; };
+stream = Stream.of(strArray);
+stream = Arrays.stream(strArray);
+List&lt;String&gt; list = Arrays.asList(strArray);
+stream = list.stream();
+</code></pre><p><strong>2.Stream流的之间的转换</strong></p>
+<p>注意:一个Stream流只可以使用一次，这段代码为了简洁而重复使用了数次，因此会抛出 stream has already been operated upon or closed 异常。</p>
+<pre><code>try {
+        Stream&lt;String&gt; stream2 = Stream.of(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;);
+        // 转换成 Array
+        String[] strArray1 = stream2.toArray(String[]::new);
+
+        // 转换成 Collection
+        List&lt;String&gt; list1 = stream2.collect(Collectors.toList());
+        List&lt;String&gt; list2 = stream2.collect(Collectors.toCollection(ArrayList::new));            
+        Set set1 = stream2.collect(Collectors.toSet());
+        Stack stack1 = stream2.collect(Collectors.toCollection(Stack::new));
+
+        // 转换成 String
+        String str = stream.collect(Collectors.joining()).toString();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+</code></pre><p><strong>3.Stream流的map使用</strong></p>
+<p>map方法用于映射每个元素到对应的结果，一对一。</p>
+<p>示例一：转换大写</p>
+<pre><code>List&lt;String&gt; list3 = Arrays.asList(&quot;zhangSan&quot;, &quot;liSi&quot;, &quot;wangWu&quot;);
+System.out.println(&quot;转换之前的数据:&quot; + list3);
+List&lt;String&gt; list4 = list3.stream().map(String::toUpperCase).collect(Collectors.toList());
+System.out.println(&quot;转换之后的数据:&quot; + list4); 
+// 转换之后的数据:[ZHANGSAN, LISI,WANGWU]
+</code></pre><p>示例二：转换数据类型</p>
+<pre><code>List&lt;String&gt; list31 = Arrays.asList(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;);
+System.out.println(&quot;转换之前的数据:&quot; + list31);
+List&lt;Integer&gt; list41 = list31.stream().map(Integer::valueOf).collect(Collectors.toList());
+System.out.println(&quot;转换之后的数据:&quot; + list41); 
+// [1, 2, 3]
+</code></pre><p>示例三：获取平方</p>
+<pre><code>List&lt;Integer&gt; list5 = Arrays.asList(new Integer[] { 1, 2, 3, 4, 5 });
+List&lt;Integer&gt; list6 = list5.stream().map(n -&gt; n * n).collect(Collectors.toList());
+System.out.println(&quot;平方的数据:&quot; + list6);
+// [1, 4, 9, 16, 25]
+</code></pre><p><strong>4.Stream流的filter使用</strong></p>
+<p>filter方法用于通过设置的条件过滤出元素。</p>
+<p>示例二：通过与 findAny 得到 if/else 的值</p>
+<pre><code>List&lt;String&gt; list = Arrays.asList(&quot;张三&quot;, &quot;李四&quot;, &quot;王五&quot;, &quot;xuwujing&quot;);
+String result3 = list.stream().filter(str -&gt; &quot;李四&quot;.equals(str)).findAny().orElse(&quot;找不到!&quot;);
+String result4 = list.stream().filter(str -&gt; &quot;李二&quot;.equals(str)).findAny().orElse(&quot;找不到!&quot;);
+
+System.out.println(&quot;stream 过滤之后 2:&quot; + result3);
+System.out.println(&quot;stream 过滤之后 3:&quot; + result4);
+//stream 过滤之后 2:李四
+//stream 过滤之后 3:找不到!
+</code></pre><p>示例三：通过与 mapToInt 计算和</p>
+<pre><code>List&lt;User&gt; lists = new ArrayList&lt;User&gt;();
+lists.add(new User(6, &quot;张三&quot;));
+lists.add(new User(2, &quot;李四&quot;));
+lists.add(new User(3, &quot;王五&quot;));
+lists.add(new User(1, &quot;张三&quot;));
+// 计算这个list中出现 &quot;张三&quot; id的值
+int sum = lists.stream().filter(u -&gt; &quot;张三&quot;.equals(u.getName())).mapToInt(u -&gt; u.getId()).sum();
+
+System.out.println(&quot;计算结果:&quot; + sum); 
+// 7
+</code></pre><p><strong>5.Stream流的flatMap使用</strong></p>
+<p>flatMap 方法用于映射每个元素到对应的结果，一对多。</p>
+<p>示例:从句子中得到单词</p>
+<pre><code>String worlds = &quot;The way of the future&quot;;
+List&lt;String&gt; list7 = new ArrayList&lt;&gt;();
+list7.add(worlds);
+List&lt;String&gt; list8 = list7.stream().flatMap(str -&gt; Stream.of(str.split(&quot; &quot;)))
+        .filter(world -&gt; world.length() &gt; 0).collect(Collectors.toList());
+System.out.println(&quot;单词:&quot;);
+list8.forEach(System.out::println);
+// 单词:
+// The 
+// way 
+// of 
+// the 
+// future
+</code></pre><p><strong>6.Stream流的limit使用</strong></p>
+<p>limit 方法用于获取指定数量的流。</p>
+<p>示例一：获取前n条数的数据</p>
+<pre><code>Random rd = new Random();
+System.out.println(&quot;取到的前三条数据:&quot;);
+rd.ints().limit(3).forEach(System.out::println);
+//    取到的前三条数据:
+//    1167267754
+//    -1164558977
+//    1977868798
+</code></pre><p>示例二：结合skip使用得到需要的数据</p>
+<p>skip表示的是扔掉前n个元素。</p>
+<pre><code>List&lt;User&gt; list9 = new ArrayList&lt;User&gt;();
+    for (int i = 1; i &lt; 4; i++) {
+        User user = new User(i, &quot;pancm&quot; + i);
+        list9.add(user);
+    }
+    System.out.println(&quot;截取之前的数据:&quot;);
+    // 取前3条数据，但是扔掉了前面的2条，可以理解为拿到的数据为 2&lt;=i&lt;3 (i 是数值下标)
+    List&lt;String&gt; list10 = list9.stream().map(User::getName).limit(3).skip(2).collect(Collectors.toList());
+    System.out.println(&quot;截取之后的数据:&quot; + list10);
+    //        截取之前的数据:
+    //        姓名:pancm1
+    //        姓名:pancm2
+    //        姓名:pancm3
+    //        截取之后的数据:[pancm3]
+</code></pre><p>注:User实体类中 getName 方法会打印姓名。</p>
+<p><strong>7.Stream流的sort使用</strong></p>
+<p>sorted方法用于对流进行升序排序。</p>
+<p>示例一：随机取值排序</p>
+<pre><code>Random rd2 = new Random();
+System.out.println(&quot;取到的前三条数据然后进行排序:&quot;);
+rd2.ints().limit(3).sorted().forEach(System.out::println);
+//    取到的前三条数据然后进行排序:
+//    -2043456377
+//    -1778595703
+//    1013369565
+</code></pre><p>示例二：优化排序</p>
+<p>tips:先获取在排序效率会更高!</p>
+<pre><code>//普通的排序取值
+List&lt;User&gt; list11 = list9.stream().sorted((u1, u2) -&gt; u1.getName().compareTo(u2.getName())).limit(3)
+        .collect(Collectors.toList());
+System.out.println(&quot;排序之后的数据:&quot; + list11);
+//优化排序取值
+List&lt;User&gt; list12 = list9.stream().limit(3).sorted((u1, u2) -&gt; u1.getName().compareTo(u2.getName()))
+        .collect(Collectors.toList());
+System.out.println(&quot;优化排序之后的数据:&quot; + list12);
+//排序之后的数据:[{&quot;id&quot;:1,&quot;name&quot;:&quot;pancm1&quot;}, {&quot;id&quot;:2,&quot;name&quot;:&quot;pancm2&quot;}, {&quot;id&quot;:3,&quot;name&quot;:&quot;pancm3&quot;}]
+//优化排序之后的数据:[{&quot;id&quot;:1,&quot;name&quot;:&quot;pancm1&quot;}, {&quot;id&quot;:2,&quot;name&quot;:&quot;pancm2&quot;}, {&quot;id&quot;:3,&quot;name&quot;:&quot;pancm3&quot;}]
+</code></pre><p><strong>8.Stream流的peek使用</strong></p>
+<p>peek对每个元素执行操作并返回一个新的Stream</p>
+<p>示例:双重操作</p>
+<pre><code>System.out.println(&quot;peek使用:&quot;);
+Stream.of(&quot;one&quot;, &quot;two&quot;, &quot;three&quot;, &quot;four&quot;).filter(e -&gt; e.length() &gt; 3).peek(e -&gt; System.out.println(&quot;转换之前: &quot; + e))
+        .map(String::toUpperCase).peek(e -&gt; System.out.println(&quot;转换之后: &quot; + e)).collect(Collectors.toList());
+
+//    转换之前: three
+//    转换之后: THREE
+//    转换之前: four
+//    转换之后: FOUR
+</code></pre><p><strong>9.Stream流的parallel使用</strong></p>
+<p>parallelStream 是流并行处理程序的代替方法。</p>
+<p>示例:获取空字符串的数量</p>
+<pre><code>List&lt;String&gt; strings = Arrays.asList(&quot;a&quot;, &quot;&quot;, &quot;c&quot;, &quot;&quot;, &quot;e&quot;,&quot;&quot;, &quot; &quot;);
+// 获取空字符串的数量
+long count =  strings.parallelStream().filter(string -&gt; string.isEmpty()).count();
+System.out.println(&quot;空字符串的个数:&quot;+count);
+</code></pre><p><strong>10.Stream流的max/min/distinct使用</strong></p>
+<p>示例一：得到最大最小值</p>
+<pre><code>List&lt;String&gt; list13 = Arrays.asList(&quot;zhangsan&quot;,&quot;lisi&quot;,&quot;wangwu&quot;,&quot;xuwujing&quot;);
+int maxLines = list13.stream().mapToInt(String::length).max().getAsInt();
+int minLines = list13.stream().mapToInt(String::length).min().getAsInt();
+System.out.println(&quot;最长字符的长度:&quot; + maxLines+&quot;,最短字符的长度:&quot;+minLines);
+//最长字符的长度:8,最短字符的长度:4
+</code></pre><p>示例二：得到去重之后的数据</p>
+<pre><code>String lines = &quot;good good study day day up&quot;;
+List&lt;String&gt; list14 = new ArrayList&lt;String&gt;();
+list14.add(lines);
+List&lt;String&gt; words = list14.stream().flatMap(line -&gt; Stream.of(line.split(&quot; &quot;))).filter(word -&gt; word.length() &gt; 0)
+        .map(String::toLowerCase).distinct().sorted().collect(Collectors.toList());
+System.out.println(&quot;去重复之后:&quot; + words);
+//去重复之后:[day, good, study, up]
+</code></pre><p><strong>11.Stream流的Match使用</strong></p>
+<ul>
+<li>allMatch：Stream 中全部元素符合则返回 true ;</li>
+<li>anyMatch：Stream 中只要有一个元素符合则返回 true; </li>
+<li>noneMatch：Stream 中没有一个元素符合则返回 true。</li>
+</ul>
+<p>示例:数据是否符合</p>
+<pre><code>boolean all = lists.stream().allMatch(u -&gt; u.getId() &gt; 3);
+System.out.println(&quot;是否都大于3:&quot; + all);
+boolean any = lists.stream().anyMatch(u -&gt; u.getId() &gt; 3);
+System.out.println(&quot;是否有一个大于3:&quot; + any);
+boolean none = lists.stream().noneMatch(u -&gt; u.getId() &gt; 3);
+System.out.println(&quot;是否没有一个大于3的:&quot; + none);        
+//    是否都大于3:false
+//    是否有一个大于3:true
+//    是否没有一个大于3的:false
+</code></pre><p><strong>12.Stream流的reduce使用</strong></p>
+<p>reduce 主要作用是把 Stream 元素组合起来进行操作。</p>
+<p>示例一：字符串连接</p>
+<pre><code>String concat = Stream.of(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;).reduce(&quot;&quot;, String::concat);
+System.out.println(&quot;字符串拼接:&quot; + concat);
+</code></pre><p>示例二：得到最小值</p>
+<pre><code>double minValue = Stream.of(-4.0, 1.0, 3.0, -2.0).reduce(Double.MAX_VALUE, Double::min);
+System.out.println(&quot;最小值:&quot; + minValue);
+//最小值:-4.0
+</code></pre><p>示例三：求和</p>
+<pre><code>// 求和, 无起始值
+int sumValue = Stream.of(1, 2, 3, 4).reduce(Integer::sum).get();
+System.out.println(&quot;有无起始值求和:&quot; + sumValue);
+// 求和, 有起始值
+ sumValue = Stream.of(1, 2, 3, 4).reduce(1, Integer::sum);
+ System.out.println(&quot;有起始值求和:&quot; + sumValue);
+//    有无起始值求和:10
+//    有起始值求和:11
+</code></pre><p>示例四：过滤拼接</p>
+<pre><code>concat = Stream.of(&quot;a&quot;, &quot;B&quot;, &quot;c&quot;, &quot;D&quot;, &quot;e&quot;, &quot;F&quot;).filter(x -&gt; x.compareTo(&quot;Z&quot;) &gt; 0).reduce(&quot;&quot;, String::concat);
+System.out.println(&quot;过滤和字符串连接:&quot; + concat);
+    //过滤和字符串连接:ace
+</code></pre><p><strong>13.Stream流的iterate使用</strong></p>
+<blockquote>
+<p>iterate 跟 reduce 操作很像，接受一个种子值，和一个UnaryOperator（例如 f）。 然后种子值成为 Stream 的第一个元素，f(seed) 为第二个，f(f(seed)) 第三个，以此类推。 在 iterate 时候管道必须有 limit 这样的操作来限制 Stream 大小。</p>
+</blockquote>
+<p>示例:生成一个等差队列</p>
+<pre><code>System.out.println(&quot;从2开始生成一个等差队列:&quot;);
+Stream.iterate(2, n -&gt; n + 2).limit(5).forEach(x -&gt; System.out.print(x + &quot; &quot;));
+// 从2开始生成一个等差队列:
+// 2 4 6 8 10
+</code></pre><p><strong>14.Stream流的Supplier使用</strong></p>
+<p>通过实现Supplier类的方法可以自定义流计算规则。</p>
+<p>示例：随机获取两条用户信息</p>
+<pre><code>    System.out.println(&quot;自定义一个流进行计算输出:&quot;);
+    Stream.generate(new UserSupplier()).limit(2).forEach(u -&gt; System.out.println(u.getId() + &quot;, &quot; + u.getName()));
+
+    //第一次:
+    //自定义一个流进行计算输出:
+    //10, pancm7
+    //11, pancm6
+
+    //第二次:
+    //自定义一个流进行计算输出:
+    //10, pancm4
+    //11, pancm2
+
+    //第三次:
+    //自定义一个流进行计算输出:
+    //10, pancm4
+    //11, pancm8
+
+
+ class UserSupplier implements Supplier&lt;User&gt; {
+    private int index = 10;
+    private Random random = new Random();
+
+    @Override
+    public User get() {
+        return new User(index++, &quot;pancm&quot; + random.nextInt(10));
+    }
+}
+</code></pre><p><strong>15.Stream流的groupingBy/partitioningBy使用</strong></p>
+<ul>
+<li>groupingBy：分组排序；</li>
+<li>partitioningBy：分区排序。</li>
+</ul>
+<p>示例一：分组排序</p>
+<pre><code>System.out.println(&quot;通过id进行分组排序:&quot;);
+Map&lt;Integer, List&lt;User&gt;&gt; personGroups = Stream.generate(new UserSupplier2()).limit(5)
+        .collect(Collectors.groupingBy(User::getId));
+Iterator it = personGroups.entrySet().iterator();
+while (it.hasNext()) {
+    Map.Entry&lt;Integer, List&lt;User&gt;&gt; persons = (Map.Entry) it.next();
+    System.out.println(&quot;id &quot; + persons.getKey() + &quot; = &quot; + persons.getValue());
+}
+
+//    通过id进行分组排序:
+//    id 10 = [{&quot;id&quot;:10,&quot;name&quot;:&quot;pancm1&quot;}]    
+//    id 11 = [{&quot;id&quot;:11,&quot;name&quot;:&quot;pancm3&quot;}, {&quot;id&quot;:11,&quot;name&quot;:&quot;pancm6&quot;}, {&quot;id&quot;:11,&quot;name&quot;:&quot;pancm4&quot;}, {&quot;id&quot;:11,&quot;name&quot;:&quot;pancm7&quot;}]
+
+
+
+class UserSupplier2 implements Supplier&lt;User&gt; {
+    private int index = 10;
+    private Random random = new Random();
+
+    @Override
+    public User get() {
+        return new User(index % 2 == 0 ? index++ : index, &quot;pancm&quot; + random.nextInt(10));
+    }
+}
+</code></pre><p>示例二：分区排序</p>
+<pre><code>System.out.println(&quot;通过年龄进行分区排序:&quot;);
+Map&lt;Boolean, List&lt;User&gt;&gt; children = Stream.generate(new UserSupplier3()).limit(5)
+        .collect(Collectors.partitioningBy(p -&gt; p.getId() &lt; 18));
+
+System.out.println(&quot;小孩: &quot; + children.get(true));
+System.out.println(&quot;成年人: &quot; + children.get(false));
+
+// 通过年龄进行分区排序:
+// 小孩: [{&quot;id&quot;:16,&quot;name&quot;:&quot;pancm7&quot;}, {&quot;id&quot;:17,&quot;name&quot;:&quot;pancm2&quot;}]
+// 成年人: [{&quot;id&quot;:18,&quot;name&quot;:&quot;pancm4&quot;}, {&quot;id&quot;:19,&quot;name&quot;:&quot;pancm9&quot;}, {&quot;id&quot;:20,&quot;name&quot;:&quot;pancm6&quot;}]
+
+ class UserSupplier3 implements Supplier&lt;User&gt; {
+    private int index = 16;
+    private Random random = new Random();
+
+    @Override
+    public User get() {
+        return new User(index++, &quot;pancm&quot; + random.nextInt(10));
+    }
+}
+</code></pre><p><strong>16.Stream流的summaryStatistics使用</strong></p>
+<p>IntSummaryStatistics 用于收集统计信息(如count、min、max、sum和average)的状态对象。</p>
+<p>示例:得到最大、最小、之和以及平均数。</p>
+<pre><code>List&lt;Integer&gt; numbers = Arrays.asList(1, 5, 7, 3, 9);
+IntSummaryStatistics stats = numbers.stream().mapToInt((x) -&gt; x).summaryStatistics();
+
+System.out.println(&quot;列表中最大的数 : &quot; + stats.getMax());
+System.out.println(&quot;列表中最小的数 : &quot; + stats.getMin());
+System.out.println(&quot;所有数之和 : &quot; + stats.getSum());
+System.out.println(&quot;平均数 : &quot; + stats.getAverage());
+
+//    列表中最大的数 : 9
+//    列表中最小的数 : 1
+//    所有数之和 : 25
+//    平均数 : 5.0
+</code></pre><p> Stream 介绍就到这里了，JDK1.8中的Stream流其实还有很多很多用法，更多的用法则需要大家去查看JDK1.8的API文档了。</p>
+<h2 id="LocalDateTime"><a href="#LocalDateTime" class="headerlink" title="LocalDateTime"></a>LocalDateTime</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><blockquote>
+<p>JDK1.8除了新增了lambda表达式、stream流之外，它还新增了全新的日期时间API。在JDK1.8之前，Java处理日期、日历和时间的方式一直为社区所诟病，将 java.util.Date设定为可变类型，以及SimpleDateFormat的非线程安全使其应用非常受限。因此推出了java.time包，该包下的所有类都是不可变类型而且线程安全。</p>
+</blockquote>
+<h3 id="关键类"><a href="#关键类" class="headerlink" title="关键类"></a>关键类</h3><ul>
+<li>Instant：瞬时时间。</li>
+<li>LocalDate：本地日期，不包含具体时间, 格式 yyyy-MM-dd。</li>
+<li>LocalTime：本地时间，不包含日期. 格式 yyyy-MM-dd HH:mm:ss.SSS 。</li>
+<li>LocalDateTime：组合了日期和时间，但不包含时差和时区信息。</li>
+<li>ZonedDateTime：最完整的日期时间，包含时区和相对UTC或格林威治的时差。</li>
+</ul>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p><strong>1.获取当前的日期时间</strong></p>
+<p>通过静态工厂方法now()来获取当前时间。</p>
+<pre><code>//本地日期,不包括时分秒
+LocalDate nowDate = LocalDate.now();
+//本地日期,包括时分秒
+LocalDateTime nowDateTime = LocalDateTime.now();
+System.out.println(&quot;当前时间:&quot;+nowDate);
+System.out.println(&quot;当前时间:&quot;+nowDateTime);
+//  当前时间:2018-12-19
+//  当前时间:2018-12-19T15:24:35.822
+</code></pre><p><strong>2.获取当前的年月日时分秒</strong></p>
+<p>获取时间之后，直接get获取年月日时分秒。</p>
+<pre><code> //获取当前的时间，包括毫秒
+ LocalDateTime ldt = LocalDateTime.now();
+ System.out.println(&quot;当前年:&quot;+ldt.getYear());   //2018
+ System.out.println(&quot;当前年份天数:&quot;+ldt.getDayOfYear());//172 
+ System.out.println(&quot;当前月:&quot;+ldt.getMonthValue());
+ System.out.println(&quot;当前时:&quot;+ldt.getHour());
+ System.out.println(&quot;当前分:&quot;+ldt.getMinute());
+ System.out.println(&quot;当前时间:&quot;+ldt.toString());
+//         当前年:2018
+//         当前年份天数:353
+//         当前月:12
+//         当前时:15
+//         当前分:24
+//         当前时间:2018-12-19T15:24:35.833
+</code></pre><p><strong>3.格式化时间</strong></p>
+<p>格式时间格式需要用到DateTimeFormatter类。</p>
+<pre><code>LocalDateTime ldt = LocalDateTime.now();
+System.out.println(&quot;格式化时间: &quot;+ ldt.format(DateTimeFormatter.ofPattern(&quot;yyyy-MM-dd HH:mm:ss.SSS&quot;)));
+//格式化时间:2018-12-19 15:37:47.119
+</code></pre><p><strong>4.时间增减</strong></p>
+<p>在指定的时间进行增加/减少年月日时分秒。</p>
+<pre><code> LocalDateTime ldt = LocalDateTime.now();
+ System.out.println(&quot;后5天时间:&quot;+ldt.plusDays(5));
+ System.out.println(&quot;前5天时间并格式化:&quot;+ldt.minusDays(5).format(DateTimeFormatter.ofPattern(&quot;yyyy-MM-dd&quot;))); //2018-06-16
+ System.out.println(&quot;前一个月的时间:&quot;+ldt2.minusMonths(1).format(DateTimeFormatter.ofPattern(&quot;yyyyMM&quot;))); //2018-06-16
+ System.out.println(&quot;后一个月的时间:&quot;+ldt2.plusMonths(1)); //2018-06-16
+ System.out.println(&quot;指定2099年的当前时间:&quot;+ldt.withYear(2099)); //2099-06-21T15:07:39.506
+//        后5天时间:2018-12-24T15:50:37.508
+//        前5天时间并格式化:2018-12-14
+//        前一个月的时间:201712
+//        后一个月的时间:2018-02-04T09:19:29.499
+//        指定2099年的当前时间:2099-12-19T15:50:37.508
+</code></pre><p><strong>5.创建指定时间</strong></p>
+<p>通过指定年月日来创建。</p>
+<pre><code>LocalDate ld3=LocalDate.of(2017, Month.NOVEMBER, 17);
+LocalDate ld4=LocalDate.of(2018, 02, 11);
+</code></pre><p><strong>6.时间相差比较</strong></p>
+<p>比较相差的年月日时分秒。</p>
+<p>示例一: 具体相差的年月日</p>
+<pre><code>LocalDate ld=LocalDate.parse(&quot;2017-11-17&quot;);
+LocalDate ld2=LocalDate.parse(&quot;2018-01-05&quot;);
+Period p=Period.between(ld, ld2);
+System.out.println(&quot;相差年: &quot;+p.getYears()+&quot; 相差月 :&quot;+p.getMonths() +&quot; 相差天:&quot;+p.getDays());
+// 相差年: 0 相差月 :1 相差天:19
+</code></pre><p>注:这里的月份是不满足一年，天数是不满足一个月的。这里实际相差的是1月19天，也就是49天。</p>
+<p>示例二：相差总数的时间</p>
+<p>ChronoUnit 日期周期单位的标准集合。</p>
+<pre><code>  LocalDate startDate = LocalDate.of(2017, 11, 17);
+LocalDate endDate = LocalDate.of(2018, 01, 05);
+System.out.println(&quot;相差月份:&quot;+ChronoUnit.MONTHS.between(startDate, endDate));
+System.out.println(&quot;两月之间的相差的天数   : &quot; + ChronoUnit.DAYS.between(startDate, endDate));
+//           相差月份:1
+//           两天之间的差在天数   : 49
+</code></pre><p>注:ChronoUnit也可以计算相差时分秒。</p>
+<p>示例三：精度时间相差</p>
+<p> Duration 这个类以秒和纳秒为单位建模时间的数量或数量。</p>
+<pre><code>Instant inst1 = Instant.now();
+System.out.println(&quot;当前时间戳 : &quot; + inst1);
+Instant inst2 = inst1.plus(Duration.ofSeconds(10));
+System.out.println(&quot;增加之后的时间 : &quot; + inst2);
+System.out.println(&quot;相差毫秒 : &quot; + Duration.between(inst1, inst2).toMillis());
+System.out.println(&quot;相毫秒 : &quot; + Duration.between(inst1, inst2).getSeconds());
+//    当前时间戳 : 2018-12-19T08:14:21.675Z
+//    增加之后的时间 : 2018-12-19T08:14:31.675Z
+//    相差毫秒 : 10000
+//    相毫秒 : 10
+</code></pre><p>示例四：时间大小比较</p>
+<pre><code> LocalDateTime ldt4 = LocalDateTime.now();
+LocalDateTime ldt5 = ldt4.plusMinutes(10);
+System.out.println(&quot;当前时间是否大于:&quot;+ldt4.isAfter(ldt5));
+System.out.println(&quot;当前时间是否小于&quot;+ldt4.isBefore(ldt5));
+// false
+// true
+</code></pre><p><strong>7.时区时间计算</strong></p>
+<p>得到其他时区的时间。</p>
+<p>示例一:通过Clock时钟类获取计算</p>
+<p>Clock时钟类用于获取当时的时间戳，或当前时区下的日期时间信息。</p>
+<pre><code>Clock clock = Clock.systemUTC();
+System.out.println(&quot;当前时间戳 : &quot; + clock.millis());
+Clock clock2 = Clock.system(ZoneId.of(&quot;Asia/Shanghai&quot;));
+System.out.println(&quot;亚洲上海此时的时间戳:&quot;+clock2.millis());
+Clock clock3 = Clock.system(ZoneId.of(&quot;America/New_York&quot;));
+System.out.println(&quot;美国纽约此时的时间戳:&quot;+clock3.millis());
+//     当前时间戳 : 1545209277657
+//     亚洲上海此时的时间戳:1545209277657
+//     美国纽约此时的时间戳:1545209277658
+</code></pre><p>示例二:通过ZonedDateTime类和ZoneId</p>
+<pre><code>ZoneId zoneId= ZoneId.of(&quot;America/New_York&quot;);
+ZonedDateTime dateTime=ZonedDateTime.now(zoneId);
+System.out.println(&quot;美国纽约此时的时间 : &quot; + dateTime.format(DateTimeFormatter.ofPattern(&quot;yyyy-MM-dd HH:mm:ss.SSS&quot;)));
+System.out.println(&quot;美国纽约此时的时间 和时区: &quot; + dateTime);
+//     美国纽约此时的时间 : 2018-12-19 03:52:22.494
+//    美国纽约此时的时间 和时区: 2018-12-19T03:52:22.494-05:00[America/New_York]
+</code></pre><p>Java 8日期时间API总结:         </p>
+<ul>
+<li>提供了javax.time.ZoneId 获取时区。</li>
+<li>提供了LocalDate和LocalTime类。</li>
+<li>Java 8 的所有日期和时间API都是不可变类并且线程安全，而现有的Date和Calendar API中的java.util.Date和SimpleDateFormat是非线程安全的。</li>
+<li>主包是 java.time,包含了表示日期、时间、时间间隔的一些类。里面有两个子包java.time.format用于格式化， java.time.temporal用于更底层的操作。</li>
+<li>时区代表了地球上某个区域内普遍使用的标准时间。每个时区都有一个代号，格式通常由区域/城市构成（Asia/Tokyo），在加上与格林威治或 UTC的时差。例如：东京的时差是+09:00。</li>
+<li>OffsetDateTime类实际上组合了LocalDateTime类和ZoneOffset类。用来表示包含和格林威治或UTC时差的完整日期（年、月、日）和时间（时、分、秒、纳秒）信息。</li>
+<li>DateTimeFormatter 类用来格式化和解析时间。与SimpleDateFormat不同，这个类不可变并且线程安全，需要时可以给静态常量赋值。 DateTimeFormatter类提供了大量的内置格式化工具，同时也允许你自定义。在转换方面也提供了parse()将字符串解析成日期，如果解析出错会抛出DateTimeParseException。DateTimeFormatter类同时还有format()用来格式化日期，如果出错会抛出DateTimeException异常。</li>
+<li>再补充一点，日期格式“MMM d yyyy”和“MMM dd yyyy”有一些微妙的不同，第一个格式可以解析“Jan 2 2014”和“Jan 14 2014”，而第二个在解析“Jan 2 2014”就会抛异常，因为第二个格式里要求日必须是两位的。如果想修正，你必须在日期只有个位数时在前面补零，就是说“Jan 2 2014”应该写成 “Jan 02 2014”。</li>
+</ul>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><p>参考:<br><a href="http://blog.oneapm.com/apm-tech/226.html" target="_blank" rel="external">http://blog.oneapm.com/apm-tech/226.html</a><br><a href="https://www.ibm.com/developerworks/cn/java/j-lo-java8streamapi/" target="_blank" rel="external">https://www.ibm.com/developerworks/cn/java/j-lo-java8streamapi/</a><br><a href="http://www.importnew.com/15637.html" target="_blank" rel="external">http://www.importnew.com/15637.html</a></p>
+<h3 id="音乐推荐"><a href="#音乐推荐" class="headerlink" title="音乐推荐"></a>音乐推荐</h3><p>分享一首非常带感的电音！你若想做，那么就去做吧！</p>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=431096925&auto=0&height=66"></iframe>
+
+<h3 id="项目的代码"><a href="#项目的代码" class="headerlink" title="项目的代码"></a>项目的代码</h3><p> <a href="https://github.com/xuwujing/java-study" target="_blank" rel="external">java-study </a>是本人在学习Java过程中记录的一些代码，也包括之前博文中使用的代码。如果感觉不错，希望顺手给个start，当然如果有不足，也希望提出。<br>github地址:  <a href="https://github.com/xuwujing/java-study" target="_blank" rel="external">https://github.com/xuwujing/java-study</a></p>
+<p>原创不易，如果感觉不错，希望给个推荐！您的支持是我写作的最大动力！<br>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/17/pancm104/" rel="next" title="Java进阶篇 设计模式之十四 ----- 总结篇">
+                <i class="fa fa-chevron-left"></i> Java进阶篇 设计模式之十四 ----- 总结篇
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">104</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lambda"><span class="nav-number">2.</span> <span class="nav-text">Lambda</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Lambda介绍"><span class="nav-number">2.1.</span> <span class="nav-text">Lambda介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lambda表达式的结构"><span class="nav-number">2.2.</span> <span class="nav-text">Lambda表达式的结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lambda-表达式的使用"><span class="nav-number">2.3.</span> <span class="nav-text">Lambda 表达式的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lambda表达式使用注意事项"><span class="nav-number">2.4.</span> <span class="nav-text">Lambda表达式使用注意事项</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stream"><span class="nav-number">3.</span> <span class="nav-text">Stream</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Stream介绍"><span class="nav-number">3.1.</span> <span class="nav-text">Stream介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Stream使用"><span class="nav-number">3.2.</span> <span class="nav-text">Stream使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LocalDateTime"><span class="nav-number">4.</span> <span class="nav-text">LocalDateTime</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">4.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关键类"><span class="nav-number">4.2.</span> <span class="nav-text">关键类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用"><span class="nav-number">4.3.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它"><span class="nav-number">5.</span> <span class="nav-text">其它</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#音乐推荐"><span class="nav-number">5.1.</span> <span class="nav-text">音乐推荐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#项目的代码"><span class="nav-number">5.2.</span> <span class="nav-text">项目的代码</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

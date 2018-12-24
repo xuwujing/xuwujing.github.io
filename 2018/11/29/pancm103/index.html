@@ -1,0 +1,907 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,设计模式," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言在上一篇中我们学习了行为型模式的备忘录模式(Memento Pattern)和状态模式（Memento Pattern）。本篇则来学习下行为型模式的最后两个模式，观察者模式(Observer Pattern)和空对象模式模式（NullObject Pattern）。 观察者模式简介  观察者模式又叫发布-订阅(Publish/Subscribe)模式、模型-视图(Model/View)模式、">
+<meta name="keywords" content="java,设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java进阶篇设计模式之十三 ---- 观察者模式和空对象模式">
+<meta property="og:url" content="http://yoursite.com/2018/11/29/pancm103/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言在上一篇中我们学习了行为型模式的备忘录模式(Memento Pattern)和状态模式（Memento Pattern）。本篇则来学习下行为型模式的最后两个模式，观察者模式(Observer Pattern)和空对象模式模式（NullObject Pattern）。 观察者模式简介  观察者模式又叫发布-订阅(Publish/Subscribe)模式、模型-视图(Model/View)模式、">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181128203250148.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2018-12-24T13:42:32.163Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java进阶篇设计模式之十三 ---- 观察者模式和空对象模式">
+<meta name="twitter:description" content="前言在上一篇中我们学习了行为型模式的备忘录模式(Memento Pattern)和状态模式（Memento Pattern）。本篇则来学习下行为型模式的最后两个模式，观察者模式(Observer Pattern)和空对象模式模式（NullObject Pattern）。 观察者模式简介  观察者模式又叫发布-订阅(Publish/Subscribe)模式、模型-视图(Model/View)模式、">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20181128203250148.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/11/29/pancm103/"/>
+
+
+
+
+
+
+  <title>Java进阶篇设计模式之十三 ---- 观察者模式和空对象模式 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/29/pancm103/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java进阶篇设计模式之十三 ---- 观察者模式和空对象模式</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-29T08:49:10+08:00">
+                2018-11-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在<a href="https://www.cnblogs.com/xuwujing/p/10003390.html" target="_blank" rel="external">上一篇</a>中我们学习了行为型模式的备忘录模式(Memento Pattern)和状态模式（Memento Pattern）。本篇则来学习下行为型模式的最后两个模式，观察者模式(Observer Pattern)和空对象模式模式（NullObject Pattern）。</p>
+<h2 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h2><p><strong>简介</strong></p>
+<blockquote>
+<p>观察者模式又叫发布-订阅(Publish/Subscribe)模式、模型-视图(Model/View)模式、源-监听器(Source/Listener)模式或从属者(Dependents)模式。观察者模式定义了一种一对多的依赖关系，让多个观察者对象同时监听某一个主题对象。这个主题对象在状态上发生变化时，会通知所有观察者对象，使它们能够自动更新自己。。<br>其主要目的是定义对象间的一种一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都得到通知并被自动更新。</p>
+</blockquote>
+<p><strong>观察者模式</strong>主要由这四个角色组成，抽象主题角色（Subject）、具体主题角色（ConcreteSubject）、抽象观察者角色（Observer）和具体观察者角色（ConcreteObserver）。</p>
+<ul>
+<li>抽象主题角色（Subject）：它把所有观察者对象的引用保存到一个聚集里，每个主题都可以有任何数量的观察者。抽象主题提供一个接口，可以增加和删除观察者对象。</li>
+<li>具体主题角色（ConcreteSubject）：将有关状态存入具体观察者对象；在具体主题内部状态改变时，给所有登记过的观察者发出通知。</li>
+<li>抽象观察者角色（Observer）：主要是负责从备忘录对象中恢复对象的状态。</li>
+</ul>
+<p>示例图如下:</p>
+<p><img src="https://img-blog.csdnimg.cn/20181128203250148.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>我们这里用一个示例来进行说明吧。<br>我们在视频网站进行看剧追番的时候，一般会有一个订阅功能，如果对某个番剧点了订阅，那么该番剧在更新的时候会向订阅该番剧的用户推送已经更新的消息，如果取消了订阅或者没有订阅，那么用户便不会收到该消息。<br>那么我们可以根据这个场景来使用备忘录模式来进行开发。</p>
+<p>首先定义一个抽象主题, 将观察者(订阅者)聚集起来,可以进行新增、删除和通知，这里就可以当做番剧。<br>代码如下:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"> </div><div class="line">interface BangumiSubject&#123;</div><div class="line">	</div><div class="line">	void toThem(UserObserver user);</div><div class="line"></div><div class="line">	void callOff(UserObserver user);</div><div class="line"></div><div class="line">	void notifyUser();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后再定义一个抽象观察者,有一个主要的方法update，主要是在得到通知时进行更新,这里就可以当做是用户。</p>
+<p>代码如下:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">interface UserObserver&#123;</div><div class="line">	</div><div class="line">	void update(String bangumi);</div><div class="line">	</div><div class="line">	String getName();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后再定义一个具体主题,实现了抽象主题(BangumiSubject)接口的方法，同时通过一个List集合保存观察者的信息，当需要通知观察者的时候，遍历通知即可。<br>代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">class  Bangumi implements BangumiSubject &#123;</div><div class="line">    </div><div class="line">    private List&lt;UserObserver&gt; list;</div><div class="line">    private String  anime;</div><div class="line">    public Bangumi(String anime) &#123;</div><div class="line">        this.anime = anime;</div><div class="line">    	list = new ArrayList&lt;UserObserver&gt;();</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    @Override</div><div class="line">    public void toThem(UserObserver user) &#123;</div><div class="line">        System.out.println(&quot;用户&quot;+user.getName()+&quot;订阅了&quot;+anime+&quot;!&quot;);</div><div class="line">        list.add(user);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    @Override</div><div class="line">    public void callOff(UserObserver user) &#123;</div><div class="line">        if(!list.isEmpty())</div><div class="line">        	System.out.println(&quot;用户&quot;+user.getName()+&quot;取消订阅&quot;+anime+&quot;!&quot;);</div><div class="line">            list.remove(user);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void notifyUser() &#123;</div><div class="line">    	System.out.println(anime+&quot;更新了！开始通知订阅该番剧的用户！&quot;);</div><div class="line">    	list.forEach(user-&gt;</div><div class="line">    		user.update(anime)</div><div class="line">    	);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最后再定义了一个具体观察者,实现抽象观察者(UserObserver)接口的方法。</p>
+<p>代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">	class  User implements UserObserver&#123;</div><div class="line">	private String name;</div><div class="line">	public User(String name)&#123;</div><div class="line">		this.name = name;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	@Override</div><div class="line">	public void update(String bangumi) &#123;</div><div class="line">		System.out.println(name+&quot;订阅的番剧: &quot; + bangumi+&quot;更新啦！&quot;);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public String getName() &#123;</div><div class="line">		return name;</div><div class="line">	&#125; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>编写好之后，那么我们来进行测试。<br>这里我们定义两个用户角色，张三和xuwujing，他们都订阅了&lt;冰菓&gt;和<fate zero="">番剧，当番剧更新的时候，他们就会收到通知。  如果他们取消了该番剧的订阅，那么他就不会收到该番剧的通知了。</fate></p>
+<p>相应的测试代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">	public static void main(String[] args) &#123;</div><div class="line">  		String name1 =&quot;张三&quot;;</div><div class="line">		String name2 =&quot;xuwujing&quot;;</div><div class="line">		String	bingguo = &quot;冰菓&quot;;</div><div class="line">		String	fate = &quot;fate/zero&quot;;</div><div class="line">		BangumiSubject bs1 = new Bangumi(bingguo);</div><div class="line">		BangumiSubject bs2 = new Bangumi(fate);</div><div class="line">        </div><div class="line">        UserObserver uo1 = new User(name1);</div><div class="line">        UserObserver uo2 = new User(name2);</div><div class="line">        </div><div class="line">        //进行订阅</div><div class="line">        bs1.toThem(uo1);</div><div class="line">        bs1.toThem(uo2);</div><div class="line">        bs2.toThem(uo1);</div><div class="line">        bs2.toThem(uo2);</div><div class="line">        //进行通知</div><div class="line">        bs1.notifyUser();</div><div class="line">        bs2.notifyUser();</div><div class="line">        </div><div class="line">        //取消订阅</div><div class="line">        bs1.callOff(uo1);</div><div class="line">        bs2.callOff(uo2);</div><div class="line">        //进行通知</div><div class="line">        bs1.notifyUser();</div><div class="line">        bs2.notifyUser();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>输出结果:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">		用户张三订阅了冰菓!</div><div class="line">用户xuwujing订阅了冰菓!</div><div class="line">用户张三订阅了fate/zero!</div><div class="line">用户xuwujing订阅了fate/zero!</div><div class="line">冰菓更新了！开始通知订阅该番剧的用户！</div><div class="line">张三订阅的番剧: 冰菓更新啦！</div><div class="line">xuwujing订阅的番剧: 冰菓更新啦！</div><div class="line">fate/zero更新了！开始通知订阅该番剧的用户！</div><div class="line">张三订阅的番剧: fate/zero更新啦！</div><div class="line">xuwujing订阅的番剧: fate/zero更新啦！</div><div class="line">用户张三取消订阅冰菓!</div><div class="line">用户xuwujing取消订阅fate/zero!</div><div class="line">冰菓更新了！开始通知订阅该番剧的用户！</div><div class="line">xuwujing订阅的番剧: 冰菓更新啦！</div><div class="line">fate/zero更新了！开始通知订阅该番剧的用户！</div><div class="line">张三订阅的番剧: fate/zero更新啦！</div></pre></td></tr></table></figure></p>
+<p><strong>观察者模式优点:</strong></p>
+<blockquote>
+<p> 解除耦合，让耦合的双方都依赖于抽象，从而使得各自的变换都不会影响另一边的变换。</p>
+</blockquote>
+<p><strong>观察者模式缺点</strong></p>
+<blockquote>
+<p>如果一个被观察者对象有很多的直接和间接的观察者的话，将所有的观察者都通知到会花费很多时间；<br>如果在观察者和观察目标之间有循环依赖的话，观察目标会触发它们之间进行循环调用，可能导致系统崩溃；<br>观察者模式没有相应的机制让观察者知道所观察的目标对象是怎么发生变化的，而仅仅只是知道观察目标发生了变化。</p>
+</blockquote>
+<p><strong>使用场景：</strong> </p>
+<blockquote>
+<p>需要关联行为的场景；<br>事件需要创建一个触发链的场景，比如监控；<br>跨系统的消息交换场景，比如消息队列、事件总线的处理机制。</p>
+</blockquote>
+<p><strong>注意事项：</strong> </p>
+<blockquote>
+<p>如果顺序执行，某一观察者错误会导致系统卡壳，建议采用异步方式。</p>
+</blockquote>
+<h2 id="空对象模式"><a href="#空对象模式" class="headerlink" title="空对象模式"></a>空对象模式</h2><p><strong>简介</strong></p>
+<blockquote>
+<p>空对象模式（NullObject Pattern）主要是通过一个空对象取代 NULL 对象实例的检查。Null 对象不是检查空值，而是反应一个不做任何动作的关系。 这样的Null 对象也可以在数据不可用的时候提供默认的行为。<br>其主要目的是在进行调用是不返回Null，而是返回一个空对象，防止空指针异常。 </p>
+</blockquote>
+<p>空对象模式，作为一种被基本遗忘的设计模式，但却有着不能被遗忘的作用。为什么说这么说呢，因为这种模式几乎难以见到和使用，不是它不够好用，也不是使用场景少 ，而是相比于简单的空值判断，使用它会显得比较复杂，至于为什么这么说，我们可以通过以下示例来进行说明。<br>假如我们要根据用户在已存的数据中进行查找相关信息，并且将它的信息给返回回来的话，那么一般我们是通过该用户的名称在数据库中进行查找，然后将数据返回，但是在数据库中进行查找时，很有可能没有该用户的信息，因此返回Null，如果稍不注意，就会出现空指针异常。这时我们一般的做法是，查询之后判断该数据是否为Null，如果为Null，就告知客户端没有这条数据，虽然这么做可以防止空指针异常，但是类似该方法过多，并且返回的信息实体为同一个的时候，我们每次都需要判断，就有点过于繁琐。那么这时我们就可以使用空对象模式来实现这方面的功能。</p>
+<p>首先定义一个抽象角色，有获取姓名和判断是否为空的方法，这个抽象类的代码如下:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">interface AbstractUser &#123;</div><div class="line">	String getName();</div><div class="line">	boolean isNull();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>定义好该抽象类之后，我们再来定义具体实现类。这里定义两实现个类，一个表示是真实的用户，返回真实的姓名，一个是不存在的用户，用另一种方式返回数据，可以告知客户端该用户不存在，预防空指针。<br>代码如下:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">class RealUser implements AbstractUser &#123;</div><div class="line">	private String name;</div><div class="line"></div><div class="line">	public RealUser(String name) &#123;</div><div class="line">		this.name = name;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public String getName() &#123;</div><div class="line">		return name;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public boolean isNull() &#123;</div><div class="line">		return false;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class NullUser implements AbstractUser &#123;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public String getName() &#123;</div><div class="line">		return &quot;user is not exist&quot;;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public boolean isNull() &#123;</div><div class="line">		return true;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后在来定义一个工厂角色，用于对客户端提供一个接口，返回查询信息。<br>代码如下:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">class UserFactory &#123;</div><div class="line"></div><div class="line">	public static final String[] names = &#123; &quot;zhangsan&quot;, &quot;lisi&quot;, &quot;xuwujing&quot; &#125;;</div><div class="line"></div><div class="line">	public static AbstractUser getUser(String name) &#123;</div><div class="line">		for (int i = 0; i &lt; names.length; i++) &#123;</div><div class="line">			if (names[i].equalsIgnoreCase(name)) &#123;</div><div class="line">				return new RealUser(name);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		return new NullUser();</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最后再来进行测试，测试代码如下:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"> </div><div class="line">public static void main(String[] args) &#123;</div><div class="line">		AbstractUser au1 = UserFactory.getUser(&quot;wangwu&quot;);</div><div class="line">		AbstractUser au2 = UserFactory.getUser(&quot;xuwujing&quot;);</div><div class="line">		System.out.println(au1.isNull());</div><div class="line">		System.out.println(au1.getName());</div><div class="line">		System.out.println(au2.isNull());</div><div class="line">		System.out.println(au2.getName());</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>输出结果:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">true</div><div class="line">user is not exist</div><div class="line">false</div><div class="line">xuwujing</div></pre></td></tr></table></figure>
+<p><strong>空对象优点：</strong></p>
+<blockquote>
+<p>可以加强系统的稳固性，能有效防止空指针报错对整个系统的影响；<br>不依赖客户端便可以保证系统的稳定性；</p>
+</blockquote>
+<p><strong>空对象缺点：</strong></p>
+<blockquote>
+<p>需要编写较多的代码来实现空值的判断，从某种方面来说不划算；</p>
+</blockquote>
+<p><strong>使用场景：</strong> </p>
+<blockquote>
+<p> 需要大量对空值进行判断的时候；</p>
+</blockquote>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><h3 id="音乐推荐"><a href="#音乐推荐" class="headerlink" title="音乐推荐"></a>音乐推荐</h3><blockquote>
+<p>所有人和事，自己问心无愧就好，不是你的也别强求，反正离去的，都是风景，留下的，才是人生。</p>
+</blockquote>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=5307982&auto=0&height=66"></iframe>
+
+<h3 id="项目的代码"><a href="#项目的代码" class="headerlink" title="项目的代码"></a>项目的代码</h3><p> <a href="https://github.com/xuwujing/java-study" target="_blank" rel="external">java-study </a>是本人在学习Java过程中记录的一些代码，也包括之前博文中使用的代码。如果感觉不错，希望顺手给个start，当然如果有不足，也希望提出。<br>github地址:  <a href="https://github.com/xuwujing/java-study" target="_blank" rel="external">https://github.com/xuwujing/java-study</a></p>
+<p>原创不易，如果感觉不错，希望给个推荐！您的支持是我写作的最大动力！<br>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/22/pancm102/" rel="next" title="Java进阶篇设计模式之十二 ---- 备忘录模式和状态模式">
+                <i class="fa fa-chevron-left"></i> Java进阶篇设计模式之十二 ---- 备忘录模式和状态模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/17/pancm104/" rel="prev" title="Java进阶篇 设计模式之十四 ----- 总结篇">
+                Java进阶篇 设计模式之十四 ----- 总结篇 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">104</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#观察者模式"><span class="nav-number">2.</span> <span class="nav-text">观察者模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#空对象模式"><span class="nav-number">3.</span> <span class="nav-text">空对象模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它"><span class="nav-number">4.</span> <span class="nav-text">其它</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#音乐推荐"><span class="nav-number">4.1.</span> <span class="nav-text">音乐推荐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#项目的代码"><span class="nav-number">4.2.</span> <span class="nav-text">项目的代码</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,914 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,设计模式," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言在上一篇中我们学习了结构型模式的解释器模式(Interpreter Pattern)和迭代器模式（Iterator Pattern）。本篇则来学习下行为型模式的两个模式，访问者模式(Visitor Pattern)和中介者模式（Mediator Pattern）。 访问者模式简介  访问者模式（VisitorPattern），顾名思义使用了这个模式后就可以在不修改已有程序结构的前提下，通过添">
+<meta name="keywords" content="java,设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java进阶篇设计模式之十 ---- 访问者模式和中介者模式">
+<meta property="og:url" content="http://yoursite.com/2018/11/05/pancm100/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言在上一篇中我们学习了结构型模式的解释器模式(Interpreter Pattern)和迭代器模式（Iterator Pattern）。本篇则来学习下行为型模式的两个模式，访问者模式(Visitor Pattern)和中介者模式（Mediator Pattern）。 访问者模式简介  访问者模式（VisitorPattern），顾名思义使用了这个模式后就可以在不修改已有程序结构的前提下，通过添">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181105203837733.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181105211356878.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2018-12-24T13:42:01.916Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java进阶篇设计模式之十 ---- 访问者模式和中介者模式">
+<meta name="twitter:description" content="前言在上一篇中我们学习了结构型模式的解释器模式(Interpreter Pattern)和迭代器模式（Iterator Pattern）。本篇则来学习下行为型模式的两个模式，访问者模式(Visitor Pattern)和中介者模式（Mediator Pattern）。 访问者模式简介  访问者模式（VisitorPattern），顾名思义使用了这个模式后就可以在不修改已有程序结构的前提下，通过添">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20181105203837733.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/11/05/pancm100/"/>
+
+
+
+
+
+
+  <title>Java进阶篇设计模式之十 ---- 访问者模式和中介者模式 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/05/pancm100/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java进阶篇设计模式之十 ---- 访问者模式和中介者模式</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-05T22:29:10+08:00">
+                2018-11-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在<a href="https://www.cnblogs.com/xuwujing/p/9873514.html" target="_blank" rel="external">上一篇</a>中我们学习了结构型模式的解释器模式(Interpreter Pattern)和迭代器模式（Iterator Pattern）。本篇则来学习下行为型模式的两个模式，访问者模式(Visitor Pattern)和中介者模式（Mediator Pattern）。</p>
+<h2 id="访问者模式"><a href="#访问者模式" class="headerlink" title="访问者模式"></a>访问者模式</h2><p><strong>简介</strong></p>
+<blockquote>
+<p>访问者模式（VisitorPattern），顾名思义使用了这个模式后就可以在不修改已有程序结构的前提下，通过添加额外的<strong>访问者</strong>来完成对已有代码功能的提升，它属于行为模式。访问者模式的目的是封装一些施加于某种数据结构元素之上的操作。一旦这些操作需要修改的话，接受这个操作的数据结构则可以保持不变。<br>其主要目的是将数据结构与数据操作分离。</p>
+</blockquote>
+<p>访问者模式可以说是设计模式中最难以理解的一个模式，因为相比其它模式而言，它过于”绕“了。但是我们可以通过生活中的一些例子来理解它，比如家里来了客人，客人就是访问者，他可以做一些事情，但是又不能做全部的事情； 又或者说去网吧上网的小明，小明也是访问者，他可以在网吧玩游戏、看视频、听音乐等等，但是不能破坏网吧中的设备等等。按照这么理解，我们大概就可以知道<strong>访问者模式</strong>主要是做什么了。</p>
+<p><strong>访问者模式</strong>主要由这五个角色组成，抽象访问者(Visitor)、具体访问者(ConcreteVisitor)、抽象节点(Node)、具体节点(ConcreteNode)和结构对象(ObjectStructure)。</p>
+<ul>
+<li>抽象访问者(Visitor)角色：声明了一个或者多个方法操作，形成所有的具体访问者角色必须实现的接口。</li>
+<li>具体访问者(ConcreteVisitor)角色：实现抽象访问者所声明的接口，也就是抽象访问者所声明的各个访问操作。</li>
+<li>抽象节点(Node)角色：声明一个接受操作，接受一个访问者对象作为一个参数。</li>
+<li>具体节点(ConcreteNode)角色：实现了抽象节点所规定的接受操作。</li>
+<li>结构对象(ObjectStructure)角色：有如下的责任，可以遍历结构中的所有元素。</li>
+</ul>
+<p>示例图如下:<br><img src="https://img-blog.csdnimg.cn/20181105203837733.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>这里为了方便理解，我们使用一个简单的示例来加以说明。<br>图书馆有一台电脑，有两个账户，其中一个是管理员的账户，拥有所有权限，但是设置了密码；另一个账户是不需要密码，但是只能玩游戏和看图片。张三和李四先后使用了这台电脑，那么他们就可以当作是访问者。<br>那么我们便可以根据这里例子来使用访问者模式进行开发，首先定义一个抽象的访问者，拥有玩游戏和看图片的方法；然后再定义一个抽象节点电脑，接受这个请求。<br>那么这个抽象类的代码如下:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"> </div><div class="line">interface Visitor &#123;</div><div class="line">	void visit(Games games);</div><div class="line">	void visit(Photos photos);</div><div class="line">&#125;</div><div class="line"></div><div class="line">interface Computer &#123;</div><div class="line">	void accept(Visitor visitor);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>定义好该抽象类之后，我们需要设计不同的访问者对节点进行不同的处理。并且需要设计具体节点类实现刚刚抽象节点的方法。</p>
+<p>那么代码如下:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">class ZhangSan implements Visitor &#123;</div><div class="line">	@Override</div><div class="line">	public void visit(Games games) &#123;</div><div class="line">		games.play();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public void visit(Photos photos) &#123;</div><div class="line">		photos.watch();</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class LiSi implements Visitor &#123;</div><div class="line">	@Override</div><div class="line">	public void visit(Games games) &#123;</div><div class="line">		games.play();</div><div class="line">	&#125;</div><div class="line">	@Override</div><div class="line">	public void visit(Photos photos) &#123;</div><div class="line">		photos.watch();</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class Games implements Computer &#123;</div><div class="line">	@Override</div><div class="line">	public void accept(Visitor visitor) &#123;</div><div class="line">		visitor.visit(this);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public void play() &#123;</div><div class="line">		System.out.println(&quot;play lol&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class Photos implements Computer &#123;</div><div class="line">	@Override</div><div class="line">	public void accept(Visitor visitor) &#123;</div><div class="line">		visitor.visit(this);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	public void watch() &#123;</div><div class="line">		System.out.println(&quot;watch scenery photo&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最后我们还需要定义一个结构对象角色，提供一个的接口并允许该访问者进行访问，它可以对这些角色进行增加、修改或删除等操作和遍历。<br>代码如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">class ObjectStructure &#123;</div><div class="line"></div><div class="line">	private List&lt;Computer&gt; computers = new ArrayList&lt;Computer&gt;();</div><div class="line"></div><div class="line">	public void action(Visitor visitor) &#123;</div><div class="line">		computers.forEach(c -&gt; &#123;</div><div class="line">			c.accept(visitor);</div><div class="line">		&#125;);</div><div class="line">	&#125;</div><div class="line">	public void add(Computer computer) &#123;</div><div class="line">		computers.add(computer);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>编写好之后，那么我们来进行测试。<br>测试代码如下:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"> </div><div class="line">public static void main(String[] args) &#123;</div><div class="line">		// 创建一个结构对象</div><div class="line">		ObjectStructure os = new ObjectStructure();</div><div class="line">		// 给结构增加一个节点</div><div class="line">		os.add(new Games());</div><div class="line">		// 给结构增加一个节点</div><div class="line">		os.add(new Photos());</div><div class="line">		// 创建一个访问者</div><div class="line">		Visitor visitor = new ZhangSan();</div><div class="line">		os.action(visitor);</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>输出结果:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">play lol</div><div class="line">watch scenery photo</div></pre></td></tr></table></figure></p>
+<p><strong>访问者模式优点：</strong></p>
+<blockquote>
+<p> 扩展性好，可以在不修改对象结构中的元素的情况下，为对象结构中的元素添加新的功能；<br> 符合单一职责原则，通过访问者将无关的行为分离，使职责单一；</p>
+</blockquote>
+<p><strong>访问者模式缺点：</strong></p>
+<blockquote>
+<p>违反了迪米特原则，因为具体元素对访问者公布细节；<br>违反了依赖倒置原则，依赖了具体类，没有依赖抽象；<br>对象结构变化困难，若对象结构发生了改变，访问者的接口和访问者的实现也都要发生相应的改变；</p>
+</blockquote>
+<p><strong>使用场景：</strong> </p>
+<blockquote>
+<p>对象结构中对象对应的类很少改变，但经常需要在此对象结构上定义新的操作；<br>需要对一个对象结构中的对象进行很多不同的并且不相关的操作，而需要避免让这些操作”污染”这些对象的类，也不希望在增加新操作时修改这些类。</p>
+</blockquote>
+<h2 id="中介者模式"><a href="#中介者模式" class="headerlink" title="中介者模式"></a>中介者模式</h2><p><strong>简介</strong></p>
+<blockquote>
+<p>中介者模式（Mediator Pattern），定义了一个中介对象来封装一系列对象之间的交互关系。中介者使各个对象之间不需要显式地相互引用，从而使耦合性降低，而且可以独立地改变它们之间的交互行为，属于行为型模式。<br>其主要的目的是用来降低多个对象和类之间的通信复杂性。</p>
+</blockquote>
+<p>简单的来说就是提供一个平台。比如生活中我们经常用到的聊天软件QQ、微信群，或者是上网购物的网站淘宝、京东，又或者是房产中介。但是无论是QQ群，还是房产中介，他们都是充当一个中间平台的作用，我们可以直接通过这个平台得到我们想要的信息，避免了独自获取花费的成本。</p>
+<p><strong>中介者模式</strong>主要由这四个角色组成， 抽象中介者(Mediator)、具体中介者(ConcreteMediator)、 抽象同事类(Colleague)和具体同事类(ConcreteColleague) 。</p>
+<ul>
+<li>抽象中介者(Mediator): 定义了同事对象到中介者对象之间的接口。</li>
+<li>具体中介者(ConcreteMediator): 实现抽象中介者的方法，它需要知道所有的具体同事类，同时需要从具体的同事类那里接收信息，并且向具体的同事类发送信息。</li>
+<li>抽象同事类(Colleague): 定义了中介者对象的接口，它只知道中介者而不知道其他的同事对象。</li>
+<li>具体同事类(ConcreteColleague) : 每个具体同事类都只需要知道自己的行为即可，但是他们都需要认识中介者。</li>
+</ul>
+<p>示例图如下:<br><img src="https://img-blog.csdnimg.cn/20181105211356878.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>这里为了方便理解，我们使用一个简单的示例来加以说明。<br>xuwujing创建了一个Java的QQ群，并邀请了很多人进来，其中张三也加进来了，进群之后，大家开始互相打招呼进行交流。。。<br>那么我们便可以根据这个简单的例子来使用中介者模式进行开发。<br>首先依旧定义一个抽象的中介者，就是QQ群，可以进行交流；然后再定义一个抽象的同事类，可以谈话。<br>那么这个抽象类的代码如下:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"> </div><div class="line">interface QQqun &#123;</div><div class="line">	void exchange(Person person,String message);</div><div class="line">&#125;</div><div class="line"></div><div class="line">abstract class Person&#123;</div><div class="line">	protected String name;</div><div class="line">    protected QQqun qun;  </div><div class="line">    Person(String name,QQqun qun)&#123;</div><div class="line">        this.name = name;</div><div class="line">        this.qun = qun;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>定义好该抽象类之后，我们再来定义具体的同事类，也就是xuwujing和张三，可以进行交流。</p>
+<p>那么代码如下:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">class ZhangSan extends Person&#123;</div><div class="line"></div><div class="line">	ZhangSan(String name, QQqun qun) &#123;</div><div class="line">		super(name, qun);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	 void exchange(String message)&#123;</div><div class="line">		qun.exchange(this,message);</div><div class="line">    &#125;</div><div class="line">	</div><div class="line">     void talk(String message)&#123;</div><div class="line">        System.out.println(name +&quot;说：&quot; + message);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class XuWuJing extends Person&#123;</div><div class="line"></div><div class="line">	XuWuJing(String name, QQqun qun) &#123;</div><div class="line">		super(name, qun);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	 void exchange(String message)&#123;</div><div class="line">		qun.exchange(this,message);</div><div class="line">    &#125;</div><div class="line">	</div><div class="line">     void talk(String message)&#123;</div><div class="line">        System.out.println(name +&quot;回应：&quot; + message);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最后再来定义具体中介者对象，这个QQ群的具体实现。<br>代码如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">class JavaQQqun implements QQqun&#123;</div><div class="line">    private ZhangSan zs;</div><div class="line">    private XuWuJing xwj;</div><div class="line"></div><div class="line">    public ZhangSan getZs() &#123;</div><div class="line">		return zs;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public void setZs(ZhangSan zs) &#123;</div><div class="line">		this.zs = zs;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public XuWuJing getXwj() &#123;</div><div class="line">		return xwj;</div><div class="line">	&#125;</div><div class="line"></div><div class="line"></div><div class="line">	public void setXwj(XuWuJing xwj) &#123;</div><div class="line">		this.xwj = xwj;</div><div class="line">	&#125;</div><div class="line"></div><div class="line"></div><div class="line">	@Override</div><div class="line">	public void exchange(Person person, String message) &#123;</div><div class="line">			if(zs.equals(person))&#123;</div><div class="line">				zs.talk(message);</div><div class="line">			&#125;else if(xwj.equals(person))&#123;</div><div class="line">				xwj.talk(message);</div><div class="line">			&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>最后再来进行测试，定义好交流平台以及需要交流的人员。<br>那么测试代码如下:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"> </div><div class="line">public static void main(String[] args) &#123;</div><div class="line">	 JavaQQqun jq = new JavaQQqun();  </div><div class="line">		ZhangSan zs = new ZhangSan(&quot;张三&quot;, jq);</div><div class="line">		XuWuJing xwj = new XuWuJing(&quot;xuwujing&quot;, jq);</div><div class="line">		jq.setZs(zs);</div><div class="line">		jq.setXwj(xwj);      </div><div class="line">		zs.talk(&quot;大家好！我是张三!&quot;);;</div><div class="line">		xwj.talk(&quot;欢迎你！张三！&quot;);</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>输出结果:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">张三说：大家好！我是张三</div><div class="line">xuwujing回应：欢迎你！张三！</div></pre></td></tr></table></figure></p>
+<p><strong>中介者模式优点：</strong></p>
+<blockquote>
+<p>灵活性高，因为将同事类进行了解耦，使其不必有关联性；<br>降低了类的复杂度，将一对多转化成了一对一；</p>
+</blockquote>
+<p><strong>中介者模式缺点：</strong></p>
+<blockquote>
+<p>中介者使用过多，会使系统变得复杂难以维护；</p>
+</blockquote>
+<p><strong>使用场景：</strong> </p>
+<blockquote>
+<p>通过一个中间类来封装多个类中的行为，而又不想生成太多的子类。</p>
+</blockquote>
+<p><strong>注意事项：</strong> </p>
+<blockquote>
+<p>若不明确各个类的职责，那么就不要进行使用！</p>
+</blockquote>
+<p><strong>和外观模式、代理模式比较</strong> </p>
+<blockquote>
+<p>中介者模式和外观模式、代理模式比较类似，但是又有不同。<br>和外观模式比较，中介者模式中，同事类必须依赖与中介者，中介者也知道同事类；但是外观模式中，子系统是不需要知道外观类的存在，并且子系统是可以脱离外观模式的。<br>和代理模式，代理模式的核心就是代理作用，主要还是对原先的类进行扩展或增加控制，比如进行权限控制；而中介者模式主要目的是为了减少对象之前的耦合，也就是同事类直接相互独立，互不影响。</p>
+</blockquote>
+<p>参考文章: <a href="https://www.cnblogs.com/chenssy/p/3348520.html" target="_blank" rel="external">https://www.cnblogs.com/chenssy/p/3348520.html</a></p>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><h3 id="音乐推荐"><a href="#音乐推荐" class="headerlink" title="音乐推荐"></a>音乐推荐</h3><p>分享一首很有节奏感的电音！</p>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=31830308&auto=0&height=66"></iframe>
+
+<h3 id="项目的代码"><a href="#项目的代码" class="headerlink" title="项目的代码"></a>项目的代码</h3><p> <a href="https://github.com/xuwujing/java-study" target="_blank" rel="external">java-study </a>是本人在学习Java过程中记录的一些代码，也包括之前博文中使用的代码。如果感觉不错，希望顺手给个start，当然如果有不足，也希望提出。<br>github地址:  <a href="https://github.com/xuwujing/java-study" target="_blank" rel="external">https://github.com/xuwujing/java-study</a></p>
+<p>原创不易，如果感觉不错，希望给个推荐！您的支持是我写作的最大动力！<br>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a> </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/29/pancm99/" rel="next" title="Java进阶篇设计模式之九----- 解释器模式和迭代器模式">
+                <i class="fa fa-chevron-left"></i> Java进阶篇设计模式之九----- 解释器模式和迭代器模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/13/pancm101/" rel="prev" title="Java进阶篇设计模式之十一 ---- 策略模式和模板方法模式">
+                Java进阶篇设计模式之十一 ---- 策略模式和模板方法模式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">104</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#访问者模式"><span class="nav-number">2.</span> <span class="nav-text">访问者模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#中介者模式"><span class="nav-number">3.</span> <span class="nav-text">中介者模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它"><span class="nav-number">4.</span> <span class="nav-text">其它</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#音乐推荐"><span class="nav-number">4.1.</span> <span class="nav-text">音乐推荐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#项目的代码"><span class="nav-number">4.2.</span> <span class="nav-text">项目的代码</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
