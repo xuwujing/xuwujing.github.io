@@ -1,0 +1,978 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,springcloud," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言本篇主要介绍的是SpringCloud相关知识、微服务架构以及搭建一个高可用的服务注册与发现的服务模块(Eureka)。 SpringCloud介绍 Spring Cloud是在Spring Boot的基础上构建的，用于简化分布式系统构建的工具集，为开发人员提供快速建立分布式系统中的一些常见的模式。  例如：  配置管理（configuration management），服务发现（serv">
+<meta name="keywords" content="java,springcloud">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringCloud学习系列之一 ----- 搭建一个高可用的注册中心(Eureka)">
+<meta property="og:url" content="http://yoursite.com/2019/01/14/pancm107/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言本篇主要介绍的是SpringCloud相关知识、微服务架构以及搭建一个高可用的服务注册与发现的服务模块(Eureka)。 SpringCloud介绍 Spring Cloud是在Spring Boot的基础上构建的，用于简化分布式系统构建的工具集，为开发人员提供快速建立分布式系统中的一些常见的模式。  例如：  配置管理（configuration management），服务发现（serv">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190111165555121.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190114153229585.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190114153210968.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190114153159941.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2019-01-31T10:08:34.889Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringCloud学习系列之一 ----- 搭建一个高可用的注册中心(Eureka)">
+<meta name="twitter:description" content="前言本篇主要介绍的是SpringCloud相关知识、微服务架构以及搭建一个高可用的服务注册与发现的服务模块(Eureka)。 SpringCloud介绍 Spring Cloud是在Spring Boot的基础上构建的，用于简化分布式系统构建的工具集，为开发人员提供快速建立分布式系统中的一些常见的模式。  例如：  配置管理（configuration management），服务发现（serv">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190111165555121.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/01/14/pancm107/"/>
+
+
+
+
+
+
+  <title>SpringCloud学习系列之一 ----- 搭建一个高可用的注册中心(Eureka) | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/14/pancm107/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SpringCloud学习系列之一 ----- 搭建一个高可用的注册中心(Eureka)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-14T00:00:00+08:00">
+                2019-01-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本篇主要介绍的是SpringCloud相关知识、微服务架构以及搭建一个高可用的服务注册与发现的服务模块(Eureka)。</p>
+<h2 id="SpringCloud介绍"><a href="#SpringCloud介绍" class="headerlink" title="SpringCloud介绍"></a>SpringCloud介绍</h2><blockquote>
+<p>Spring Cloud是在Spring Boot的基础上构建的，用于简化分布式系统构建的工具集，为开发人员提供快速建立分布式系统中的一些常见的模式。</p>
+</blockquote>
+<p>例如：</p>
+<blockquote>
+<p>配置管理（configuration management），服务发现（service<br>discovery），断路器（circuit breakers），智能路由（ intelligent routing），微代理（micro-proxy），控制总线（control bus），一次性令牌（ one-time okens），全局锁（global locks），领导选举（leadership election），分布式会话(distributed sessions），集群状态（cluster state)等等。</p>
+</blockquote>
+<h2 id="微服务架构是什么"><a href="#微服务架构是什么" class="headerlink" title="微服务架构是什么"></a>微服务架构是什么</h2><blockquote>
+<p>微服务架构风格是一种将单个应用程序开发为一套小型服务的方法，每个小型服务都在自己的流程中运行，并与轻量级机制（通常是HTTP资源API）进行通信。这些服务围绕业务功能构建，可通过全自动部署机制独立部署。这些服务至少集中管理，可以用不同的编程语言编写，并使用不同的数据存储技术。</p>
+</blockquote>
+<h2 id="SpringCloud-Eureka"><a href="#SpringCloud-Eureka" class="headerlink" title="SpringCloud Eureka"></a>SpringCloud Eureka</h2><h3 id="Eureka-介绍"><a href="#Eureka-介绍" class="headerlink" title="Eureka 介绍"></a>Eureka 介绍</h3><blockquote>
+<p>Eureka是Netflix开源的一款提供服务注册和发现的产品，它提供了完整的Service Registry和Service Discovery实现。也是springcloud体系中最重要最核心的组件之一。</p>
+</blockquote>
+<p>Eureka主要由两个组件组成：Eureka服务器和Eureka客户端。<br>Eureka服务器用作服务注册服务器。<br>Eureka客户端是一个java客户端，用来简化与服务器的交互、作为轮询负载均衡器，并提供服务的故障切换支持。</p>
+<h3 id="开发准备"><a href="#开发准备" class="headerlink" title="开发准备"></a>开发准备</h3><p><strong>开发环境</strong></p>
+<ul>
+<li><strong>JDK</strong>:1.8</li>
+<li><strong>SpringBoot</strong>:2.1.1.RELEASE</li>
+<li><strong>SpringCloud</strong>：Finchley</li>
+</ul>
+<p><strong>注:不一定非要用上述的版本，可以根据情况进行相应的调整。需要注意的是SpringBoot2.x以后，jdk的版本必须是1.8以上！</strong></p>
+<p>确认了开发环境之后，我们再来添加相关的pom依赖。</p>
+<pre><code>&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-cloud-starter&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-cloud-starter-netflix-eureka&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+        &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
+</code></pre><p><strong>注:</strong> 基于SpringBoot1.x以上SpringCloud是Dalston版本的eureka 依赖是 <code>&lt;artifactId&gt;spring-cloud-starter-eureka&lt;/artifactId&gt;</code>，少了个 netflix 。SpringCloud的版本命名方式是通过伦敦的地方来命名的，版本顺序是根据首字母的顺序来的。</p>
+<h3 id="SpringCloud-Eureka-Hello-World"><a href="#SpringCloud-Eureka-Hello-World" class="headerlink" title="SpringCloud Eureka Hello World"></a>SpringCloud Eureka Hello World</h3><p>我们先来实现Eureka的Hello World版，其实也就是实现简单的服务注册和发现功能。</p>
+<h4 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h4><p>首先建立一个服务端的工程，添加如上的依赖之后，在<code>application.properties</code>添加如下的配置:</p>
+<p><strong>配置信息:</strong></p>
+<pre><code>spring.application.name=springcloud-eureka-client
+server.port=8000
+eureka.client.register-with-eureka=false
+eureka.client.fetch-registry=false
+eureka.client.serviceUrl.defaultZone=http://localhost:8000/eureka/
+</code></pre><p><strong>配置说明:</strong></p>
+<ul>
+<li>spring.application.name： 这个是指定服务名称。</li>
+<li>server.port:服务指定的端口。</li>
+<li>eureka.client.register-with-eureka：表示是否将自己注册到Eureka Server，默认是true。</li>
+<li>eureka.client.fetch-registry：表示是否从Eureka Server获取注册信息，默认为true。</li>
+<li>eureka.client.serviceUrl.defaultZone： 这个是设置与Eureka Server交互的地址，客户端的查询服务和注册服务都需要依赖这个地址。</li>
+</ul>
+<p>完成配置信息的添加后，我们再来看代码如何实现。<br>在服务端这边只需要在SpringBoot启动类添加<code>@EnableEurekaServer</code>注解就可以了，该注解表示此服务是一个服务注册中心服务。</p>
+<p><strong>代码示例:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">@EnableEurekaServer</div><div class="line">@SpringBootApplication</div><div class="line">public class App &#123;</div><div class="line">  public static void main(String[] args) &#123;</div><div class="line">      SpringApplication.run(App.class, args);</div><div class="line">      System.out.println(&quot;注册中心服务启动...&quot;);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h4><p>这里我们在新建一个客户端的项目，添加如上的依赖之后，在<code>application.properties</code>添加如下的配置:</p>
+<p><strong>配置信息:</strong></p>
+<pre><code>spring.application.name=springcloud-eureka-client
+server.port=9001
+eureka.client.serviceUrl.defaultZone=http://localhost:8000/eureka/
+</code></pre><p><strong>配置说明:</strong></p>
+<ul>
+<li>spring.application.name： 这个是客户端的服务名称。如果有多个服务使用同一个名称但是访问地址不同，结合ribbon 使用，则可以实现负载均衡功能。</li>
+<li>server.port:服务指定的端口。</li>
+<li>eureka.client.serviceUrl.defaultZone： 注册中心服务端的地址。</li>
+</ul>
+<p>服务端这边的实现也很简单，只需在启动类上添加<code>@EnableDiscoveryClient</code>该注解即可，使用该注解表示该项目就具有了服务注册的功能。</p>
+<p><strong>代码示例:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">@SpringBootApplication</div><div class="line">@EnableDiscoveryClient</div><div class="line">public class App &#123;</div><div class="line"></div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		SpringApplication.run(App.class, args);</div><div class="line">		System.out.println(&quot;客户端服务启动...&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="功能测试"><a href="#功能测试" class="headerlink" title="功能测试"></a>功能测试</h3><p>完成如上的工程开发之后，我们依次启动服务端和客户端程序，然后在浏览器界面输入:<code>http://localhost:8000/</code>，即可查看注册中心的信息。</p>
+<p>访问界面地址:</p>
+<p><img src="https://img-blog.csdnimg.cn/20190111165555121.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>通过上述示例图中，可以看到Eureka启动成功了，并且有一个服务进行注册了。</p>
+<p>成功的实现了服务注册功能之后，我们来测试下Eureka服务的保护机制。<br>这里我们先关闭客户端，查看界面信息，发现没什么改变，等待大约15分钟左右之后，再到Eureka界面查看信息，发现出现了一长串红字描述,描述的语句如下:</p>
+<blockquote>
+<p>EMERGENCY! EUREKA MAY BE INCORRECTLY CLAIMING INSTANCES ARE UP WHEN THEY’RE NOT. RENEWALS ARE LESSER THAN THRESHOLD AND HENCE THE INSTANCES ARE NOT BEING EXPIRED JUST TO BE SAFE.</p>
+</blockquote>
+<p>翻译之后的意思:</p>
+<blockquote>
+<p>紧急!EUREKA可能错误地声称实例已经启动，而实际上并没有。续订小于阈值，因此实例不会为了安全而过期。</p>
+</blockquote>
+<p>界面示例图:</p>
+<p><img src="https://img-blog.csdnimg.cn/20190114153229585.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>这里就顺便说下Eureka的自我保护机制。</p>
+<blockquote>
+<p>自我保护模式正是一种针对网络异常波动的安全保护措施，使用自我保护模式能使Eureka集群更加的健壮、稳定的运行。</p>
+</blockquote>
+<p>自我保护机制的工作机制是如果在15分钟内超过85%的客户端节点都没有正常的心跳，那么Eureka就认为客户端与注册中心出现了网络故障，Eureka Server自动进入自我保护机制，此时会出现以下几种情况：</p>
+<ol>
+<li>Eureka Server不再从注册列表中移除因为长时间没收到心跳而应该过期的服务。</li>
+<li>Eureka Server仍然能够接受新服务的注册和查询请求，但是不会被同步到其它节点上，保证当前节点依然可用。</li>
+<li>当网络稳定时，当前Eureka Server新的注册信息会被同步到其它节点中。</li>
+</ol>
+<p>因此Eureka Server可以很好的应对因网络故障导致部分节点失联的情况，而不会像ZK那样如果有一半不可用的情况会导致整个集群不可用而变成瘫痪。</p>
+<p>自我保护机制的相关配置如下:</p>
+<p><strong>服务端的配置：</strong></p>
+<ul>
+<li>eureka.server.enable-self-preservation: 该配置可以移除这种自我保护机制，防止失效的服务也被一直访问 (Spring Cloud默认该配置是 true)。</li>
+<li>eureka.server.eviction-interval-timer-in-ms:该配置可以修改检查失效服务的时间，每隔10s检查失效服务，并移除列表 (Spring Cloud默认该配置是 60s)</li>
+</ul>
+<p><strong>客户端的配置:</strong></p>
+<ul>
+<li>eureka.instance.lease-renewal-interval-in-seconds: 该配置指示eureka客户端需要向eureka服务器发送心跳的频率  (Spring Cloud默认该配置是 30s)。</li>
+<li>eureka.instance.lease-expiration-duration-in-seconds: 该配置指示eureka服务器在接收到最后一个心跳之后等待的时间，然后才能从列表中删除此实例 (Spring Cloud默认该配置是 90s)。</li>
+</ul>
+<p>这里顺便说下Eureka的的心跳机制。</p>
+<blockquote>
+<p>Eureka Client需要每30秒给Eureka Server发一次心跳，同时更新Server上最新的注册信息到本地，如果Server多次没有收到来自客户端的心跳，那么在90秒内会被Server上剔除。</p>
+</blockquote>
+<h3 id="高可用的注册中心"><a href="#高可用的注册中心" class="headerlink" title="高可用的注册中心"></a>高可用的注册中心</h3><p>上述的服务注册中心示例是单点的，如果在生产环境中就显得不适合，显然这并不适合应用于线上生产环境。作为分布式系统最重要的注册服务功能，为了使其高可用，使用集群是最普遍的方式。Eureka可以通过互相注册的方式来实现高可用的部署。</p>
+<p>Eureka实现相互注册的方式很简单，只需要将各个服务端的地址相互进行配置即可。<br>那么我们再来新建两个服务端的工程，其中配置信息如下:</p>
+<p><strong>server2配置信息:</strong></p>
+<pre><code>spring.application.name=springcloud-eureka-server
+server.port=8002
+eureka.instance.hostname = server2
+eureka.client.serviceUrl.defaultZone=http://server3:8003/eureka/
+</code></pre><p><strong>server3配置信息:</strong></p>
+<pre><code>spring.application.name=springcloud-eureka-server
+server.port=8003
+eureka.instance.hostname = server3
+eureka.client.serviceUrl.defaultZone=http://server2:8002/eureka/
+</code></pre><p>上述的配置在之前已经说过了，这里就不在过多描述了。这里的服务端配置和之前项目的服务端配置略有不同，允许自己进行注册了。并且这里的<code>eureka.instance.hostname</code>相当于是对服务地址起一个别名，也可以不配置，默认将会使用IP进行查找。<code>eureka.client.serviceUrl.defaultZone</code>这里配置的是另一个服务端的地址，如果是多个就通过 “，”逗号隔开。</p>
+<p>因为这里使用了别名进行区分服务，所以需要在hosts文件添加如下配置，用于做映射。</p>
+<pre><code>127.0.0.1     server2
+127.0.0.1     server3
+</code></pre><p><strong>hosts文件地址:</strong></p>
+<p> Windows 系统地址:<code>C:\Windows\System32\drivers\etc\hosts</code></p>
+<p> Linux系统地址: <code>/etc/hosts</code></p>
+<p>配置完成之后，启动这两个服务，然后在浏览器输入:<br><code>http://server2:8002/</code><br>或<br><code>http://server3:8003/</code><br>即可查看信息.</p>
+<p>高可用注册中心示例图:</p>
+<p><img src="https://img-blog.csdnimg.cn/20190114153210968.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>这里我们把之前的客户端程序的配置改下，改成指定这个高可用注册中心的地址，然后在关闭其中一个服务，查看是否能够正常的使用。</p>
+<p>示例图:</p>
+<p><img src="https://img-blog.csdnimg.cn/20190114153159941.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>可以看到其中一个服务可以正常运行和使用！</p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><h3 id="项目地址"><a href="#项目地址" class="headerlink" title="项目地址"></a>项目地址</h3><p>基于SpringBoot1.x、SpringCloud的Dalston版本开发的地址:<code>https://github.com/xuwujing/springcloud-study</code>。</p>
+<p>基于SpringBoot1.x、SpringCloud 的Dalston版本开发的地址: <code>https://github.com/xuwujing/springcloud-study-old</code>。</p>
+<p>如果感觉项目不错，希望能给个star，谢谢!</p>
+<h3 id="音乐推荐"><a href="#音乐推荐" class="headerlink" title="音乐推荐"></a>音乐推荐</h3><p>挺有节奏感的一首纯音乐！</p>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=730859&auto=0&height=66"></iframe>
+
+
+<p>原创不易，如果感觉不错，希望给个推荐！您的支持是我写作的最大动力！<br>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a> </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/springcloud/" rel="tag"># springcloud</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/02/pancm106/" rel="next" title="一个平凡但不平庸的程序猿2018个人总结">
+                <i class="fa fa-chevron-left"></i> 一个平凡但不平庸的程序猿2018个人总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/15/pancm108/" rel="prev" title="SpringCloud学习系列之二 ----- 服务消费者(Feign)和负载均衡(Ribbon)">
+                SpringCloud学习系列之二 ----- 服务消费者(Feign)和负载均衡(Ribbon) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">107</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">52</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringCloud介绍"><span class="nav-number">2.</span> <span class="nav-text">SpringCloud介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#微服务架构是什么"><span class="nav-number">3.</span> <span class="nav-text">微服务架构是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringCloud-Eureka"><span class="nav-number">4.</span> <span class="nav-text">SpringCloud Eureka</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Eureka-介绍"><span class="nav-number">4.1.</span> <span class="nav-text">Eureka 介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开发准备"><span class="nav-number">4.2.</span> <span class="nav-text">开发准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SpringCloud-Eureka-Hello-World"><span class="nav-number">4.3.</span> <span class="nav-text">SpringCloud Eureka Hello World</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#服务端"><span class="nav-number">4.3.1.</span> <span class="nav-text">服务端</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#客户端"><span class="nav-number">4.3.2.</span> <span class="nav-text">客户端</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#功能测试"><span class="nav-number">4.4.</span> <span class="nav-text">功能测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高可用的注册中心"><span class="nav-number">4.5.</span> <span class="nav-text">高可用的注册中心</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他"><span class="nav-number">5.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#项目地址"><span class="nav-number">5.1.</span> <span class="nav-text">项目地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#音乐推荐"><span class="nav-number">5.2.</span> <span class="nav-text">音乐推荐</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1099 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,springcloud," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言本篇主要介绍的是SpringCloud中的服务消费者(Feign)和负载均衡(Ribbon)功能的实现以及使用Feign结合Ribbon实现负载均衡。 SpringCloud FeignFeign 介绍 Feign是一个声明式的Web Service客户端，它使得编写Web Serivce客户端变得更加简单。我们只需要使用Feign来创建一个接口并用注解来配置它既可完成。它具备可插拔的注解支">
+<meta name="keywords" content="java,springcloud">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringCloud学习系列之二 ----- 服务消费者(Feign)和负载均衡(Ribbon)">
+<meta property="og:url" content="http://yoursite.com/2019/01/15/pancm108/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言本篇主要介绍的是SpringCloud中的服务消费者(Feign)和负载均衡(Ribbon)功能的实现以及使用Feign结合Ribbon实现负载均衡。 SpringCloud FeignFeign 介绍 Feign是一个声明式的Web Service客户端，它使得编写Web Serivce客户端变得更加简单。我们只需要使用Feign来创建一个接口并用注解来配置它既可完成。它具备可插拔的注解支">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190115164628193.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190115164639937.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190115164542580.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190115164554553.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2019-01-31T10:08:59.671Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringCloud学习系列之二 ----- 服务消费者(Feign)和负载均衡(Ribbon)">
+<meta name="twitter:description" content="前言本篇主要介绍的是SpringCloud中的服务消费者(Feign)和负载均衡(Ribbon)功能的实现以及使用Feign结合Ribbon实现负载均衡。 SpringCloud FeignFeign 介绍 Feign是一个声明式的Web Service客户端，它使得编写Web Serivce客户端变得更加简单。我们只需要使用Feign来创建一个接口并用注解来配置它既可完成。它具备可插拔的注解支">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190115164628193.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/01/15/pancm108/"/>
+
+
+
+
+
+
+  <title>SpringCloud学习系列之二 ----- 服务消费者(Feign)和负载均衡(Ribbon) | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/15/pancm108/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SpringCloud学习系列之二 ----- 服务消费者(Feign)和负载均衡(Ribbon)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-15T00:00:00+08:00">
+                2019-01-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本篇主要介绍的是SpringCloud中的服务消费者(Feign)和负载均衡(Ribbon)功能的实现以及使用Feign结合Ribbon实现负载均衡。</p>
+<h2 id="SpringCloud-Feign"><a href="#SpringCloud-Feign" class="headerlink" title="SpringCloud Feign"></a>SpringCloud Feign</h2><h3 id="Feign-介绍"><a href="#Feign-介绍" class="headerlink" title="Feign 介绍"></a>Feign 介绍</h3><blockquote>
+<p>Feign是一个声明式的Web Service客户端，它使得编写Web Serivce客户端变得更加简单。我们只需要使用Feign来创建一个接口并用注解来配置它既可完成。它具备可插拔的注解支持，包括Feign注解和JAX-RS注解。Feign也支持可插拔的编码器和解码器。Spring Cloud为Feign增加了对Spring MVC注解的支持，还整合了Ribbon和Eureka来提供均衡负载的HTTP客户端实现。</p>
+</blockquote>
+<h3 id="开发准备"><a href="#开发准备" class="headerlink" title="开发准备"></a>开发准备</h3><p><strong>开发环境</strong></p>
+<ul>
+<li><strong>JDK</strong>:1.8</li>
+<li><strong>SpringBoot</strong>:2.1.1.RELEASE</li>
+<li><strong>SpringCloud</strong>：Finchley</li>
+</ul>
+<p><strong>注:不一定非要用上述的版本，可以根据情况进行相应的调整。需要注意的是SpringBoot2.x以后，jdk的版本必须是1.8以上！</strong></p>
+<p>确认了开发环境之后，我们再来添加相关的pom依赖。</p>
+<pre><code>&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-cloud-starter&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-server&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-cloud-starter-openfeign&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
+</code></pre><p><strong>注:</strong> 基于SpringBoot1.x以上SpringCloud是Dalston版本的eureka 依赖是 <code>&lt;artifactId&gt;spring-cloud-starter-eureka&lt;/artifactId&gt;</code>，feign 依赖是 <code>&lt;artifactId&gt;spring-cloud-starter-feign&lt;/artifactId&gt;</code> ，少了个 netflix 。SpringCloud的版本命名方式是通过伦敦的地方来命名的，版本顺序是根据首字母的顺序来的。</p>
+<h3 id="SpringCloud-Feign-示例"><a href="#SpringCloud-Feign-示例" class="headerlink" title="SpringCloud Feign 示例"></a>SpringCloud Feign 示例</h3><h4 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h4><p>首先建立一个<code>springcloud-feign-eureka</code>服务的工程，用于做注册中心。配置和之前的基本一样。<code>application.properties</code>添加如下的配置:</p>
+<p><strong>配置信息:</strong></p>
+<pre><code>spring.application.name=springcloud-feign-eureka-server
+server.port=8001
+eureka.client.register-with-eureka=false
+eureka.client.fetch-registry=false
+eureka.client.serviceUrl.defaultZone=http://localhost:8001/eureka/
+</code></pre><p><strong>配置说明:</strong></p>
+<ul>
+<li>spring.application.name： 这个是指定服务名称。</li>
+<li>server.port:服务指定的端口。</li>
+<li>eureka.client.register-with-eureka：表示是否将自己注册到Eureka Server，默认是true。</li>
+<li>eureka.client.fetch-registry：表示是否从Eureka Server获取注册信息，默认为true。</li>
+<li>eureka.client.serviceUrl.defaultZone： 这个是设置与Eureka Server交互的地址，客户端的查询服务和注册服务都需要依赖这个地址。</li>
+</ul>
+<p>完成配置信息的添加后，我们再来看代码如何实现。<br>在服务端这边只需要在SpringBoot启动类添加<code>@EnableEurekaServer</code>注解就可以了，该注解表示此服务是一个服务注册中心服务。</p>
+<p><strong>代码示例:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">@EnableEurekaServer</div><div class="line">@SpringBootApplication</div><div class="line">public class FeignEurekaApplication &#123;</div><div class="line">  public static void main(String[] args) &#123;</div><div class="line">      SpringApplication.run(FeignEurekaApplication.class, args);</div><div class="line">      System.out.println(&quot;feign注册中心服务启动...&quot;);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h4><p>这里我们定义两个消费者，<code>springcloud-feign-consumer</code>和<code>springcloud-feign-consumer2</code>，一个使用feign做转发，另一个为一个普通的项目。 添加如上的依赖之后，在<code>application.properties</code>添加如下的配置:</p>
+<p><strong>consumer 配置信息:</strong></p>
+<pre><code>spring.application.name=springcloud-feign-consumer
+server.port=9002
+eureka.client.serviceUrl.defaultZone=http://localhost:8001/eureka/
+</code></pre><p><strong>consumer2 配置信息:</strong></p>
+<pre><code>spring.application.name=springcloud-feign-consumer2
+server.port=9003
+eureka.client.serviceUrl.defaultZone=http://localhost:8001/eureka/
+</code></pre><p><strong>配置说明:</strong></p>
+<ul>
+<li>spring.application.name： 这个是客户端的服务名称。如果有多个服务使用同一个名称但是访问地址不同，结合ribbon 使用，则可以实现负载均衡功能。</li>
+<li>server.port:服务指定的端口。</li>
+<li>eureka.client.serviceUrl.defaultZone： 注册中心服务端的地址。</li>
+</ul>
+<h5 id="springcloud-feign-consumer"><a href="#springcloud-feign-consumer" class="headerlink" title="springcloud-feign-consumer"></a>springcloud-feign-consumer</h5><p><code>springcloud-feign-consumer</code>服务因为要实现fegin的功能，因此需要在启动类上添加<code>@EnableFeignClients</code>该注解，使用该注解表示启用feign进行远程调用。</p>
+<p><strong>启动类代码示例:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">@SpringBootApplication</div><div class="line">@EnableDiscoveryClient</div><div class="line">@EnableFeignClients</div><div class="line">public class FeignConsumerApplication &#123;</div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		SpringApplication.run(FeignConsumerApplication.class, args);</div><div class="line">		  System.out.println(&quot;feign第一个消费者服务启动...&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>需要定义转发的服务，这里使用<code>@FeignClient</code>注解来实现，该注解表示需要转发服务的名称，该名称在<code>application.properties</code>中进行配置。<br>这里我们把请求转发到第二个服务<code>springcloud-feign-consumer2</code>。</p>
+<p><strong>转发类代码示例:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@FeignClient(name= &quot;springcloud-feign-consumer2&quot;) </div><div class="line">public interface HelloRemote &#123;</div><div class="line">   	@RequestMapping(value = &quot;/hello&quot;)</div><div class="line">  		 public String hello(@RequestParam(value = &quot;name&quot;) String name);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们还需要提供一个入口供外部调用，然后调用上述的的方法进行转发。</p>
+<p><strong>控制层代码示例:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">@RestController</div><div class="line">public class ConsumerController &#123;</div><div class="line"></div><div class="line">    @Autowired</div><div class="line">    HelloRemote helloRemote;</div><div class="line">	</div><div class="line">    @RequestMapping(&quot;/hello/&#123;name&#125;&quot;)</div><div class="line">    public String index(@PathVariable(&quot;name&quot;) String name) &#123;</div><div class="line">    	System.out.println(&quot;接受到请求参数:&quot;+name+&quot;,进行转发到其他服务&quot;);</div><div class="line">        return helloRemote.hello(name);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="springcloud-feign-consumer2"><a href="#springcloud-feign-consumer2" class="headerlink" title="springcloud-feign-consumer2"></a>springcloud-feign-consumer2</h5><p>这个服务的代码就比较简单了，只是一个普通的服务，提供一个接口然后打印信息即可。</p>
+<p><strong>启动类代码示例:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">@SpringBootApplication</div><div class="line">@EnableDiscoveryClient</div><div class="line">public class FeignConsumerApplication2 &#123;</div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		SpringApplication.run(FeignConsumerApplication2.class, args);</div><div class="line">		  System.out.println(&quot;feign第二个消费者服务启动...&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>控制层代码示例:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">@RestController</div><div class="line">public class ConsumerController &#123;</div><div class="line"></div><div class="line">	@RequestMapping(&quot;/hello&quot;)</div><div class="line">    public String index(@RequestParam String name) &#123;</div><div class="line">        return name+&quot;,Hello World&quot;;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="功能测试"><a href="#功能测试" class="headerlink" title="功能测试"></a>功能测试</h3><p>完成如上的工程开发之后，我们依次启动服务端和客户端的三个程序，然后在浏览器界面输入:<code>http://localhost:8001/</code>，即可查看注册中心的信息。</p>
+<p>在浏览器输入：</p>
+<blockquote>
+<p><a href="http://localhost:9003/hello?name=pancm" target="_blank" rel="external">http://localhost:9003/hello?name=pancm</a> </p>
+</blockquote>
+<p>返回:</p>
+<pre><code>pancm,Hello World
+</code></pre><p>说明可以直接访问第二个消费服务。</p>
+<p>然后再输入:</p>
+<blockquote>
+<p><a href="http://localhost:9002/hello/pancm" target="_blank" rel="external">http://localhost:9002/hello/pancm</a> </p>
+</blockquote>
+<p>通过第一个消费服务调用第二个服务。</p>
+<p>控制台打印:</p>
+<pre><code>接受到请求参数:pancm,进行转发到其他服务
+</code></pre><p>界面返回结果:</p>
+<pre><code>pancm,Hello World
+</code></pre><p>示例图:</p>
+<p><img src="https://img-blog.csdnimg.cn/20190115164628193.png" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/20190115164639937.png" alt="在这里插入图片描述"></p>
+<p>出现以上结果说明客户端已经成功的通过feign调用了远程服务hello，并且将结果返回到了浏览器。</p>
+<h2 id="SpringCloud-Ribbon"><a href="#SpringCloud-Ribbon" class="headerlink" title="SpringCloud Ribbon"></a>SpringCloud Ribbon</h2><h3 id="Ribbon-介绍"><a href="#Ribbon-介绍" class="headerlink" title="Ribbon 介绍"></a>Ribbon 介绍</h3><blockquote>
+<p>Ribbon是Netflix发布的开源项目，主要功能是提供客户端的软件负载均衡算法，将Netflix的中间层服务连接在一起。Ribbon客户端组件提供一系列完善的配置项如连接超时，重试等。简单的说，就是在配置文件中列出Load Balancer后面所有的机器，Ribbon会自动的帮助你基于某种规则（如简单轮询，随即连接等）去连接这些机器。我们也很容易使用Ribbon实现自定义的负载均衡算法。简单地说，Ribbon是一个客户端负载均衡器。</p>
+</blockquote>
+<h3 id="开发准备-1"><a href="#开发准备-1" class="headerlink" title="开发准备"></a>开发准备</h3><p><strong>开发环境</strong></p>
+<ul>
+<li><strong>JDK</strong>:1.8</li>
+<li><strong>SpringBoot</strong>:2.1.1.RELEASE</li>
+<li><strong>SpringCloud</strong>：Finchley</li>
+</ul>
+<p><strong>注:不一定非要用上述的版本，可以根据情况进行相应的调整。需要注意的是SpringBoot2.x以后，jdk的版本必须是1.8以上！</strong></p>
+<p>确认了开发环境之后，我们再来添加相关的pom依赖。</p>
+<pre><code>&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-cloud-starter&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-cloud-starter-netflix-eureka&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-cloud-starter-netflix-ribbon&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
+</code></pre><p><strong>注:</strong> 基于SpringBoot1.x以上SpringCloud是Dalston版本的eureka 依赖是 <code>&lt;artifactId&gt;spring-cloud-starter-eureka&lt;/artifactId&gt;</code>，feign 依赖是 <code>&lt;artifactId&gt;spring-cloud-starter-ribbon&lt;/artifactId&gt;</code> ，少了个 netflix 。SpringCloud的版本命名方式是通过伦敦的地方来命名的，版本顺序是根据首字母的顺序来的。</p>
+<h3 id="SpringCloud-Ribbon-示例"><a href="#SpringCloud-Ribbon-示例" class="headerlink" title="SpringCloud Ribbon 示例"></a>SpringCloud Ribbon 示例</h3><h4 id="服务端-1"><a href="#服务端-1" class="headerlink" title="服务端"></a>服务端</h4><p>首先建立一个<code>springcloud-ribbon-eureka</code>服务的工程，用于做注册中心。配置和代码之前的基本一样，除了端口和打印信息，这里就不在说明了。</p>
+<h4 id="客户端-1"><a href="#客户端-1" class="headerlink" title="客户端"></a>客户端</h4><p>这里我们定义三个服务，一个服务使用Ribbon做负载均衡，另外两个做普通的服务，服务名称依次为<code>springcloud-ribbon-consumer</code>、<code>springcloud-ribbon-consumer2</code>和<code>springcloud-ribbon-consumer3</code>。 添加如上的依赖之后，在<code>application.properties</code>添加如下的配置:</p>
+<p><strong>consumer 配置信息:</strong></p>
+<pre><code>spring.application.name=springcloud-ribbon-consumer
+server.port=9006
+eureka.client.serviceUrl.defaultZone=http://localhost:8003/eureka/
+</code></pre><p><strong>consumer2 配置信息:</strong></p>
+<pre><code>spring.application.name=springcloud-ribbon-consumer2
+server.port=9007
+eureka.client.serviceUrl.defaultZone=http://localhost:8003/eureka/
+</code></pre><p><strong>consumer3 配置信息:</strong></p>
+<p>这里的服务名称和另一个服务的名称保持一致才能实现负载均衡功能。</p>
+<pre><code>spring.application.name=springcloud-ribbon-consumer2
+server.port=9008
+eureka.client.serviceUrl.defaultZone=http://localhost:8003/eureka/
+</code></pre><p><strong>配置说明:</strong></p>
+<ul>
+<li>spring.application.name： 这个是客户端的服务名称。如果有多个服务使用同一个名称但是访问地址不同，结合ribbon 使用，则可以实现负载均衡功能。</li>
+<li>server.port:服务指定的端口。</li>
+<li>eureka.client.serviceUrl.defaultZone： 注册中心服务端的地址。</li>
+</ul>
+<h5 id="springcloud-ribbon-consumer"><a href="#springcloud-ribbon-consumer" class="headerlink" title="springcloud-ribbon-consumer"></a>springcloud-ribbon-consumer</h5><p>使用Ribbon实现负载均衡，只需要在启动类中实例化<code>RestTemplate</code>，通过<code>@LoadBalanced</code>注解开启均衡负载能力.。</p>
+<p><strong>启动类代码示例:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@SpringBootApplication</div><div class="line">@EnableDiscoveryClient</div><div class="line">public class RibbonConsumerApplication &#123;</div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		SpringApplication.run(RibbonConsumerApplication.class, args);</div><div class="line">		System.out.println(&quot;ribbon第一个消费者服务启动...&quot;);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Bean</div><div class="line">	@LoadBalanced</div><div class="line">	public RestTemplate restTemplate() &#123;</div><div class="line">		return new RestTemplate();</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>需要定义转发的服务，这里使用<code>RestTemplate</code>来进行调用，调用另外一个服务的名称。</p>
+<p><strong>转发类代码示例:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@RestController</div><div class="line">public class ConsumerController &#123;</div><div class="line">   </div><div class="line">    @Autowired</div><div class="line">    RestTemplate restTemplate;</div><div class="line">    </div><div class="line">    @RequestMapping(&quot;/hello&quot;)</div><div class="line">    public String hello() &#123;</div><div class="line">    	//进行远程调用</div><div class="line">        return restTemplate.getForObject(&quot;http://springcloud-ribbon-consumer2/hello/?name=xuwujing&quot;, String.class);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>springcloud-ribbon-consumer2</code>和<code>springcloud-ribbon-consumer3</code>代码基本和fegin中的<code>springcloud-feign-consumer</code>一样，因此这里就不在贴代码了。</p>
+<h3 id="功能测试-1"><a href="#功能测试-1" class="headerlink" title="功能测试"></a>功能测试</h3><p>完成如上的工程开发之后，我们依次启动服务端和客户端的四个程序，然后在浏览器界面输入:<code>http://localhost:8003/</code>，即可查看注册中心的信息。</p>
+<p>在浏览器输入：</p>
+<blockquote>
+<p><a href="http://localhost:9006//hello" target="_blank" rel="external">http://localhost:9006//hello</a> </p>
+</blockquote>
+<p>然后进行重复访问，返回如下结果:</p>
+<pre><code>xuwujing,Hello World!
+xuwujing,Hello World! 这是另一个服务！
+xuwujing,Hello World!
+xuwujing,Hello World! 这是另一个服务！
+xuwujing,Hello World!
+xuwujing,Hello World! 这是另一个服务！
+</code></pre><p>说明已经实现了负载均衡功能了。</p>
+<p>我们从上述的结果中发现了一点，这个调用貌似是有规律的，两个服务进行来回调用。那么根据这个我们发现了，负载均衡是由策略的。上述的这个示例的策略就是其中的一个<strong>RoundRobinRule</strong>轮询策略。</p>
+<p>这里就顺便说下Ribbon的策略，Ribbon一共有7中策略，默认使用的策略是轮询。策略说明如下表格:</p>
+<table>
+<thead>
+<tr>
+<th>策略名</th>
+<th>策略声明</th>
+<th>策略描述</th>
+<th>实现说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BestAvailableRule</td>
+<td>public class BestAvailableRule extends ClientConfigEnabledRoundRobinRule</td>
+<td>选择一个最小的并发请求的server</td>
+<td>逐个考察Server，如果Server被tripped了，则忽略，在选择其中ActiveRequestsCount最小的server</td>
+</tr>
+<tr>
+<td>AvailabilityFilteringRule</td>
+<td>public class AvailabilityFilteringRule extends PredicateBasedRule</td>
+<td>过滤掉那些因为一直连接失败的被标记为circuit tripped的后端server，并过滤掉那些高并发的的后端server（active connections 超过配置的阈值）</td>
+<td>使用一个AvailabilityPredicate来包含过滤server的逻辑，其实就就是检查status里记录的各个server的运行状态</td>
+</tr>
+<tr>
+<td>WeightedResponseTimeRule</td>
+<td>public class WeightedResponseTimeRule extends RoundRobinRule</td>
+<td>根据响应时间分配一个weight，响应时间越长，weight越小，被选中的可能性越低。</td>
+<td>一个后台线程定期的从status里面读取评价响应时间，为每个server计算一个weight。Weight的计算也比较简单responsetime 减去每个server自己平均的responsetime是server的权重。当刚开始运行，没有形成status时，使用roubine策略选择server。</td>
+</tr>
+<tr>
+<td>RetryRule</td>
+<td>public class RetryRule extends AbstractLoadBalancerRule</td>
+<td>对选定的负载均衡策略机上重试机制。</td>
+<td>在一个配置时间段内当选择server不成功，则一直尝试使用subRule的方式选择一个可用的server</td>
+</tr>
+<tr>
+<td>RoundRobinRule</td>
+<td>public class RoundRobinRule extends AbstractLoadBalancerRule</td>
+<td>roundRobin方式轮询选择server</td>
+<td>轮询index，选择index对应位置的server</td>
+</tr>
+<tr>
+<td>RandomRule</td>
+<td>public class RandomRule extends AbstractLoadBalancerRule</td>
+<td>随机选择一个server</td>
+<td>在index上随机，选择index对应位置的server</td>
+</tr>
+<tr>
+<td>ZoneAvoidanceRule</td>
+<td>public class ZoneAvoidanceRule extends PredicateBasedRule</td>
+<td>复合判断server所在区域的性能和server的可用性选择server</td>
+<td>使用ZoneAvoidancePredicate和AvailabilityPredicate来判断是否选择某个server，前一个判断判定一个zone的运行性能是否可用，剔除不可用的zone（的所有server），AvailabilityPredicate用于过滤掉连接数过多的Server。</td>
+</tr>
+</tbody>
+</table>
+<p>这里也顺便说明如何指定一个策略使用方法。</p>
+<p><strong>最简单的方式</strong></p>
+<p>在<code>application.properties</code>添加如下配置:</p>
+<pre><code>springcloud-ribbon-consumer2.ribbon.NFLoadBalancerRuleClassName=com.netflix.loadbalancer.RandomRule
+</code></pre><p>该配置的意思是为<code>springcloud-ribbon-consumer2</code>服务指定随机策略。</p>
+<p><strong>另一种方式</strong></p>
+<p>新建一个类，通过<code>@Bean</code>注解指定策略。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@Configuration</div><div class="line">public class RibbonConfiguration&#123;</div><div class="line">      @Bean</div><div class="line">      public IRule ribbonRule()&#123;        </div><div class="line">          return new RandomRule();</div><div class="line">     &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后再通过<code>@RibbonClien</code>注解指定服务。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@RibbonClient(name=&quot;springcloud-ribbon-consumer2&quot;, configuration=RibbonConfiguration.class)</div><div class="line">public class HelloRibbon&#123;	 </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>注: 如果有的服务没有在Eureka进行注册，可以使用<code>ribbon.listOfServers</code>方式在配置文件中来指定服务。</p>
+<p>例如:</p>
+<pre><code>springcloud-ribbon-consumer2.ribbon.listOfServers:localhost:9007,localhost:9008
+</code></pre><p>添加好了该配置之后，我们重启<code>springcloud-ribbon-consumer</code>服务，然后依旧重复访问 <code>http://localhost:9006//hello</code> 该地址，<br>访问的结果如下:</p>
+<pre><code>xuwujing,Hello World!
+xuwujing,Hello World! 这是另一个服务！
+xuwujing,Hello World! 这是另一个服务！
+xuwujing,Hello World!
+xuwujing,Hello World!
+xuwujing,Hello World!
+</code></pre><p>可以看到已经成功实现了随机访问的策略！</p>
+<h2 id="SpringCloud-Fegin结合Ribbon实现负载均衡"><a href="#SpringCloud-Fegin结合Ribbon实现负载均衡" class="headerlink" title="SpringCloud Fegin结合Ribbon实现负载均衡"></a>SpringCloud Fegin结合Ribbon实现负载均衡</h2><p>Fegin包含了Ribbon，可以直接实现负载均衡功能。这里我们就在Ribbon的项目稍微进行改造下实现该功能。</p>
+<p>首先在pom文件添加Fegin的依赖包。</p>
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-starter-openfeign&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre><p>然后在<code>springcloud-ribbon-consumer</code>项目的启动类上添加<code>@EnableFeignClients</code>注解，启用feign进行远程调用。</p>
+<p>添加完成之后，新建一个类，实现feign远程调用。<br>代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@FeignClient(name= &quot;springcloud-ribbon-consumer2&quot;) </div><div class="line">public interface HelloRemote &#123;</div><div class="line">    @RequestMapping(value = &quot;/hello&quot;)</div><div class="line">    public String hello(@RequestParam(value = &quot;name&quot;) String name);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最后在提供一个新的接口供外部调用。这里就直接在之前的代码上新加一个接口了。<br>代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@RestController</div><div class="line">public class ConsumerController &#123;</div><div class="line">   </div><div class="line">    @Autowired</div><div class="line">    RestTemplate restTemplate;</div><div class="line">    </div><div class="line">    @RequestMapping(&quot;/hello&quot;)</div><div class="line">    public String hello() &#123;</div><div class="line">        return restTemplate.getForObject(&quot;http://springcloud-ribbon-consumer2/hello/?name=xuwujing&quot;, String.class);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">   </div><div class="line">    @Autowired</div><div class="line">    HelloRemote helloRemote;</div><div class="line">	</div><div class="line">    @RequestMapping(&quot;/hello/&#123;name&#125;&quot;)</div><div class="line">    public String index(@PathVariable(&quot;name&quot;) String name) &#123;</div><div class="line">    	System.out.println(&quot;接受到请求参数:&quot;+name+&quot;,进行转发到其他服务!&quot;);</div><div class="line">        return helloRemote.hello(name);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>添加完之后，重启<code>springcloud-ribbon-consumer</code>服务，然后依旧重复访问 <code>http://localhost:9006//hello/pancm</code> 该地址，<br>访问的结果如下:</p>
+<pre><code>pancm,Hello World!
+pancm,Hello World! 这是另一个服务！
+pancm,Hello World!
+pancm,Hello World! 这是另一个服务！
+pancm,Hello World!
+pancm,Hello World! 这是另一个服务！
+</code></pre><p>示例图:<br><img src="https://img-blog.csdnimg.cn/20190115164542580.png" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/20190115164554553.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><h3 id="项目地址"><a href="#项目地址" class="headerlink" title="项目地址"></a>项目地址</h3><p>基于SpringBoot1.x、SpringCloud的Dalston版本<a href="https://github.com/xuwujing/springcloud-study" target="_blank" rel="external">开发的地址</a>:<a href="https://github.com/xuwujing/springcloud-study" target="_blank" rel="external">https://github.com/xuwujing/springcloud-study</a></p>
+<p>基于SpringBoot1.x、SpringCloud 的Dalston版本<a href="https://github.com/xuwujing/springcloud-study-old" target="_blank" rel="external">开发的地址</a>: <a href="https://github.com/xuwujing/springcloud-study-old" target="_blank" rel="external">https://github.com/xuwujing/springcloud-study-old</a></p>
+<p>如果感觉项目不错，希望能给个star，谢谢!</p>
+<h3 id="音乐推荐"><a href="#音乐推荐" class="headerlink" title="音乐推荐"></a>音乐推荐</h3><p>一首非常棒的纯音乐  NEXT TO YOU ，强烈推荐！</p>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=29816800&auto=0&height=66"></iframe>
+
+
+<p>原创不易，如果感觉不错，希望给个推荐！您的支持是我写作的最大动力！<br>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a> </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/springcloud/" rel="tag"># springcloud</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/14/pancm107/" rel="next" title="SpringCloud学习系列之一 ----- 搭建一个高可用的注册中心(Eureka)">
+                <i class="fa fa-chevron-left"></i> SpringCloud学习系列之一 ----- 搭建一个高可用的注册中心(Eureka)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">107</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">52</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringCloud-Feign"><span class="nav-number">2.</span> <span class="nav-text">SpringCloud Feign</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Feign-介绍"><span class="nav-number">2.1.</span> <span class="nav-text">Feign 介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开发准备"><span class="nav-number">2.2.</span> <span class="nav-text">开发准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SpringCloud-Feign-示例"><span class="nav-number">2.3.</span> <span class="nav-text">SpringCloud Feign 示例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#服务端"><span class="nav-number">2.3.1.</span> <span class="nav-text">服务端</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#客户端"><span class="nav-number">2.3.2.</span> <span class="nav-text">客户端</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#springcloud-feign-consumer"><span class="nav-number">2.3.2.1.</span> <span class="nav-text">springcloud-feign-consumer</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#springcloud-feign-consumer2"><span class="nav-number">2.3.2.2.</span> <span class="nav-text">springcloud-feign-consumer2</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#功能测试"><span class="nav-number">2.4.</span> <span class="nav-text">功能测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringCloud-Ribbon"><span class="nav-number">3.</span> <span class="nav-text">SpringCloud Ribbon</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Ribbon-介绍"><span class="nav-number">3.1.</span> <span class="nav-text">Ribbon 介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开发准备-1"><span class="nav-number">3.2.</span> <span class="nav-text">开发准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SpringCloud-Ribbon-示例"><span class="nav-number">3.3.</span> <span class="nav-text">SpringCloud Ribbon 示例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#服务端-1"><span class="nav-number">3.3.1.</span> <span class="nav-text">服务端</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#客户端-1"><span class="nav-number">3.3.2.</span> <span class="nav-text">客户端</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#springcloud-ribbon-consumer"><span class="nav-number">3.3.2.1.</span> <span class="nav-text">springcloud-ribbon-consumer</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#功能测试-1"><span class="nav-number">3.4.</span> <span class="nav-text">功能测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringCloud-Fegin结合Ribbon实现负载均衡"><span class="nav-number">4.</span> <span class="nav-text">SpringCloud Fegin结合Ribbon实现负载均衡</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他"><span class="nav-number">5.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#项目地址"><span class="nav-number">5.1.</span> <span class="nav-text">项目地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#音乐推荐"><span class="nav-number">5.2.</span> <span class="nav-text">音乐推荐</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
