@@ -1,0 +1,962 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="redis,springboot," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言本篇文章主要介绍的是SpringBoot整合Redis，使用Restful风格实现的CRUD功能。 Redis 介绍Redis 是完全开源免费的，遵守BSD协议，是一个高性能的key-value数据库。  Redis 与其他 key - value缓存产品有以下三个特点：   Redis支持数据的持久化，可以将内存中的数据保存在磁盘中，重启的时候可以再次加载进行使用。 Redis不仅仅支持简">
+<meta name="keywords" content="redis,springboot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot整合Redis使用Restful风格实现CRUD功能">
+<meta property="og:url" content="http://yoursite.com/2019/05/08/pancm114/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言本篇文章主要介绍的是SpringBoot整合Redis，使用Restful风格实现的CRUD功能。 Redis 介绍Redis 是完全开源免费的，遵守BSD协议，是一个高性能的key-value数据库。  Redis 与其他 key - value缓存产品有以下三个特点：   Redis支持数据的持久化，可以将内存中的数据保存在磁盘中，重启的时候可以再次加载进行使用。 Redis不仅仅支持简">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190508212843449.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190508213152690.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190508213342227.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190508213514420.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2019050821361881.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2019-05-12T15:21:11.788Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringBoot整合Redis使用Restful风格实现CRUD功能">
+<meta name="twitter:description" content="前言本篇文章主要介绍的是SpringBoot整合Redis，使用Restful风格实现的CRUD功能。 Redis 介绍Redis 是完全开源免费的，遵守BSD协议，是一个高性能的key-value数据库。  Redis 与其他 key - value缓存产品有以下三个特点：   Redis支持数据的持久化，可以将内存中的数据保存在磁盘中，重启的时候可以再次加载进行使用。 Redis不仅仅支持简">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190508212843449.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/05/08/pancm114/"/>
+
+
+
+
+
+
+  <title>SpringBoot整合Redis使用Restful风格实现CRUD功能 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/08/pancm114/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SpringBoot整合Redis使用Restful风格实现CRUD功能</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-08T00:00:00+08:00">
+                2019-05-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本篇文章主要介绍的是SpringBoot整合Redis，使用Restful风格实现的CRUD功能。</p>
+<h2 id="Redis-介绍"><a href="#Redis-介绍" class="headerlink" title="Redis 介绍"></a>Redis 介绍</h2><p>Redis 是完全开源免费的，遵守BSD协议，是一个高性能的key-value数据库。  Redis 与其他 key - value缓存产品有以下三个特点： </p>
+<ul>
+<li>Redis支持数据的持久化，可以将内存中的数据保存在磁盘中，重启的时候可以再次加载进行使用。</li>
+<li>Redis不仅仅支持简单的key-value类型的数据，同时还提供list，set，zset，hash等数据结构的存储。 </li>
+<li>Redis支持数据的备份，即master-slave模式的数据备份。</li>
+</ul>
+<p>更多的使用说明可以查看官方的文档。<br>官方文档: <a href="https://redis.io" target="_blank" rel="external">https://redis.io</a></p>
+<h2 id="SpringBoot整合Redis"><a href="#SpringBoot整合Redis" class="headerlink" title="SpringBoot整合Redis"></a>SpringBoot整合Redis</h2><p><strong>说明：如果想直接获取工程那么可以直接跳到底部，通过链接下载工程代码。</strong></p>
+<h3 id="开发准备"><a href="#开发准备" class="headerlink" title="开发准备"></a>开发准备</h3><p><strong>环境要求</strong><br><strong>JDK</strong>：1.8<br><strong>SpringBoot</strong>：1.5.15.RELEASE<br><strong>Redis</strong>：3.2或以上。</p>
+<p><strong>Tips</strong>：Redis的偶数为稳定版本，奇数为非稳定版本，所以在使用的时候最好使用偶数的版本！</p>
+<p>Reids的可以看我之前的写的这篇文章: <a href="https://www.cnblogs.com/xuwujing/p/7536708.html" target="_blank" rel="external">Redis安装教程</a></p>
+<p>首先还是Maven的相关依赖:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">&lt;properties&gt;</div><div class="line">    &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;</div><div class="line">    &lt;project.reporting.outputEncoding&gt;UTF-8&lt;/project.reporting.outputEncoding&gt;</div><div class="line">    &lt;java.version&gt;1.8&lt;/java.version&gt;</div><div class="line">    &lt;fastjson&gt;1.2.41&lt;/fastjson&gt;</div><div class="line">    &lt;springboot&gt;1.5.15.RELEASE&lt;/springboot&gt;</div><div class="line">  &lt;/properties&gt;</div><div class="line"></div><div class="line">  &lt;dependencies&gt;</div><div class="line">		&lt;dependency&gt;</div><div class="line">			&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; </div><div class="line">			&lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;</div><div class="line">			&lt;version&gt;$&#123;springboot&#125;&lt;/version&gt;</div><div class="line">		&lt;/dependency&gt;</div><div class="line"></div><div class="line">		&lt;dependency&gt;</div><div class="line">			&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">			&lt;artifactId&gt;spring-boot-devtools&lt;/artifactId&gt;</div><div class="line">			&lt;optional&gt;true&lt;/optional&gt;</div><div class="line">			&lt;version&gt;$&#123;springboot&#125;&lt;/version&gt;</div><div class="line">		&lt;/dependency&gt;</div><div class="line">		</div><div class="line">		&lt;dependency&gt;</div><div class="line">			&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">			&lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;</div><div class="line">			&lt;version&gt;$&#123;springboot&#125;&lt;/version&gt;</div><div class="line">			&lt;scope&gt;test&lt;/scope&gt;</div><div class="line">		&lt;/dependency&gt;</div><div class="line">  		</div><div class="line">		&lt;dependency&gt;</div><div class="line">			&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">			&lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;</div><div class="line">			&lt;version&gt;$&#123;springboot&#125;&lt;/version&gt;</div><div class="line">		&lt;/dependency&gt;</div><div class="line">  </div><div class="line">		&lt;dependency&gt;</div><div class="line">			&lt;groupId&gt;com.alibaba&lt;/groupId&gt;</div><div class="line">			&lt;artifactId&gt;fastjson&lt;/artifactId&gt;</div><div class="line">			&lt;version&gt;$&#123;fastjson&#125;&lt;/version&gt;</div><div class="line">		&lt;/dependency&gt;</div><div class="line">  </div><div class="line">  &lt;/dependencies&gt;</div></pre></td></tr></table></figure></p>
+<p>添加了相应的maven依赖之后，我们再来查看配置。<br><strong>Redis</strong>配置的说明在下面中已经说的很详细了，这里就不在过多说明了，不过需要注意的是如果<strong>Redis</strong>是集群版的话，需要使用这个<code>spring.redis.cluster.nodes</code>这个配置，该配置为Redis的Host加上Port，多个之间用，逗号隔开。<br><strong>application.properties</strong>的配置如下:</p>
+<pre><code># Redis服务器地址
+# 单机版配置
+spring.redis.host = 127.0.0.1
+spring.redis.port = 6379
+# redis最大重连数
+redis.cluster.max-redirects=3
+# Redis服务器连接密码（默认为空）
+redis.password=
+# 最大空闲数  
+redis.maxIdle=5  
+# 连接池的最大数据库连接数。
+redis.maxTotal=5 
+# 最大建立连接等待时间。如果超过此时间将接到异常。设为-1表示无限制。  
+redis.maxWaitMillis=1000  
+# 连接的最小空闲时间 默认1800000毫秒(30分钟)  
+redis.minEvictableIdleTimeMillis=300000  
+# 每次释放连接的最大数目,默认3  
+redis.numTestsPerEvictionRun=3 
+# 逐出扫描的时间间隔(毫秒) 如果为负数,则不运行逐出线程, 默认-1  
+redis.timeBetweenEvictionRunsMillis=30000  
+# 是否在从池中取出连接前进行检验,如果检验失败,则从池中去除连接并尝试取出另一个  
+redis.testOnBorrow=true  
+# 在空闲时检查有效性, 默认false  
+redis.testWhileIdle=true  
+</code></pre><h3 id="代码编写"><a href="#代码编写" class="headerlink" title="代码编写"></a>代码编写</h3><p>首先是编写Redis的配置类，对Redis这块进行配置。<br>在使用SpringBoot整合Redis的时候，SpringBoot是可以根据配置自动完成Redis的相关配置，不过为了更灵活一点，我们这边还是手动加载一下配置，配置成自己想要的那种效果吧。<br>首先，配置一个Redis的连接池，使用<code>redis.clients.jedis.JedisPoolConfig</code>这个类来进行实现，相关的配置在代码的注释中说明得很详细了，这里就不在过多讲述了；<br>然后，再来配置一个Redis的工厂，加载Redis的连接池配置，这里我们也可以进行一下设置，如果Redis设置了密码，我们就加载改密码，否则就不进行加载。<br>继而，我们再来设置数据存入Redis的序列化的方式并开启事务。这里也顺便说下为什么要设置序列化器，如果不设置，那么在用实体类(未序列化)进行存储的时候，会提示错误: <code>Failed to serialize object using DefaultSerializer</code>; 当然，也可以不设置，不过存储的实体类必须进行序列化。<br>最后，我们再来实例化RedisTemplate的对象，加载上述的配置。在使用的时候，只需要使用如下的方式注入就可以使用了</p>
+<pre><code>@Autowired
+RedisTemplate&lt;String, Object&gt; redisTemplate;
+</code></pre><p><strong>Redis的配置类的代码如下:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * </div><div class="line"> * @Title: RedisConfig</div><div class="line"> * @Description: redis初始化配置</div><div class="line"> * @Version:1.0.0</div><div class="line"> * @author pancm</div><div class="line"> * @date 2018年6月7日</div><div class="line"> */</div><div class="line">@Component</div><div class="line">public class RedisConfig &#123;</div><div class="line"></div><div class="line">	@Value(&quot;$&#123;redis.maxIdle&#125;&quot;)</div><div class="line">	private Integer maxIdle;</div><div class="line"></div><div class="line">	@Value(&quot;$&#123;redis.maxTotal&#125;&quot;)</div><div class="line">	private Integer maxTotal;</div><div class="line"></div><div class="line">	@Value(&quot;$&#123;redis.maxWaitMillis&#125;&quot;)</div><div class="line">	private Integer maxWaitMillis;</div><div class="line"></div><div class="line">	@Value(&quot;$&#123;redis.minEvictableIdleTimeMillis&#125;&quot;)</div><div class="line">	private Integer minEvictableIdleTimeMillis;</div><div class="line"></div><div class="line">	@Value(&quot;$&#123;redis.numTestsPerEvictionRun&#125;&quot;)</div><div class="line">	private Integer numTestsPerEvictionRun;</div><div class="line"></div><div class="line">	@Value(&quot;$&#123;redis.timeBetweenEvictionRunsMillis&#125;&quot;)</div><div class="line">	private long timeBetweenEvictionRunsMillis;</div><div class="line"></div><div class="line">	@Value(&quot;$&#123;redis.testOnBorrow&#125;&quot;)</div><div class="line">	private boolean testOnBorrow;</div><div class="line"></div><div class="line">	@Value(&quot;$&#123;redis.testWhileIdle&#125;&quot;)</div><div class="line">	private boolean testWhileIdle;</div><div class="line"></div><div class="line">	@Value(&quot;$&#123;redis.cluster.max-redirects&#125;&quot;)</div><div class="line">	private Integer mmaxRedirectsac;</div><div class="line"></div><div class="line">	@Value(&quot;$&#123;redis.password&#125;&quot;)</div><div class="line">	private String redispwd;</div><div class="line"></div><div class="line">	/**</div><div class="line">	 * JedisPoolConfig 连接池</div><div class="line">	 * </div><div class="line">	 * @return</div><div class="line">	 */</div><div class="line">	@Bean</div><div class="line">	public JedisPoolConfig jedisPoolConfig() &#123;</div><div class="line">		JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();</div><div class="line">		// 最大空闲数</div><div class="line">		jedisPoolConfig.setMaxIdle(maxIdle);</div><div class="line">		// 连接池的最大数据库连接数</div><div class="line">		jedisPoolConfig.setMaxTotal(maxTotal);</div><div class="line">		// 最大建立连接等待时间</div><div class="line">		jedisPoolConfig.setMaxWaitMillis(maxWaitMillis);</div><div class="line">		// 逐出连接的最小空闲时间 默认1800000毫秒(30分钟)</div><div class="line">		jedisPoolConfig.setMinEvictableIdleTimeMillis(minEvictableIdleTimeMillis);</div><div class="line">		// 每次逐出检查时 逐出的最大数目 如果为负数就是 : 1/abs(n), 默认3</div><div class="line">		jedisPoolConfig.setNumTestsPerEvictionRun(numTestsPerEvictionRun);</div><div class="line">		// 逐出扫描的时间间隔(毫秒) 如果为负数,则不运行逐出线程, 默认-1</div><div class="line">		jedisPoolConfig.setTimeBetweenEvictionRunsMillis(timeBetweenEvictionRunsMillis);</div><div class="line">		// 是否在从池中取出连接前进行检验,如果检验失败,则从池中去除连接并尝试取出另一个</div><div class="line">		jedisPoolConfig.setTestOnBorrow(testOnBorrow);</div><div class="line">		// 在空闲时检查有效性, 默认false</div><div class="line">		jedisPoolConfig.setTestWhileIdle(testWhileIdle);</div><div class="line">		return jedisPoolConfig;</div><div class="line">	&#125;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 配置工厂</div><div class="line">	 */</div><div class="line">	@Bean</div><div class="line">	public JedisConnectionFactory JedisConnectionFactory(JedisPoolConfig jedisPoolConfig) &#123;</div><div class="line">		JedisConnectionFactory JedisConnectionFactory = new JedisConnectionFactory(jedisPoolConfig);</div><div class="line">		if (redispwd == null || redispwd.length() == 0) &#123;</div><div class="line">			JedisConnectionFactory.setPassword(redispwd);</div><div class="line">		&#125;</div><div class="line">		return JedisConnectionFactory;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	</div><div class="line"></div><div class="line">	/**</div><div class="line">	 * 设置数据存入 redis 的序列化方式,并开启事务</div><div class="line">	 * </div><div class="line">	 * @param redisTemplate</div><div class="line">	 * @param factory</div><div class="line">	 */</div><div class="line">	private void initDomainRedisTemplate(RedisTemplate&lt;String, Object&gt; redisTemplate, RedisConnectionFactory factory) &#123;</div><div class="line">		/*</div><div class="line">		 * 设置 序列化器 .</div><div class="line">		 * 如果不设置，那么在用实体类(未序列化)进行存储的时候，会提示错误: Failed to serialize object using DefaultSerializer;</div><div class="line">		 */</div><div class="line">		redisTemplate.setKeySerializer(new StringRedisSerializer());</div><div class="line">		redisTemplate.setHashKeySerializer(new StringRedisSerializer());</div><div class="line">		redisTemplate.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());</div><div class="line">		redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());</div><div class="line">		// 开启事务</div><div class="line">		redisTemplate.setEnableTransactionSupport(true);</div><div class="line">		// 将连接工厂设置到模板类中</div><div class="line">		redisTemplate.setConnectionFactory(factory);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 实例化 RedisTemplate 对象</div><div class="line">	 * @return</div><div class="line">	 */</div><div class="line">	@Bean</div><div class="line">	public RedisTemplate&lt;String, Object&gt; functionDomainRedisTemplate(RedisConnectionFactory redisConnectionFactory) &#123;</div><div class="line">		RedisTemplate&lt;String, Object&gt; redisTemplate = new RedisTemplate&lt;&gt;();</div><div class="line">		initDomainRedisTemplate(redisTemplate, redisConnectionFactory);</div><div class="line">		return redisTemplate;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当然，如果自己想使用自定义的Redis工具类进行实现，那么只需在该配置类中注册一个Bean注入封装一下就可以了，然后在工具类中加载一下就可以了。<br>配置类中添加:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@Bean(name = &quot;redisUtil&quot;)</div><div class="line">public RedisUtil redisUtil(RedisTemplate&lt;String, Object&gt; redisTemplate) &#123;</div><div class="line">	RedisUtil redisUtil = new RedisUtil();</div><div class="line">	redisUtil.setRedisTemplate(redisTemplate);</div><div class="line">	return redisUtil;</div><div class="line">&#125;&apos;</div></pre></td></tr></table></figure>
+<p>Redis的工具类添加如下代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">private RedisTemplate&lt;String, Object&gt; redisTemplate;</div><div class="line"></div><div class="line">public void setRedisTemplate(RedisTemplate&lt;String, Object&gt; redisTemplate) &#123;</div><div class="line">	this.redisTemplate = redisTemplate;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>使用Redis工具类示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">   @Resource</div><div class="line">private RedisUtil redisUtil;</div></pre></td></tr></table></figure></p>
+<p>讲完Redis的配置类之后，我们再来进行编写相应的实体类、dao层、service层和Controller层的代码了。<br>由于这块的代码比较简单，而且格式和之前的<a href="https://github.com/xuwujing/springBoot-study" target="_blank" rel="external">项目</a>基本类似，因此这里我就简单的贴下代码了。</p>
+<p><strong>实体类</strong></p>
+<p>又是万能的用户表  (<em>^▽^</em>)</p>
+<p><strong>代码如下：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">public class User implements Serializable&#123;</div><div class="line">	private static final long serialVersionUID = 1L;</div><div class="line">	/** 编号 */</div><div class="line">	 private int id;</div><div class="line">	 /** 姓名 */</div><div class="line">	 private String name;</div><div class="line">	 /** 年龄 */</div><div class="line">	 private int age;</div><div class="line">	 </div><div class="line">	 public User()&#123;</div><div class="line">	 &#125;</div><div class="line"></div><div class="line">	public int getId() &#123;</div><div class="line">		return id;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	public void setId(int id) &#123;</div><div class="line">		this.id = id;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public String getName() &#123;</div><div class="line">		return name;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public void setName(String name) &#123;</div><div class="line">		this.name = name;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public int getAge() &#123;</div><div class="line">		return age;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public void setAge(int age) &#123;</div><div class="line">		this.age = age;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public String toString() &#123;</div><div class="line">		return JSONObject.toJSONString(this);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>Dao 数据层</strong></p>
+<p>这里我是使用的自定义的Redis工具类，其实也就是对<code>RedisTemplate</code>做了二次封装。<br>因为使用的是set（集合）方式存储的，所以我这边把用户数据的ID作为key，用户数据作为value了。</p>
+<p><strong>实现类的代码如下:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@Repository</div><div class="line">public class UserDaoImpl implements UserDao &#123;</div><div class="line"></div><div class="line">	@Resource</div><div class="line">	private RedisUtil redisUtil;</div><div class="line">	</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public void addUser(User user) &#123;</div><div class="line">		redisUtil.set(String.valueOf(user.getId()), user.toString());</div><div class="line">	&#125;</div><div class="line"></div><div class="line"></div><div class="line">	@Override</div><div class="line">	public void updateUser(User user) &#123;</div><div class="line">		redisUtil.set(String.valueOf(user.getId()), user.toString());</div><div class="line">	&#125;</div><div class="line"></div><div class="line"></div><div class="line">	@Override</div><div class="line">	public void deleteUser(int id) &#123;</div><div class="line">		redisUtil.del(String.valueOf(id));</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	</div><div class="line">	@Override</div><div class="line">	public User findByUserId(int id) &#123;</div><div class="line">		String data = redisUtil.get(String.valueOf(id)).toString();</div><div class="line">		User user = JSON.parseObject(data, User.class);</div><div class="line">		return  user;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>Service 业务层</strong></p>
+<p>业务层这边处理比较简单，成功就返回true，失败就返回false。</p>
+<p><strong>实现类的代码如下:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@Service</div><div class="line">public class UserServiceImpl implements UserService &#123;	</div><div class="line"></div><div class="line">	private  final Logger logger = LoggerFactory.getLogger(this.getClass());</div><div class="line">	@Autowired</div><div class="line">    private UserDao userDao;	</div><div class="line">	</div><div class="line">	@Override</div><div class="line">	public boolean addUser(User user) &#123;</div><div class="line">		boolean flag=false;</div><div class="line">		try&#123;</div><div class="line">			userDao.addUser(user);</div><div class="line">			flag=true;</div><div class="line">		&#125;catch(Exception e)&#123;</div><div class="line">			logger.error(&quot;新增失败!&quot;,e);</div><div class="line">		&#125;</div><div class="line">		return flag;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public boolean updateUser(User user) &#123;</div><div class="line">		boolean flag=false;</div><div class="line">		try&#123;</div><div class="line">			userDao.updateUser(user);</div><div class="line">			flag=true;</div><div class="line">		&#125;catch(Exception e)&#123;</div><div class="line">			logger.error(&quot;修改失败!&quot;,e);</div><div class="line">		&#125;</div><div class="line">		return flag;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public boolean deleteUser(int id) &#123;</div><div class="line">		boolean flag=false;</div><div class="line">		try&#123;</div><div class="line">			userDao.deleteUser(id);</div><div class="line">			flag=true;</div><div class="line">		&#125;catch(Exception e)&#123;</div><div class="line">			logger.error(&quot;删除失败!&quot;,e);</div><div class="line">		&#125;</div><div class="line">		return flag;</div><div class="line">	&#125;</div><div class="line"></div><div class="line"></div><div class="line">	@Override</div><div class="line">	public User findByUserId(int id) &#123;</div><div class="line">		return userDao.findByUserId(id);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>Controller 控制层</strong></p>
+<p>控制层这边也比较简单，使用Restful风格实现的CRUD功能。</p>
+<p><strong>代码如下:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@RestController</div><div class="line">@RequestMapping(value = &quot;/api&quot;)</div><div class="line">public class UserRestController &#123;</div><div class="line">	</div><div class="line">	private  final Logger logger = LoggerFactory.getLogger(this.getClass());</div><div class="line"></div><div class="line">	</div><div class="line">	@Autowired</div><div class="line">    private UserService userService;</div><div class="line"> </div><div class="line">	@PostMapping(&quot;/user&quot;)</div><div class="line">    public boolean addUser(@RequestBody User user) &#123;</div><div class="line">    	logger.info(&quot;开始新增...&quot;);</div><div class="line">        return userService.addUser(user);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">	@PutMapping(&quot;/user&quot;)</div><div class="line">    public boolean updateUser(@RequestBody User user) &#123;</div><div class="line">    	logger.info(&quot;开始更新...&quot;);</div><div class="line">        return userService.updateUser(user);</div><div class="line">    &#125;</div><div class="line">	</div><div class="line">	@DeleteMapping(&quot;/user&quot;)</div><div class="line">    public boolean delete(@RequestParam(value = &quot;id&quot;, required = true) int userId) &#123;</div><div class="line">    	logger.info(&quot;开始删除...&quot;);</div><div class="line">        return userService.deleteUser(userId);</div><div class="line">    &#125;</div><div class="line">	</div><div class="line"></div><div class="line">    @GetMapping(&quot;/user&quot;)</div><div class="line">    public User findByUserId(@RequestParam(value = &quot;id&quot;, required = true) int userId) &#123;</div><div class="line">    	logger.info(&quot;开始查询所有数据...&quot;);</div><div class="line">        return userService.findByUserId(userId);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>App 入口</strong></p>
+<p>和普通的SpringBoot项目基本一样。</p>
+<p><strong>代码如下:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@SpringBootApplication</div><div class="line">public class App </div><div class="line">&#123;</div><div class="line">    public static void main( String[] args )</div><div class="line">    &#123;</div><div class="line">		SpringApplication.run(App.class, args);</div><div class="line">		System.out.println(&quot;程序正在运行...&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="功能测试"><a href="#功能测试" class="headerlink" title="功能测试"></a>功能测试</h3><p>我们成功启动该程序之后，使用Postman工具来进行接口测试。</p>
+<p>首先添加一条数据，使用POST方式进行请求</p>
+<blockquote>
+<p>POST <a href="http://localhost:8180/api/user" target="_blank" rel="external">http://localhost:8180/api/user</a></p>
+</blockquote>
+<p>Body参数为:</p>
+<blockquote>
+<p>{“id”:1,”name”:”xuwujing”,”age”:18}</p>
+</blockquote>
+<p><img src="https://img-blog.csdnimg.cn/20190508212843449.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>界面返回true，表示新增成功了！</p>
+<p>然后在进行查询，使用GET请求。</p>
+<blockquote>
+<p>GET  <a href="http://localhost:8180/api/user?id=1" target="_blank" rel="external">http://localhost:8180/api/user?id=1</a></p>
+</blockquote>
+<p>返回:</p>
+<blockquote>
+<p>{“id”:1,”name”:”xuwujing”,”age”:18}</p>
+</blockquote>
+<p><img src="https://img-blog.csdnimg.cn/20190508213152690.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>我们再来使用<a href="https://www.cnblogs.com/xuwujing/p/10393111.html" target="_blank" rel="external">RedisDesktopManager</a>工具进行查询看下，是否真的写入到Redis中去了。</p>
+<p><img src="https://img-blog.csdnimg.cn/20190508213342227.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>可以看到已经成功写入到Redis中了。</p>
+<p>然后我们再来更新下更新该数据，使用PUT方式请求。</p>
+<blockquote>
+<p>PUT <a href="http://localhost:8180/api/user" target="_blank" rel="external">http://localhost:8180/api/user</a></p>
+</blockquote>
+<p>这里只是更改了下age年龄，Body参数为:</p>
+<blockquote>
+<p>{“id”:1,”name”:”xuwujing”,”age”:19}</p>
+</blockquote>
+<p><img src="https://img-blog.csdnimg.cn/20190508213514420.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>可以看到已经成功更新了。</p>
+<p>最后我们再来查询一遍看下是否成功更新。</p>
+<blockquote>
+<p>GET  <a href="http://localhost:8180/api/user?id=1" target="_blank" rel="external">http://localhost:8180/api/user?id=1</a></p>
+</blockquote>
+<p>返回:</p>
+<blockquote>
+<p>{“id”:1,”name”:”xuwujing”,”age”:19}</p>
+</blockquote>
+<p><img src="https://img-blog.csdnimg.cn/2019050821361881.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>可以看到已经成功更新了。</p>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><p>其实SpringBoot整合Redis整个项目很早之前就已经写好并且上传到Github了，但是一直没有抽出时间写篇博客讲述(还有很多SpringBoot的项目也是如此)，最近不是那么的忙了，于是准备了下时间编写本篇博文。后续个人Github上的SpringBoot项目中以后有时间的话，也会对其中的一些发表博文进行讲解，不过那是以后的事了ヽ(ー_ー)ノ</p>
+<p>关于SpringBoot整合Redis的文章就讲解到这里了，如有不妥，欢迎指正！</p>
+<h3 id="项目地址"><a href="#项目地址" class="headerlink" title="项目地址"></a>项目地址</h3><p>SpringBoot整合Redis的项目工程地址:<br><a href="https://github.com/xuwujing/springBoot-study/tree/master/springboot-Redis" target="_blank" rel="external">https://github.com/xuwujing/springBoot-study/tree/master/springboot-Redis</a></p>
+<p>SpringBoot整个集合的地址:<br><a href="https://github.com/xuwujing/springBoot-study" target="_blank" rel="external">https://github.com/xuwujing/springBoot-study</a></p>
+<h3 id="SpringBoot整合系列的文章"><a href="#SpringBoot整合系列的文章" class="headerlink" title="SpringBoot整合系列的文章"></a>SpringBoot整合系列的文章</h3><ul>
+<li><p><a href="http://www.panchengming.com/2018/02/28/pancm73/" target="_blank" rel="external">springBoot配置文件的读取以及过滤器和拦截器的使用</a></p>
+</li>
+<li><p><a href="http://www.panchengming.com/2018/01/10/pancm67/" target="_blank" rel="external">SpringBoot的Restful风格的服务</a></p>
+</li>
+<li><p><a href="http://www.panchengming.com/2018/04/27/pancm81/" target="_blank" rel="external">SpringBoot+Mybatis+ Druid+PageHelper实现多数据源并分页</a></p>
+</li>
+<li><p><a href="http://www.panchengming.com/2018/05/07/pancm82/" target="_blank" rel="external">SpringBoot整合ElasticSearch实现多版本的兼容</a></p>
+</li>
+<li><p><a href="http://www.panchengming.com/2018/05/10/pancm83/" target="_blank" rel="external">SpringBoot整合Kafka和Storm</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/9297165.html" target="_blank" rel="external">SpringBoot整合Jsp和Thymeleaf</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/9321395.html" target="_blank" rel="external">SpringBoot整合Netty并使用Protobuf进行数据传输</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/9471802.html" target="_blank" rel="external">SpringBoot简单打包部署</a>   </p>
+</li>
+</ul>
+<h3 id="音乐推荐"><a href="#音乐推荐" class="headerlink" title="音乐推荐"></a>音乐推荐</h3><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="298" height="52" src="//music.163.com/outchain/player?type=2&id=4083642&auto=0&height=32"></iframe>
+
+
+
+
+<p>原创不易，如果感觉不错，希望给个推荐！您的支持是我写作的最大动力！<br>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a> </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/redis/" rel="tag"># redis</a>
+          
+            <a href="/tags/springboot/" rel="tag"># springboot</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/27/pancm113/" rel="next" title="SpringCloud学习系列之六 ----- 路由网关Zuul使用教程">
+                <i class="fa fa-chevron-left"></i> SpringCloud学习系列之六 ----- 路由网关Zuul使用教程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">113</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">53</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-介绍"><span class="nav-number">2.</span> <span class="nav-text">Redis 介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringBoot整合Redis"><span class="nav-number">3.</span> <span class="nav-text">SpringBoot整合Redis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#开发准备"><span class="nav-number">3.1.</span> <span class="nav-text">开发准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码编写"><span class="nav-number">3.2.</span> <span class="nav-text">代码编写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#功能测试"><span class="nav-number">3.3.</span> <span class="nav-text">功能测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它"><span class="nav-number">4.</span> <span class="nav-text">其它</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#项目地址"><span class="nav-number">4.1.</span> <span class="nav-text">项目地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SpringBoot整合系列的文章"><span class="nav-number">4.2.</span> <span class="nav-text">SpringBoot整合系列的文章</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#音乐推荐"><span class="nav-number">4.3.</span> <span class="nav-text">音乐推荐</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
