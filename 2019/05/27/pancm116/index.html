@@ -1,0 +1,949 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="springboot," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言本篇文章主要介绍的是SpringBoot项目进行全局异常的处理。 SpringBoot全局异常准备说明：如果想直接获取工程那么可以直接跳到底部，通过链接下载工程代码。 开发准备环境要求JDK：1.8SpringBoot：1.5.17.RELEASE 首先还是Maven的相关依赖: 1234567891011121314151617181920212223242526272829303132&amp;">
+<meta name="keywords" content="springboot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot优雅的全局异常处理">
+<meta property="og:url" content="http://yoursite.com/2019/05/27/pancm116/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言本篇文章主要介绍的是SpringBoot项目进行全局异常的处理。 SpringBoot全局异常准备说明：如果想直接获取工程那么可以直接跳到底部，通过链接下载工程代码。 开发准备环境要求JDK：1.8SpringBoot：1.5.17.RELEASE 首先还是Maven的相关依赖: 1234567891011121314151617181920212223242526272829303132&amp;">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190527172104814.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190527163634589.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2019052716381649.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190527172605781.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2019-06-01T13:44:29.856Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringBoot优雅的全局异常处理">
+<meta name="twitter:description" content="前言本篇文章主要介绍的是SpringBoot项目进行全局异常的处理。 SpringBoot全局异常准备说明：如果想直接获取工程那么可以直接跳到底部，通过链接下载工程代码。 开发准备环境要求JDK：1.8SpringBoot：1.5.17.RELEASE 首先还是Maven的相关依赖: 1234567891011121314151617181920212223242526272829303132&amp;">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190527172104814.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/05/27/pancm116/"/>
+
+
+
+
+
+
+  <title>SpringBoot优雅的全局异常处理 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/27/pancm116/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SpringBoot优雅的全局异常处理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-27T00:00:00+08:00">
+                2019-05-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本篇文章主要介绍的是SpringBoot项目进行全局异常的处理。</p>
+<h2 id="SpringBoot全局异常准备"><a href="#SpringBoot全局异常准备" class="headerlink" title="SpringBoot全局异常准备"></a>SpringBoot全局异常准备</h2><p><strong>说明：如果想直接获取工程那么可以直接跳到底部，通过链接下载工程代码。</strong></p>
+<h3 id="开发准备"><a href="#开发准备" class="headerlink" title="开发准备"></a>开发准备</h3><p><strong>环境要求</strong><br><strong>JDK</strong>：1.8<br><strong>SpringBoot</strong>：1.5.17.RELEASE</p>
+<p>首先还是Maven的相关依赖:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&lt;properties&gt;</div><div class="line">      &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;</div><div class="line">      &lt;java.version&gt;1.8&lt;/java.version&gt;</div><div class="line">      &lt;maven.compiler.source&gt;1.8&lt;/maven.compiler.source&gt;</div><div class="line">      &lt;maven.compiler.target&gt;1.8&lt;/maven.compiler.target&gt;</div><div class="line">  &lt;/properties&gt;</div><div class="line">  &lt;parent&gt;</div><div class="line">      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">      &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;</div><div class="line">      &lt;version&gt;1.5.17.RELEASE&lt;/version&gt;</div><div class="line">      &lt;relativePath /&gt;</div><div class="line">  &lt;/parent&gt;</div><div class="line">  &lt;dependencies&gt;</div><div class="line">      &lt;!-- Spring Boot Web 依赖 核心 --&gt;</div><div class="line">      &lt;dependency&gt;</div><div class="line">          &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">          &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;</div><div class="line">      &lt;/dependency&gt;</div><div class="line">      &lt;!-- Spring Boot Test 依赖 --&gt;</div><div class="line">      &lt;dependency&gt;</div><div class="line">          &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">          &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;</div><div class="line">          &lt;scope&gt;test&lt;/scope&gt;</div><div class="line">      &lt;/dependency&gt;</div><div class="line"></div><div class="line">      &lt;dependency&gt;</div><div class="line">          &lt;groupId&gt;com.alibaba&lt;/groupId&gt;</div><div class="line">          &lt;artifactId&gt;fastjson&lt;/artifactId&gt;</div><div class="line">          &lt;version&gt;1.2.41&lt;/version&gt;</div><div class="line">      &lt;/dependency&gt;</div><div class="line">  &lt;/dependencies&gt;</div></pre></td></tr></table></figure>
+<p>配置文件这块基本不需要更改，全局异常的处理只需在代码中实现即可。</p>
+<h3 id="代码编写"><a href="#代码编写" class="headerlink" title="代码编写"></a>代码编写</h3><p>SpringBoot的项目已经对有一定的异常处理了，但是对于我们开发者而言可能就不太合适了，因此我们需要对这些异常进行统一的捕获并处理。SpringBoot中有一个<code>ControllerAdvice</code>的注解，使用该注解表示开启了全局异常的捕获，我们只需在自定义一个方法使用<code>ExceptionHandler</code>注解然后定义捕获异常的类型即可对这些捕获的异常进行统一的处理。</p>
+<p>我们根据下面的这个示例来看该注解是如何使用吧。</p>
+<p>示例代码:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@ControllerAdvice</div><div class="line">public class MyExceptionHandler &#123;</div><div class="line"></div><div class="line">    @ExceptionHandler(value =Exception.class)</div><div class="line">	public String exceptionHandler(Exception e)&#123;</div><div class="line">		System.out.println(&quot;未知异常！原因是:&quot;+e);</div><div class="line">       	return e.getMessage();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>上述的示例中，我们对捕获的异常进行简单的二次处理，返回异常的信息，虽然这种能够让我们知道异常的原因，但是在很多的情况下来说，可能还是不够人性化，不符合我们的要求。<br>那么我们这里可以通过自定义的异常类以及枚举类来实现我们想要的那种数据吧。</p>
+<p><strong>自定义基础接口类</strong></p>
+<p>首先定义一个基础的接口类，自定义的错误描述枚举类需实现该接口。<br><strong>代码如下:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">public interface BaseErrorInfoInterface &#123;</div><div class="line">    /** 错误码*/</div><div class="line">	 String getResultCode();</div><div class="line">	</div><div class="line">	/** 错误描述*/</div><div class="line">	 String getResultMsg();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>自定义枚举类</strong></p>
+<p>然后我们这里在自定义一个枚举类，并实现该接口。<br><strong>代码如下:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">public enum CommonEnum implements BaseErrorInfoInterface &#123;</div><div class="line">	// 数据操作错误定义</div><div class="line">	SUCCESS(&quot;200&quot;, &quot;成功!&quot;), </div><div class="line">	BODY_NOT_MATCH(&quot;400&quot;,&quot;请求的数据格式不符!&quot;),</div><div class="line">	SIGNATURE_NOT_MATCH(&quot;401&quot;,&quot;请求的数字签名不匹配!&quot;),</div><div class="line">	NOT_FOUND(&quot;404&quot;, &quot;未找到该资源!&quot;), </div><div class="line">	INTERNAL_SERVER_ERROR(&quot;500&quot;, &quot;服务器内部错误!&quot;),</div><div class="line">	SERVER_BUSY(&quot;503&quot;,&quot;服务器正忙，请稍后再试!&quot;)</div><div class="line">	;</div><div class="line"></div><div class="line">	/** 错误码 */</div><div class="line">	private String resultCode;</div><div class="line"></div><div class="line">	/** 错误描述 */</div><div class="line">	private String resultMsg;</div><div class="line"></div><div class="line">	CommonEnum(String resultCode, String resultMsg) &#123;</div><div class="line">		this.resultCode = resultCode;</div><div class="line">		this.resultMsg = resultMsg;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public String getResultCode() &#123;</div><div class="line">		return resultCode;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public String getResultMsg() &#123;</div><div class="line">		return resultMsg;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>自定义异常类</strong></p>
+<p>然后我们在来自定义一个异常类，用于处理我们发生的业务异常。<br><strong>代码如下:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">public class BizException extends RuntimeException &#123;</div><div class="line"></div><div class="line">	private static final long serialVersionUID = 1L;</div><div class="line"></div><div class="line">	/**</div><div class="line">	 * 错误码</div><div class="line">	 */</div><div class="line">	protected String errorCode;</div><div class="line">	/**</div><div class="line">	 * 错误信息</div><div class="line">	 */</div><div class="line">	protected String errorMsg;</div><div class="line"></div><div class="line">	public BizException() &#123;</div><div class="line">		super();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public BizException(BaseErrorInfoInterface errorInfoInterface) &#123;</div><div class="line">		super(errorInfoInterface.getResultCode());</div><div class="line">		this.errorCode = errorInfoInterface.getResultCode();</div><div class="line">		this.errorMsg = errorInfoInterface.getResultMsg();</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	public BizException(BaseErrorInfoInterface errorInfoInterface, Throwable cause) &#123;</div><div class="line">		super(errorInfoInterface.getResultCode(), cause);</div><div class="line">		this.errorCode = errorInfoInterface.getResultCode();</div><div class="line">		this.errorMsg = errorInfoInterface.getResultMsg();</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	public BizException(String errorMsg) &#123;</div><div class="line">		super(errorMsg);</div><div class="line">		this.errorMsg = errorMsg;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	public BizException(String errorCode, String errorMsg) &#123;</div><div class="line">		super(errorCode);</div><div class="line">		this.errorCode = errorCode;</div><div class="line">		this.errorMsg = errorMsg;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public BizException(String errorCode, String errorMsg, Throwable cause) &#123;</div><div class="line">		super(errorCode, cause);</div><div class="line">		this.errorCode = errorCode;</div><div class="line">		this.errorMsg = errorMsg;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line"></div><div class="line">	public String getErrorCode() &#123;</div><div class="line">		return errorCode;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public void setErrorCode(String errorCode) &#123;</div><div class="line">		this.errorCode = errorCode;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public String getErrorMsg() &#123;</div><div class="line">		return errorMsg;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public void setErrorMsg(String errorMsg) &#123;</div><div class="line">		this.errorMsg = errorMsg;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public String getMessage() &#123;</div><div class="line">		return errorMsg;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public Throwable fillInStackTrace() &#123;</div><div class="line">		return this;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>自定义数据格式</strong></p>
+<p>顺便这里我们定义一下数据的传输格式。<br><strong>代码如下:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">public class ResultBody &#123;</div><div class="line">	/**</div><div class="line">	 * 响应代码</div><div class="line">	 */</div><div class="line">	private String code;</div><div class="line"></div><div class="line">	/**</div><div class="line">	 * 响应消息</div><div class="line">	 */</div><div class="line">	private String message;</div><div class="line"></div><div class="line">	/**</div><div class="line">	 * 响应结果</div><div class="line">	 */</div><div class="line">	private Object result;</div><div class="line"></div><div class="line">	public ResultBody() &#123;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public ResultBody(BaseErrorInfoInterface errorInfo) &#123;</div><div class="line">		this.code = errorInfo.getResultCode();</div><div class="line">		this.message = errorInfo.getResultMsg();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public String getCode() &#123;</div><div class="line">		return code;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public void setCode(String code) &#123;</div><div class="line">		this.code = code;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public String getMessage() &#123;</div><div class="line">		return message;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public void setMessage(String message) &#123;</div><div class="line">		this.message = message;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public Object getResult() &#123;</div><div class="line">		return result;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public void setResult(Object result) &#123;</div><div class="line">		this.result = result;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	/**</div><div class="line">	 * 成功</div><div class="line">	 * </div><div class="line">	 * @return</div><div class="line">	 */</div><div class="line">	public static ResultBody success() &#123;</div><div class="line">		return success(null);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	/**</div><div class="line">	 * 成功</div><div class="line">	 * @param data</div><div class="line">	 * @return</div><div class="line">	 */</div><div class="line">	public static ResultBody success(Object data) &#123;</div><div class="line">		ResultBody rb = new ResultBody();</div><div class="line">		rb.setCode(CommonEnum.SUCCESS.getResultCode());</div><div class="line">		rb.setMessage(CommonEnum.SUCCESS.getResultMsg());</div><div class="line">		rb.setResult(data);</div><div class="line">		return rb;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	/**</div><div class="line">	 * 失败</div><div class="line">	 */</div><div class="line">	public static ResultBody error(BaseErrorInfoInterface errorInfo) &#123;</div><div class="line">		ResultBody rb = new ResultBody();</div><div class="line">		rb.setCode(errorInfo.getResultCode());</div><div class="line">		rb.setMessage(errorInfo.getResultMsg());</div><div class="line">		rb.setResult(null);</div><div class="line">		return rb;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	/**</div><div class="line">	 * 失败</div><div class="line">	 */</div><div class="line">	public static ResultBody error(String code, String message) &#123;</div><div class="line">		ResultBody rb = new ResultBody();</div><div class="line">		rb.setCode(code);</div><div class="line">		rb.setMessage(message);</div><div class="line">		rb.setResult(null);</div><div class="line">		return rb;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	/**</div><div class="line">	 * 失败</div><div class="line">	 */</div><div class="line">	public static ResultBody error( String message) &#123;</div><div class="line">		ResultBody rb = new ResultBody();</div><div class="line">		rb.setCode(&quot;-1&quot;);</div><div class="line">		rb.setMessage(message);</div><div class="line">		rb.setResult(null);</div><div class="line">		return rb;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public String toString() &#123;</div><div class="line">		return JSONObject.toJSONString(this);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>自定义全局异常处理类</strong></p>
+<p>最后我们在来编写一个自定义全局异常处理的类。<br><strong>代码如下:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@ControllerAdvice</div><div class="line">public class GlobalExceptionHandler &#123;</div><div class="line">	private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);</div><div class="line">	</div><div class="line">	/**</div><div class="line">	 * 处理自定义的业务异常</div><div class="line">	 * @param req</div><div class="line">	 * @param e</div><div class="line">	 * @return</div><div class="line">	 */</div><div class="line">    @ExceptionHandler(value = BizException.class)  </div><div class="line">    @ResponseBody  </div><div class="line">	public  ResultBody bizExceptionHandler(HttpServletRequest req, BizException e)&#123;</div><div class="line">    	logger.error(&quot;发生业务异常！原因是：&#123;&#125;&quot;,e.getErrorMsg());</div><div class="line">    	return ResultBody.error(e.getErrorCode(),e.getErrorMsg());</div><div class="line">    &#125;</div><div class="line"></div><div class="line">	/**</div><div class="line">	 * 处理空指针的异常</div><div class="line">	 * @param req</div><div class="line">	 * @param e</div><div class="line">	 * @return</div><div class="line">	 */</div><div class="line">	@ExceptionHandler(value =NullPointerException.class)</div><div class="line">	@ResponseBody</div><div class="line">	public ResultBody exceptionHandler(HttpServletRequest req, NullPointerException e)&#123;</div><div class="line">		logger.error(&quot;发生空指针异常！原因是:&quot;,e);</div><div class="line">		return ResultBody.error(CommonEnum.BODY_NOT_MATCH);</div><div class="line">	&#125;</div><div class="line"></div><div class="line"></div><div class="line">    /**</div><div class="line">        * 处理其他异常</div><div class="line">     * @param req</div><div class="line">     * @param e</div><div class="line">     * @return</div><div class="line">     */</div><div class="line">    @ExceptionHandler(value =Exception.class)</div><div class="line">	@ResponseBody</div><div class="line">	public ResultBody exceptionHandler(HttpServletRequest req, Exception e)&#123;</div><div class="line">    	logger.error(&quot;未知异常！原因是:&quot;,e);</div><div class="line">       	return ResultBody.error(CommonEnum.INTERNAL_SERVER_ERROR);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>因为这里我们只是用于做全局异常处理的功能实现以及测试，所以这里我们只需在添加一个实体类和一个控制层类即可。</p>
+<p><strong>实体类</strong></p>
+<p>又是万能的用户表  (<em>^▽^</em>)</p>
+<p><strong>代码如下：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">public class User implements Serializable&#123;</div><div class="line">	private static final long serialVersionUID = 1L;</div><div class="line">	/** 编号 */</div><div class="line">	 private int id;</div><div class="line">	 /** 姓名 */</div><div class="line">	 private String name;</div><div class="line">	 /** 年龄 */</div><div class="line">	 private int age;</div><div class="line">	 </div><div class="line">	 public User()&#123;</div><div class="line">	 &#125;</div><div class="line"></div><div class="line">	public int getId() &#123;</div><div class="line">		return id;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	public void setId(int id) &#123;</div><div class="line">		this.id = id;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public String getName() &#123;</div><div class="line">		return name;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public void setName(String name) &#123;</div><div class="line">		this.name = name;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public int getAge() &#123;</div><div class="line">		return age;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public void setAge(int age) &#123;</div><div class="line">		this.age = age;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public String toString() &#123;</div><div class="line">		return JSONObject.toJSONString(this);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>Controller 控制层</strong></p>
+<p>控制层这边也比较简单，使用Restful风格实现的CRUD功能，不同的是这里我故意弄出了一些异常，好让这些异常被捕获到然后处理。这些异常中，有自定义的异常抛出，也有空指针的异常抛出，当然也有不可预知的异常抛出(这里我用类型转换异常代替)，那么我们在完成代码编写之后，看看这些异常是否能够被捕获处理成功吧！</p>
+<p><strong>代码如下:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@RestController</div><div class="line">@RequestMapping(value = &quot;/api&quot;)</div><div class="line">public class UserRestController &#123;</div><div class="line"></div><div class="line">	@PostMapping(&quot;/user&quot;)</div><div class="line">    public boolean insert(@RequestBody User user) &#123;</div><div class="line">    	System.out.println(&quot;开始新增...&quot;);</div><div class="line">    	//如果姓名为空就手动抛出一个自定义的异常！</div><div class="line">        if(user.getName()==null)&#123;</div><div class="line">            throw  new BizException(&quot;-1&quot;,&quot;用户姓名不能为空！&quot;);</div><div class="line">        &#125;</div><div class="line">        return true;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @PutMapping(&quot;/user&quot;)</div><div class="line">    public boolean update(@RequestBody User user) &#123;</div><div class="line">    	System.out.println(&quot;开始更新...&quot;);</div><div class="line">       //这里故意造成一个空指针的异常，并且不进行处理</div><div class="line">        String str=null;</div><div class="line">        str.equals(&quot;111&quot;);</div><div class="line">        return true;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @DeleteMapping(&quot;/user&quot;)</div><div class="line">    public boolean delete(@RequestBody User user)  &#123;</div><div class="line">        System.out.println(&quot;开始删除...&quot;);</div><div class="line">        //这里故意造成一个异常，并且不进行处理</div><div class="line">        Integer.parseInt(&quot;abc123&quot;);</div><div class="line">        return true;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @GetMapping(&quot;/user&quot;)</div><div class="line">    public List&lt;User&gt; findByUser(User user) &#123;</div><div class="line">    	System.out.println(&quot;开始查询...&quot;);</div><div class="line">        List&lt;User&gt; userList =new ArrayList&lt;&gt;();</div><div class="line">        User user2=new User();</div><div class="line">        user2.setId(1L);</div><div class="line">        user2.setName(&quot;xuwujing&quot;);</div><div class="line">        user2.setAge(18);</div><div class="line">        userList.add(user2);</div><div class="line">        return userList;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>App 入口</strong></p>
+<p>和普通的SpringBoot项目基本一样。</p>
+<p><strong>代码如下:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@SpringBootApplication</div><div class="line">public class App </div><div class="line">&#123;</div><div class="line">    public static void main( String[] args )</div><div class="line">    &#123;</div><div class="line">		SpringApplication.run(App.class, args);</div><div class="line">		System.out.println(&quot;程序正在运行...&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="功能测试"><a href="#功能测试" class="headerlink" title="功能测试"></a>功能测试</h3><p>我们成功启动该程序之后，使用Postman工具来进行接口测试。</p>
+<p>首先进行查询，查看程序正常运行是否ok，使用GET 方式进行请求。</p>
+<blockquote>
+<p>GET <a href="http://localhost:8181/api/user" target="_blank" rel="external">http://localhost:8181/api/user</a></p>
+</blockquote>
+<p>返回参数为:</p>
+<blockquote>
+<p>{“id”:1,”name”:”xuwujing”,”age”:18}</p>
+</blockquote>
+<p><strong>示例图:</strong><br><img src="https://img-blog.csdnimg.cn/20190527172104814.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>可以看到程序正常返回，并没有因自定义的全局异常而影响。</p>
+<p>然后我们再来测试下自定义的异常是否能够被正确的捕获并处理。</p>
+<p>使用POST方式进行请求</p>
+<blockquote>
+<p>POST  <a href="http://localhost:8181/api/user" target="_blank" rel="external">http://localhost:8181/api/user</a></p>
+</blockquote>
+<p>Body参数为:</p>
+<blockquote>
+<p>{“id”:1,”age”:18}</p>
+</blockquote>
+<p>返回参数为:</p>
+<blockquote>
+<p>{“code”:”-1”,”message”:”用户姓名不能为空！”,”result”:null}</p>
+</blockquote>
+<p><strong>示例图:</strong><br><img src="https://img-blog.csdnimg.cn/20190527163634589.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>可以看出将我们抛出的异常进行数据封装，然后将异常返回出来。</p>
+<p>然后我们再来测试下空指针异常是否能够被正确的捕获并处理。在自定义全局异常中，我们除了定义空指针的异常处理，也定义最高级别之一的Exception异常，那么这里发生了空指针异常之后，它是回优先使用哪一个呢？这里我们来测试下。</p>
+<p>使用PUT方式进行请求。</p>
+<blockquote>
+<p>PUT <a href="http://localhost:8181/api/user" target="_blank" rel="external">http://localhost:8181/api/user</a></p>
+</blockquote>
+<p>Body参数为:</p>
+<blockquote>
+<p>{“id”:1,”age”:18}</p>
+</blockquote>
+<p>返回参数为:</p>
+<blockquote>
+<p>{“code”:”400”,”message”:”请求的数据格式不符!”,”result”:null}</p>
+</blockquote>
+<p><strong>示例图:</strong><br><img src="https://img-blog.csdnimg.cn/2019052716381649.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt=""><br>我们可以看到这里的的确是返回空指针的异常护理，可以得出全局异常处理优先处理子类的异常。</p>
+<p>那么我们在来试试未指定其异常的处理，看该异常是否能够被捕获。</p>
+<p>使用DELETE方式进行请求。</p>
+<blockquote>
+<p>DELETE <a href="http://localhost:8181/api/user" target="_blank" rel="external">http://localhost:8181/api/user</a></p>
+</blockquote>
+<p>Body参数为:</p>
+<blockquote>
+<p>{“id”:1}</p>
+</blockquote>
+<p>返回参数为:</p>
+<blockquote>
+<p>{“code”:”500”,”message”:”服务器内部错误!”,”result”:null}</p>
+</blockquote>
+<p><img src="https://img-blog.csdnimg.cn/20190527172605781.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>这里可以看到它使用了我们在自定义全局异常处理类中的Exception异常处理的方法。<br>到这里，测试就结束了。顺便再说一下，自义定全局异常处理除了可以处理上述的数据格式之外，也可以处理页面的跳转，只需在新增的异常方法的返回处理上填写该跳转的路径并不使用<code>ResponseBody</code> 注解即可。 细心的同学也许发现了在<code>GlobalExceptionHandler</code>类中使用的是<code>ControllerAdvice</code>注解，而非<code>RestControllerAdvice</code>注解，如果是用的<code>RestControllerAdvice</code>注解，它会将数据自动转换成JSON格式，这种于<code>Controller</code>和<code>RestController</code>类似，所以我们在使用全局异常处理的之后可以进行灵活的选择处理。</p>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><p>关于SpringBoot优雅的全局异常处理的文章就讲解到这里了，如有不妥，欢迎指正！</p>
+<h3 id="项目地址"><a href="#项目地址" class="headerlink" title="项目地址"></a>项目地址</h3><p>SpringBoot全局异常的处理项目工程地址:<br><a href="https://github.com/xuwujing/springBoot-study/tree/master/springboot-exceptionHandler" target="_blank" rel="external">https://github.com/xuwujing/springBoot-study/tree/master/springboot-exceptionHandler</a></p>
+<p>SpringBoot整个集合的地址:<br><a href="https://github.com/xuwujing/springBoot-study" target="_blank" rel="external">https://github.com/xuwujing/springBoot-study</a></p>
+<h3 id="SpringBoot整合系列的文章"><a href="#SpringBoot整合系列的文章" class="headerlink" title="SpringBoot整合系列的文章"></a>SpringBoot整合系列的文章</h3><ul>
+<li><p><a href="http://www.panchengming.com/2018/02/28/pancm73/" target="_blank" rel="external">SpringBoot配置文件的读取以及过滤器和拦截器的使用</a></p>
+</li>
+<li><p><a href="http://www.panchengming.com/2018/01/10/pancm67/" target="_blank" rel="external">SpringBoot的Restful风格的服务</a></p>
+</li>
+<li><p><a href="http://www.panchengming.com/2018/04/27/pancm81/" target="_blank" rel="external">SpringBoot+Mybatis+ Druid+PageHelper实现多数据源并分页</a></p>
+</li>
+<li><p><a href="http://www.panchengming.com/2018/05/07/pancm82/" target="_blank" rel="external">SpringBoot整合ElasticSearch实现多版本的兼容</a></p>
+</li>
+<li><p><a href="http://www.panchengming.com/2018/05/10/pancm83/" target="_blank" rel="external">SpringBoot整合Kafka和Storm</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/9297165.html" target="_blank" rel="external">SpringBoot整合Jsp和Thymeleaf</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/9321395.html" target="_blank" rel="external">SpringBoot整合Netty并使用Protobuf进行数据传输</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/9471802.html" target="_blank" rel="external">SpringBoot简单打包部署</a>   </p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/10835571.html" target="_blank" rel="external">SpringBoot整合Redis使用Restful风格实现CRUD功能</a>   </p>
+</li>
+</ul>
+<h3 id="音乐推荐"><a href="#音乐推荐" class="headerlink" title="音乐推荐"></a>音乐推荐</h3><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=3950116&auto=0&height=66"></iframe>
+
+
+
+
+<p>原创不易，如果感觉不错，希望给个推荐！您的支持是我写作的最大动力！<br>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a> </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/springboot/" rel="tag"># springboot</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/19/pancm115/" rel="next" title="SpringCloud学习系列之七 ----- Zuul路由网关的过滤器和异常处理">
+                <i class="fa fa-chevron-left"></i> SpringCloud学习系列之七 ----- Zuul路由网关的过滤器和异常处理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/29/pancm117/" rel="prev" title="SpringBoot项目实现文件上传和邮件发送">
+                SpringBoot项目实现文件上传和邮件发送 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">116</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">53</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringBoot全局异常准备"><span class="nav-number">2.</span> <span class="nav-text">SpringBoot全局异常准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#开发准备"><span class="nav-number">2.1.</span> <span class="nav-text">开发准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码编写"><span class="nav-number">2.2.</span> <span class="nav-text">代码编写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#功能测试"><span class="nav-number">2.3.</span> <span class="nav-text">功能测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它"><span class="nav-number">3.</span> <span class="nav-text">其它</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#项目地址"><span class="nav-number">3.1.</span> <span class="nav-text">项目地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SpringBoot整合系列的文章"><span class="nav-number">3.2.</span> <span class="nav-text">SpringBoot整合系列的文章</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#音乐推荐"><span class="nav-number">3.3.</span> <span class="nav-text">音乐推荐</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

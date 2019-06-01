@@ -1,0 +1,965 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,springcloud," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言在上篇中介绍了SpringCloud Zuul路由网关的基本使用版本，本篇则介绍基于SpringCloud(基于SpringBoot2.x,.SpringCloud Finchley版)中的路由网关的过滤器Filter以及异常处理的教程。 SpringCloud Zuul Filter介绍过滤器概述 Zuul的中心是一系列过滤器，能够在HTTP请求和响应的路由过程中执行一系列操作。 以下是Z">
+<meta name="keywords" content="java,springcloud">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringCloud学习系列之七 ----- Zuul路由网关的过滤器和异常处理">
+<meta property="og:url" content="http://yoursite.com/2019/05/19/pancm115/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言在上篇中介绍了SpringCloud Zuul路由网关的基本使用版本，本篇则介绍基于SpringCloud(基于SpringBoot2.x,.SpringCloud Finchley版)中的路由网关的过滤器Filter以及异常处理的教程。 SpringCloud Zuul Filter介绍过滤器概述 Zuul的中心是一系列过滤器，能够在HTTP请求和响应的路由过程中执行一系列操作。 以下是Z">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190507211003534.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190519103217429.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190519103244489.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190519103016338.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190519094126932.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190519094147389.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190519105454822.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190519105813517.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2019-06-01T13:43:07.063Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringCloud学习系列之七 ----- Zuul路由网关的过滤器和异常处理">
+<meta name="twitter:description" content="前言在上篇中介绍了SpringCloud Zuul路由网关的基本使用版本，本篇则介绍基于SpringCloud(基于SpringBoot2.x,.SpringCloud Finchley版)中的路由网关的过滤器Filter以及异常处理的教程。 SpringCloud Zuul Filter介绍过滤器概述 Zuul的中心是一系列过滤器，能够在HTTP请求和响应的路由过程中执行一系列操作。 以下是Z">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190507211003534.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/05/19/pancm115/"/>
+
+
+
+
+
+
+  <title>SpringCloud学习系列之七 ----- Zuul路由网关的过滤器和异常处理 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/19/pancm115/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SpringCloud学习系列之七 ----- Zuul路由网关的过滤器和异常处理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-19T00:00:00+08:00">
+                2019-05-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在上篇中介绍了<a href="https://xuwujing.blog.csdn.net/article/details/89504160" target="_blank" rel="external">SpringCloud Zuul</a>路由网关的基本使用版本，本篇则介绍基于SpringCloud(基于SpringBoot2.x,.SpringCloud Finchley版)中的路由网关的过滤器Filter以及异常处理的教程。</p>
+<h2 id="SpringCloud-Zuul-Filter"><a href="#SpringCloud-Zuul-Filter" class="headerlink" title="SpringCloud Zuul Filter"></a>SpringCloud Zuul Filter</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p><strong>过滤器概述</strong></p>
+<p>Zuul的中心是一系列过滤器，能够在HTTP请求和响应的路由过程中执行一系列操作。</p>
+<p>以下是Zuul过滤器的主要特征：</p>
+<ul>
+<li>类型：通常在应用过滤器时在路由流程中定义阶段（尽管它可以是任何自定义字符串）</li>
+<li>执行顺序：在类型中应用，定义跨多个过滤器的执行顺序</li>
+<li>标准：执行过滤器所需的条件</li>
+<li>操作：满足条件时要执行的操作</li>
+<li>Zuul提供了一个动态读取，编译和运行这些过滤器的框架。过滤器不直接相互通信 - 而是通过RequestContext共享状态，RequestContext对每个请求都是唯一的。</li>
+</ul>
+<p>过滤器目前用Groovy编写，尽管Zuul支持任何基于JVM的语言。每个Filter的源代码都写入Zuul服务器上的一组指定目录，这些目录会定期轮询更改。更新的过滤器从磁盘读取，动态编译到正在运行的服务器中，并由Zuul为每个后续请求调用。</p>
+<p><strong>过滤器类型与请求生命周期</strong></p>
+<p>Zuul大部分功能都是通过过滤器来实现的。Zuul中定义了四种标准过滤器类型，这些过滤器类型对应于请求的典型生命周期。</p>
+<ul>
+<li>PRE：这种过滤器在请求被路由之前调用。我们可利用这种过滤器实现身份验证、在集群中选择请求的微服务、记录调试信息等。</li>
+<li>ROUTING：这种过滤器将请求路由到微服务。这种过滤器用于构建发送给微服务的请求，并使用Apache HttpClient或Netfilx Ribbon请求微服务。</li>
+<li>POST：这种过滤器在路由到微服务以后执行。这种过滤器可用来为响应添加标准的HTTP Header、收集统计信息和指标、将响应从微服务发送给客户端等。</li>
+<li>ERROR：在其他阶段发生错误时执行该过滤器。</li>
+</ul>
+<p>官网Wiki 提供的四种过滤器的生命周期图。</p>
+<p><img src="https://img-blog.csdnimg.cn/20190507211003534.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><strong>注</strong>：此段来之Netflix / zuul的官网Wiki，地址:<a href="https://github.com/Netflix/zuul/wiki/How-it-Works。" target="_blank" rel="external">https://github.com/Netflix/zuul/wiki/How-it-Works。</a></p>
+<h3 id="开发准备"><a href="#开发准备" class="headerlink" title="开发准备"></a>开发准备</h3><p><strong>开发环境</strong></p>
+<ul>
+<li><strong>JDK</strong>:1.8</li>
+<li><strong>SpringBoot</strong>:2.0.6.RELEASE</li>
+<li><strong>SpringCloud</strong>：Finchley.SR2</li>
+</ul>
+<p><strong>注:不一定非要用上述的版本，可以根据情况进行相应的调整。需要注意的是SpringBoot2.x以后，jdk的版本必须是1.8以上！</strong></p>
+<h4 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h4><p>由于在<a href="https://xuwujing.blog.csdn.net/article/details/89504160" target="_blank" rel="external">上一篇</a>中我们已经完成了Zuul路由网关的基本功能实现，所以服务端这块我们可以直接把之前的项目拿来直接使用，然后更改相应的名称以及相关代码即可。</p>
+<h4 id="自定义过滤器"><a href="#自定义过滤器" class="headerlink" title="自定义过滤器"></a>自定义过滤器</h4><p>这里我们来编写自定义一个Filter实现类，看看该类是如何工作的。<br>在编写该类的时候，发现自定义的Filter类需要继承<code>ZuulFilter</code>这个类，我们查看该类的源码，发现了该类定义了两个抽象的方法，并且该类实现了<code>IZuulFilter</code>该接口，该接口也定义了两个方法，我们就来看看这几个方法到底是干嘛的吧。</p>
+<p><strong>ZuulFilter源码:</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/20190519103217429.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><code>filterType</code>这个方法表示按类型对过滤器进行分类，分别是pre、post、route和error，在<code>FilterConstants</code>这个常量类中已经进行定义了，其意义在上述的Filter请求的典型生命周期已经进行过说明了。<br><code>filterOrder</code> 这个方法表示Filter执行的顺序，数值越小优先级越高。</p>
+<p><strong>IZuulFilter</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/20190519103244489.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><code>shouldFilter</code>该方法表示是否执行该过滤器，也可以说是该过滤器的一个开关。<br><code>run</code>过滤器的具体逻辑。在该函数中，我们可以实现自定义的过滤逻辑，来确定是否要拦截当前的请求，不对其进行后续的路由，或是在请求路由返回结果之后，对处理结果做一些加工等。</p>
+<p>看完上述的源码之后，这里我们再来编写自定的Filter代码。<br>首先继承<code>ZuulFilter</code>该类，然后实现里面的方法。<br>首先是<code>shouldFilter</code>方法，这里我们就直接返回true；<br>然后是<code>filterType</code>，这里我们就设置为前置过滤器，在请求被路由之前调用。<br>继而是<code>filterOrder</code>，这里我们就设置0；<br>最后是<code>run</code>，这是过滤器的核心业务代码，这里我们就简单一点，获取请求的url，如果该url携带了token，我们就让他通过，否则直接拦截。<br>当然，我们需要将该过滤类使用Bean注解使其生效。<br>那么代码如下:</p>
+<p><strong>自定义的Filter代码:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">@Component</div><div class="line">public class MyZuulFilter extends ZuulFilter&#123;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public boolean shouldFilter() &#123;</div><div class="line">		return true;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public Object run() throws ZuulException &#123;</div><div class="line">		RequestContext ctx = RequestContext.getCurrentContext();</div><div class="line">		HttpServletRequest request = ctx.getRequest();</div><div class="line">		ctx.addZuulResponseHeader(&quot;Content-type&quot;, &quot;text/json;charset=UTF-8&quot;);</div><div class="line">		ctx.getResponse().setCharacterEncoding(&quot;UTF-8&quot;);</div><div class="line">		System.out.println(&quot;请求地址:&quot;+request.getRequestURI());</div><div class="line">		String token = request.getParameter(&quot;token&quot;);</div><div class="line">		String msg=&quot;请求成功!&quot;;</div><div class="line">		if(token==null) &#123;</div><div class="line">		   ctx.setSendZuulResponse(false);</div><div class="line">		   msg=&quot;请求失败！&quot;;</div><div class="line">		   ctx.setResponseBody(msg);</div><div class="line">		   ctx.setResponseStatusCode(HttpStatus.UNAUTHORIZED.value());</div><div class="line">		&#125;	</div><div class="line">		return msg;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public String filterType() &#123;</div><div class="line">		return FilterConstants.PRE_TYPE;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public int filterOrder() &#123;</div><div class="line">		return 0;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	@Bean</div><div class="line">	public MyZuulFilter zuulFilter() &#123;</div><div class="line">	    return new MyZuulFilter();</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="自定义异常类处理"><a href="#自定义异常类处理" class="headerlink" title="自定义异常类处理"></a>自定义异常类处理</h4><p>Zuul除了可以自定义过滤器之外，也可以对异常结果进行处理，以保持返回值一致。在进行Zuul使用的时候发现了在发生了异常之后，会调用<code>SendErrorFilter</code>异常过滤器，对异常经常处理，同时重定向至/error这个路径中。所以如果我们需要自定义对异常处理的话，继承<code>SendErrorFilter</code>该类就可以实现了。我们查看<code>SendErrorFilter</code>源码，其实也是继承<code>ZuulFilter</code>该类并实现里面的一些方法，做的自定义异常封装，其实也可以把<code>SendErrorFilter</code>该类当做一个自定义的过滤器。</p>
+<p>由于<code>SendErrorFilter</code>是对<code>ZuulFilter</code>类进行了二次封装，所以我们自定义的Error代码只需继承<code>SendErrorFilter</code>改成，然后实现其中的run方法即可。</p>
+<p><strong>自定义的Error代码:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">@Component</div><div class="line">public class MyErrorFilter extends SendErrorFilter&#123;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public Object run() &#123;</div><div class="line">		String msg=&quot;请求失败！&quot;;	</div><div class="line">		try&#123;</div><div class="line">			RequestContext ctx = RequestContext.getCurrentContext();</div><div class="line">			ExceptionHolder exception = findZuulException(ctx.getThrowable());</div><div class="line">			System.out.println(&quot;错误信息:&quot;+exception.getErrorCause());</div><div class="line">			msg+=&quot;error:&quot;+exception.getErrorCause();</div><div class="line">			HttpServletResponse response = ctx.getResponse();</div><div class="line">			response.setCharacterEncoding(&quot;UTF-8&quot;);</div><div class="line">			response.getOutputStream().write(msg.getBytes());           	 </div><div class="line">		&#125;catch (Exception ex) &#123;</div><div class="line">			ex.printStackTrace();</div><div class="line">			ReflectionUtils.rethrowRuntimeException(ex);</div><div class="line">		&#125;</div><div class="line">		return msg;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	@Bean</div><div class="line">	public MyErrorFilter errorFilter() &#123;</div><div class="line">	    return new MyErrorFilter();</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里我们还需要禁用<code>SendErrorFilter</code>过滤器，不然是不会使用我们自定的异常过滤器的。</p>
+<p>在<code>application.properties</code> 添加如下配置:</p>
+<pre><code>zuul.SendErrorFilter.error.disable=true
+</code></pre><p>这里顺便说下禁用过滤器的规则。组件实现的过滤器，满足执行条件时都是会执行的，若我们想禁用某个过滤器时，可以在配置文件中配置。<br>规则：</p>
+<pre><code>zuul.&lt;SimpleClassName&gt;.&lt;filterType&gt;.disable=true
+</code></pre><p>说明：</p>
+<blockquote>
+<p> SimpleClassName为类名，filterType过滤器类型</p>
+</blockquote>
+<p>当然，如果觉得上述的异常处理还是不够优雅的话，可以使用<code>ControllerAdvice</code>注解进行全局异常处理，该注解的使用示例可以从个人的<a href="https://github.com/xuwujing/springBoot-study" target="_blank" rel="external">springboot</a>项目中进行找到，地址:<a href="https://github.com/xuwujing/springBoot-study" target="_blank" rel="external">https://github.com/xuwujing/springBoot-study</a></p>
+<h4 id="自定义异常回退处理"><a href="#自定义异常回退处理" class="headerlink" title="自定义异常回退处理"></a>自定义异常回退处理</h4><p>在之前的关于springcloud中<a href="https://www.cnblogs.com/xuwujing/p/10446126.html" target="_blank" rel="external">SpringCloud学习系列之三—– 断路器(Hystrix)和断路器监控(Dashboard)</a>这篇文章中讲解过服务的降级处理，其实这里的处理也是类似，也就是某个服务无法进行访问的时候，进行回退处理。<br>这里我们自定义异常回退处理的代码相对而已也比较简单，只需实现<code>FallbackProvider</code>该接口的方法既可。</p>
+<p><strong>该类的源码如下:</strong><br><img src="https://img-blog.csdnimg.cn/20190519103016338.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><code>getRoute</code>该方法主要是指定需要回退服务的名称。<br><code>fallbackResponse</code>该方法提供基于执行失败原因并进行回退响应。</p>
+<p>了解之后该源码之后，我们再来编写一个自定义异常回退处理的类。</p>
+<p><strong>自定义的Fallback代码:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div></pre></td><td class="code"><pre><div class="line">	</div><div class="line">@Component</div><div class="line">public class MyFallback implements FallbackProvider &#123;</div><div class="line">    private static  final  String SERVER_NAME=&quot;springcloud-zuul-filter-server2&quot;;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public String getRoute() &#123;</div><div class="line">        return SERVER_NAME;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public ClientHttpResponse fallbackResponse(String route, Throwable cause) &#123;</div><div class="line"></div><div class="line">		//标记不同的异常为不同的http状态值</div><div class="line">		if (cause instanceof HystrixTimeoutException) &#123;</div><div class="line">			return response(HttpStatus.GATEWAY_TIMEOUT);</div><div class="line">		&#125; else &#123;</div><div class="line">			//可继续添加自定义异常类</div><div class="line">			return response(HttpStatus.INTERNAL_SERVER_ERROR);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	//处理</div><div class="line">	private ClientHttpResponse response(final HttpStatus status) &#123;</div><div class="line">		String msg=&quot;该&quot;+SERVER_NAME+&quot;服务暂时不可用!&quot;;</div><div class="line">        return new ClientHttpResponse() &#123;</div><div class="line">            @Override</div><div class="line">            public HttpStatus getStatusCode() throws IOException &#123;</div><div class="line">                return status;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            @Override</div><div class="line">            public int getRawStatusCode() throws IOException &#123;</div><div class="line">                return status.value();</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            @Override</div><div class="line">            public String getStatusText() throws IOException &#123;</div><div class="line">                return status.getReasonPhrase();</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            @Override</div><div class="line">            public void close() &#123;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            @Override</div><div class="line">            public InputStream getBody() throws IOException &#123;</div><div class="line">                return new ByteArrayInputStream(msg.getBytes());</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            @Override</div><div class="line">            public HttpHeaders getHeaders() &#123;</div><div class="line">                HttpHeaders headers = new HttpHeaders();</div><div class="line">                headers.setContentType(MediaType.APPLICATION_JSON);</div><div class="line">                return headers;</div><div class="line">            &#125;</div><div class="line">        &#125;;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Bean</div><div class="line">    public MyFallback eurekaClientFallback() &#123;</div><div class="line">        return new MyFallback();</div><div class="line">    &#125;	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h4><p>客户端这边，我们可以把之前<a href="https://github.com/xuwujing/springcloud-study/tree/master/springcloud-zuul" target="_blank" rel="external">springcloud-zuul</a>项目中的<code>springcloud-zuul-server1</code>和<code>springcloud-zuul-server2</code>拿来进行使用既可。</p>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>完成上述的代码开发后，我们来进行<code>springcloud-zuul</code>的一系列自定义过滤测试。<br>首先依次启动<code>springcloud-zuul-filter-eureka</code>、<code>springcloud-zuul-filter-gateway</code>、<code>springcloud-zuul-filter-server1</code>和<code>springcloud-zuul-filter-server2</code>这四个项目。其中9009是服务端<code>springcloud-zuul-filter-gatewayr</code>的端口，9010是第一个客户端<code>springcloud-zuul-filter-server1</code>的端口，9011是第二个客户端<code>springcloud-zuul-filter-server2</code>的端口。</p>
+<p>这里顺便说下路由网关的默认规则：<code>http://ZUUL_HOST:ZUUL_PORT/微服务实例名(serverId)/**</code> ，转发至serviceId对应的微服务。比如在浏览器输入：<code>http://localhost:9009/springcloud-zuul-filter-server1/hello</code>地址， 它就会跳转访问到:<code>http://localhost:9010/hello/</code>这个地址上。使用这个方式进行测试可以帮助我们更好的了解本篇文章的实现目的。</p>
+<h3 id="自定义过滤器功能测试"><a href="#自定义过滤器功能测试" class="headerlink" title="自定义过滤器功能测试"></a>自定义过滤器功能测试</h3><p>完成上述的项目启动成功之后。</p>
+<p>我们首先在浏览器上输入:</p>
+<blockquote>
+<p><a href="http://localhost:9009/springcloud-zuul-filter-server1/hello?name=pancm" target="_blank" rel="external">http://localhost:9009/springcloud-zuul-filter-server1/hello?name=pancm</a></p>
+</blockquote>
+<p>界面返回:</p>
+<blockquote>
+<p>请求失败！</p>
+</blockquote>
+<p><img src="https://img-blog.csdnimg.cn/20190519094126932.png" alt="在这里插入图片描述"></p>
+<p>这里看到直接进行拦截了，并返回了相应的信息、</p>
+<p>加上token之后在进行访问</p>
+<blockquote>
+<p><a href="http://localhost:9009/springcloud-zuul-filter-server1/hello?name=pancm&amp;token=123" target="_blank" rel="external">http://localhost:9009/springcloud-zuul-filter-server1/hello?name=pancm&amp;token=123</a></p>
+</blockquote>
+<p>界面返回:</p>
+<blockquote>
+<p>pancm,Hello World!</p>
+</blockquote>
+<p><img src="https://img-blog.csdnimg.cn/20190519094147389.png" alt="在这里插入图片描述"></p>
+<p>我们按照我们自定的规则进行访问之后，发现可以直接访问到我们想要访问的服务上，因此该次测试也符合我们的预期，达成了自定义过滤器的处理。</p>
+<h3 id="自定义异常类处理功能测试"><a href="#自定义异常类处理功能测试" class="headerlink" title="自定义异常类处理功能测试"></a>自定义异常类处理功能测试</h3><p>上述的功能测试ok之后，这里我们停止掉<code>springcloud-zuul-filter-server1</code>服务，然后在浏览器上输入:</p>
+<blockquote>
+<p><a href="http://localhost:9009/springcloud-zuul-filter-server1/hello?name=pancm&amp;token=123" target="_blank" rel="external">http://localhost:9009/springcloud-zuul-filter-server1/hello?name=pancm&amp;token=123</a></p>
+</blockquote>
+<p>界面返回:</p>
+<blockquote>
+<p>请求失败！error:GENERAL请求失败！error:GENERAL</p>
+</blockquote>
+<p><img src="https://img-blog.csdnimg.cn/20190519105454822.png" alt="在这里插入图片描述"><br>注: 这里实际是调用了两次。</p>
+<p>可以看到这次测试也符合我们的预期，达成了自定义异常的处理。</p>
+<h3 id="自定义异常回退处理功能测试"><a href="#自定义异常回退处理功能测试" class="headerlink" title="自定义异常回退处理功能测试"></a>自定义异常回退处理功能测试</h3><p>这里我们再来停止掉<code>springcloud-zuul-filter-server2</code>服务，然后在浏览器上输入:</p>
+<blockquote>
+<p><a href="http://localhost:9009/springcloud-zuul-filter-server2/hi?name=pancm&amp;token=123" target="_blank" rel="external">http://localhost:9009/springcloud-zuul-filter-server2/hi?name=pancm&amp;token=123</a></p>
+</blockquote>
+<p>界面返回:</p>
+<blockquote>
+<p>该springcloud-zuul-filter-server2服务暂时不可用!</p>
+</blockquote>
+<p><img src="https://img-blog.csdnimg.cn/20190519105813517.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>可以看到这次测试也符合我们的预期，达成了 自定义异常回退处理的处理。这里也顺便说下，自定义该服务的异常和自定义异常回退处理最好不要在同一个服务同时使用，如果同时使用，会优先进行自定义异常回退处理的处理。</p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>参考:<br><a href="https://github.com/Netflix/zuul/wiki/How-it-Works" target="_blank" rel="external">https://github.com/Netflix/zuul/wiki/How-it-Works</a><br><a href="https://cloud.spring.io/spring-cloud-static/Finchley.SR1/single/spring-cloud.html#_router_and_filter_zuul" target="_blank" rel="external">https://cloud.spring.io/spring-cloud-static/Finchley.SR1/single/spring-cloud.html#_router_and_filter_zuul</a><br><a href="http://www.itmuch.com/spring-cloud/zuul/spring-cloud-zuul-filter/" target="_blank" rel="external">http://www.itmuch.com/spring-cloud/zuul/spring-cloud-zuul-filter/</a><br><a href="https://blog.lqdev.cn/2018/10/17/SpringCloud/chapter-ten/#参考资料" target="_blank" rel="external">https://blog.lqdev.cn/2018/10/17/SpringCloud/chapter-ten/#参考资料</a></p>
+<h3 id="项目地址"><a href="#项目地址" class="headerlink" title="项目地址"></a>项目地址</h3><p>基于SpringBoot2.x、SpringCloud的Finchley版本<a href="https://github.com/xuwujing/springcloud-study" target="_blank" rel="external">开发的地址</a>:<a href="https://github.com/xuwujing/springcloud-study" target="_blank" rel="external">https://github.com/xuwujing/springcloud-study</a></p>
+<p>如果感觉项目不错，希望能给个star，谢谢!</p>
+<p><a href="https://www.cnblogs.com/xuwujing/tag/springcloud/" target="_blank" rel="external">springcloud系列博客:</a></p>
+<ul>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/10269570.html" target="_blank" rel="external">SpringCloud学习系列之一 —– 搭建一个高可用的注册中心(Eureka)</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/10273989.html" target="_blank" rel="external">SpringCloud学习系列之二 —– 服务消费者(Feign)和负载均衡(Ribbon)</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/10446126.html" target="_blank" rel="external">SpringCloud学习系列之三—– 断路器(Hystrix)和断路器监控(Dashboard)</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/10549242.html" target="_blank" rel="external">SpringCloud学习系列之四—–配置中心(Config)使用详解)</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/10602687.html" target="_blank" rel="external">SpringCloud学习系列之五—–配置中心(Config)和消息总线(Bus)完美使用版)</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/10777782.html" target="_blank" rel="external">SpringCloud学习系列之六 —– 路由网关Zuul基础使用教程)</a></p>
+</li>
+</ul>
+<h3 id="音乐推荐"><a href="#音乐推荐" class="headerlink" title="音乐推荐"></a>音乐推荐</h3><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=22706980&auto=0&height=66"></iframe>
+
+
+
+
+<p>原创不易，如果感觉不错，希望留言推荐！您的支持是我写作的最大动力！<br>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a> </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/springcloud/" rel="tag"># springcloud</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/08/pancm114/" rel="next" title="SpringBoot整合Redis使用Restful风格实现CRUD功能">
+                <i class="fa fa-chevron-left"></i> SpringBoot整合Redis使用Restful风格实现CRUD功能
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/27/pancm116/" rel="prev" title="SpringBoot优雅的全局异常处理">
+                SpringBoot优雅的全局异常处理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">116</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">53</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringCloud-Zuul-Filter"><span class="nav-number">2.</span> <span class="nav-text">SpringCloud Zuul Filter</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">2.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开发准备"><span class="nav-number">2.2.</span> <span class="nav-text">开发准备</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#服务端"><span class="nav-number">2.2.1.</span> <span class="nav-text">服务端</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自定义过滤器"><span class="nav-number">2.2.2.</span> <span class="nav-text">自定义过滤器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自定义异常类处理"><span class="nav-number">2.2.3.</span> <span class="nav-text">自定义异常类处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自定义异常回退处理"><span class="nav-number">2.2.4.</span> <span class="nav-text">自定义异常回退处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#客户端"><span class="nav-number">2.2.5.</span> <span class="nav-text">客户端</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试"><span class="nav-number">3.</span> <span class="nav-text">测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义过滤器功能测试"><span class="nav-number">3.1.</span> <span class="nav-text">自定义过滤器功能测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义异常类处理功能测试"><span class="nav-number">3.2.</span> <span class="nav-text">自定义异常类处理功能测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义异常回退处理功能测试"><span class="nav-number">3.3.</span> <span class="nav-text">自定义异常回退处理功能测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他"><span class="nav-number">4.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#项目地址"><span class="nav-number">4.1.</span> <span class="nav-text">项目地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#音乐推荐"><span class="nav-number">4.2.</span> <span class="nav-text">音乐推荐</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

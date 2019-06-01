@@ -1,0 +1,1019 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="springboot," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言本篇文章主要介绍的是SpringBoot项目实现文件上传和邮件发送的功能。 SpringBoot 文件上传说明：如果想直接获取工程那么可以直接跳到底部，通过链接下载工程代码。 开发准备环境要求 JDK：1.8 SpringBoot：1.5.9.RELEASE 首先还是Maven的相关依赖: pom.xml文件如下: &amp;lt;properties&amp;gt;       &amp;lt;project.b">
+<meta name="keywords" content="springboot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot项目实现文件上传和邮件发送">
+<meta property="og:url" content="http://yoursite.com/2019/05/29/pancm117/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言本篇文章主要介绍的是SpringBoot项目实现文件上传和邮件发送的功能。 SpringBoot 文件上传说明：如果想直接获取工程那么可以直接跳到底部，通过链接下载工程代码。 开发准备环境要求 JDK：1.8 SpringBoot：1.5.9.RELEASE 首先还是Maven的相关依赖: pom.xml文件如下: &amp;lt;properties&amp;gt;       &amp;lt;project.b">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190529161935498.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190529161945423.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190529161958403.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2019052916201959.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190529185656174.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190529185547717.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2019-06-01T13:45:05.093Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringBoot项目实现文件上传和邮件发送">
+<meta name="twitter:description" content="前言本篇文章主要介绍的是SpringBoot项目实现文件上传和邮件发送的功能。 SpringBoot 文件上传说明：如果想直接获取工程那么可以直接跳到底部，通过链接下载工程代码。 开发准备环境要求 JDK：1.8 SpringBoot：1.5.9.RELEASE 首先还是Maven的相关依赖: pom.xml文件如下: &amp;lt;properties&amp;gt;       &amp;lt;project.b">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190529161935498.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/05/29/pancm117/"/>
+
+
+
+
+
+
+  <title>SpringBoot项目实现文件上传和邮件发送 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/29/pancm117/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SpringBoot项目实现文件上传和邮件发送</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-29T00:00:00+08:00">
+                2019-05-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本篇文章主要介绍的是SpringBoot项目实现文件上传和邮件发送的功能。</p>
+<h2 id="SpringBoot-文件上传"><a href="#SpringBoot-文件上传" class="headerlink" title="SpringBoot 文件上传"></a>SpringBoot 文件上传</h2><p><strong>说明：如果想直接获取工程那么可以直接跳到底部，通过链接下载工程代码。</strong></p>
+<h3 id="开发准备"><a href="#开发准备" class="headerlink" title="开发准备"></a>开发准备</h3><p><strong>环境要求</strong></p>
+<p><strong>JDK</strong>：1.8</p>
+<p><strong>SpringBoot</strong>：1.5.9.RELEASE</p>
+<p>首先还是Maven的相关依赖:</p>
+<p><strong>pom.xml</strong>文件如下:</p>
+<pre><code>&lt;properties&gt;
+      &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
+      &lt;java.version&gt;1.8&lt;/java.version&gt;
+      &lt;maven.compiler.source&gt;1.8&lt;/maven.compiler.source&gt;
+      &lt;maven.compiler.target&gt;1.8&lt;/maven.compiler.target&gt;
+  &lt;/properties&gt;
+  &lt;parent&gt;
+      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+      &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+      &lt;version&gt;1.5.9.RELEASE&lt;/version&gt;
+      &lt;relativePath /&gt;
+  &lt;/parent&gt;
+  &lt;dependencies&gt;
+      &lt;!-- Spring Boot Web 依赖 核心 --&gt;
+      &lt;dependency&gt;
+          &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+          &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+      &lt;/dependency&gt;
+      &lt;!-- Spring Boot Test 依赖 --&gt;
+      &lt;dependency&gt;
+          &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+          &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+          &lt;scope&gt;test&lt;/scope&gt;
+      &lt;/dependency&gt;
+          &lt;!-- Spring Boot thymeleaf 模板 --&gt;
+      &lt;dependency&gt;
+          &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+          &lt;artifactId&gt;spring-boot-starter-thymeleaf&lt;/artifactId&gt;
+      &lt;/dependency&gt;
+  &lt;/dependencies&gt;
+</code></pre><p>然后就是application.properties的文件配置。</p>
+<p><strong>application.properties:</strong></p>
+<pre><code>banner.charset=UTF-8
+server.tomcat.uri-encoding=UTF-8
+spring.http.encoding.charset=UTF-8
+spring.http.encoding.enabled=true
+spring.http.encoding.force=true
+spring.messages.encoding=UTF-8
+server.port=8182
+
+spring.http.multipart.maxFileSize=100Mb
+spring.http.multipart.maxRequestSize=100Mb
+
+filePath=F:/test/
+</code></pre><p><strong>注</strong>:其中<code>spring.http.multipart.maxFileSize</code>和<code>spring.http.multipart.maxRequestSize</code>是设置上传文件的大小，这里我设置的是100Mb,<code>filePath</code>是文件上传的路径，因为个人使用的是Windows系统，所以将路径设置在<code>F:/test/</code>。</p>
+<h3 id="代码编写"><a href="#代码编写" class="headerlink" title="代码编写"></a>代码编写</h3><p>SpringBoot自身对于文件上传可以说是非常的友好了，只需要在控制层的参数中使用<code>MultipartFile</code>这个类，然后接受<code>file</code>类型的数据上传就可以了，至于将上传得到的文件如何处理就是我们开发者自己决定了。</p>
+<p>首先我们先写一个前端界面，在界面上新增一个按钮用于上传文件。由于SpringBoot对thymeleaf的支持非常友好，所以这里我们就直接使用thymeleaf编写一个简单的界面，用于上传文件。</p>
+<p><strong>html代码如下:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html&gt;</div><div class="line">  &lt;head&gt;</div><div class="line">    &lt;title&gt;uploading.html&lt;/title&gt;</div><div class="line"></div><div class="line">    &lt;meta name=&quot;keywords&quot; content=&quot;keyword1,keyword2,keyword3&quot;&gt;&lt;/meta&gt;</div><div class="line">    &lt;meta name=&quot;description&quot; content=&quot;this is my page&quot;&gt;&lt;/meta&gt;</div><div class="line">    &lt;meta name=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;&lt;/meta&gt;</div><div class="line"></div><div class="line">  &lt;/head&gt;</div><div class="line"></div><div class="line">  &lt;body&gt;</div><div class="line">  &lt;form enctype=&quot;multipart/form-data&quot; method=&quot;post&quot; action=&quot;/uploading&quot;&gt;</div><div class="line">    &lt;input type=&quot;file&quot; name=&quot;file&quot;/&gt;</div><div class="line">    &lt;input type=&quot;submit&quot; value=&quot;上传&quot;/&gt;</div><div class="line">    &lt;/form&gt;</div><div class="line">  &lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+<p><strong>注:</strong> 如果不想编写前端界面的话，也可以通过Postman等工具实现。<br>Postman的操作方式为:</p>
+<blockquote>
+<p>填写url路径，选择post方式 -&gt; body 选择form-data 格式-&gt; key选择file类型，选择文件，然后点击send就可以实现文件上传。</p>
+</blockquote>
+<p>因为我们这里只进行文件上传，并不做其它的业务逻辑处理，因此我们只用在控制层实现即可。定义一个文件上传的接口，然后使用<code>MultipartFile</code>类进行接收即可。</p>
+<p><strong>代码如下:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@Controller</div><div class="line">public class FileUploadController &#123;</div><div class="line">	</div><div class="line">	@Value(&quot;$&#123;filePath&#125;&quot;)</div><div class="line">	private String filePath;</div><div class="line">	</div><div class="line">    @GetMapping(&quot;/upload&quot;)</div><div class="line">    public String uploading() &#123;</div><div class="line">        //跳转到 templates 目录下的 uploading.html</div><div class="line">        return &quot;uploading&quot;;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    //处理文件上传</div><div class="line">    @PostMapping(&quot;/uploading&quot;)</div><div class="line">    public @ResponseBody String uploading(@RequestParam(&quot;file&quot;) MultipartFile file,</div><div class="line">            HttpServletRequest request) &#123;</div><div class="line">        try &#123;</div><div class="line">            uploadFile(file.getBytes(), filePath, file.getOriginalFilename());</div><div class="line">        &#125; catch (Exception e) &#123;</div><div class="line">        	e.printStackTrace();</div><div class="line">        	System.out.println(&quot;文件上传失败!&quot;);</div><div class="line">        	return &quot;uploading failure&quot;;</div><div class="line">        &#125;</div><div class="line">        System.out.println(&quot;文件上传成功!&quot;);</div><div class="line">        return &quot;uploading success&quot;;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    </div><div class="line">    </div><div class="line">    public void  uploadFile(byte[] file, String filePath, String fileName) throws Exception &#123; </div><div class="line">        File targetFile = new File(filePath);  </div><div class="line">        if(!targetFile.exists())&#123;    </div><div class="line">            targetFile.mkdirs();    </div><div class="line">        &#125;       </div><div class="line">        FileOutputStream out = new FileOutputStream(filePath+fileName);</div><div class="line">        out.write(file);</div><div class="line">        out.flush();</div><div class="line">        out.close();</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>注</strong>:上述的代码只是一个示例，实际的情况下请注意异常的处理！上述的流关闭理应放在finally中，实际为了方便才如此的编写。</p>
+<p><strong>App 入口</strong></p>
+<p>和普通的SpringBoot项目基本一样。</p>
+<p><strong>代码如下:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@SpringBootApplication</div><div class="line">public class FileUploadApplication &#123;</div><div class="line"></div><div class="line">    public static void main(String[] args)  &#123;</div><div class="line">        SpringApplication.run(FileUploadApplication.class, args);</div><div class="line">        System.out.println(&quot;FileUploadApplication 程序启动成功!&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="功能测试"><a href="#功能测试" class="headerlink" title="功能测试"></a>功能测试</h3><p>我们成功启动该程序之后，在浏览器上输入:<code>http://localhost:8182/upload</code>,然后选择一个文件进行上传，最后我们再到<code>F:/test/</code>路径下查看是否有该文件。</p>
+<p>示例图如下:</p>
+<p><img src="https://img-blog.csdnimg.cn/20190529161935498.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/20190529161945423.png" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20190529161958403.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>使用Postman上传的示例图:</p>
+<p><img src="https://img-blog.csdnimg.cn/2019052916201959.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>最后说明一下，如果文件重复上传，后面上传的文件会替换掉之前的那个文件。</p>
+<h2 id="SpringBoot-邮件发送"><a href="#SpringBoot-邮件发送" class="headerlink" title="SpringBoot 邮件发送"></a>SpringBoot 邮件发送</h2><p><strong>说明：如果想直接获取工程那么可以直接跳到底部，通过链接下载工程代码。</strong></p>
+<h3 id="开发准备-1"><a href="#开发准备-1" class="headerlink" title="开发准备"></a>开发准备</h3><p><strong>环境要求</strong></p>
+<p><strong>JDK</strong>：1.8</p>
+<p><strong>SpringBoot</strong>：1.5.9.RELEASE</p>
+<p>首先还是Maven的相关依赖:</p>
+<p><strong>pom.xml</strong>文件如下:</p>
+<pre><code>&lt;properties&gt;
+      &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
+      &lt;java.version&gt;1.8&lt;/java.version&gt;
+      &lt;maven.compiler.source&gt;1.8&lt;/maven.compiler.source&gt;
+      &lt;maven.compiler.target&gt;1.8&lt;/maven.compiler.target&gt;
+  &lt;/properties&gt;
+  &lt;parent&gt;
+      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+      &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+      &lt;version&gt;1.5.9.RELEASE&lt;/version&gt;
+      &lt;relativePath /&gt;
+  &lt;/parent&gt;
+  &lt;dependencies&gt;
+      &lt;!-- Spring Boot Web 依赖 核心 --&gt;
+      &lt;dependency&gt;
+          &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+          &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+      &lt;/dependency&gt;
+      &lt;!-- Spring Boot Test 依赖 --&gt;
+      &lt;dependency&gt;
+          &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+          &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+          &lt;scope&gt;test&lt;/scope&gt;
+      &lt;/dependency&gt;
+          &lt;!-- Spring Boot thymeleaf 模板 --&gt;
+      &lt;dependency&gt;
+          &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+          &lt;artifactId&gt;spring-boot-starter-thymeleaf&lt;/artifactId&gt;
+      &lt;/dependency&gt;
+      &lt;dependency&gt;
+          &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+          &lt;artifactId&gt;spring-boot-starter-mail&lt;/artifactId&gt;
+      &lt;/dependency&gt;
+      &lt;dependency&gt;
+          &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+          &lt;artifactId&gt;spring-context-support&lt;/artifactId&gt;
+      &lt;/dependency&gt;
+
+  &lt;/dependencies&gt;
+</code></pre><p>然后就是application.properties的文件配置，这里我们需要根据自己的实际情况进行填写。如下述的配置文件示例中，个人使用的是qq邮箱，因此<code>spring.mail.host</code>配置的是<code>smtp.qq.com</code>。下述的示例中，只需填写个人邮箱的账号和密码即可。如果出现了535 错误，则需要该邮箱开启POP3/SMTP服务，并且使用授权码替换密码进行发送。</p>
+<p><strong>application.properties:</strong></p>
+<pre><code>server.port = 8182
+spring.mail.host=smtp.qq.com
+spring.mail.username=xxx@qq.com
+spring.mail.password=xxx
+spring.mail.default-encoding=UTF-8
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+spring.mail.properties.mail.smtp.starttls.required=true
+</code></pre><h3 id="代码编写-1"><a href="#代码编写-1" class="headerlink" title="代码编写"></a>代码编写</h3><p>SpringBoot这块已经集成了mail邮件发送的功能，我们引入相关架包之后，只需使用<code>JavaMailSender</code>这个类中的send方法即可完成邮件的发送。如果还想发送静态资源和附件的邮件，在<code>JavaMailSender</code>这个类中的方法也可以实现。如果想使用自定义的模板内容发送的话，则需要使用<code>TemplateEngine</code> 该类中的方法。</p>
+<p>在我们使用邮件发送的时候，这四样最为重要，发件人、收件人、发送主题和发送的消息。因此我们可以根据这四样来创建一个简答的邮件实体类，方便进行相关的业务处理。</p>
+<p><strong>实体类代码</strong></p>
+<p>代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">public class Mail &#123;</div><div class="line">	</div><div class="line">	/** 发送者*/</div><div class="line">	private String sender;</div><div class="line">	</div><div class="line">	/** 接受者  */</div><div class="line">	private String receiver;</div><div class="line">	</div><div class="line">	/** 主题 */</div><div class="line">	private String subject;</div><div class="line">	</div><div class="line">	/** 发送 消息*/</div><div class="line">	private String text;</div><div class="line"></div><div class="line">	//getter 和 setter 略</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里我们还是定义接口来进行邮件的发送，我们发送邮件的时候依旧只需要知道发件人、收件人、发送主题和发送的消息这四点就可以了，其余的可以在代码中完成。这里我们就简单的定义几个接口，用于实现上述的要求</p>
+<p><strong>控制层代码:</strong></p>
+<p>代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@RestController</div><div class="line">@RequestMapping(&quot;/api/mail&quot;)</div><div class="line">public class MailController &#123;</div><div class="line">	private static Logger LOG=LoggerFactory.getLogger(MailController.class);</div><div class="line">	</div><div class="line">	@Autowired</div><div class="line">	private JavaMailSender mailSender;</div><div class="line">     </div><div class="line">	@Autowired</div><div class="line">    private TemplateEngine templateEngine;</div><div class="line">	/*</div><div class="line">	 * 发送普通邮件</div><div class="line">	 */</div><div class="line">    @PostMapping(&quot;/sendMail&quot;)</div><div class="line">    public String sendMail(@RequestBody Mail mail) &#123;</div><div class="line">    	SimpleMailMessage message = new SimpleMailMessage();</div><div class="line">		message.setFrom(mail.getSender());</div><div class="line">		message.setTo(mail.getReceiver());</div><div class="line">		message.setSubject(mail.getSubject());</div><div class="line">		message.setText(mail.getText());</div><div class="line">		mailSender.send(message);</div><div class="line">		LOG.info(&quot;发送成功!&quot;);</div><div class="line">        return &quot;发送成功！&quot;;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    </div><div class="line">    /*</div><div class="line">     *  发送附件</div><div class="line">     */</div><div class="line">    @PostMapping(&quot;/sendAttachments&quot;)</div><div class="line">    public String sendAttachmentsMail(@RequestBody Mail mail) throws MessagingException  &#123;</div><div class="line"></div><div class="line">    	MimeMessage mimeMessage = mailSender.createMimeMessage();</div><div class="line">    	MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);</div><div class="line">    	helper.setFrom(mail.getSender());</div><div class="line">    	helper.setTo(mail.getReceiver());</div><div class="line">    	helper.setSubject(mail.getSubject());</div><div class="line">    	helper.setText(mail.getText());</div><div class="line">    	FileSystemResource file = new FileSystemResource(new File(&quot;1.png&quot;));</div><div class="line">    	helper.addAttachment(&quot;附件.jpg&quot;, file);</div><div class="line">    	mailSender.send(mimeMessage);</div><div class="line">		return &quot;发送成功!&quot;;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    /*</div><div class="line">     * 发送文件</div><div class="line">     */</div><div class="line">    @PostMapping(&quot;/sendInlineMail&quot;)</div><div class="line">    public String sendInlineMail(@RequestBody Mail mail) throws Exception &#123;</div><div class="line"></div><div class="line">    	MimeMessage mimeMessage = mailSender.createMimeMessage();</div><div class="line"></div><div class="line">    	MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);</div><div class="line">    	helper.setFrom(mail.getSender());</div><div class="line">    	helper.setTo(mail.getReceiver());</div><div class="line">    	helper.setSubject(mail.getSubject());</div><div class="line">    	//这里的text 是html</div><div class="line">    	helper.setText(mail.getText(), true);</div><div class="line">    	FileSystemResource file = new FileSystemResource(new File(&quot;1.png&quot;));</div><div class="line">    	helper.addInline(&quot;文件&quot;, file);</div><div class="line">    	mailSender.send(mimeMessage);</div><div class="line">    	return &quot;发送成功!&quot;;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    </div><div class="line">    /*</div><div class="line">     * 发送模板</div><div class="line">     */</div><div class="line">    @PostMapping(&quot;/sendTemplateMail&quot;)</div><div class="line">    public void sendTemplateMail(@RequestBody Mail mail) throws Exception &#123;</div><div class="line"></div><div class="line">    	MimeMessage mimeMessage = mailSender.createMimeMessage();</div><div class="line"></div><div class="line">    	MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);</div><div class="line">    	helper.setFrom(mail.getSender());</div><div class="line">    	helper.setTo(mail.getReceiver());</div><div class="line">    	helper.setSubject(mail.getSubject());</div><div class="line">    	  	</div><div class="line">    	//创建邮件正文</div><div class="line">        Context context = new Context();</div><div class="line">        context.setVariable(&quot;id&quot;, &quot;1&quot;);</div><div class="line">        context.setVariable(&quot;name&quot;, &quot;xuwujing&quot;);</div><div class="line">        String emailContent = templateEngine.process(&quot;emailTemplate&quot;, context);</div><div class="line">    	helper.setText(emailContent, true);</div><div class="line">    	mailSender.send(mimeMessage);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>App 入口</strong></p>
+<p>和普通的SpringBoot项目基本一样。</p>
+<p><strong>代码如下:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@SpringBootApplication</div><div class="line">public class MailApp </div><div class="line">&#123;</div><div class="line">    public static void main( String[] args )</div><div class="line">    &#123;</div><div class="line">		SpringApplication.run(MailApp.class, args);</div><div class="line">		System.out.println(&quot;MailApp启动成功！&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="功能测试-1"><a href="#功能测试-1" class="headerlink" title="功能测试"></a>功能测试</h3><p>我们成功启动该程序之后，我们使用Postman工具进行测试。</p>
+<p>使用POST方式进行请求</p>
+<blockquote>
+<p>POST <a href="http://localhost:8182/api/mail/sendMail" target="_blank" rel="external">http://localhost:8182/api/mail/sendMail</a></p>
+</blockquote>
+<p>Body参数为:</p>
+<blockquote>
+<p>{<br>    “sender”:”xxx@qq.com”,<br>    “receiver”:”xxx@qq.com”,<br>    “subject”:”测试主题”,<br>    “text”:”测试消息”<br>}</p>
+</blockquote>
+<p><strong>注</strong>:当然这里的参数填写你自己的邮箱即可！</p>
+<p>返回参数为:</p>
+<blockquote>
+<p>发送成功!</p>
+</blockquote>
+<p>示例图:<br><img src="https://img-blog.csdnimg.cn/20190529185656174.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>可以看到邮件已经发送成功了！</p>
+<p>有的同学可能不知道授权码如何生成，这里我就用QQ邮箱生成授权码的一张示例图来说明。</p>
+<p><strong>示例图:</strong><br><img src="https://img-blog.csdnimg.cn/20190529185547717.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><p>关于SpringBoot项目实现文件上传和邮件发送的功能的文章就讲解到这里了，如有不妥，欢迎指正！</p>
+<h3 id="项目地址"><a href="#项目地址" class="headerlink" title="项目地址"></a>项目地址</h3><p>SpringBoot实现文件上传的项目工程地址:<br><a href="https://github.com/xuwujing/springBoot-study/tree/master/springboot-fileUpload" target="_blank" rel="external">https://github.com/xuwujing/springBoot-study/tree/master/springboot-fileUpload</a></p>
+<p>SpringBoot实现邮件发送的项目工程地址:<br><a href="https://github.com/xuwujing/springBoot-study/tree/master/springboot-mail" target="_blank" rel="external">https://github.com/xuwujing/springBoot-study/tree/master/springboot-mail</a></p>
+<p>SpringBoot整个集合的地址:<br><a href="https://github.com/xuwujing/springBoot-study" target="_blank" rel="external">https://github.com/xuwujing/springBoot-study</a></p>
+<h3 id="SpringBoot整合系列的文章"><a href="#SpringBoot整合系列的文章" class="headerlink" title="SpringBoot整合系列的文章"></a>SpringBoot整合系列的文章</h3><ul>
+<li><p><a href="http://www.panchengming.com/2018/02/28/pancm73/" target="_blank" rel="external">SpringBoot配置文件的读取以及过滤器和拦截器的使用</a></p>
+</li>
+<li><p><a href="http://www.panchengming.com/2018/01/10/pancm67/" target="_blank" rel="external">SpringBoot的Restful风格的服务</a></p>
+</li>
+<li><p><a href="http://www.panchengming.com/2018/04/27/pancm81/" target="_blank" rel="external">SpringBoot+Mybatis+ Druid+PageHelper实现多数据源并分页</a></p>
+</li>
+<li><p><a href="http://www.panchengming.com/2018/05/07/pancm82/" target="_blank" rel="external">SpringBoot整合ElasticSearch实现多版本的兼容</a></p>
+</li>
+<li><p><a href="http://www.panchengming.com/2018/05/10/pancm83/" target="_blank" rel="external">SpringBoot整合Kafka和Storm</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/9297165.html" target="_blank" rel="external">SpringBoot整合Jsp和Thymeleaf</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/9321395.html" target="_blank" rel="external">SpringBoot整合Netty并使用Protobuf进行数据传输</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/9471802.html" target="_blank" rel="external">SpringBoot简单打包部署</a>   </p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/10835571.html" target="_blank" rel="external">SpringBoot整合Redis使用Restful风格实现CRUD功能</a>   </p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/10933082.html" target="_blank" rel="external">SpringBoot优雅的全局异常处理</a>   </p>
+</li>
+</ul>
+<h3 id="音乐推荐"><a href="#音乐推荐" class="headerlink" title="音乐推荐"></a>音乐推荐</h3><p>推荐一首在静下心来看书的纯音乐！</p>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=492390949&auto=0&height=66"></iframe>
+
+
+<p>原创不易，如果感觉不错，希望给个推荐！您的支持是我写作的最大动力！<br>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a> </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/springboot/" rel="tag"># springboot</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/27/pancm116/" rel="next" title="SpringBoot优雅的全局异常处理">
+                <i class="fa fa-chevron-left"></i> SpringBoot优雅的全局异常处理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">116</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">53</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringBoot-文件上传"><span class="nav-number">2.</span> <span class="nav-text">SpringBoot 文件上传</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#开发准备"><span class="nav-number">2.1.</span> <span class="nav-text">开发准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码编写"><span class="nav-number">2.2.</span> <span class="nav-text">代码编写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#功能测试"><span class="nav-number">2.3.</span> <span class="nav-text">功能测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringBoot-邮件发送"><span class="nav-number">3.</span> <span class="nav-text">SpringBoot 邮件发送</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#开发准备-1"><span class="nav-number">3.1.</span> <span class="nav-text">开发准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码编写-1"><span class="nav-number">3.2.</span> <span class="nav-text">代码编写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#功能测试-1"><span class="nav-number">3.3.</span> <span class="nav-text">功能测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它"><span class="nav-number">4.</span> <span class="nav-text">其它</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#项目地址"><span class="nav-number">4.1.</span> <span class="nav-text">项目地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SpringBoot整合系列的文章"><span class="nav-number">4.2.</span> <span class="nav-text">SpringBoot整合系列的文章</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#音乐推荐"><span class="nav-number">4.3.</span> <span class="nav-text">音乐推荐</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
