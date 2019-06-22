@@ -1,0 +1,1080 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="springboot," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言本篇文章主要介绍的是SpringBoot整合Swagger(API文档生成框架)和SpringBoot整合Actuator(项目监控)使用教程。 SpringBoot整合Swagger说明：如果想直接获取工程那么可以直接跳到底部，通过链接下载工程代码。 Swagger 介绍Swagger 是一套基于 OpenAPI 规范构建的开源工具，可以帮助我们设计、构建、记录以及使用 Rest API。">
+<meta name="keywords" content="springboot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot整合Swagger和Actuator">
+<meta property="og:url" content="http://yoursite.com/2019/06/17/pancm118/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言本篇文章主要介绍的是SpringBoot整合Swagger(API文档生成框架)和SpringBoot整合Actuator(项目监控)使用教程。 SpringBoot整合Swagger说明：如果想直接获取工程那么可以直接跳到底部，通过链接下载工程代码。 Swagger 介绍Swagger 是一套基于 OpenAPI 规范构建的开源工具，可以帮助我们设计、构建、记录以及使用 Rest API。">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190615162357842.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190615162407216.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190615162306522.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190615162314189.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190615162335237.png">
+<meta property="og:updated_time" content="2019-06-22T14:34:54.537Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringBoot整合Swagger和Actuator">
+<meta name="twitter:description" content="前言本篇文章主要介绍的是SpringBoot整合Swagger(API文档生成框架)和SpringBoot整合Actuator(项目监控)使用教程。 SpringBoot整合Swagger说明：如果想直接获取工程那么可以直接跳到底部，通过链接下载工程代码。 Swagger 介绍Swagger 是一套基于 OpenAPI 规范构建的开源工具，可以帮助我们设计、构建、记录以及使用 Rest API。">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190615162357842.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/06/17/pancm118/"/>
+
+
+
+
+
+
+  <title>SpringBoot整合Swagger和Actuator | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/17/pancm118/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SpringBoot整合Swagger和Actuator</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-17T00:00:00+08:00">
+                2019-06-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本篇文章主要介绍的是SpringBoot整合Swagger(API文档生成框架)和SpringBoot整合Actuator(项目监控)使用教程。</p>
+<h2 id="SpringBoot整合Swagger"><a href="#SpringBoot整合Swagger" class="headerlink" title="SpringBoot整合Swagger"></a>SpringBoot整合Swagger</h2><p><strong>说明：如果想直接获取工程那么可以直接跳到底部，通过链接下载工程代码。</strong></p>
+<h3 id="Swagger-介绍"><a href="#Swagger-介绍" class="headerlink" title="Swagger 介绍"></a>Swagger 介绍</h3><p>Swagger 是一套基于 OpenAPI 规范构建的开源工具，可以帮助我们设计、构建、记录以及使用 Rest API。Swagger 主要包含了以下三个部分：</p>
+<ul>
+<li>Swagger Editor：基于浏览器的编辑器，我们可以使用它编写我们 OpenAPI 规范。</li>
+<li>Swagger UI：它会将我们编写的 OpenAPI 规范呈现为交互式的 API 文档，后文我将使用浏览器来查看并且操作我们的 Rest API。</li>
+<li>Swagger Codegen：它可以通过为 OpenAPI（以前称为 Swagger）规范定义的任何 API 生成服务器存根和客户端 SDK 来简化构建过程。</li>
+</ul>
+<h3 id="Swagger优缺点"><a href="#Swagger优缺点" class="headerlink" title="Swagger优缺点"></a>Swagger优缺点</h3><h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><ul>
+<li>易用性好，Swagger UI提供很好的API接口的UI界面，可以很方面的进行API接口的调用。</li>
+<li>时效性和可维护性好，API文档随着代码变更而变更。 Swagger是根据注解来生成文API档的，我们可以在变更代码的时候顺便更改相应的注解即可。 </li>
+<li>易于测试，可以将文档规范导入相关的工具（例如 SoapUI）, 这些工具将会为我们自动地创建自动化测试。</li>
+</ul>
+<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><ul>
+<li>重复利用性差，因为Swagger毕竟是网页打开，在进行接口测试的时候很多参数无法进行保存，因此不易于重复利用。</li>
+<li>复杂的场景不易模拟，比如使用token鉴权的，可能每次都需要先模拟登录，再来进行接口调用。</li>
+</ul>
+<p>不过上述的这些缺点其实也无伤大雅，可以配合<a href="https://blog.csdn.net/qazwsxpcm/article/details/70578600" target="_blank" rel="external">Postman</a>来一起使用！<br>Postman可以保存参数并持久化生成文件，也可以在Header中保存Token信息，也可以动态的生成数字签名等等。<br>如果有兴趣的话，可以看看我之前写的这篇文章。<br>地址: <a href="https://blog.csdn.net/qazwsxpcm/article/details/70578600" target="_blank" rel="external">Postman使用教程</a></p>
+<h3 id="Swagger-相关地址"><a href="#Swagger-相关地址" class="headerlink" title="Swagger 相关地址"></a>Swagger 相关地址</h3><ul>
+<li>Swagger官网：<a href="http://swagger.io" target="_blank" rel="external">http://swagger.io</a></li>
+<li>Swagger的GitHub地址：<a href="https://github.com/swagger-api" target="_blank" rel="external">https://github.com/swagger-api</a></li>
+</ul>
+<h3 id="开发准备"><a href="#开发准备" class="headerlink" title="开发准备"></a>开发准备</h3><p><strong>环境要求</strong></p>
+<p><strong>JDK</strong>：1.8</p>
+<p><strong>SpringBoot</strong>：1.5.9.RELEASE</p>
+<p>首先还是Maven的相关依赖:</p>
+<p><strong>pom.xml</strong>文件如下:</p>
+<pre><code> &lt;properties&gt;
+    &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
+    &lt;project.reporting.outputEncoding&gt;UTF-8&lt;/project.reporting.outputEncoding&gt;
+    &lt;java.version&gt;1.8&lt;/java.version&gt;
+    &lt;maven.compiler.source&gt;1.8&lt;/maven.compiler.source&gt;
+    &lt;maven.compiler.target&gt;1.8&lt;/maven.compiler.target&gt;
+&lt;/properties&gt;
+
+&lt;parent&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+    &lt;version&gt;1.5.9.RELEASE&lt;/version&gt;
+    &lt;relativePath/&gt;
+&lt;/parent&gt;
+
+&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+        &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+     &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-devtools&lt;/artifactId&gt;
+        &lt;optional&gt;true&lt;/optional&gt;
+        &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+
+        &lt;!-- swagger RESTful API --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;io.springfox&lt;/groupId&gt;
+        &lt;artifactId&gt;springfox-swagger2&lt;/artifactId&gt;
+        &lt;version&gt;2.2.2&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;io.springfox&lt;/groupId&gt;
+        &lt;artifactId&gt;springfox-swagger-ui&lt;/artifactId&gt;
+        &lt;version&gt;2.2.2&lt;/version&gt;
+    &lt;/dependency&gt;
+
+&lt;/dependencies&gt;
+</code></pre><p><strong>注:</strong> Swagger的jar包既可原生的 Swagger的架包，也可以选择maven仓库SpringBoot已经整合好的Swagger的架包。</p>
+<p><code>application.properties</code>的文件的配置和一般的SpringBoot项目一样即可。</p>
+<h3 id="代码编写"><a href="#代码编写" class="headerlink" title="代码编写"></a>代码编写</h3><p>SpringBoot使用Swagger其实很简单，只需要在启动的时候添加<code>@EnableSwagger2</code>注解开启，然后再使用<code>@Bean</code>注解初始化一些相应的配置即可，比如编辑Swagger UI界面的信息，指定Swagger负责扫描的package等等。</p>
+<p><strong>Swagger代码配置如下:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@Configuration</div><div class="line">@EnableSwagger2</div><div class="line">public class Swagger2 &#123;</div><div class="line"></div><div class="line">    @Bean</div><div class="line">    public Docket createRestApi() &#123;</div><div class="line">        return new Docket(DocumentationType.SWAGGER_2)</div><div class="line">                .apiInfo(apiInfo())</div><div class="line">                .select()</div><div class="line">                .apis(RequestHandlerSelectors.basePackage(&quot;com.pancm&quot;))</div><div class="line">                .paths(PathSelectors.any())</div><div class="line">                .build();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private ApiInfo apiInfo() &#123;</div><div class="line">        return new ApiInfoBuilder()</div><div class="line">                .title(&quot;Spring Boot中使用Swagger2构建RESTful APIs&quot;)</div><div class="line">                .description(&quot;测试&quot;)</div><div class="line">                .termsOfServiceUrl(&quot;http://www.panchengming.com/&quot;)</div><div class="line">                .contact(&quot;xuwujing&quot;)</div><div class="line">                .version(&quot;1.0&quot;)</div><div class="line">                .build();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>因为Swagger主要是用于生成API文档，因此这里我们可以直接编写控制层的相关代码，忽略掉Service层和Dao层相关的代码编写。这里我们首先编写一个实体类。</p>
+<p><strong>实体类</strong></p>
+<p>又是万能的用户表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">public class User &#123;</div><div class="line">	</div><div class="line">	 private Long id;</div><div class="line"></div><div class="line">	 private String name;</div><div class="line">	 </div><div class="line">	</div><div class="line">	 private Integer age;</div><div class="line">	 </div><div class="line">	//getter 和 setter 略</div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>Controller 控制层</strong></p>
+<p>Swagger主要的使用就是在控制层这块，它是通过一些注解来为接口提供API文档。下述的代码中主要使用的注解为这两个<code>@ApiOperation</code>和 <code>@ApiImplicitParam</code>这两个，<code>@ApiOperation</code>注解来给API增加说明并通过<code>@ApiImplicitParams</code>注解来给参数增加说明，其中 <code>value</code> 是标题,<code>notes</code>是详细说明。</p>
+<p>下列是Swagger的一些注解说明，更详细的可以查看官方的wiki文档。</p>
+<ul>
+<li>@Api：将类标记为Swagger资源。</li>
+<li>@ApiImplicitParam：表示API操作中的单个参数。</li>
+<li>@ApiImplicitParams：一个包装器，允许列出多个ApiImplicitParam对象。</li>
+<li>@ApiModel：提供有关Swagger模型的其他信息，比如描述POJO对象。</li>
+<li>@ApiModelProperty：    添加和操作模型属性的数据。</li>
+<li>@ApiOperation：    描述针对特定路径的操作或通常是HTTP方法。</li>
+<li>@ApiParam：    为操作参数添加其他元数据。</li>
+<li>@ApiResponse：    描述操作的可能响应。</li>
+<li>@ApiResponses：    一个包装器，允许列出多个ApiResponse对象。</li>
+<li>@Authorization：    声明要在资源或操作上使用的授权方案。</li>
+<li>@AuthorizationScope：    描述OAuth2授权范围。</li>
+<li>@ResponseHeader：    表示可以作为响应的一部分提供的标头。</li>
+<li>@ApiProperty： 描述POJO对象中的属性值。</li>
+<li>@ApiError ： 接口错误所返回的信息</li>
+<li>…</li>
+</ul>
+<p>官方wiki文档地址:<br><a href="https://github.com/swagger-api/swagger-core/wiki/Swagger-2.X---Annotations" target="_blank" rel="external">https://github.com/swagger-api/swagger-core/wiki/Swagger-2.X---Annotations</a></p>
+<p>控制层代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@RestController</div><div class="line">@RequestMapping(value = &quot;/api&quot;)</div><div class="line">public class UserRestController &#123;</div><div class="line">	</div><div class="line">	private  final Logger logger = LoggerFactory.getLogger(this.getClass());</div><div class="line">	</div><div class="line"></div><div class="line">	@ApiOperation(value=&quot;创建用户&quot;, notes=&quot;根据User对象创建用户&quot;)</div><div class="line">    @ApiImplicitParam(name = &quot;user&quot;, value = &quot;用户详细实体user&quot;, required = true, dataType = &quot;User&quot;)</div><div class="line">	@PostMapping(&quot;/user&quot;)</div><div class="line">    public boolean insert(@RequestBody User user) &#123;</div><div class="line">		logger.info(&quot;开始新增用户信息！请求参数:&#123;&#125;&quot;,user);</div><div class="line">        return true;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">	@ApiOperation(value=&quot;更新用户&quot;, notes=&quot;根据User对象更新用户&quot;)</div><div class="line">    @ApiImplicitParam(name = &quot;user&quot;, value = &quot;用户详细实体user&quot;, required = true, dataType = &quot;User&quot;)</div><div class="line">	@PutMapping(&quot;/user&quot;)</div><div class="line">    public boolean update(@RequestBody User user) &#123;</div><div class="line">    	logger.info(&quot;开始更新用户信息！请求参数:&#123;&#125;&quot;,user);</div><div class="line">        return true;</div><div class="line">    &#125;</div><div class="line">	</div><div class="line">	@ApiOperation(value=&quot;删除用户&quot;, notes=&quot;根据User对象删除用户&quot;)</div><div class="line">    @ApiImplicitParam(name = &quot;user&quot;, value = &quot;用户详细实体user&quot;, required = true, dataType = &quot;User&quot;)</div><div class="line">	@DeleteMapping(&quot;/user&quot;)</div><div class="line">    public boolean delete(@RequestBody User user)  &#123;</div><div class="line">    	logger.info(&quot;开始删除用户信息！请求参数:&#123;&#125;&quot;,user);</div><div class="line">        return true;</div><div class="line">    &#125;</div><div class="line">	</div><div class="line"></div><div class="line">	@ApiOperation(value=&quot;获取用户列表&quot;, notes=&quot;根据User对象查询用户信息&quot;)</div><div class="line">	@ApiImplicitParam(name = &quot;user&quot;, value = &quot;用户详细实体user&quot;, required = true, dataType = &quot;User&quot;)</div><div class="line">    @GetMapping(&quot;/user&quot;)</div><div class="line">    public User findByUser(User user) &#123;</div><div class="line">    	logger.info(&quot;开始查询用户列表，请求参数:&#123;&#125;&quot;,user);</div><div class="line">    	User user2 =new User();</div><div class="line">    	user2.setId(1L);</div><div class="line">    	user2.setAge(18);</div><div class="line">    	user2.setName(&quot;xuwujing&quot;);</div><div class="line">        return user2;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>App 入口</strong></p>
+<p>和普通的SpringBoot项目基本一样。</p>
+<p><strong>代码如下:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@SpringBootApplication</div><div class="line">public class SwaggerApplication  &#123;</div><div class="line"></div><div class="line">	private static final Logger logger = LoggerFactory.getLogger(SwaggerApplication.class);</div><div class="line"></div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		SpringApplication.run(SwaggerApplication.class, args);</div><div class="line">		logger.info(&quot;Swagger程序启动成功!&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="功能测试"><a href="#功能测试" class="headerlink" title="功能测试"></a>功能测试</h3><p>我们成功启动该程序之后，在浏览器上输入:<code>http://localhost:8183/swagger-ui.html</code>, 就可以看到Swagger的界面了。</p>
+<p>界面的示例图如下:</p>
+<p><img src="https://img-blog.csdnimg.cn/20190615162357842.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>由于Swagger的操作主要是在界面操作，因此用图片会更加有说服力。</p>
+<p>使用GET请求测试示例图如下:</p>
+<p><img src="https://img-blog.csdnimg.cn/20190615162407216.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h2 id="SpringBoot整合Actuator"><a href="#SpringBoot整合Actuator" class="headerlink" title="SpringBoot整合Actuator"></a>SpringBoot整合Actuator</h2><p><strong>说明：如果想直接获取工程那么可以直接跳到底部，通过链接下载工程代码。</strong></p>
+<h3 id="Actuator介绍"><a href="#Actuator介绍" class="headerlink" title="Actuator介绍"></a>Actuator介绍</h3><blockquote>
+<p>从本质上讲，Actuator为我们的应用程序带来了生产就绪功能。通过这种依赖关系监控我们的应用程序，收集指标，了解流量或数据库的状态变得微不足道。这个库的主要好处是我们可以获得生产级工具，而无需自己实际实现这些功能。Actuator主要用于公开有关正在运行的应用程序的运行信息 - 运行状况，指标，信息，转储，env等。它使用HTTP端点或JMX bean来使我们能够与它进行交互。一旦这个依赖关系在类路径上，就可以开箱即用几个端点。与大多数Spring模块一样，我们可以通过多种方式轻松配置或扩展它。</p>
+</blockquote>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><p>Actuator的1.x版本和2.x版本差别很大，本文介绍的是1.x版本。</p>
+<blockquote>
+<p>Actuator现在与技术无关，而在1.x中，它与MVC相关联，因此与Servlet API相关联。<br>在2.x中，Actuator定义了它的模型，可插拔和可扩展，而不依赖于MVC。因此，通过这个新模型，我们可以利用MVC和WebFlux作为底层Web技术。<br>此外，可以通过实施正确的适配器来添加即将到来的技术。<br>最后，JMX仍然支持在没有任何其他代码的情况下公开端点。</p>
+</blockquote>
+<p>上述的说明参考Actuator官网。</p>
+<p>官网地址:<br><a href="https://www.baeldung.com/spring-boot-actuators" target="_blank" rel="external">https://www.baeldung.com/spring-boot-actuators</a></p>
+<h3 id="开发准备-1"><a href="#开发准备-1" class="headerlink" title="开发准备"></a>开发准备</h3><p><strong>环境要求</strong></p>
+<p><strong>JDK</strong>：1.8</p>
+<p><strong>SpringBoot</strong>：1.5.9.RELEASE</p>
+<p>首先还是Maven的相关依赖:</p>
+<p><strong>pom.xml</strong>文件如下:</p>
+<pre><code>  &lt;properties&gt;
+    &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
+    &lt;project.reporting.outputEncoding&gt;UTF-8&lt;/project.reporting.outputEncoding&gt;
+    &lt;java.version&gt;1.8&lt;/java.version&gt;
+    &lt;maven.compiler.source&gt;1.8&lt;/maven.compiler.source&gt;
+    &lt;maven.compiler.target&gt;1.8&lt;/maven.compiler.target&gt;
+&lt;/properties&gt;
+
+&lt;parent&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+    &lt;version&gt;1.5.9.RELEASE&lt;/version&gt;
+    &lt;relativePath/&gt;
+&lt;/parent&gt;
+
+&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+        &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+     &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-devtools&lt;/artifactId&gt;
+        &lt;optional&gt;true&lt;/optional&gt;
+        &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
+</code></pre><p>然后就是application.yml的文件配置，这里的配置主要是指定监控的端口和路径以及关闭安全认证等等。</p>
+<p><strong>application.yml:</strong></p>
+<pre><code>server:
+  port: 8181 
+management:
+  security:
+    enabled: false 
+  port: 8888 
+  context-path: /monitor
+
+endpoints:
+  shutdown:
+    enabled: true
+
+info:
+  app:
+   name:springboot-actuator
+   version:1.0
+</code></pre><h3 id="代码编写-1"><a href="#代码编写-1" class="headerlink" title="代码编写"></a>代码编写</h3><p>其实这块不需要代码的编写，因为它只需要你在项目中添加了该依赖并进行配置之后即可使用。这里我们在创建一个普通的SpringBoot项目并且添加了Actuator的相关依赖，然后通过调用Actuator提供的一些接口就可以得知相关的信息。<br>这些接口的一些说明如下:</p>
+<blockquote>
+<p>1./autoconfig   可以得到配置生效信息</p>
+<ol>
+<li>/configprops  可以得到属性的内容和默认值</li>
+<li>/beans            可 以得到bean的别名、类型、是否单例、类的地址、依赖等信息</li>
+<li>/dump         可 以得到线程名、线程ID、线程的状态、是否等待锁资源等信息</li>
+<li>/env          可以得到环境变量、JVM 属性、命令行参数、项目使用的jar包等信息<br> 5.1 /sun.boot.library.path   可以得到JDK安装路径</li>
+<li>/health       可以得到磁盘检测和数据库检测等信息</li>
+<li>/mappings     可以得到全部的URI路径，以及它们和控制器的映射关系</li>
+<li>/metrics      可以得到JVM内容使用、GC情况、类加载信息<br>8.1 /gc.<em>     可以得到GC相关信息<br>8.2 /mem.</em>         可以得到内存信息 … </li>
+<li>/info         可以得到自定义的配置信息</li>
+<li>/shutdown    可以进行关闭程序  post请求</li>
+<li>/trace       可以得到所Web请求的详细信息<br>12 ….</li>
+</ol>
+</blockquote>
+<p>更多的相关配置说明可以查看官方文档！<br>如果通过通过接口信息返回的数据进行查看不够清晰明了的话，可以结合SpringCloud Hystrix-Dashboard进行转换图表查看。<br>具体使用可以参考： <a href="https://www.cnblogs.com/xuwujing/p/10446126.html" target="_blank" rel="external">SpringCloud学习系列之三—– 断路器(Hystrix)和断路器监控(Dashboard)</a> 这篇文章。</p>
+<h3 id="功能测试-1"><a href="#功能测试-1" class="headerlink" title="功能测试"></a>功能测试</h3><p>我们成功启动该程序之后，便来进行测试。</p>
+<p>首先查看启动日志，会发现启动了两个端口，一个是springboot项目自身的端口，还有一个Actuator监控的端口。</p>
+<p><strong>示例图：</strong><br><img src="https://img-blog.csdnimg.cn/20190615162306522.png" alt="在这里插入图片描述"><br>对外提供的Actuator主要是可以帮助我们获取一些程序以及一些环境的相关信息。</p>
+<p>比如获取程序健康状态。<br>在浏览器输入: </p>
+<blockquote>
+<p><a href="http://localhost:8888/monitor/health" target="_blank" rel="external">http://localhost:8888/monitor/health</a></p>
+</blockquote>
+<p>即可查看。</p>
+<p><strong>示例图:</strong><br><img src="https://img-blog.csdnimg.cn/20190615162314189.png" alt="在这里插入图片描述"></p>
+<p>当然也可以自定一些程序信息，比如定义程序版本。</p>
+<p>在浏览器输入: </p>
+<blockquote>
+<p><a href="http://localhost:8888/monitor/info" target="_blank" rel="external">http://localhost:8888/monitor/info</a></p>
+</blockquote>
+<p><strong>示例图:</strong><br><img src="https://img-blog.csdnimg.cn/20190615162335237.png" alt="在这里插入图片描述"></p>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><h3 id="项目地址"><a href="#项目地址" class="headerlink" title="项目地址"></a>项目地址</h3><p>SpringBoot整合Swagger的项目工程地址:<br><a href="https://github.com/xuwujing/springBoot-study/tree/master/springboot-swagger" target="_blank" rel="external">https://github.com/xuwujing/springBoot-study/tree/master/springboot-swagger</a></p>
+<p>SpringBoot整合Actuator的项目工程地址:<br><a href="https://github.com/xuwujing/springBoot-study/tree/master/springboot-actuator" target="_blank" rel="external">https://github.com/xuwujing/springBoot-study/tree/master/springboot-actuator</a></p>
+<p>SpringBoot整个集合的地址:<br><a href="https://github.com/xuwujing/springBoot-study" target="_blank" rel="external">https://github.com/xuwujing/springBoot-study</a></p>
+<h3 id="SpringBoot整合系列的文章"><a href="#SpringBoot整合系列的文章" class="headerlink" title="SpringBoot整合系列的文章"></a>SpringBoot整合系列的文章</h3><p><a href="https://www.cnblogs.com/xuwujing/category/1145997.html" target="_blank" rel="external">SpringBoot系列博客:</a></p>
+<ul>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/8260935.html" target="_blank" rel="external">SpringBoot的Restful风格的服务</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/8485832.html" target="_blank" rel="external">SpringBoot配置文件的读取以及过滤器和拦截器的使用</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/8964927.html" target="_blank" rel="external">SpringBoot+Mybatis+ Druid+PageHelper实现多数据源并分页</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/8998168.html" target="_blank" rel="external">SpringBoot整合ElasticSearch实现多版本的兼容</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/9021561.html" target="_blank" rel="external">SpringBoot整合Kafka和Storm</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/9297165.html" target="_blank" rel="external">SpringBoot整合Jsp和Thymeleaf</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/9321395.html" target="_blank" rel="external">SpringBoot整合Netty并使用Protobuf进行数据传输</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/9471802.html" target="_blank" rel="external">SpringBoot简单打包部署</a>  </p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/10835571.html" target="_blank" rel="external">SpringBoot整合Redis使用Restful风格实现CRUD功能</a> </p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/10933082.html" target="_blank" rel="external">SpringBoot优雅的全局异常处理</a>   </p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/10945698.html" target="_blank" rel="external">SpringBoot项目实现文件上传和邮件发送</a> </p>
+</li>
+</ul>
+<h3 id="音乐推荐"><a href="#音乐推荐" class="headerlink" title="音乐推荐"></a>音乐推荐</h3><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="298" height="52" src="//music.163.com/outchain/player?type=2&id=4083642&auto=0&height=32"></iframe>
+
+
+
+
+<p>原创不易，如果感觉不错，希望给个推荐！您的支持是我写作的最大动力！<br>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a> </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/springboot/" rel="tag"># springboot</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/29/pancm117/" rel="next" title="SpringBoot项目实现文件上传和邮件发送">
+                <i class="fa fa-chevron-left"></i> SpringBoot项目实现文件上传和邮件发送
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">117</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">53</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://italker.imisty.cn" title="xiaowu" target="_blank">xiaowu</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringBoot整合Swagger"><span class="nav-number">2.</span> <span class="nav-text">SpringBoot整合Swagger</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Swagger-介绍"><span class="nav-number">2.1.</span> <span class="nav-text">Swagger 介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Swagger优缺点"><span class="nav-number">2.2.</span> <span class="nav-text">Swagger优缺点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#优点"><span class="nav-number">2.2.1.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#缺点"><span class="nav-number">2.2.2.</span> <span class="nav-text">缺点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Swagger-相关地址"><span class="nav-number">2.3.</span> <span class="nav-text">Swagger 相关地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开发准备"><span class="nav-number">2.4.</span> <span class="nav-text">开发准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码编写"><span class="nav-number">2.5.</span> <span class="nav-text">代码编写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#功能测试"><span class="nav-number">2.6.</span> <span class="nav-text">功能测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringBoot整合Actuator"><span class="nav-number">3.</span> <span class="nav-text">SpringBoot整合Actuator</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Actuator介绍"><span class="nav-number">3.1.</span> <span class="nav-text">Actuator介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注意事项"><span class="nav-number">3.2.</span> <span class="nav-text">注意事项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开发准备-1"><span class="nav-number">3.3.</span> <span class="nav-text">开发准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码编写-1"><span class="nav-number">3.4.</span> <span class="nav-text">代码编写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#功能测试-1"><span class="nav-number">3.5.</span> <span class="nav-text">功能测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它"><span class="nav-number">4.</span> <span class="nav-text">其它</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#项目地址"><span class="nav-number">4.1.</span> <span class="nav-text">项目地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SpringBoot整合系列的文章"><span class="nav-number">4.2.</span> <span class="nav-text">SpringBoot整合系列的文章</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#音乐推荐"><span class="nav-number">4.3.</span> <span class="nav-text">音乐推荐</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
