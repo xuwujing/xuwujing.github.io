@@ -1,0 +1,1137 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="elasticsearch," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言在上一篇中介绍了ElasticSearch集群和kinaba的安装教程，本篇文章就来讲解下 ElasticSearch的DSL语句使用。 ElasticSearch DSL 介绍 Elasticsearch提供了基于JSON的完整查询DSL（特定于域的语言）来定义查询。将查询DSL视为查询的AST（抽象语法树），它由两种子句组成：   叶子查询子句:叶查询子句中寻找一个特定的值在某一特定领域">
+<meta name="keywords" content="elasticsearch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ElasticSearch实战系列二:ElasticSearch的DSL语句使用教程---图文详解">
+<meta property="og:url" content="http://yoursite.com/2019/09/22/pancm121/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言在上一篇中介绍了ElasticSearch集群和kinaba的安装教程，本篇文章就来讲解下 ElasticSearch的DSL语句使用。 ElasticSearch DSL 介绍 Elasticsearch提供了基于JSON的完整查询DSL（特定于域的语言）来定义查询。将查询DSL视为查询的AST（抽象语法树），它由两种子句组成：   叶子查询子句:叶查询子句中寻找一个特定的值在某一特定领域">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190922090903395.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190922092023198.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190922095335329.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190922095448962.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190922112807508.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190922114417775.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190922114718187.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190922115749618.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190922123646305.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190922121055349.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190922121728361.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190922122714744.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190922122748851.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190922123328918.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190922124005722.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190922124647663.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190922124857101.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2019-10-16T14:01:20.039Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ElasticSearch实战系列二:ElasticSearch的DSL语句使用教程---图文详解">
+<meta name="twitter:description" content="前言在上一篇中介绍了ElasticSearch集群和kinaba的安装教程，本篇文章就来讲解下 ElasticSearch的DSL语句使用。 ElasticSearch DSL 介绍 Elasticsearch提供了基于JSON的完整查询DSL（特定于域的语言）来定义查询。将查询DSL视为查询的AST（抽象语法树），它由两种子句组成：   叶子查询子句:叶查询子句中寻找一个特定的值在某一特定领域">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190922090903395.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/09/22/pancm121/"/>
+
+
+
+
+
+
+  <title>ElasticSearch实战系列二:ElasticSearch的DSL语句使用教程---图文详解 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/22/pancm121/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ElasticSearch实战系列二:ElasticSearch的DSL语句使用教程---图文详解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-22T00:00:00+08:00">
+                2019-09-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/elasticsearch/" itemprop="url" rel="index">
+                    <span itemprop="name">elasticsearch</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在上一篇中介绍了<a href="https://www.cnblogs.com/xuwujing/p/11385255.html" target="_blank" rel="external">ElasticSearch集群和kinaba的安装教程</a>，本篇文章就来讲解下 ElasticSearch的DSL语句使用。</p>
+<h2 id="ElasticSearch-DSL-介绍"><a href="#ElasticSearch-DSL-介绍" class="headerlink" title="ElasticSearch DSL 介绍"></a>ElasticSearch DSL 介绍</h2><blockquote>
+<p>Elasticsearch提供了基于JSON的完整查询DSL（特定于域的语言）来定义查询。将查询DSL视为查询的AST（抽象语法树），它由两种子句组成：</p>
+</blockquote>
+<ul>
+<li>叶子查询子句:<br>叶查询子句中寻找一个特定的值在某一特定领域，如  match，term或  range查询。这些查询可以自己使用。</li>
+<li>复合查询子句<br>复合查询子句包装其他叶查询或复合查询，并用于以逻辑方式组合多个查询（例如  bool或dis_max查询），或更改其行为（例如  constant_score查询）。<br>查询子句的行为会有所不同，具体取决于它们是在 查询上下文中还是在过滤器上下文中使用。</li>
+</ul>
+<p>我们在使用ElasticSearch的时候，避免不了使用DSL语句去查询，就像使用关系型数据库的时候要学会SQL语法一样。如果我们学习好了DSL语法的使用，那么在日后使用和使用Java Client调用时候也会变得非常简单。 </p>
+<h2 id="ElasticSearch-DSL-语句使用"><a href="#ElasticSearch-DSL-语句使用" class="headerlink" title="ElasticSearch DSL 语句使用"></a>ElasticSearch DSL 语句使用</h2><p>这里我们先来介绍下DSL 语句简单的使用，从最常用的增删改查开始！</p>
+<h3 id="一、新增数据"><a href="#一、新增数据" class="headerlink" title="一、新增数据"></a>一、新增数据</h3><p> ElasticSearch可以直接新增数据，只要你指定了index(索引库名称)和type(类型)即可。在新增的时候你可以自己指定主键ID，也可以不指定，由 ElasticSearch自身生成。</p>
+<p>新增数据命令示例:</p>
+<pre><code>POST test1/_doc/1
+{
+    &quot;uid&quot; : &quot;1234&quot;,
+    &quot;phone&quot; : &quot;12345678909&quot;,
+    &quot;message&quot; : &quot;qq&quot;,
+    &quot;msgcode&quot; : &quot;1&quot;,
+    &quot;sendtime&quot; : &quot;2019-03-14 01:57:04&quot;
+}
+</code></pre><p>kinaba示例图:<br><img src="https://img-blog.csdnimg.cn/20190922090903395.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><strong>注: POST test1/_doc/1 这是指定主键ID为1，如果POST test1/_doc 的话，那么便是es自身生成ES语句。</strong></p>
+<p>这里我们还可以通过 <code>GET test1/</code> 或 <code>GET test1/_settings</code>和<code>GET test1/_mapping</code>查看该index的状态，也就是 setting(设置选项) 和mapping(数据结构)。<br><img src="https://img-blog.csdnimg.cn/20190922092023198.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="二、创建索引库"><a href="#二、创建索引库" class="headerlink" title="二、创建索引库"></a>二、创建索引库</h3><p>在上述示例中，我们通过直接通过创建数据从而创建了索引库，但是没有创建索引库而通过ES自身生成的这种并不友好，因为它会使用默认的配置，字段结构都是text(text的数据会分词，在存储的时候也会额外的占用空间)，分片和索引副本采用默认值，默认是5和1，ES的分片数在创建之后就不能修改，除非reindex(下面会讲到)，所以这里我们还是指定数据模板进行创建。</p>
+<p>这里先简单介绍一下ES的数据结构，以下的数据结构为ES的6.x版本。</p>
+<ul>
+<li>核心数据类型<br>text 和 keyword</li>
+<li>数值数据类型<br>long，integer，short，byte，double，float，half_float，scaled_float</li>
+<li>日期数据类型<br>date</li>
+<li>布尔数据类型<br>boolean</li>
+<li>二进制数据类型<br>binary</li>
+<li><p>范围数据类型<br>integer_range，float_range，long_range，double_range，date_range</p>
+</li>
+<li><p><strong>复杂数据类型编辑</strong></p>
+</li>
+<li>对象数据类型<br>object 用于单个JSON对象</li>
+<li>嵌套数据类型<br>nested 用于JSON对象数组</li>
+</ul>
+<ul>
+<li><strong>地理数据类型编辑</strong></li>
+<li>地理位置数据类型<br>geo_point 纬度/经度积分</li>
+<li><p>地理形状数据类型<br>geo_shape 用于多边形等复杂形状</p>
+</li>
+<li><p><strong>专业数据类型编辑</strong></p>
+</li>
+<li>IP数据类型<br>ip 用于IPv4和IPv6地址</li>
+<li>完成数据类型<br>completion 提供自动完成建议</li>
+<li>令牌计数数据类型<br>token_count 计算字符串中令牌的数量<br>mapper-murmur3<br>murmur3 在索引时计算值的哈希并将其存储在索引中<br>mapper-annotated-text<br>annotated-text 索引包含特殊标记的文本（通常用于标识命名实体）</li>
+<li>渗滤器类型<br>接受来自query-dsl的查询</li>
+<li>join 数据类型<br>为同一索引内的文档定义父/子关系</li>
+<li><p>别名数据类型<br>为现有字段定义别名。</p>
+</li>
+<li><p>多字段编辑<br>为不同的目的以不同的方式对同一字段建立索引通常很有用。例如，一个string字段可以映射为text用于全文搜索的字段，也可以映射为keyword用于排序或聚合的字段。或者，您可以使用standard分析仪，  english分析仪和  french分析仪索引文本字段。<br>这是多领域的目的。大多数数据类型通过fields参数支持多字段。</p>
+</li>
+</ul>
+<p>上面介绍的字段介绍虽然比较复杂，但是我们常用的几个类型也就是这几种 <code>text、keyword、byte、short、integer、long、float、double、boolean、date</code>，其中text和keyword都是string类型，选择区分很简单，需要进行分词用text，不需要并且进行排序或聚合的可以用keyword。</p>
+<p>关于ES的数据结构就到这里了，我们来进行索引库的创建吧！</p>
+<p>新增索引库的命令示例:</p>
+<pre><code>PUT test1
+{
+    &quot;settings&quot; : {
+        &quot;number_of_shards&quot; : 10,
+        &quot;number_of_replicas&quot; : 1,
+         &quot;refresh_interval&quot; : &quot;1s&quot;
+    },
+    &quot;mappings&quot; : {
+        &quot;_doc&quot; : {
+            &quot;properties&quot; : {
+                &quot;uid&quot; : { &quot;type&quot; : &quot;long&quot; },
+                &quot;phone&quot; : { &quot;type&quot; : &quot;long&quot; },
+                &quot;message&quot; : { &quot;type&quot; : &quot;keyword&quot; },
+                &quot;msgcode&quot; : { &quot;type&quot; : &quot;long&quot; },
+                 &quot;sendtime&quot; : {  
+                  &quot;type&quot; : &quot;date&quot;,
+                  &quot;format&quot; : &quot;yyyy-MM-dd HH:mm:ss&quot; 
+  }
+
+            }
+        }
+    }
+}
+</code></pre><p>示例图:<br><img src="https://img-blog.csdnimg.cn/20190922095335329.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20190922095448962.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><strong>注:</strong></p>
+<ul>
+<li>number_of_shards: 是设置的分片数，设置之后无法更改！</li>
+<li>refresh_interval: 是设置es缓存的刷新时间，如果写入较为频繁，但是查询对实时性要求不那么高的话，可以设置高一些来提升性能。可以更改</li>
+<li>number_of_replicas : 是设置该索引库的副本数，建议设置为1以上。</li>
+</ul>
+<p>其中这里还有几个重要参数也顺便说一下:</p>
+<ul>
+<li>store: true/false  表示该字段是否存储，默认存储。</li>
+<li>doc_values: true/false  表示该字段是否参与聚合和排序。</li>
+<li>index: true/false  表示该字段是否建立索引，默认建立。</li>
+</ul>
+<p>关于这几个字段的取值可以参考一下的示例图:<br><img src="https://img-blog.csdnimg.cn/20190922112807508.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="三、修改数据"><a href="#三、修改数据" class="headerlink" title="三、修改数据"></a>三、修改数据</h3><p>其实ES的新增和修改可以看做是一样，存在则修改，不存在则新增，不过这里还是简单的介绍下吧。<br>修改数据的方式主要有两种，一种是通过主键ID进行修改，这种比较简单，就是和新增一样即可。<br>另一种则是通过条件进行修改，相当于SQL更新语句的 where条件。 </p>
+<p>根据主键修改的命令示例:</p>
+<pre><code>POST test1/_doc/1
+{
+    &quot;uid&quot; : &quot;1234&quot;,
+    &quot;phone&quot; : &quot;12345678909&quot;,
+    &quot;message&quot; : &quot;qq&quot;,
+    &quot;msgcode&quot; : &quot;1&quot;,
+    &quot;sendtime&quot; : &quot;2019-03-14 01:57:04&quot;
+}
+</code></pre><p>根据条件修改的命令示例:</p>
+<pre><code>POST test1/_update_by_query
+{
+  &quot;query&quot;: {
+    &quot;term&quot;: {
+      &quot;phone&quot;: &quot;12345678909&quot;
+    }
+  } ,
+  &quot;script&quot;: {
+    &quot;source&quot;: &quot;ctx._source[&apos;message&apos;] = &apos;xuwujing&apos;&quot;
+  }
+}
+</code></pre><p>原有的数据：<br><img src="https://img-blog.csdnimg.cn/20190922114417775.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>修改后的数据:<br><img src="https://img-blog.csdnimg.cn/20190922114718187.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><strong>注：这里的根据条件进行修改用到的脚本语言，ES除了使用DSl语句之后，使用一些官方定义的脚本语言和SQL语句也能进行操作，脚本语言和SQL语句的操作留到以后在来讲下。</strong></p>
+<h3 id="四、删除数据、字段和索引库"><a href="#四、删除数据、字段和索引库" class="headerlink" title="四、删除数据、字段和索引库"></a>四、删除数据、字段和索引库</h3><p>ES根据主键删除数据的命令示例是<code>DELETE 索引库/id</code>，简单实用，但是一定要要加上ID，不然就是删除索引库了！</p>
+<p>根据主键删除数据命令示例：</p>
+<pre><code>DELETE test1/1
+</code></pre><p>根据条件删除数据的命令示例：</p>
+<pre><code>POST test/_delete_by_query
+{
+  &quot;query&quot;: {
+      &quot;term&quot;: {
+        &quot;phone&quot;: &quot;12345678909&quot;
+      }
+  }
+}
+</code></pre><p>当然ES还可以根据条件只删除某一个字段的数据，比如删除字段msgcode的数据。</p>
+<p>删除字段数据的命令示例:</p>
+<pre><code>POST test/_doc/_update_by_query
+{
+&quot;script&quot;:{
+&quot;lang&quot;:&quot;painless&quot;,
+&quot;inline&quot;:&quot;ctx._source.remove(\&quot;msgcode\&quot;)&quot;
+}
+}
+</code></pre><p>示例图:</p>
+<p><img src="https://img-blog.csdnimg.cn/20190922115749618.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="查询语句"><a href="#查询语句" class="headerlink" title="查询语句"></a>查询语句</h3><h4 id="查询所有"><a href="#查询所有" class="headerlink" title="查询所有"></a>查询所有</h4><p>match_all可以查询集群所有索引库的信息，包括一些隐藏索性库的信息。<br>命令示例:</p>
+<pre><code>GET _search
+{   
+  &quot;query&quot;: {
+    &quot;match_all&quot;: {}
+  }
+}
+</code></pre><p>示例图:<br><img src="https://img-blog.csdnimg.cn/20190922123646305.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>查询索引库所有的数据，命令格式为<code>GET  索引库名称/索引库类型/_search</code>，也可以不需要索引库类型。</p>
+<p>命令示例:</p>
+<pre><code>GET  test1/_doc/_search
+</code></pre><p>如果根据ID查询某一条数据的话，也比较简单，只需要将上述的_search换成主键ID即可。<br>命令示例:</p>
+<pre><code>GET  test1/_doc/2
+</code></pre><h4 id="等值（term）查询"><a href="#等值（term）查询" class="headerlink" title="等值（term）查询"></a>等值（term）查询</h4><blockquote>
+<p>term主要用于精确匹配哪些值，比如数字，日期，布尔值或 not_analyzed 的字符串(未经分析的文本数据类型)</p>
+</blockquote>
+<p>比如根据手机号进行查询。<br>命令示例:</p>
+<pre><code>GET  test1/_doc/_search
+{
+  &quot;query&quot;: {
+    &quot;term&quot;: {
+      &quot;phone&quot;: &quot;12345678909&quot;
+    }
+  }
+}
+</code></pre><p>当然，如果想在一个字段匹配多个值的话，可以使用terms，相当于SQL的in语法。</p>
+<p>命令示例:</p>
+<pre><code>GET  test1/_doc/_search
+{
+  &quot;query&quot;: {
+    &quot;terms&quot;: {
+       &quot;uid&quot;: [ 
+        1234, 
+        12345, 
+        123456
+      ] 
+    }
+  }
+}
+</code></pre><p>示例图:<br><img src="https://img-blog.csdnimg.cn/20190922121055349.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><strong>注：上述中是没有123456这条数据，这样只是为了做下简单的测试而已。</strong></p>
+<h4 id="范围（range-）查询"><a href="#范围（range-）查询" class="headerlink" title="范围（range ）查询"></a>范围（range ）查询</h4><blockquote>
+<p>range可以理解为SQL中的&gt;&lt;符号，其中gt是大于，lt是小于，gte是大于等于，lte是小于等于。</p>
+</blockquote>
+<p>命令示例:</p>
+<pre><code>GET  test1/_doc/_search
+{
+  &quot;query&quot;: {
+   &quot;range&quot;: { 
+      &quot;uid&quot;: { 
+        &quot;gt&quot;: 1234,
+        &quot;lte&quot;: 12345
+      } 
+    } 
+  }
+}
+</code></pre><p><img src="https://img-blog.csdnimg.cn/20190922121728361.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="存在-exists-查询"><a href="#存在-exists-查询" class="headerlink" title="存在(exists)查询"></a>存在(exists)查询</h3><blockquote>
+<p>exists可以理解为SQL中的exists函数，就是判断是否存在该字段。</p>
+</blockquote>
+<p>这里我们新增一条没有msgcode的字段，然后用exists去查询。</p>
+<pre><code>POST test1/_doc/3
+{
+    &quot;uid&quot; : &quot;123456&quot;,
+    &quot;phone&quot; : &quot;12345678909&quot;,
+    &quot;message&quot; : &quot;qq&quot;,
+    &quot;sendtime&quot; : &quot;2019-03-14 01:57:04&quot;
+}
+</code></pre><p>存在查询命令示例:</p>
+<pre><code>GET  test1/_doc/_search
+{
+  &quot;query&quot;: {
+   &quot;exists&quot;: { 
+       &quot;field&quot;:&quot;msgcode&quot; 
+    } 
+  }
+}
+</code></pre><p>示例图:</p>
+<p><img src="https://img-blog.csdnimg.cn/20190922122714744.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt=""><br><img src="https://img-blog.csdnimg.cn/20190922122748851.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h4 id="组合-bool-查询"><a href="#组合-bool-查询" class="headerlink" title="组合(bool)查询"></a>组合(bool)查询</h4><p>bool 可以用来合并多个过滤条件查询结果的布尔逻辑，它包含这如下几个操作符:</p>
+<ul>
+<li><strong>must</strong> : 多个查询条件的完全匹配,相当于 and。</li>
+<li><strong>must_not</strong> ::多个查询条件的相反匹配，相当于 not。</li>
+<li><strong>should</strong> : 至少有一个查询条件匹配, 相当于 or。</li>
+</ul>
+<p>查询的命令示例:</p>
+<pre><code>GET /test1/_search
+{
+  &quot;query&quot;: {
+    &quot;bool&quot;: {
+      &quot;must&quot;: {
+        &quot;term&quot;: {
+          &quot;phone&quot;: &quot;12345678909&quot;
+        }
+      },
+      &quot;must_not&quot;: {
+        &quot;term&quot;: {
+          &quot;uid&quot;: 12345
+        }
+      },
+      &quot;should&quot;: [
+        {
+          &quot;term&quot;: {
+            &quot;uid&quot;: 1234
+          }
+        },
+        {
+          &quot;term&quot;: {
+            &quot;uid&quot;: 123456
+          }
+        }
+      ],
+      &quot;adjust_pure_negative&quot;: true,
+      &quot;boost&quot;: 1
+    }
+  }
+}
+</code></pre><p>示例图:<br><img src="https://img-blog.csdnimg.cn/20190922123328918.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h4 id="模糊-wildcard-查询"><a href="#模糊-wildcard-查询" class="headerlink" title="模糊(wildcard)查询"></a>模糊(wildcard)查询</h4><blockquote>
+<p>wildcard查询相当于SQL语句中的like语法，只不过它查询的数据需要加上*符号。</p>
+</blockquote>
+<p>模糊查询命令示例:</p>
+<pre><code>GET /test1/_search
+{
+  &quot;query&quot;: {
+   &quot;wildcard&quot;: { 
+       &quot;message&quot;:&quot;*wu*&quot; 
+    } 
+  }
+}
+</code></pre><p><img src="https://img-blog.csdnimg.cn/20190922124005722.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h4 id="正则-regexp-查询"><a href="#正则-regexp-查询" class="headerlink" title="正则(regexp)查询"></a>正则(regexp)查询</h4><blockquote>
+<p>regexp可以支持正则查询，比如查询短信内容中的验证码之类的。</p>
+</blockquote>
+<p>下面的这个示例就是查询以xu开头，后面是0-9数字的内容的数据。</p>
+<p>正则查询命令示例:</p>
+<pre><code>GET /test1/_search
+{
+  &quot;query&quot;: {
+   &quot;regexp&quot;: { 
+       &quot;message&quot;:&quot;xu[0-9]&quot; 
+    } 
+  }
+}
+</code></pre><p>示例图:</p>
+<p><img src="https://img-blog.csdnimg.cn/20190922124647663.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>查询语句的示例到这里就差不多就结束了，这里在推荐一下kinaba查询的几个小技巧，如图所示：<br><img src="https://img-blog.csdnimg.cn/20190922124857101.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><p>参考：<br><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html" target="_blank" rel="external">https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html</a></p>
+<p>ElasticSearch个人已经使用一年多了，在学习的过程中也积攒了一些相关资料其，只不过今年特别忙，没有太多时间将其整理成博客进行分享了。说来惭愧，今年写博客的数量有些少了，下半年自己从一个周更博主变成了月更博主了，不过后面若是时间充足的话也会多些一些的，再忙每个月至少也会写一篇 ヾ(◍°∇°◍)ﾉﾞ</p>
+<p><a href="https://www.cnblogs.com/xuwujing/tag/elasticsearch/" target="_blank" rel="external">ElasticSearch实战系列</a>:<br><a href="https://www.cnblogs.com/xuwujing/p/11385255.html" target="_blank" rel="external">ElasticSearch实战系列一:  ElasticSearch集群+Kinaba安装教程</a></p>
+<h3 id="音乐推荐"><a href="#音乐推荐" class="headerlink" title="音乐推荐"></a>音乐推荐</h3><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=1366594775&auto=0&height=66"></iframe>
+
+
+
+<p>原创不易，如果感觉不错，希望给个推荐！您的支持是我写作的最大动力！<br>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a> </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/elasticsearch/" rel="tag"># elasticsearch</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/15/pancm119/" rel="next" title="SpringBoot事物Transaction实战讲解教程">
+                <i class="fa fa-chevron-left"></i> SpringBoot事物Transaction实战讲解教程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">119</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">53</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://italker.imisty.cn" title="xiaowu" target="_blank">xiaowu</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ElasticSearch-DSL-介绍"><span class="nav-number">2.</span> <span class="nav-text">ElasticSearch DSL 介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ElasticSearch-DSL-语句使用"><span class="nav-number">3.</span> <span class="nav-text">ElasticSearch DSL 语句使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、新增数据"><span class="nav-number">3.1.</span> <span class="nav-text">一、新增数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、创建索引库"><span class="nav-number">3.2.</span> <span class="nav-text">二、创建索引库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、修改数据"><span class="nav-number">3.3.</span> <span class="nav-text">三、修改数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、删除数据、字段和索引库"><span class="nav-number">3.4.</span> <span class="nav-text">四、删除数据、字段和索引库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询语句"><span class="nav-number">3.5.</span> <span class="nav-text">查询语句</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#查询所有"><span class="nav-number">3.5.1.</span> <span class="nav-text">查询所有</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#等值（term）查询"><span class="nav-number">3.5.2.</span> <span class="nav-text">等值（term）查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#范围（range-）查询"><span class="nav-number">3.5.3.</span> <span class="nav-text">范围（range ）查询</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#存在-exists-查询"><span class="nav-number">3.6.</span> <span class="nav-text">存在(exists)查询</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#组合-bool-查询"><span class="nav-number">3.6.1.</span> <span class="nav-text">组合(bool)查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模糊-wildcard-查询"><span class="nav-number">3.6.2.</span> <span class="nav-text">模糊(wildcard)查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#正则-regexp-查询"><span class="nav-number">3.6.3.</span> <span class="nav-text">正则(regexp)查询</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它"><span class="nav-number">4.</span> <span class="nav-text">其它</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#音乐推荐"><span class="nav-number">4.1.</span> <span class="nav-text">音乐推荐</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
