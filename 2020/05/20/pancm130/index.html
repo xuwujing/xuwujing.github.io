@@ -1,0 +1,986 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="springboot," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言本篇文章主要介绍的是SpringBoot切面Aop的demo简单讲解。 SpringBoot Aop说明：如果想直接获取工程那么可以直接跳到底部，通过链接下载工程代码。 切面(Aop)一、概念  AOP（Aspect OrientedProgramming）：面向切面编程，面向切面编程（也叫面向方面编程），是目前软件开发中的一个热点，也是Spring框架中的一个重要内容。利用AOP可以对业务">
+<meta name="keywords" content="springboot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot切面Aop的demo简单讲解">
+<meta property="og:url" content="http://yoursite.com/2020/05/20/pancm130/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言本篇文章主要介绍的是SpringBoot切面Aop的demo简单讲解。 SpringBoot Aop说明：如果想直接获取工程那么可以直接跳到底部，通过链接下载工程代码。 切面(Aop)一、概念  AOP（Aspect OrientedProgramming）：面向切面编程，面向切面编程（也叫面向方面编程），是目前软件开发中的一个热点，也是Spring框架中的一个重要内容。利用AOP可以对业务">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200518160714223.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200518160724904.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2020-08-17T13:56:07.576Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringBoot切面Aop的demo简单讲解">
+<meta name="twitter:description" content="前言本篇文章主要介绍的是SpringBoot切面Aop的demo简单讲解。 SpringBoot Aop说明：如果想直接获取工程那么可以直接跳到底部，通过链接下载工程代码。 切面(Aop)一、概念  AOP（Aspect OrientedProgramming）：面向切面编程，面向切面编程（也叫面向方面编程），是目前软件开发中的一个热点，也是Spring框架中的一个重要内容。利用AOP可以对业务">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200518160714223.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/05/20/pancm130/"/>
+
+
+
+
+
+
+  <title>SpringBoot切面Aop的demo简单讲解 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/20/pancm130/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SpringBoot切面Aop的demo简单讲解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-20T00:00:00+08:00">
+                2020-05-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/springboot/" itemprop="url" rel="index">
+                    <span itemprop="name">springboot</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本篇文章主要介绍的是SpringBoot切面Aop的demo简单讲解。</p>
+<h2 id="SpringBoot-Aop"><a href="#SpringBoot-Aop" class="headerlink" title="SpringBoot Aop"></a>SpringBoot Aop</h2><p><strong>说明：如果想直接获取工程那么可以直接跳到底部，通过链接下载工程代码。</strong></p>
+<h3 id="切面-Aop"><a href="#切面-Aop" class="headerlink" title="切面(Aop)"></a>切面(Aop)</h3><p><strong>一、概念</strong></p>
+<blockquote>
+<p>AOP（Aspect OrientedProgramming）：面向切面编程，面向切面编程（也叫面向方面编程），是目前软件开发中的一个热点，也是Spring框架中的一个重要内容。利用AOP可以对业务逻辑的各个部分进行隔离，从而使得业务逻辑各部分之间的耦合度降低，提高程序的可重用性，同时提高了开发的效率。</p>
+</blockquote>
+<p><strong>二、用途</strong></p>
+<blockquote>
+<p>日志记录，性能统计，安全控制，权限管理，事务处理，异常处理，资源池管理。</p>
+</blockquote>
+<p><strong>三、详解</strong></p>
+<p> 1.切面（Aspect）:<br>官方的抽象定义为“一个关注点的模块化，这个关注点可能会横切多个对象”，在本例中，“切面”就是类TestAspect所关注的具体行为，例如：AServiceImpl.barA()的调用就是切面TestAspect所关注的行为之一。“切面”在ApplicationContext中<aop:aspect>来配置。</aop:aspect></p>
+<p> 2.连接点（Joinpoint）:<br>程序执行过程中的某一行为，例如，AServiceImpl.barA()的调用或者BServiceImpl.barB(String _msg, int _type)抛出异常等行为。</p>
+<p> 3.通知（Advice）:<br>“切面”对于某个“连接点”所产生的动作，例如，TestAspect中对com.spring.service包下所有类的方法进行日志记录的动作就是一个Advice。其中，一个“切面”可以包含多个“Advice”，例如TestAspect。Advice共有如下5种类型：</p>
+<ul>
+<li>A 前置通知（Before advice） ：在某连接点（JoinPoint）之前执行的通知，但这个通知不能阻止连接点前的执行。xml中在<aop:aspect>里面使用<aop:before>元素进行声明；例如，TestAspect中的doBefore方法。注解中使用@Before声明；例如，TestAnnotationAspect中的doBefore方法。</aop:before></aop:aspect></li>
+<li>B 后通知（After advice）：当某连接点退出的时候执行的通知（不论是正常返回还是异常退出）。xml中在<aop:aspect>里面使用<aop:after>元素进行声明。例如，TestAspect中的doAfter方法，所以AOPTest中调用BServiceImpl.barB抛出异常时，doAfter方法仍然执行。注解中使用@After声明。</aop:after></aop:aspect></li>
+<li>C 返回后通知（After return advice）：在某连接点正常完成后执行的通知，不包括抛出异常的情况。xml中在<aop:aspect>里面使用<after-returning>元素进行声明。注解中使用@AfterReturning声明；</after-returning></aop:aspect></li>
+<li>D 环绕通知（Around advice） ：包围一个连接点的通知，类似Web中Servlet规范中的Filter的doFilter方法。可以在方法的调用前后完成自定义的行为，也可以选择不执行。xml中在<aop:aspect>里面使用<aop:around>元素进行声明。例如，TestAspect中的doAround方法。注解中使用@Around声明。</aop:around></aop:aspect></li>
+<li>E 抛出异常后通知（After throwing advice） ： 在方法抛出异常退出时执行的通知。xml中在<aop:aspect>里面使用<aop:after-throwing>元素进行声明。例如，TestAspect中的doThrowing方法。注解中使用@AfterThrowing声明。</aop:after-throwing></aop:aspect></li>
+<li>通知执行顺序：前置通知→环绕通知连接点之前→连接点执行→环绕通知连接点之后→返回通知→后通知 →(如果发生异常)异常通知→后通知。</li>
+</ul>
+<p>4.切入点（Pointcut）<br>匹配连接点的断言，在AOP中通知和一个切入点表达式关联。例如，TestAspect中的所有通知所关注的连接点，都由切入点表达式execution(<em> com.spring.service.</em>.*(..))来决定。</p>
+<p><strong>注:以上的理论知识参考:<a href="https://www.cnblogs.com/yepei/p/4735298.html" target="_blank" rel="external">https://www.cnblogs.com/yepei/p/4735298.html</a></strong></p>
+<h3 id="开发准备"><a href="#开发准备" class="headerlink" title="开发准备"></a>开发准备</h3><p><strong>环境要求</strong></p>
+<p><strong>JDK</strong>：1.8</p>
+<p><strong>SpringBoot</strong>：2.2.6.RELEASE</p>
+<p>首先还是Maven的相关依赖，基本和普通springboot项目一样，就是多了<code>spring-boot-starter-aop</code>这jar的依赖。</p>
+<p><strong>pom.xml</strong>文件如下:</p>
+<pre><code>&lt;properties&gt;
+    &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
+    &lt;project.reporting.outputEncoding&gt;UTF-8&lt;/project.reporting.outputEncoding&gt;
+    &lt;java.version&gt;1.8&lt;/java.version&gt;
+    &lt;maven.compiler.source&gt;1.8&lt;/maven.compiler.source&gt;
+    &lt;maven.compiler.target&gt;1.8&lt;/maven.compiler.target&gt;
+&lt;/properties&gt;
+
+&lt;parent&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+    &lt;version&gt;2.2.6.RELEASE&lt;/version&gt;
+    &lt;relativePath/&gt;
+&lt;/parent&gt;
+
+&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+        &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-aop&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;com.alibaba&lt;/groupId&gt;
+        &lt;artifactId&gt;fastjson&lt;/artifactId&gt;
+        &lt;version&gt;1.2.68&lt;/version&gt;
+    &lt;/dependency&gt;
+     &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-devtools&lt;/artifactId&gt;
+        &lt;optional&gt;true&lt;/optional&gt;
+        &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
+</code></pre><p><code>application.properties</code>的文件的配置:</p>
+<pre><code>banner.charset=UTF-8
+server.tomcat.uri-encoding=UTF-8
+spring.http.encoding.charset=UTF-8
+spring.http.encoding.enabled=true
+spring.http.encoding.force=true
+spring.messages.encoding=UTF-8
+spring.application.name=springboot-aspect
+server.port=8180
+</code></pre><h3 id="代码编写"><a href="#代码编写" class="headerlink" title="代码编写"></a>代码编写</h3><p>SpringBoot在使用切面的时候，只需要在自定义的一个切面类中加上 <code>@Aspect</code> 注解进行声明，然后在自定义切面的类方法中加上对应的注解即可。<br>比如这里的示例我们想做一个请求响应的加解密切面处理，业务层只需关心代码逻辑实现，而不用关心请求参数和响应参数的加解密实现。那么首先我们需要自定义一个加解密的切面类，在该类添加<code>@Aspect</code>注解，然后在定义一个公共的切入点（Pointcut），指向需要处理的包，然后在定义一个前置通知(添加<code>@Before</code>注解)和后置通知(添加<code>@AfterReturning</code>)方法实现即可。</p>
+<p>这里我们就将切入点设置为控制层包里所有的请求。</p>
+<p><strong>切入点代码示例:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@Pointcut(&quot;execution(public * com.pancm.web.*.*(..))&quot;)</div><div class="line">	  public void doOperation() &#123;</div><div class="line">	 &#125;</div></pre></td></tr></table></figure>
+<p>然后在定义一个前置通知，实现对请求参数的数据解密，这里我们就用User这个实体类的名称，对该数据进行解密。实际在运用是可以根据自身的情况来编写。</p>
+<p><strong>前置通知代码示例:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">@Before(&quot;doOperation()&quot;)</div><div class="line">   public void before(JoinPoint joinPoint) throws Throwable&#123;</div><div class="line">       Object[] objs = joinPoint.getArgs();</div><div class="line">       for (Object obj : objs) &#123;</div><div class="line">           User user =(User) obj;</div><div class="line">           System.out.println(&quot;前置通知接受的参数:&quot;+user);</div><div class="line">           String name =base64DeStr(user.getName());</div><div class="line">           user.setName(name);</div><div class="line">       &#125;</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p>在编写完前置通知的方法之后，我们在编写后置通知的代码，这块基本和前置通知的一样，就是把返回的数据进行加密而已。</p>
+<p><strong>后置通知代码示例:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@AfterReturning(returning = &quot;object&quot;, pointcut = &quot;doOperation()&quot;)</div><div class="line">public void doAfterReturning(Object object) &#123;</div><div class="line">    ResultBody resultBody = (ResultBody) object;</div><div class="line">    String str =null;</div><div class="line">    try &#123;</div><div class="line">         str=base64EnStr(resultBody.getResult());</div><div class="line">    &#125; catch (UnsupportedEncodingException e) &#123;</div><div class="line">        e.printStackTrace();</div><div class="line">    &#125;</div><div class="line">    resultBody.setResult(str);</div><div class="line">    System.out.println(&quot;后通知响应的参数:&quot;+resultBody);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>完整代码示例:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@Aspect</div><div class="line">@Component</div><div class="line">public class ParamAspect &#123;</div><div class="line"></div><div class="line">    @Pointcut(&quot;execution(public * com.pancm.web.*.*(..))&quot;)</div><div class="line">    public void doOperation() &#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    @Before(&quot;doOperation()&quot;)</div><div class="line">    public void before(JoinPoint joinPoint) throws Throwable&#123;</div><div class="line">        Object[] objs = joinPoint.getArgs();</div><div class="line">        for (Object obj : objs) &#123;</div><div class="line">            User user =(User) obj;</div><div class="line">            System.out.println(&quot;前置通知接受的参数:&quot;+user);</div><div class="line">            String name =base64DeStr(user.getName());</div><div class="line">            user.setName(name);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    @AfterReturning(returning = &quot;object&quot;, pointcut = &quot;doOperation()&quot;)</div><div class="line">    public void doAfterReturning(Object object) &#123;</div><div class="line">        ResultBody resultBody = (ResultBody) object;</div><div class="line">        String str =null;</div><div class="line">        try &#123;</div><div class="line">             str=base64EnStr(resultBody.getResult());</div><div class="line">        &#125; catch (UnsupportedEncodingException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">        resultBody.setResult(str);</div><div class="line">        System.out.println(&quot;前置通知响应的参数:&quot;+resultBody);</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    public  String base64EnStr(String str) throws UnsupportedEncodingException &#123;</div><div class="line">        return Base64.getEncoder().encodeToString(str.getBytes(&quot;UTF-8&quot;));</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    public static String base64DeStr(String encodeStr) throws UnsupportedEncodingException &#123;</div><div class="line">        byte[] decodeStr = Base64.getDecoder().decode(encodeStr);</div><div class="line">        return new String(decodeStr, &quot;UTF-8&quot;);</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p><strong>实体类代码</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">public class User &#123;</div><div class="line">	</div><div class="line">	 private Long id;</div><div class="line"></div><div class="line">	 private String name;</div><div class="line">	 </div><div class="line">	 private Integer age;</div><div class="line">	 </div><div class="line">	//getter 和 setter 略</div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>控制层z这块的代码和普通的一样，我们这里只需简单的做下处理即可，这里为了方便理解，没有编写service层和dao的代码。:</p>
+<p><strong> 控制层代码</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@RestController</div><div class="line">@RequestMapping(value = &quot;/api&quot;)</div><div class="line">public class UserRestController &#123;</div><div class="line"></div><div class="line">    @GetMapping(&quot;/user&quot;)</div><div class="line">    public ResultBody findByUser(User  user) &#123;</div><div class="line">        System.out.println(&quot;用户查询接口请求的参数:&quot;+user);</div><div class="line">        ResultBody resultBody = new ResultBody();</div><div class="line">        List&lt;User&gt; userList =new ArrayList&lt;&gt;();</div><div class="line">        User user2=new User();</div><div class="line">        user2.setId(1L);</div><div class="line">        user2.setName(&quot;xuwujing&quot;);</div><div class="line">        user2.setAge(18);</div><div class="line">        userList.add(user2);</div><div class="line">        resultBody.setCode(&quot;0&quot;);</div><div class="line">        resultBody.setResult(userList.toString());</div><div class="line">        System.out.println(&quot;用户查询接口响应的参数:&quot;+resultBody);</div><div class="line">        return resultBody;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>App 入口</strong></p>
+<p>和普通的SpringBoot项目基本一样！</p>
+<p><strong>代码如下:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@SpringBootApplication</div><div class="line">public class AspectApp</div><div class="line">&#123;</div><div class="line">    public static void main( String[] args )</div><div class="line">    &#123;</div><div class="line">		SpringApplication.run(AspectApp.class, args);</div><div class="line">		System.out.println(&quot;Aspect启动成功！&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="功能测试"><a href="#功能测试" class="headerlink" title="功能测试"></a>功能测试</h3><p>编写完代码之后，我们启动程序，因为是Get请求，在浏览器或者使用<a href="https://blog.csdn.net/qazwsxpcm/article/details/70578600" target="_blank" rel="external">Postman</a>输入地址都可以进行测试，需要注意的是这里我们需要对name的值进行base64加密请求。</p>
+<p>输入:</p>
+<blockquote>
+<p><a href="http://localhost:8180/api/user?name=eHV3dWppbmc=" target="_blank" rel="external">http://localhost:8180/api/user?name=eHV3dWppbmc=</a></p>
+</blockquote>
+<p>控制台打印:</p>
+<blockquote>
+<p>前置通知接受的参数:{“name”:”eHV3dWppbmc=”}<br>用户查询接口请求的参数:{“name”:”xuwujing”}<br>用户查询接口响应的参数:{“code”:”0”,”result”:”[{\”age\”:18,\”id\”:1,\”name\”:\”xuwujing\”}]”}<br>后通知响应的参数:{“code”:”0”,”result”:”W3siYWdlIjoxOCwiaWQiOjEsIm5hbWUiOiJ4dXd1amluZyJ9XQ==”}</p>
+</blockquote>
+<p>请求响应参数:</p>
+<blockquote>
+<p>{<br>    “code”: “0”,<br>    “message”: null,<br>    “result”: “W3siYWdlIjoxOCwiaWQiOjEsIm5hbWUiOiJ4dXd1amluZyJ9XQ==”<br>     }</p>
+</blockquote>
+<p>示例图:<br><img src="https://img-blog.csdnimg.cn/20200518160714223.png" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20200518160724904.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><p>关于SpringBoot切面Aop的demo简单讲解的文章就讲解到这里了，如有不妥，欢迎指正！</p>
+<h3 id="项目地址"><a href="#项目地址" class="headerlink" title="项目地址"></a>项目地址</h3><p>SpringBoot 的aop的项目工程地址:<br><a href="https://github.com/xuwujing/springBoot-study/tree/master/springboot-aspect" target="_blank" rel="external">https://github.com/xuwujing/springBoot-study/tree/master/springboot-aspect</a></p>
+<p>SpringBoot整个集合的地址:<br><a href="https://github.com/xuwujing/springBoot-study" target="_blank" rel="external">https://github.com/xuwujing/springBoot-study</a></p>
+<h3 id="SpringBoot整合系列的文章"><a href="#SpringBoot整合系列的文章" class="headerlink" title="SpringBoot整合系列的文章"></a>SpringBoot整合系列的文章</h3><ul>
+<li><p><a href="http://www.panchengming.com/2018/02/28/pancm73/" target="_blank" rel="external">springBoot配置文件的读取以及过滤器和拦截器的使用</a></p>
+</li>
+<li><p><a href="http://www.panchengming.com/2018/01/10/pancm67/" target="_blank" rel="external">SpringBoot的Restful风格的服务</a></p>
+</li>
+<li><p><a href="http://www.panchengming.com/2018/04/27/pancm81/" target="_blank" rel="external">SpringBoot+Mybatis+ Druid+PageHelper实现多数据源并分页</a></p>
+</li>
+<li><p><a href="http://www.panchengming.com/2018/05/07/pancm82/" target="_blank" rel="external">SpringBoot整合ElasticSearch实现多版本的兼容</a></p>
+</li>
+<li><p><a href="http://www.panchengming.com/2018/05/10/pancm83/" target="_blank" rel="external">SpringBoot整合Kafka和Storm</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/9297165.html" target="_blank" rel="external">SpringBoot整合Jsp和Thymeleaf</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/9321395.html" target="_blank" rel="external">SpringBoot整合Netty并使用Protobuf进行数据传输</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/9471802.html" target="_blank" rel="external">SpringBoot简单打包部署</a>   </p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/10835571.html" target="_blank" rel="external">SpringBoot整合Redis使用Restful风格实现CRUD功能</a> </p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/10933082.html" target="_blank" rel="external">SpringBoot优雅的全局异常处理</a>   </p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/10945698.html" target="_blank" rel="external">SpringBoot项目实现文件上传和邮件发送</a> </p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/11042674.html" target="_blank" rel="external">SpringBoot整合Swagger和Actuator</a> </p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xuwujing/p/11184162.html" target="_blank" rel="external">SpringBoot事物Transaction实战讲解教程</a> </p>
+</li>
+</ul>
+<h3 id="音乐推荐"><a href="#音乐推荐" class="headerlink" title="音乐推荐"></a>音乐推荐</h3><blockquote>
+<p>翩若惊鸿，婉若游龙，荣曜秋菊，华茂春松。仿佛兮若轻云之蔽月，飘飘兮若流风之回雪。远而望之，皎若太阳升朝霞；迫而察之，灼若芙蕖出渌波。–网易云网友评论</p>
+</blockquote>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=863982546&auto=0&height=66"></iframe>
+
+
+
+
+<p>原创不易，如果感觉不错，希望给个推荐！您的支持是我写作的最大动力！<br>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a> </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/springboot/" rel="tag"># springboot</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/30/pancm129/" rel="next" title="Nginx简单快速搭建文件服务器">
+                <i class="fa fa-chevron-left"></i> Nginx简单快速搭建文件服务器
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/07/31/pancm131/" rel="prev" title="ElasticSearch实战系列六:Logstash快速入门">
+                ElasticSearch实战系列六:Logstash快速入门 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">131</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">29</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">55</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://italker.imisty.cn" title="xiaowu" target="_blank">xiaowu</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringBoot-Aop"><span class="nav-number">2.</span> <span class="nav-text">SpringBoot Aop</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#切面-Aop"><span class="nav-number">2.1.</span> <span class="nav-text">切面(Aop)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开发准备"><span class="nav-number">2.2.</span> <span class="nav-text">开发准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码编写"><span class="nav-number">2.3.</span> <span class="nav-text">代码编写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#功能测试"><span class="nav-number">2.4.</span> <span class="nav-text">功能测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它"><span class="nav-number">3.</span> <span class="nav-text">其它</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#项目地址"><span class="nav-number">3.1.</span> <span class="nav-text">项目地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SpringBoot整合系列的文章"><span class="nav-number">3.2.</span> <span class="nav-text">SpringBoot整合系列的文章</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#音乐推荐"><span class="nav-number">3.3.</span> <span class="nav-text">音乐推荐</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
