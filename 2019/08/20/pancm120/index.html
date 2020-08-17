@@ -1,0 +1,1072 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="elasticsearch," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言本文主要介绍的是ElasticSearch集群和kinaba的安装教程。 ElasticSearch介绍 ElasticSearch是一个基于Lucene的搜索服务器，其实就是对Lucene进行封装，提供了 REST API 的操作接口.ElasticSearch作为一个高度可拓展的开源全文搜索和分析引擎，可用于快速地对大数据进行存储，搜索和分析。ElasticSearch主要特点：分布式、">
+<meta name="keywords" content="elasticsearch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ElasticSearch实战系列一:ElasticSearch集群+Kinaba安装教程">
+<meta property="og:url" content="http://yoursite.com/2019/08/20/pancm120/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言本文主要介绍的是ElasticSearch集群和kinaba的安装教程。 ElasticSearch介绍 ElasticSearch是一个基于Lucene的搜索服务器，其实就是对Lucene进行封装，提供了 REST API 的操作接口.ElasticSearch作为一个高度可拓展的开源全文搜索和分析引擎，可用于快速地对大数据进行存储，搜索和分析。ElasticSearch主要特点：分布式、">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190820173745587.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190820173759801.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190820173806367.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190820173812247.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190820173831123.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190820173835817.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190820173839949.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190820173844671.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2019082017385018.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190820173905691.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190820173911690.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190820173922160.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190820173925574.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190820173932170.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190820173937573.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2020-08-17T13:47:55.862Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ElasticSearch实战系列一:ElasticSearch集群+Kinaba安装教程">
+<meta name="twitter:description" content="前言本文主要介绍的是ElasticSearch集群和kinaba的安装教程。 ElasticSearch介绍 ElasticSearch是一个基于Lucene的搜索服务器，其实就是对Lucene进行封装，提供了 REST API 的操作接口.ElasticSearch作为一个高度可拓展的开源全文搜索和分析引擎，可用于快速地对大数据进行存储，搜索和分析。ElasticSearch主要特点：分布式、">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190820173745587.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/08/20/pancm120/"/>
+
+
+
+
+
+
+  <title>ElasticSearch实战系列一:ElasticSearch集群+Kinaba安装教程 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/20/pancm120/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ElasticSearch实战系列一:ElasticSearch集群+Kinaba安装教程</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-20T00:00:00+08:00">
+                2019-08-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/elasticsearch/" itemprop="url" rel="index">
+                    <span itemprop="name">elasticsearch</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文主要介绍的是ElasticSearch集群和kinaba的安装教程。</p>
+<h2 id="ElasticSearch介绍"><a href="#ElasticSearch介绍" class="headerlink" title="ElasticSearch介绍"></a>ElasticSearch介绍</h2><blockquote>
+<p>ElasticSearch是一个基于Lucene的搜索服务器，其实就是对Lucene进行封装，提供了 REST API 的操作接口.<br>ElasticSearch作为一个高度可拓展的开源全文搜索和分析引擎，可用于快速地对大数据进行存储，搜索和分析。<br>ElasticSearch主要特点：分布式、高可用、异步写入、多API、面向文档 。<br>ElasticSearch核心概念：近实时，集群，节点（保存数据），索引，分片（将索引分片），副本（分片可设置多个副本） 。它可以快速地储存、搜索和分析海量数据。 ElasticSearch使用案例:维基百科、Stack Overflow、Github 等等。</p>
+</blockquote>
+<h2 id="ElasticSearch集群安装"><a href="#ElasticSearch集群安装" class="headerlink" title="ElasticSearch集群安装"></a>ElasticSearch集群安装</h2><h3 id="一、环境选择"><a href="#一、环境选择" class="headerlink" title="一、环境选择"></a>一、环境选择</h3><p>ElasticSearch集群安装依赖JDK，本文的ElasticSearch版本为6.5.4，对应的Kibana也是6.5.4，这里顺便说下Kibana的版本最好不要低于ElasticSearch的版本，JDK的版本为1.8。</p>
+<p><strong>下载地址:</strong></p>
+<p>ElasticSearch-6.5.4: <a href="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.5.4.tar.gz" target="_blank" rel="external">https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.5.4.tar.gz</a></p>
+<p>Kibana-6.5.4: <a href="https://artifacts.elastic.co/downloads/kibana/kibana-6.5.4-linux-x86_64.tar.gz" target="_blank" rel="external">https://artifacts.elastic.co/downloads/kibana/kibana-6.5.4-linux-x86_64.tar.gz</a></p>
+<p>JDK1.8 : <a href="http://www.oracle.com/technetwork/java/javase/downloads" target="_blank" rel="external">http://www.oracle.com/technetwork/java/javase/downloads</a></p>
+<p>ElasticSearch有几个重要的节点属性，主节点、数据节点、查询节点、摄取节点，其中主节点、数据节点最重要的，因此本文就只主要介绍这两个节点的安装，剩下的节点属性在配置文件那块进行说明。</p>
+<p><strong>ElasticSearch集群安装表格:</strong><br><img src="https://img-blog.csdnimg.cn/20190820173745587.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="二、Linux配置"><a href="#二、Linux配置" class="headerlink" title="二、Linux配置"></a>二、Linux配置</h3><p>在安装ElasticSearch之前，我们需要对Linux的环境做一些调整，防止在后续过程中出现一些问题！</p>
+<h4 id="1、修改最大内存限制"><a href="#1、修改最大内存限制" class="headerlink" title="1、修改最大内存限制"></a>1、修改最大内存限制</h4><p>修改sysctl.conf文件</p>
+<pre><code>vim /etc/sysctl.conf
+</code></pre><p>在末尾增加如下配置:</p>
+<pre><code>vm.max_map_count = 655360
+vm.swappiness=1
+</code></pre><p>然后保存退出，输入以下命令使其生效</p>
+<pre><code>sysctl -p
+</code></pre><p>保存退出，输入以下命令执行使其生效</p>
+<pre><code>sysctl -p
+</code></pre><p>使用命令查看: </p>
+<pre><code>tail -3 /etc/sysctl.conf
+</code></pre><p><img src="https://img-blog.csdnimg.cn/20190820173759801.png" alt="在这里插入图片描述"></p>
+<h4 id="2、修改最大线程个数"><a href="#2、修改最大线程个数" class="headerlink" title="2、修改最大线程个数"></a>2、修改最大线程个数</h4><p>修改90-nproc.conf文件</p>
+<pre><code>vim /etc/security/limits.d/90-nproc.conf 
+</code></pre><p><strong>注:不同的linux服务器90-nproc.conf可能文件名不一样，建议先在/etc/security/limits.d/查看文件名确认之后再来进行更改。</strong></p>
+<p>将下述的内容</p>
+<pre><code>soft nproc 2048
+</code></pre><p>修改为</p>
+<pre><code>soft nproc 4096
+</code></pre><p>使用命令查看: </p>
+<pre><code>tail -3 /etc/security/limits.d/90-nproc.conf
+</code></pre><p><img src="https://img-blog.csdnimg.cn/20190820173806367.png" alt="在这里插入图片描述"></p>
+<h4 id="3、修改最大打开文件个数"><a href="#3、修改最大打开文件个数" class="headerlink" title="3、修改最大打开文件个数"></a>3、修改最大打开文件个数</h4><p>修改limits.conf</p>
+<pre><code>vim /etc/security/limits.conf
+</code></pre><p>在末尾添加如下内容:</p>
+<pre><code>hard nofile 65536
+soft nofile 65536
+</code></pre><p><img src="https://img-blog.csdnimg.cn/20190820173812247.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h4 id="4、防火墙关闭"><a href="#4、防火墙关闭" class="headerlink" title="4、防火墙关闭"></a>4、防火墙关闭</h4><p><strong>说明:其实可以不关闭防火墙，进行权限设置，但是为了方便访问，于是便关闭了防火墙。每个机器都做！！！</strong></p>
+<p>关闭防火墙的命令<br>CentOS 6<br>查询防火墙状态:<br>[root@localhost ~]# service   iptables status<br>停止防火墙:<br>[root@localhost ~]# service   iptables stop<br>启动防火墙:<br>[root@localhost ~]# service   iptables start<br>重启防火墙:<br>[root@localhost ~]# service   iptables restart<br>永久关闭防火墙:<br>[root@localhost ~]# chkconfig   iptables off<br>永久关闭后启用:<br>[root@localhost ~]# chkconfig   iptables on</p>
+<p>CentOS 7<br>关闭防火墙<br>systemctl   stop   firewalld.service</p>
+<h3 id="三、JDK安装"><a href="#三、JDK安装" class="headerlink" title="三、JDK安装"></a>三、JDK安装</h3><h4 id="1，文件准备"><a href="#1，文件准备" class="headerlink" title="1，文件准备"></a>1，文件准备</h4><p>解压下载下来的JDK<br>tar  -xvf   jdk-8u144-linux-x64.tar.gz<br>移动到opt/java文件夹中，没有就新建，然后将文件夹重命名为jdk1.8</p>
+<pre><code>mv  jdk1.8.0_144 /opt/java
+mv  jdk1.8.0_144  jdk1.8
+</code></pre><p><img src="https://img-blog.csdnimg.cn/20190820173831123.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h4 id="2，环境配置"><a href="#2，环境配置" class="headerlink" title="2，环境配置"></a>2，环境配置</h4><p>首先输入 java -version<br>查看是否安装了JDK，如果安装了，但版本不适合的话，就卸载</p>
+<p><img src="https://img-blog.csdnimg.cn/20190820173835817.png" alt="在这里插入图片描述"><br>输入</p>
+<pre><code>rpm -qa | grep java 
+</code></pre><p>查看信息</p>
+<p><img src="https://img-blog.csdnimg.cn/20190820173839949.png" alt="在这里插入图片描述"><br>然后输入:</p>
+<pre><code>rpm -e --nodeps “你要卸载JDK的信息”
+如: rpm -e --nodeps java-1.7.0-openjdk-1.7.0.99-2.6.5.1.el6.x86_64
+</code></pre><p><img src="https://img-blog.csdnimg.cn/20190820173844671.png" alt="在这里插入图片描述"></p>
+<p>确认没有了之后，解压下载下来的JDK</p>
+<pre><code>tar  -xvf   jdk-8u144-linux-x64.tar.gz
+</code></pre><p>移动到opt/java文件夹中，没有就新建，然后将文件夹重命名为jdk1.8。</p>
+<pre><code>mv  jdk1.8.0_144 /opt/java
+mv  jdk1.8.0_144  jdk1.8
+</code></pre><p>然后编辑 profile 文件，添加如下配置<br> 输入:    vim /etc/profile</p>
+<pre><code>export JAVA_HOME=/opt/java/jdk1.8
+export JRE_HOME=/opt/java/jdk1.8/jre
+export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JRE_HOME/lib
+export PATH=.:${JAVA_HOME}/bin:$PATH
+</code></pre><p>添加成功之后，输入:</p>
+<pre><code>source /etc/profile
+</code></pre><p>使配置生效，然后查看版本信息输入:</p>
+<pre><code>java  -version 
+</code></pre><p><img src="https://img-blog.csdnimg.cn/2019082017385018.png" alt="在这里插入图片描述"></p>
+<h3 id="四、ElasticSearch安装"><a href="#四、ElasticSearch安装" class="headerlink" title="四、ElasticSearch安装"></a>四、ElasticSearch安装</h3><h4 id="1，文件准备-1"><a href="#1，文件准备-1" class="headerlink" title="1，文件准备"></a>1，文件准备</h4><p>将下载好的elasticsearch文件解压 </p>
+<p>输入:</p>
+<pre><code>tar -xvf elasticsearch-6.5.4.tar.gz
+</code></pre><p>然后移动到/opt/elk文件夹 里面，没有该文件夹则创建,然后将文件夹重命名为masternode.</p>
+<p>在/opt/elk输入:</p>
+<pre><code>mv elasticsearch-6.5.4 /opt/elk
+mv  elasticsearch-6.5.4  masternode
+</code></pre><h4 id="2，配置修改"><a href="#2，配置修改" class="headerlink" title="2，配置修改"></a>2，配置修改</h4><p>因为elasticsearch需要在非root的用户下面操作，并且elasticsearch的文件夹的权限也为非root权限， 因此我们需要创建一个用户进行操作，我们创建一个elastic用户，并赋予该目录的权限。<br>命令如下:</p>
+<pre><code>adduser elastic
+chown -R elastic:elastic  /opt/elk/masternode
+</code></pre><p>这里我们顺便再来指定ElasticSearch数据和日志存放的路径地址，我们可以先使用df -h命令查看当前系统的盘主要的磁盘在哪，然后在确认数据和日志存放的路径，如果在/home 目录下的话，我们就在home目录下创建ElasticSearch数据和日志的文件夹，这里为了区分吗，我们可以根据不同的节点创建不同的文件夹。这里的文件夹创建用我们刚刚创建好的用户去创建，切换到elastic用户，然后创建文件夹。</p>
+<pre><code>su elastic    
+mkdir  /home/elk
+mkdir  /home/elk/masternode
+mkdir  /home/elk/masternode/data
+mkdir  /home/elk/masternode/logs
+mkdir  /home/elk/datanode1
+mkdir  /home/elk/datanode1/data
+mkdir  /home/elk/datanode1/logs
+</code></pre><h5 id="主节点-master-配置"><a href="#主节点-master-配置" class="headerlink" title="主节点(master)配置"></a>主节点(master)配置</h5><p>创建成功之后，我们先修改masternode节点的配置，修改完成之后在同级目录进行copy一下，名称为datanode1，然后只需少许更改datanode节点的配置即可。这里我们要修改elasticsearch.yml和jvm.options文件即可！ 注意这里还是elastic用户！</p>
+<pre><code> cd /opt/elk/
+vim masternode/config/elasticsearch.yml
+vim masternode/config/jvm.options
+</code></pre><p>masternode的elasticsearch.yml文件配置如下:</p>
+<pre><code>cluster.name: pancm
+node.name: master
+path.data: /home/elk/masternode/data
+path.logs: /home/elk/masternode/logs
+network.host: 0.0.0.0
+network.publish_host: 192.169.0.23
+transport.tcp.port: 9301
+http.port: 9201
+discovery.zen.ping.unicast.hosts: [&quot;192.169.0.23:9301&quot;,&quot;192.169.0.24:9301&quot;,&quot;192.169.0.25:9301&quot;]
+node.master: true 
+node.data: false
+node.ingest: false 
+index.number_of_shards: 5
+index.number_of_replicas: 1
+discovery.zen.minimum_master_nodes: 1
+bootstrap.memory_lock: true
+http.max_content_length: 1024mb
+</code></pre><p>elasticsearch.yml文件参数配置说明:</p>
+<ul>
+<li><p>cluster.name: 集群名称，同一集群的节点配置应该一致。es会自动发现在同一网段下的es，如果在同一网段下有多个集群，就可以用这个属性来区分不同的集群。</p>
+</li>
+<li><p>node.name: 该节点的名称。 path.data: 数据存放的路径。 path.logs: 日志存放的路径。</p>
+</li>
+<li>network.host: 设置ip地址，可以是ipv4或ipv6的，默认为0.0.0.0。</li>
+<li>network.publish_host: 设置其它节点和该节点交互的ip地址，如果不设置它会自动判断，值必须是个真实的ip地址。</li>
+<li>transport.tcp.port:设置节点间交互的tcp端口，默认是9300。</li>
+<li>http.port:设置对外服务的http端口，默认为9200。 </li>
+<li>discovery.zen.ping.unicast.hosts:   设置集群中master节点的初始列表，可以通过这些节点来自动发现新加入集群的节点。 </li>
+<li>node.master: 指定该节点是否有资格被选举成为node，默认是true。 node.data: 指定该节点是否存储索引数据，默认为true。</li>
+<li>node.ingest: 指定该节点是否使用管道，默认为true。</li>
+<li>index.number_of_shards:设置默认索引分片个数，默认为5片。</li>
+<li>index.number_of_replicas:设置默认索引副本个数，默认为1个副本。</li>
+<li>discovery.zen.minimum_master_nodes: 设置这个参数来保证集群中的节点可以知道其它N个有master资格的节点。默认为1，对于大的集群来说，可以设置大一点的值（2-4）。</li>
+<li>bootstrap.memory_lock: 设置为true来锁住内存。因为当jvm开始swapping时es的效率会降低，所以要保证它不swap，可以把ES_MIN_MEM和ES_MAX_MEM两个环境变量设置成同一个值，并且保证机器有足够的内存分配给es。同时也要允许elasticsearch的进程可以锁住内存，Linux下可以通过<code>ulimit   -l unlimited</code>命令。 http.max_content_length: 设置内容的最大容量，默认100mb。<br>-…</li>
+</ul>
+<p>这里在顺便说下ElasticSearch节点的属性。</p>
+<ol>
+<li>node.master: true 并且   node.data: true<br>这种组合表示这个节点即有成为主节点的资格，又存储数据。<br>如果某个节点被选举成为了真正的主节点，那么他还要存储数据，这样对于这个节点的压力就比较大了。ElasticSearch默认每个节点都是这样的配置，在测试环境下这样做没问题。实际工作中建议不要这样设置，因为这样相当于主节点和数据节点的角色混合到一块了。</li>
+</ol>
+<ol>
+<li>node.master: false  并且   node.data: true<br>这种组合表示这个节点没有成为主节点的资格，也就不参与选举，只会存储数据。    这个节点我们称为data(数据)节点。在集群中需要单独设置几个这样的节点负责存储数据，后期提供存储和查询服务。</li>
+<li>node.master: true  并且   node.data: false<br>这种组合表示这个节点不会存储数据，有成为主节点的资格，可以参与选举，有可能成为真正的主节点，这个节点我们称为master节点。</li>
+<li>node.master: false    node.data: false<br>这种组合表示这个节点即不会成为主节点，也不会存储数据，这个节点的意义是作为一个client(客户端)节点，主要是针对海量请求的时候可以进行负载均衡。</li>
+</ol>
+<ol>
+<li>node.ingest: true<br>执行预处理管道，不负责数据和集群相关的事物。<br>它在索引之前预处理文档，拦截文档的bulk和index请求，然后加以转换。<br>将文档传回给bulk和index API，用户可以定义一个管道，指定一系列的预处理器。</li>
+</ol>
+<p>elasticsearch.yml文件配置示例图</p>
+<p><img src="https://img-blog.csdnimg.cn/20190820173905691.png" alt="在这里插入图片描述"></p>
+<p>将<strong>jvm.options</strong>配置Xms和Xmx改成2G，配置如下:</p>
+<pre><code>-Xms2g
+-Xmx2g
+</code></pre><p><img src="https://img-blog.csdnimg.cn/20190820173911690.png" alt="在这里插入图片描述"></p>
+<p>关于ElasticSearch更多配置可以参考ElasticSearch官方文档！</p>
+<h5 id="数据节点节点-data-配置"><a href="#数据节点节点-data-配置" class="headerlink" title="数据节点节点(data)配置"></a>数据节点节点(data)配置</h5><p>在配置完masternode节点的ElasticSearch之后，我们再来配置datanode节点的，我们将masternode节点copy一份并重命名为datanode1，然后根据上述示例图中红色框出来简单更改一下即可。<br>命令如下:</p>
+<pre><code>cd /opt/elk/
+cp -r  masternode/ datanode1
+vim datanode1/config/elasticsearch.yml
+vim datanode1/config/jvm.options
+</code></pre><p><strong>datanode</strong>的elasticsearch.yml文件配置如下:</p>
+<pre><code>cluster.name: pancm
+node.name: data1
+path.data: /home/elk/datanode/data
+path.logs: /home/elk/datanode/logs
+network.host: 0.0.0.0
+network.publish_host: 192.169.0.23
+transport.tcp.port: 9300
+http.port: 9200
+discovery.zen.ping.unicast.hosts: [&quot;192.169.0.23:9301&quot;,&quot;192.169.0.24:9301&quot;,&quot;192.169.0.25:9301&quot;]
+node.master: false
+node.data: true
+node.ingest: false 
+index.number_of_shards: 5
+index.number_of_replicas: 1
+discovery.zen.minimum_master_nodes: 1
+bootstrap.memory_lock: true
+http.max_content_length: 1024mb
+</code></pre><p>将jvm.options配置Xms和Xmx改成8G，配置如下:</p>
+<pre><code>-Xms8g
+-Xmx8g
+</code></pre><p><strong>注:配置完成之后需要使用ll命令检查一下masternode和datanode1权限是否属于elastic用户的，若不属于，可以使用chown -R elastic:elastic +路径 命令进行赋予权限。</strong></p>
+<p>上述配置完成之后，可以使用相同的方法在其他的机器在操作一次，或者使用ftp工具进行传输，又或者使用scp命令进行远程传输文件然后根据不同的机器进行不同的修改。<br>scp命令示例:</p>
+<p>jdk环境传输:</p>
+<pre><code>scp -r /opt/java root@slave1:/opt
+scp -r /opt/java root@slave2:/opt
+</code></pre><p>ElasticSearch环境传输:</p>
+<pre><code>scp -r /opt/elk root@slave1:/opt
+scp -r /home/elk root@slave1:/opt
+scp -r /opt/elk root@slave2:/opt
+scp -r /home/elk root@slave2:/opt
+</code></pre><h4 id="3，启动ElasticSearch"><a href="#3，启动ElasticSearch" class="headerlink" title="3，启动ElasticSearch"></a>3，启动ElasticSearch</h4><p>这里还是需要使用elastic用户来进行启动，每台机器的每个节点都需要进行操作！<br>在/opt/elk的目录下输入:</p>
+<pre><code>su elastic    
+cd /opt/elk
+./masternode/bin/elasticsearch -d
+./datanode1/bin/elasticsearch -d
+</code></pre><p>启动成功之后，可以输入jps命令进行查看或者在浏览器上输入 ip+9200或ip+9201进行查看。<br>出现以下界面表示成功！</p>
+<p><img src="https://img-blog.csdnimg.cn/20190820173922160.png" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20190820173925574.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="四、Kibana-安装"><a href="#四、Kibana-安装" class="headerlink" title="四、Kibana 安装"></a>四、Kibana 安装</h3><p>kinaba安装只需要在一台机器上部署即可，直接通过root用户进行操作，需要注意的是kinaba需要和ElasticSearch服务器网络ping通即可。</p>
+<h4 id="1，文件准备-2"><a href="#1，文件准备-2" class="headerlink" title="1，文件准备"></a>1，文件准备</h4><p>将下载下来的kibana-6.5.4-linux-x86_64.tar.gz的配置文件进行解压<br>在linux上输入:</p>
+<pre><code>tar  -xvf   kibana-6.5.4-linux-x86_64.tar.gz
+</code></pre><p>然后移动到/opt/elk 里面，然后将文件夹重命名为 kibana6.5.4<br>输入:</p>
+<pre><code>mv  kibana-6.5.4-linux-x86_64  /opt/elk
+mv  kibana-6.5.4-linux-x86_64  kibana6.5.4
+</code></pre><h4 id="2，配置修改-1"><a href="#2，配置修改-1" class="headerlink" title="2，配置修改"></a>2，配置修改</h4><p>进入文件夹并修改kibana.yml配置文件:</p>
+<pre><code>cd /opt/elk/kibana6.5.4
+vim config/kibana.yml
+</code></pre><p>将配置文件中的：</p>
+<pre><code>server.host: &quot;localhost&quot;
+</code></pre><p>修改为：</p>
+<pre><code>server.host: &quot;192.169.0.23&quot;
+</code></pre><p>然后一行新增,这行的意思是不使用帐号密码登录</p>
+<pre><code>xpack.security.enabled: false
+</code></pre><p>保存退出！</p>
+<p><img src="https://img-blog.csdnimg.cn/20190820173932170.png" alt="在这里插入图片描述"></p>
+<h4 id="3，Kinaba-启动"><a href="#3，Kinaba-启动" class="headerlink" title="3，Kinaba 启动"></a>3，Kinaba 启动</h4><p>使用root用户进行启动。<br>在kibana6.5.4文件夹目录输入:</p>
+<pre><code>nohup ./bin/kibana &gt;/dev/null   2&gt;&amp;1 &amp;
+</code></pre><p>浏览器输入:</p>
+<blockquote>
+<p><a href="http://IP:5601" target="_blank" rel="external">http://IP:5601</a></p>
+</blockquote>
+<p><img src="https://img-blog.csdnimg.cn/20190820173937573.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly94dXd1amluZy5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="五、错误问题解决办法"><a href="#五、错误问题解决办法" class="headerlink" title="五、错误问题解决办法"></a>五、错误问题解决办法</h3><h4 id="1，max-virtual-memory-areas-vm-max-map-count-65530-is-too-low-increase-to-at-least-262144"><a href="#1，max-virtual-memory-areas-vm-max-map-count-65530-is-too-low-increase-to-at-least-262144" class="headerlink" title="1，max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]"></a>1，max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]</h4><p>原因: 内存限制太小了！<br>解决办法:  修改最大内存限制，参考Linux环境配置的第一条！</p>
+<h4 id="2，max-number-of-threads-2048-for-user-elastic-is-too-low-increase-to-at-least-4096"><a href="#2，max-number-of-threads-2048-for-user-elastic-is-too-low-increase-to-at-least-4096" class="headerlink" title="2，max number of threads [2048] for user [elastic] is too low, increase to at least [4096]"></a>2，max number of threads [2048] for user [elastic] is too low, increase to at least [4096]</h4><p>原因: 线程数限制太少了！<br>解决办法:  修改最大线程数限制，参考Linux环境配置的第二条！</p>
+<h4 id="3，-max-file-descriptors-65535-for-elasticsearch-process-likely-too-low-increase-to-at-least-65536"><a href="#3，-max-file-descriptors-65535-for-elasticsearch-process-likely-too-low-increase-to-at-least-65536" class="headerlink" title="3， max file descriptors [65535] for elasticsearch process likely too low, increase to at least [65536]"></a>3， max file descriptors [65535] for elasticsearch process likely too low, increase to at least [65536]</h4><p>原因: 打开文件个数太少了！<br>解决办法:  修改最打开文件个数，参考Linux环境配置的第三条！</p>
+<h4 id="4，ERROR-bootstrap-checks-failed"><a href="#4，ERROR-bootstrap-checks-failed" class="headerlink" title="4，ERROR:bootstrap checks failed"></a>4，ERROR:bootstrap checks failed</h4><p>原因:未锁定内存。<br>解决办法：在报错机器上的<strong>elasticsearch.yml</strong>配置文件中添加<code>bootstrap.memory_lock: true</code>配置！</p>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><p>ElasticSearch和head插件 Windows版的安装:</p>
+<p><a href="https://www.cnblogs.com/xuwujing/p/8998168.html" target="_blank" rel="external">https://www.cnblogs.com/xuwujing/p/8998168.html</a></p>
+<h3 id="音乐推荐"><a href="#音乐推荐" class="headerlink" title="音乐推荐"></a>音乐推荐</h3><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=1366594775&auto=0&height=66"></iframe>
+
+
+
+
+<p>原创不易，如果感觉不错，希望给个推荐！您的支持是我写作的最大动力！<br>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a> </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/elasticsearch/" rel="tag"># elasticsearch</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/15/pancm119/" rel="next" title="SpringBoot事物Transaction实战讲解教程">
+                <i class="fa fa-chevron-left"></i> SpringBoot事物Transaction实战讲解教程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/22/pancm121/" rel="prev" title="ElasticSearch实战系列二_  ElasticSearch的DSL语句使用教程---图文详解">
+                ElasticSearch实战系列二_  ElasticSearch的DSL语句使用教程---图文详解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">131</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">54</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://italker.imisty.cn" title="xiaowu" target="_blank">xiaowu</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ElasticSearch介绍"><span class="nav-number">2.</span> <span class="nav-text">ElasticSearch介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ElasticSearch集群安装"><span class="nav-number">3.</span> <span class="nav-text">ElasticSearch集群安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、环境选择"><span class="nav-number">3.1.</span> <span class="nav-text">一、环境选择</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、Linux配置"><span class="nav-number">3.2.</span> <span class="nav-text">二、Linux配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、修改最大内存限制"><span class="nav-number">3.2.1.</span> <span class="nav-text">1、修改最大内存限制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、修改最大线程个数"><span class="nav-number">3.2.2.</span> <span class="nav-text">2、修改最大线程个数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3、修改最大打开文件个数"><span class="nav-number">3.2.3.</span> <span class="nav-text">3、修改最大打开文件个数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4、防火墙关闭"><span class="nav-number">3.2.4.</span> <span class="nav-text">4、防火墙关闭</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、JDK安装"><span class="nav-number">3.3.</span> <span class="nav-text">三、JDK安装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1，文件准备"><span class="nav-number">3.3.1.</span> <span class="nav-text">1，文件准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2，环境配置"><span class="nav-number">3.3.2.</span> <span class="nav-text">2，环境配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、ElasticSearch安装"><span class="nav-number">3.4.</span> <span class="nav-text">四、ElasticSearch安装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1，文件准备-1"><span class="nav-number">3.4.1.</span> <span class="nav-text">1，文件准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2，配置修改"><span class="nav-number">3.4.2.</span> <span class="nav-text">2，配置修改</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#主节点-master-配置"><span class="nav-number">3.4.2.1.</span> <span class="nav-text">主节点(master)配置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#数据节点节点-data-配置"><span class="nav-number">3.4.2.2.</span> <span class="nav-text">数据节点节点(data)配置</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3，启动ElasticSearch"><span class="nav-number">3.4.3.</span> <span class="nav-text">3，启动ElasticSearch</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、Kibana-安装"><span class="nav-number">3.5.</span> <span class="nav-text">四、Kibana 安装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1，文件准备-2"><span class="nav-number">3.5.1.</span> <span class="nav-text">1，文件准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2，配置修改-1"><span class="nav-number">3.5.2.</span> <span class="nav-text">2，配置修改</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3，Kinaba-启动"><span class="nav-number">3.5.3.</span> <span class="nav-text">3，Kinaba 启动</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#五、错误问题解决办法"><span class="nav-number">3.6.</span> <span class="nav-text">五、错误问题解决办法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1，max-virtual-memory-areas-vm-max-map-count-65530-is-too-low-increase-to-at-least-262144"><span class="nav-number">3.6.1.</span> <span class="nav-text">1，max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2，max-number-of-threads-2048-for-user-elastic-is-too-low-increase-to-at-least-4096"><span class="nav-number">3.6.2.</span> <span class="nav-text">2，max number of threads [2048] for user [elastic] is too low, increase to at least [4096]</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3，-max-file-descriptors-65535-for-elasticsearch-process-likely-too-low-increase-to-at-least-65536"><span class="nav-number">3.6.3.</span> <span class="nav-text">3， max file descriptors [65535] for elasticsearch process likely too low, increase to at least [65536]</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4，ERROR-bootstrap-checks-failed"><span class="nav-number">3.6.4.</span> <span class="nav-text">4，ERROR:bootstrap checks failed</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它"><span class="nav-number">4.</span> <span class="nav-text">其它</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#音乐推荐"><span class="nav-number">4.1.</span> <span class="nav-text">音乐推荐</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

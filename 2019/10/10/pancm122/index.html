@@ -1,0 +1,1259 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="elasticsearch," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言在上一篇中介绍了ElasticSearch实战系列二: ElasticSearch的DSL语句使用教程—图文详解，本篇文章就来讲解下 ElasticSearch 6.x官方Java API的使用。 ElasticSearch JAVA API目前市面上有几种常见的ElasticSearch Java API架包，JestClient、SpringBoot整合的SpringData、Sprin">
+<meta name="keywords" content="elasticsearch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ElasticSearch实战系列三:ElasticSearch的JAVA API使用教程">
+<meta property="og:url" content="http://yoursite.com/2019/10/10/pancm122/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言在上一篇中介绍了ElasticSearch实战系列二: ElasticSearch的DSL语句使用教程—图文详解，本篇文章就来讲解下 ElasticSearch 6.x官方Java API的使用。 ElasticSearch JAVA API目前市面上有几种常见的ElasticSearch Java API架包，JestClient、SpringBoot整合的SpringData、Sprin">
+<meta property="og:updated_time" content="2020-08-17T13:46:49.670Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ElasticSearch实战系列三:ElasticSearch的JAVA API使用教程">
+<meta name="twitter:description" content="前言在上一篇中介绍了ElasticSearch实战系列二: ElasticSearch的DSL语句使用教程—图文详解，本篇文章就来讲解下 ElasticSearch 6.x官方Java API的使用。 ElasticSearch JAVA API目前市面上有几种常见的ElasticSearch Java API架包，JestClient、SpringBoot整合的SpringData、Sprin">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/10/10/pancm122/"/>
+
+
+
+
+
+
+  <title>ElasticSearch实战系列三:ElasticSearch的JAVA API使用教程 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/10/pancm122/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ElasticSearch实战系列三:ElasticSearch的JAVA API使用教程</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-10T00:00:00+08:00">
+                2019-10-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/elasticsearch/" itemprop="url" rel="index">
+                    <span itemprop="name">elasticsearch</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在上一篇中介绍了<a href="https://www.cnblogs.com/xuwujing/p/11567053.html" target="_blank" rel="external">ElasticSearch实战系列二: ElasticSearch的DSL语句使用教程—图文详解</a>，本篇文章就来讲解下 ElasticSearch 6.x官方Java API的使用。</p>
+<h2 id="ElasticSearch-JAVA-API"><a href="#ElasticSearch-JAVA-API" class="headerlink" title="ElasticSearch JAVA API"></a>ElasticSearch JAVA API</h2><p>目前市面上有几种常见的ElasticSearch Java API架包，JestClient、SpringBoot整合的SpringData、Spring整合的ElasticsearchTemplate、Elasticsearch Bboss等一些开源架包，上述这些第三方整合的架包中，基本已经支持日常的使用，除了支持的ES版本会低一些而已。</p>
+<p>本文介绍的是ElasticSearch官方的<code>Java High Level REST Client</code>的使用，<code>Java High Level REST Client</code>是ElasticSearch官方目前推荐使用的，适用于6.x以上的版本，要求JDK在1.8以上，可以很好的在大版本中进行兼容，并且该架包自身也包含<code>Java Low Level REST Client</code>中的方法，可以应对一些特需的情况进行特殊的处理， 它对于一些常用的方法封装Restful风格，可以直接对应操作名调用使用即可，支持同步和异步(Async)调用。</p>
+<p>这里我们的使用也可以直接对应上一篇文章中的DSL语句使用，这样的话可以非常方便的对照和学习使用。</p>
+<p>在对下述进行操作时，我们先来看下Elasticsearch <code>Java High Level REST Client</code>的初始化连接写法吧。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">RestHighLevelClient client = new RestHighLevelClient(RestClient.builder(new HttpHost(elasticIp, elasticPort)));</div></pre></td></tr></table></figure>
+<p>是不是很简单呢，关闭也很简单，client不为空直接close即可！</p>
+<h3 id="一、新增数据"><a href="#一、新增数据" class="headerlink" title="一、新增数据"></a>一、新增数据</h3><p> ElasticSearch可以直接新增数据，只要你指定了index(索引库名称)和type(类型)即可。在新增的时候你可以自己指定主键ID，也可以不指定，由 ElasticSearch自身生成。Elasticsearch <code>Java High Level REST Client</code>新增数据提供了三种方法，这里我们就来看一下这三种写法吧。</p>
+<p>新增数据代码示例一，通过jsonString进行创建：</p>
+<pre><code>String index = &quot;test1&quot;;
+String type = &quot;_doc&quot;;
+// 唯一编号
+String id = &quot;1&quot;;
+IndexRequest request = new IndexRequest(index, type, id);
+
+String jsonString = &quot;{&quot; + &quot;\&quot;uid\&quot;:\&quot;1234\&quot;,&quot;+ &quot;\&quot;phone\&quot;:\&quot;12345678909\&quot;,&quot;+ &quot;\&quot;msgcode\&quot;:\&quot;1\&quot;,&quot; + &quot;\&quot;sendtime\&quot;:\&quot;2019-03-14 01:57:04\&quot;,&quot;
+        + &quot;\&quot;message\&quot;:\&quot;xuwujing study Elasticsearch\&quot;&quot; + &quot;}&quot;;
+request.source(jsonString, XContentType.JSON);
+IndexResponse indexResponse = client.index(request, RequestOptions.DEFAULT);
+</code></pre><p>新增数据代码示例二，通过map创建,会自动转换成json的数据:</p>
+<pre><code>String index = &quot;test1&quot;;
+String type = &quot;_doc&quot;;
+// 唯一编号
+String id = &quot;1&quot;;
+IndexRequest request = new IndexRequest(index, type, id);
+Map&lt;String, Object&gt; jsonMap = new HashMap&lt;&gt;();
+jsonMap.put(&quot;uid&quot;, 1234);
+jsonMap.put(&quot;phone&quot;, 12345678909L);
+jsonMap.put(&quot;msgcode&quot;, 1);
+jsonMap.put(&quot;sendtime&quot;, &quot;2019-03-14 01:57:04&quot;);
+jsonMap.put(&quot;message&quot;, &quot;xuwujing study Elasticsearch&quot;);
+request.source(jsonMap);
+IndexResponse indexResponse = client.index(request, RequestOptions.DEFAULT);
+</code></pre><p>新增数据代码示例三，通过XContentBuilder对象进行创建:</p>
+<pre><code>String index = &quot;test1&quot;;
+ String type = &quot;_doc&quot;;
+ // 唯一编号
+ String id = &quot;1&quot;;
+ IndexRequest request = new IndexRequest(index, type, id);
+ XContentBuilder builder = XContentFactory.jsonBuilder();
+ builder.startObject();
+ {
+     builder.field(&quot;uid&quot;, 1234);
+     builder.field(&quot;phone&quot;, 12345678909L);
+     builder.field(&quot;msgcode&quot;, 1);
+     builder.timeField(&quot;sendtime&quot;, &quot;2019-03-14 01:57:04&quot;);
+     builder.field(&quot;message&quot;, &quot;xuwujing study Elasticsearch&quot;);
+ }
+ builder.endObject();
+ request.source(builder);
+ IndexResponse indexResponse = client.index(request, RequestOptions.DEFAULT);
+</code></pre><p>上述三种方法中，个人推荐第二种，比较容易理解和使用。</p>
+<h3 id="二、创建索引库"><a href="#二、创建索引库" class="headerlink" title="二、创建索引库"></a>二、创建索引库</h3><p>在上述示例中，我们通过直接通过创建数据从而创建了索引库，但是没有创建索引库而通过ES自身生成的这种并不友好，因为它会使用默认的配置，字段结构都是text(text的数据会分词，在存储的时候也会额外的占用空间)，分片和索引副本采用默认值，默认是5和1，ES的分片数在创建之后就不能修改，除非reindex，所以这里我们还是指定数据模板进行创建。<br>使用JAVA API 创建索引库的方法和上述中新增数据的一样，有三种方式，不过这里就只介绍一种。</p>
+<p>新增索引库的代码示例:</p>
+<pre><code>private static void createIndex() throws IOException {
+    String type = &quot;_doc&quot;;
+    String index = &quot;test1&quot;;
+    // setting 的值
+    Map&lt;String, Object&gt; setmapping = new HashMap&lt;&gt;();
+    // 分区数、副本数、缓存刷新时间
+    setmapping.put(&quot;number_of_shards&quot;, 10);
+    setmapping.put(&quot;number_of_replicas&quot;, 1);
+    setmapping.put(&quot;refresh_interval&quot;, &quot;5s&quot;);
+    Map&lt;String, Object&gt; keyword = new HashMap&lt;&gt;();
+    //设置类型
+    keyword.put(&quot;type&quot;, &quot;keyword&quot;);
+    Map&lt;String, Object&gt; lon = new HashMap&lt;&gt;();
+    //设置类型
+    lon.put(&quot;type&quot;, &quot;long&quot;);
+    Map&lt;String, Object&gt; date = new HashMap&lt;&gt;();
+    //设置类型
+    date.put(&quot;type&quot;, &quot;date&quot;);
+    date.put(&quot;format&quot;, &quot;yyyy-MM-dd HH:mm:ss&quot;);
+
+    Map&lt;String, Object&gt; jsonMap2 = new HashMap&lt;&gt;();
+    Map&lt;String, Object&gt; properties = new HashMap&lt;&gt;();
+    //设置字段message信息
+    properties.put(&quot;uid&quot;, lon);
+    properties.put(&quot;phone&quot;, lon);
+    properties.put(&quot;msgcode&quot;, lon);
+    properties.put(&quot;message&quot;, keyword);
+    properties.put(&quot;sendtime&quot;, date);
+    Map&lt;String, Object&gt; mapping = new HashMap&lt;&gt;();
+    mapping.put(&quot;properties&quot;, properties);
+    jsonMap2.put(type, mapping);
+
+    GetIndexRequest getRequest = new GetIndexRequest();
+    getRequest.indices(index);
+    getRequest.local(false);
+    getRequest.humanReadable(true);
+    boolean exists2 = client.indices().exists(getRequest, RequestOptions.DEFAULT);
+    //如果存在就不创建了
+    if(exists2) {
+        System.out.println(index+&quot;索引库已经存在!&quot;);
+        return;
+    }
+    // 开始创建库
+    CreateIndexRequest request = new CreateIndexRequest(index);
+    try {
+        // 加载数据类型
+        request.settings(setmapping);
+        //设置mapping参数
+        request.mapping(type, jsonMap2);
+        //设置别名
+        request.alias(new Alias(&quot;pancm_alias&quot;));
+        CreateIndexResponse createIndexResponse = client.indices().create(request, RequestOptions.DEFAULT);
+        boolean falg = createIndexResponse.isAcknowledged();
+        if(falg){
+            System.out.println(&quot;创建索引库:&quot;+index+&quot;成功！&quot; );
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+
+}
+</code></pre><p><strong>注：创建索引库的时候，一定要先判断索引库是否存在！！！</strong><br>这里创建索引库的时候顺便也指定了别名（alias），这个别名是一个好东西，使用恰当可以提升查询性能，这里我们留着下次在讲。</p>
+<h3 id="三、修改数据"><a href="#三、修改数据" class="headerlink" title="三、修改数据"></a>三、修改数据</h3><p>ES提供修改API的时候，有两种方式，一种是直接修改，但是若数据不存在会抛出异常，另一种则是存在更新，不存着就插入。相比第一种，第二种会更加好用一些，不过在写入速度上是不如第一种的。</p>
+<p>ES修改的代码示例:</p>
+<pre><code>private static void update() throws IOException {
+    String type = &quot;_doc&quot;;
+    String index = &quot;test1&quot;;
+    // 唯一编号
+    String id = &quot;1&quot;;
+    UpdateRequest upateRequest = new UpdateRequest();
+    upateRequest.id(id);
+    upateRequest.index(index);
+    upateRequest.type(type);
+
+    // 依旧可以使用Map这种集合作为更新条件
+    Map&lt;String, Object&gt; jsonMap = new HashMap&lt;&gt;();
+    jsonMap.put(&quot;uid&quot;, 12345);
+    jsonMap.put(&quot;phone&quot;, 123456789019L);
+    jsonMap.put(&quot;msgcode&quot;, 2);
+    jsonMap.put(&quot;sendtime&quot;, &quot;2019-03-14 01:57:04&quot;);
+    jsonMap.put(&quot;message&quot;, &quot;xuwujing study Elasticsearch&quot;);
+    upateRequest.doc(jsonMap);
+    // upsert 方法表示如果数据不存在，那么就新增一条
+    upateRequest.docAsUpsert(true);
+    client.update(upateRequest, RequestOptions.DEFAULT);
+    System.out.println(&quot;更新成功！&quot;);
+
+}
+</code></pre><p><strong>注:upsert 方法表示如果数据不存在，那么就新增一条，默认是false。</strong></p>
+<h3 id="四、删除数据"><a href="#四、删除数据" class="headerlink" title="四、删除数据"></a>四、删除数据</h3><p>根据上述的几个操作，想必不用多说，已经知道了是DELETE方法了，那我们就直接开始吧。</p>
+<p>ES根据ID删除代码示例:</p>
+<pre><code>private static void delete() throws IOException {
+
+    String type = &quot;_doc&quot;;
+    String index = &quot;test1&quot;;
+    // 唯一编号
+    String id = &quot;1&quot;;
+    DeleteRequest deleteRequest = new DeleteRequest();
+    deleteRequest.id(id);
+    deleteRequest.index(index);
+    deleteRequest.type(type);
+    // 设置超时时间
+    deleteRequest.timeout(TimeValue.timeValueMinutes(2));
+    // 设置刷新策略&quot;wait_for&quot;
+    // 保持此请求打开，直到刷新使此请求的内容可以搜索为止。此刷新策略与高索引和搜索吞吐量兼容，但它会导致请求等待响应，直到发生刷新
+    deleteRequest.setRefreshPolicy(WriteRequest.RefreshPolicy.WAIT_UNTIL);
+    // 同步删除
+    DeleteResponse deleteResponse = client.delete(deleteRequest, RequestOptions.DEFAULT);
+}        
+</code></pre><p>ES根据条件进行删除：</p>
+<pre><code>   private static void deleteByQuery() throws IOException {
+    String type = &quot;_doc&quot;;
+    String index = &quot;test1&quot;;
+    DeleteByQueryRequest request = new DeleteByQueryRequest(index,type);
+    // 设置查询条件
+    request.setQuery(QueryBuilders.termsQuery(&quot;uid&quot;,1234));
+    // 同步执行
+    BulkByScrollResponse bulkResponse = client.deleteByQuery(request, RequestOptions.DEFAULT);
+}
+</code></pre><h4 id="测试结果"><a href="#测试结果" class="headerlink" title="测试结果"></a>测试结果</h4><p>示例图:</p>
+<h3 id="查询语句"><a href="#查询语句" class="headerlink" title="查询语句"></a>查询语句</h3><p>几个常用的查询API这里就简单的介绍下用法，然后再直接给出所有的查询语句代码。</p>
+<h4 id="查询API"><a href="#查询API" class="headerlink" title="查询API"></a>查询API</h4><ul>
+<li>等值（term查询：QueryBuilders.termQuery(name,value);</li>
+<li>多值(terms)查询:QueryBuilders.termsQuery(name,value,value2,value3…);</li>
+<li>范围（range)查询：QueryBuilders.rangeQuery(name).gte(value).lte(value);</li>
+<li>存在(exists)查询:QueryBuilders.existsQuery(name);</li>
+<li>模糊(wildcard)查询:QueryBuilders.wildcardQuery(name,<em>+value+</em>);</li>
+<li>组合（bool）查询: BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();</li>
+</ul>
+<h4 id="查询所有代码示例"><a href="#查询所有代码示例" class="headerlink" title="查询所有代码示例"></a>查询所有代码示例</h4><pre><code> private static void allSearch() throws IOException {
+    SearchRequest searchRequestAll = new SearchRequest();
+    SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+    searchSourceBuilder.query(QueryBuilders.matchAllQuery());
+    searchRequestAll.source(searchSourceBuilder);
+    // 同步查询
+    SearchResponse searchResponseAll = client.search(searchRequestAll, RequestOptions.DEFAULT);
+    System.out.println(&quot;所有查询总数:&quot; + searchResponseAll.getHits().getTotalHits());
+}
+</code></pre><h4 id="一般查询代码示例"><a href="#一般查询代码示例" class="headerlink" title="一般查询代码示例"></a>一般查询代码示例</h4><p>其实就是等值查询，只不过在里面加入了分页、排序、超时、路由等等设置，并且在查询结果里面增加了一些处理。</p>
+<pre><code>   private static void genSearch() throws IOException {
+    String type = &quot;_doc&quot;;
+    String index = &quot;test1&quot;;
+    // 查询指定的索引库
+    SearchRequest searchRequest = new SearchRequest(index);
+    searchRequest.types(type);
+    SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+    // 设置查询条件
+    sourceBuilder.query(QueryBuilders.termQuery(&quot;uid&quot;, &quot;1234&quot;));
+    // 设置起止和结束
+    sourceBuilder.from(0);
+    sourceBuilder.size(5);
+    sourceBuilder.timeout(new TimeValue(60, TimeUnit.SECONDS));
+    // 设置路由
+//        searchRequest.routing(&quot;routing&quot;);
+    // 设置索引库表达式
+    searchRequest.indicesOptions(IndicesOptions.lenientExpandOpen());
+    // 查询选择本地分片，默认是集群分片
+    searchRequest.preference(&quot;_local&quot;);
+
+    // 排序
+    // 根据默认值进行降序排序
+//    sourceBuilder.sort(new ScoreSortBuilder().order(SortOrder.DESC));
+    // 根据字段进行升序排序
+//    sourceBuilder.sort(new FieldSortBuilder(&quot;id&quot;).order(SortOrder.ASC));
+
+    // 关闭suorce查询
+//    sourceBuilder.fetchSource(false);
+
+    String[] includeFields = new String[]{&quot;title&quot;, &quot;user&quot;, &quot;innerObject.*&quot;};
+    String[] excludeFields = new String[]{&quot;_type&quot;};
+    // 包含或排除字段
+//    sourceBuilder.fetchSource(includeFields, excludeFields);
+
+    searchRequest.source(sourceBuilder);
+    System.out.println(&quot;普通查询的DSL语句:&quot;+sourceBuilder.toString());
+    // 同步查询
+    SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+
+    // HTTP状态代码、执行时间或请求是否提前终止或超时
+    RestStatus status = searchResponse.status();
+    TimeValue took = searchResponse.getTook();
+    Boolean terminatedEarly = searchResponse.isTerminatedEarly();
+    boolean timedOut = searchResponse.isTimedOut();
+
+    // 供关于受搜索影响的切分总数的统计信息，以及成功和失败的切分
+    int totalShards = searchResponse.getTotalShards();
+    int successfulShards = searchResponse.getSuccessfulShards();
+    int failedShards = searchResponse.getFailedShards();
+    // 失败的原因
+    for (ShardSearchFailure failure : searchResponse.getShardFailures()) {
+        // failures should be handled here
+    }
+    // 结果
+    searchResponse.getHits().forEach(hit -&gt; {
+        Map&lt;String, Object&gt; map = hit.getSourceAsMap();
+        System.out.println(&quot;普通查询的结果:&quot; + map);
+    });
+    System.out.println(&quot;\n=================\n&quot;);
+}
+</code></pre><h4 id="或查询"><a href="#或查询" class="headerlink" title="或查询"></a>或查询</h4><p>其实这个或查询也是bool查询中的一种，这里的查询语句相当于SQL语句中的</p>
+<blockquote>
+<p>SELECT * FROM test1 where (uid = 1 or uid =2)  and phone = 12345678919</p>
+</blockquote>
+<p>代码示例:</p>
+<pre><code>private static void orSearch() throws IOException {
+    SearchRequest searchRequest = new SearchRequest();
+    searchRequest.indices(&quot;test1&quot;);
+    searchRequest.types(&quot;_doc&quot;);
+    SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+    BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+    BoolQueryBuilder boolQueryBuilder2 = new BoolQueryBuilder();
+
+      /**
+     *  SELECT * FROM test1 where (uid = 1234 or uid =12345)  and phone = 12345678909
+     * */
+    boolQueryBuilder2.should(QueryBuilders.termQuery(&quot;uid&quot;, 1234));
+    boolQueryBuilder2.should(QueryBuilders.termQuery(&quot;uid&quot;, 12345));
+    boolQueryBuilder.must(boolQueryBuilder2);
+    boolQueryBuilder.must(QueryBuilders.termQuery(&quot;phone&quot;, &quot;12345678909&quot;));
+    searchSourceBuilder.query(boolQueryBuilder);
+    System.out.println(&quot;或查询语句:&quot; + searchSourceBuilder.toString());
+    searchRequest.source(searchSourceBuilder);
+    // 同步查询
+    SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+
+    searchResponse.getHits().forEach(documentFields -&gt; {
+
+        System.out.println(&quot;查询结果:&quot; + documentFields.getSourceAsMap());
+    });
+
+}
+</code></pre><h4 id="模糊查询"><a href="#模糊查询" class="headerlink" title="模糊查询"></a>模糊查询</h4><p>相当于SQL语句中的like查询。</p>
+<pre><code>private static void likeSearch() throws IOException {
+    String type = &quot;_doc&quot;;
+    String index = &quot;test1&quot;;
+    SearchRequest searchRequest = new SearchRequest();
+    searchRequest.indices(index);
+    searchRequest.types(type);
+    SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+    BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+
+   /**
+     *  SELECT * FROM p_test where  message like &apos;%xu%&apos;;
+     * */
+    boolQueryBuilder.must(QueryBuilders.wildcardQuery(&quot;message&quot;, &quot;*xu*&quot;));
+    searchSourceBuilder.query(boolQueryBuilder);
+    System.out.println(&quot;模糊查询语句:&quot; + searchSourceBuilder.toString());
+    searchRequest.source(searchSourceBuilder);
+    // 同步查询
+    SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+    searchResponse.getHits().forEach(documentFields -&gt; {
+        System.out.println(&quot;模糊查询结果:&quot; + documentFields.getSourceAsMap());
+    });
+    System.out.println(&quot;\n=================\n&quot;);
+}
+</code></pre><h4 id="多值查询"><a href="#多值查询" class="headerlink" title="多值查询"></a>多值查询</h4><p>也就是相当于SQL语句中的in查询。</p>
+<pre><code>  private static void inSearch() throws IOException {
+    String type = &quot;_doc&quot;;
+    String index = &quot;test1&quot;;
+    // 查询指定的索引库
+    SearchRequest searchRequest = new SearchRequest(index,type);
+    SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+    /**
+     *  SELECT * FROM p_test where uid in (1,2)
+     * */
+    // 设置查询条件
+    sourceBuilder.query(QueryBuilders.termsQuery(&quot;uid&quot;, 1, 2));
+    searchRequest.source(sourceBuilder);
+      System.out.println(&quot;in查询的DSL语句:&quot;+sourceBuilder.toString());
+    // 同步查询
+    SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+    // 结果
+    searchResponse.getHits().forEach(hit -&gt; {
+        Map&lt;String, Object&gt; map = hit.getSourceAsMap();
+        String string = hit.getSourceAsString();
+        System.out.println(&quot;in查询的Map结果:&quot; + map);
+        System.out.println(&quot;in查询的String结果:&quot; + string);
+    });
+
+    System.out.println(&quot;\n=================\n&quot;);
+}
+</code></pre><h4 id="存在查询"><a href="#存在查询" class="headerlink" title="存在查询"></a>存在查询</h4><p>判断是否存在该字段，用法和SQL语句中的exist类似。</p>
+<pre><code>   private static void existSearch() throws IOException {
+    String type = &quot;_doc&quot;;
+    String index = &quot;test1&quot;;
+    // 查询指定的索引库
+    SearchRequest searchRequest = new SearchRequest(index);
+    searchRequest.types(type);
+    SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+
+    // 设置查询条件
+     sourceBuilder.query(QueryBuilders.existsQuery(&quot;msgcode&quot;));
+    searchRequest.source(sourceBuilder);
+    System.out.println(&quot;存在查询的DSL语句:&quot;+sourceBuilder.toString());
+    // 同步查询
+    SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+    // 结果
+    searchResponse.getHits().forEach(hit -&gt; {
+        Map&lt;String, Object&gt; map = hit.getSourceAsMap();
+        String string = hit.getSourceAsString();
+        System.out.println(&quot;存在查询的Map结果:&quot; + map);
+        System.out.println(&quot;存在查询的String结果:&quot; + string);
+    });
+    System.out.println(&quot;\n=================\n&quot;);
+}
+</code></pre><h4 id="范围查询"><a href="#范围查询" class="headerlink" title="范围查询"></a>范围查询</h4><p>和SQL语句中&lt;&gt;使用方法一样,其中gt是大于，lt是小于，gte是大于等于，lte是小于等于。</p>
+<pre><code>private static void rangeSearch() throws IOException{
+    String type = &quot;_doc&quot;;
+    String index = &quot;test1&quot;;
+    SearchRequest searchRequest = new SearchRequest(index);
+    searchRequest.types(type);
+    SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+
+    // 设置查询条件
+    sourceBuilder.query(QueryBuilders.rangeQuery(&quot;sendtime&quot;).gte(&quot;2019-01-01 00:00:00&quot;).lte(&quot;2019-12-31 23:59:59&quot;));
+    searchRequest.source(sourceBuilder);
+     System.out.println(&quot;范围查询的DSL语句:&quot;+sourceBuilder.toString());
+    // 同步查询
+    SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+    // 结果
+    searchResponse.getHits().forEach(hit -&gt; {
+        String string = hit.getSourceAsString();
+        System.out.println(&quot;范围查询的String结果:&quot; + string);
+    });
+    System.out.println(&quot;\n=================\n&quot;);
+}
+</code></pre><h4 id="正则查询"><a href="#正则查询" class="headerlink" title="正则查询"></a>正则查询</h4><p>ES可以使用正则进行查询，查询方式也非常的简单，代码示例如下：</p>
+<pre><code> private static void regexpSearch() throws IOException{
+    String type = &quot;_doc&quot;;
+    String index = &quot;test1&quot;;
+    // 查询指定的索引库
+    SearchRequest searchRequest = new SearchRequest(index);
+    searchRequest.types(type);
+    SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+    // 设置查询条件
+    sourceBuilder.query(QueryBuilders.regexpQuery(&quot;message&quot;,&quot;xu[0-9]&quot;));
+    searchRequest.source(sourceBuilder);
+     System.out.println(&quot;正则查询的DSL语句:&quot;+sourceBuilder.toString());
+    // 同步查询
+    SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+    // 结果
+    searchResponse.getHits().forEach(hit -&gt; {
+        Map&lt;String, Object&gt; map = hit.getSourceAsMap();
+        String string = hit.getSourceAsString();
+        System.out.println(&quot;正则查询的Map结果:&quot; + map);
+        System.out.println(&quot;正则查询的String结果:&quot; + string);
+    });
+
+    System.out.println(&quot;\n=================\n&quot;);
+}
+</code></pre><h4 id="查询测试结果"><a href="#查询测试结果" class="headerlink" title="查询测试结果"></a>查询测试结果</h4><blockquote>
+<p>所有查询总数:6<br>普通查询的DSL语句:{“from”:0,”size”:5,”timeout”:”60s”,”query”:{“term”:{“uid”:{“value”:”1234”,”boost”:1.0}}}}</p>
+<p>=================</p>
+<p>或查询语句:{“query”:{“bool”:{“must”:[{“bool”:{“should”:[{“term”:{“uid”:{“value”:1234,”boost”:1.0}}},{“term”:{“uid”:{“value”:12345,”boost”:1.0}}}],”adjust_pure_negative”:true,”boost”:1.0}},{“term”:{“phone”:{“value”:”12345678909”,”boost”:1.0}}}],”adjust_pure_negative”:true,”boost”:1.0}}}<br>或查询结果:{msgcode=1, uid=12345, phone=12345678909, message=qq, sendtime=2019-03-14 01:57:04}</p>
+<p>=================</p>
+<p>模糊查询语句:{“query”:{“bool”:{“must”:[{“wildcard”:{“message”:{“wildcard”:”<em>xu</em>“,”boost”:1.0}}}],”adjust_pure_negative”:true,”boost”:1.0}}}<br>模糊查询结果:{msgcode=2, uid=12345, phone=123456789019, sendtime=2019-03-14 01:57:04, message=xuwujing study Elasticsearch}<br>模糊查询结果:{uid=123456, phone=12345678909, message=xu1, sendtime=2019-03-14 01:57:04}</p>
+<p>=================</p>
+<p>存在查询的DSL语句:{“query”:{“exists”:{“field”:”msgcode”,”boost”:1.0}}}<br>存在查询的Map结果:{msgcode=2, uid=12345, phone=123456789019, sendtime=2019-03-14 01:57:04, message=xuwujing study Elasticsearch}<br>存在查询的String结果:{“uid”:12345,”phone”:123456789019,”msgcode”:2,”sendtime”:”2019-03-14 01:57:04”,”message”:”xuwujing study Elasticsearch”}<br>存在查询的Map结果:{msgcode=1, uid=12345, phone=12345678909, message=qq, sendtime=2019-03-14 01:57:04}<br>存在查询的String结果:{“uid”:”12345”,”phone”:”12345678909”,”message”:”qq”,”msgcode”:”1”,”sendtime”:”2019-03-14 01:57:04”}</p>
+<p>=================</p>
+<p>范围查询的DSL语句:{“query”:{“range”:{“sendtime”:{“from”:”2019-01-01 00:00:00”,”to”:”2019-12-31 23:59:59”,”include_lower”:true,”include_upper”:true,”boost”:1.0}}}}<br>范围查询的String结果:{“uid”:12345,”phone”:123456789019,”msgcode”:2,”sendtime”:”2019-03-14 01:57:04”,”message”:”xuwujing study Elasticsearch”}<br>范围查询的String结果:{“uid”:”123456”,”phone”:”12345678909”,”message”:”xu1”,”sendtime”:”2019-03-14 01:57:04”}<br>范围查询的String结果:{“uid”:”12345”,”phone”:”12345678909”,”message”:”qq”,”msgcode”:”1”,”sendtime”:”2019-03-14 01:57:04”}</p>
+<p>=================</p>
+<p>正则查询的DSL语句:{“query”:{“regexp”:{“message”:{“value”:”xu[0-9]”,”flags_value”:65535,”max_determinized_states”:10000,”boost”:1.0}}}}<br>正则查询的Map结果:{uid=123456, phone=12345678909, message=xu1, sendtime=2019-03-14 01:57:04}<br>正则查询的String结果:{“uid”:”123456”,”phone”:”12345678909”,”message”:”xu1”,”sendtime”:”2019-03-14 01:57:04”}</p>
+<p>=================</p>
+<p>组合查询的DSL语句:{“query”:{“bool”:{“must”:[{“term”:{“uid”:{“value”:12345,”boost”:1.0}}},{“term”:{“msgcode”:{“value”:1,”boost”:1.0}}}],”adjust_pure_negative”:true,”boost”:1.0}}}<br>组合查询的String结果:{“uid”:”12345”,”phone”:”12345678909”,”message”:”qq”,”msgcode”:”1”,”sendtime”:”2019-03-14 01:57:04”}</p>
+<p>=================</p>
+</blockquote>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><p>参考ES官方文档：<br><a href="https://www.elastic.co/guide/en/elasticsearch/client/java-rest/current/java-rest-high.html" target="_blank" rel="external">https://www.elastic.co/guide/en/elasticsearch/client/java-rest/current/java-rest-high.html</a></p>
+<p>关于SpringBoot集成ElasticSearch和JestClient的使用可以查看这篇文章：<a href="https://www.cnblogs.com/xuwujing/p/8998168.html" target="_blank" rel="external">SpringBoot整合ElasticSearch实现多版本的兼容</a></p>
+<p>关于ElasticSearch Java API的选择，如果ElasticSearch版本在6.x以前的话，推荐使用JestClient。如果是6.x之后并且有意升级到7.x的话，那么直接使用ES官方的<code>Java High Level REST Client</code>，因为在7.x之后将直接会舍弃<code>Transport client</code>的连接方式，目前Spring和SpringBoot集成的ES就是使用该方式(不知后续是否会做调整)。</p>
+<p>本篇文章的代码已收录在本人的<a href="https://github.com/xuwujing/java-study" target="_blank" rel="external">java-study</a>项目中，若有兴趣，欢迎star、fork和issues。<br>项目地址:<a href="https://github.com/xuwujing/java-study" target="_blank" rel="external">https://github.com/xuwujing/java-study</a></p>
+<p><a href="https://www.cnblogs.com/xuwujing/tag/elasticsearch/" target="_blank" rel="external">ElasticSearch实战系列</a>:<br><a href="https://www.cnblogs.com/xuwujing/p/11385255.html" target="_blank" rel="external">ElasticSearch实战系列一:  ElasticSearch集群+Kinaba安装教程</a><br><a href="https://www.cnblogs.com/xuwujing/p/11567053.html" target="_blank" rel="external">ElasticSearch实战系列二: ElasticSearch的DSL语句使用教程—图文详解</a></p>
+<h3 id="音乐推荐"><a href="#音乐推荐" class="headerlink" title="音乐推荐"></a>音乐推荐</h3><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=1366594775&auto=0&height=66"></iframe>
+
+
+
+<p>原创不易，如果感觉不错，希望给个推荐！您的支持是我写作的最大动力！<br>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a> </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/elasticsearch/" rel="tag"># elasticsearch</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/22/pancm121/" rel="next" title="ElasticSearch实战系列二_  ElasticSearch的DSL语句使用教程---图文详解">
+                <i class="fa fa-chevron-left"></i> ElasticSearch实战系列二_  ElasticSearch的DSL语句使用教程---图文详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/10/24/pancm123/" rel="prev" title="一个毕业三年的程序猿对于提升自我的一些建议">
+                一个毕业三年的程序猿对于提升自我的一些建议 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">131</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">54</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://italker.imisty.cn" title="xiaowu" target="_blank">xiaowu</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ElasticSearch-JAVA-API"><span class="nav-number">2.</span> <span class="nav-text">ElasticSearch JAVA API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、新增数据"><span class="nav-number">2.1.</span> <span class="nav-text">一、新增数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、创建索引库"><span class="nav-number">2.2.</span> <span class="nav-text">二、创建索引库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、修改数据"><span class="nav-number">2.3.</span> <span class="nav-text">三、修改数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、删除数据"><span class="nav-number">2.4.</span> <span class="nav-text">四、删除数据</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#测试结果"><span class="nav-number">2.4.1.</span> <span class="nav-text">测试结果</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询语句"><span class="nav-number">2.5.</span> <span class="nav-text">查询语句</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#查询API"><span class="nav-number">2.5.1.</span> <span class="nav-text">查询API</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查询所有代码示例"><span class="nav-number">2.5.2.</span> <span class="nav-text">查询所有代码示例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一般查询代码示例"><span class="nav-number">2.5.3.</span> <span class="nav-text">一般查询代码示例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#或查询"><span class="nav-number">2.5.4.</span> <span class="nav-text">或查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模糊查询"><span class="nav-number">2.5.5.</span> <span class="nav-text">模糊查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多值查询"><span class="nav-number">2.5.6.</span> <span class="nav-text">多值查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#存在查询"><span class="nav-number">2.5.7.</span> <span class="nav-text">存在查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#范围查询"><span class="nav-number">2.5.8.</span> <span class="nav-text">范围查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#正则查询"><span class="nav-number">2.5.9.</span> <span class="nav-text">正则查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查询测试结果"><span class="nav-number">2.5.10.</span> <span class="nav-text">查询测试结果</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它"><span class="nav-number">3.</span> <span class="nav-text">其它</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#音乐推荐"><span class="nav-number">3.1.</span> <span class="nav-text">音乐推荐</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

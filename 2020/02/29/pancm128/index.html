@@ -1,0 +1,968 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="elasticsearch," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言在上上一篇中介绍了ElasticSearch实战系列三: ElasticSearch的JAVA API使用教程，介绍了ElasticSearch Java API基础的语法，基本的增删改查(对应SQL语句)， 本篇则来介绍一下ElasticSearch 聚合查询的使用JAVA API 和 DSL语句的使用 。 ElasticSearch  Aggregation聚合框架有助于基于搜索查询提供">
+<meta name="keywords" content="elasticsearch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ElasticSearch实战系列五:ElasticSearch的聚合查询基础使用教程之度量(Metric)聚合">
+<meta property="og:url" content="http://yoursite.com/2020/02/29/pancm128/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言在上上一篇中介绍了ElasticSearch实战系列三: ElasticSearch的JAVA API使用教程，介绍了ElasticSearch Java API基础的语法，基本的增删改查(对应SQL语句)， 本篇则来介绍一下ElasticSearch 聚合查询的使用JAVA API 和 DSL语句的使用 。 ElasticSearch  Aggregation聚合框架有助于基于搜索查询提供">
+<meta property="og:updated_time" content="2020-08-17T13:47:29.370Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ElasticSearch实战系列五:ElasticSearch的聚合查询基础使用教程之度量(Metric)聚合">
+<meta name="twitter:description" content="前言在上上一篇中介绍了ElasticSearch实战系列三: ElasticSearch的JAVA API使用教程，介绍了ElasticSearch Java API基础的语法，基本的增删改查(对应SQL语句)， 本篇则来介绍一下ElasticSearch 聚合查询的使用JAVA API 和 DSL语句的使用 。 ElasticSearch  Aggregation聚合框架有助于基于搜索查询提供">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/02/29/pancm128/"/>
+
+
+
+
+
+
+  <title>ElasticSearch实战系列五:ElasticSearch的聚合查询基础使用教程之度量(Metric)聚合 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/29/pancm128/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ElasticSearch实战系列五:ElasticSearch的聚合查询基础使用教程之度量(Metric)聚合</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-29T00:00:00+08:00">
+                2020-02-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/elasticsearch/" itemprop="url" rel="index">
+                    <span itemprop="name">elasticsearch</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在上上一篇中介绍了<a href="https://www.cnblogs.com/xuwujing/p/11645630.html" target="_blank" rel="external">ElasticSearch实战系列三: ElasticSearch的JAVA API使用教程</a>，介绍了ElasticSearch Java API基础的语法，基本的增删改查(对应SQL语句)， 本篇则来介绍一下ElasticSearch 聚合查询的使用JAVA API 和 DSL语句的使用 。</p>
+<h2 id="ElasticSearch-Aggregation"><a href="#ElasticSearch-Aggregation" class="headerlink" title="ElasticSearch  Aggregation"></a>ElasticSearch  Aggregation</h2><p>聚合框架有助于基于搜索查询提供聚合数据。它基于称为聚合的简单构建块，可以进行组合以构建复杂的数据摘要。<br>聚合可以看作是在一组文档上建立分析信息的工作单元。执行的上下文定义此文档集是什么（例如，顶级聚合在搜索请求的已执行查询/过滤器的上下文中执行）。<br>有许多不同类型的聚合，每种聚合都有自己的目的和输出。为了更好地理解这些类型，通常更容易将它们分为四个主要家族：</p>
+<ul>
+<li><p>Metric:</p>
+<blockquote>
+<p>在一组文档上跟踪和计算指标的聚合。这些值通常是从文档的字段中提取的（使用字段数据），但也可以使用脚本生成。</p>
+</blockquote>
+</li>
+<li><p>Bucketing:</p>
+<blockquote>
+<p>生成存储桶的一组聚合，其中每个存储桶都与一个键和一个文档条件相关联。执行聚合时，将对上下文中的每个文档评估所有存储桶条件，并且当条件匹配时，该文档将被视为“落入”相关存储桶。到聚合过程结束时，我们将得到一个存储桶列表-每个存储桶都有一组“属于”的文档。</p>
+</blockquote>
+</li>
+<li><p>Matrix:</p>
+<blockquote>
+<p>操作多个字段并根据从请求的文档字段中提取的值生成矩阵结果的集合。与Metric和Bucketing不同，这个聚合不支持脚本!</p>
+</blockquote>
+</li>
+<li><p>Pipeline:</p>
+<blockquote>
+<p>它聚合其他聚合的输出及其相关的Metric。</p>
+</blockquote>
+</li>
+</ul>
+<p>由于每个存储桶有效地定义了一个文档集（所有文件都属于该存储桶），因此可以潜在地在存储桶级别关联聚合，并且这些聚合将在该存储桶的上下文中执行。这就是聚合真正的力量所在：聚合可以嵌套！</p>
+<blockquote>
+<p>存储桶聚合可以具有子聚合（存储桶或指标）。子聚合将针对其父聚合生成的存储桶进行计算。嵌套聚合的级别/深度没有硬性限制（可以将一个聚合嵌套在“父”聚合下，该“父”聚合本身是另一种更高级别的聚合的子聚合）。<br>聚合作用于double数据的表示形式。因此，当运行绝对值大于的多头时，结果可能是近似的2^53。</p>
+</blockquote>
+<h2 id="度量-Metric-聚合"><a href="#度量-Metric-聚合" class="headerlink" title="度量(Metric)聚合"></a>度量(Metric)聚合</h2><blockquote>
+<p>数值指标聚合是一种特殊类型的指标聚合，可输出数值。一些聚合输出单个数值度量（例如avg）并被称为single-value numeric metrics aggregation，其他聚合则生成多个度量（例如stats）并被称为multi-value numeric metrics aggregation。当这些值充当某些存储桶聚合的直接子聚合（某些存储桶聚合使您可以基于每个存储桶中的数字度量对返回的存储桶进行排序）时，单值和多值数字度量聚合之间的区别将发挥作用。</p>
+</blockquote>
+<p>度量(Metric)聚合在ElasticSearch官方文档中有很中聚合，这里我只列举我们最常用的几个聚合示例。</p>
+<h3 id="avg-聚合"><a href="#avg-聚合" class="headerlink" title="avg 聚合"></a>avg 聚合</h3><blockquote>
+<p>计算的平均个从聚集的文档中提取数值。这些值可以从文档中的特定数字字段中提取，也可以由提供的脚本生成。</p>
+</blockquote>
+<p>这里我们用一个示例来进行说明，得到一个班级的学生分数平均分数。</p>
+<p>DSL语句示例:</p>
+<pre><code>POST /student/_search?size=0
+{
+    &quot;aggs&quot; : {
+        &quot;avg_grade&quot; : { &quot;avg&quot; : { &quot;field&quot; : &quot;grade&quot; } }
+    }
+}
+</code></pre><p><strong>注: grade 字段类型必须是整型</strong></p>
+<p>当然，如果成绩还包含<strong>权重</strong>(weight)的话,我们可以为其添加权重.<br><strong>权重</strong>: 在计算常规平均值时，每个数据点都具有相等的``权重’’…它对最终值的贡献均等。可以理解为权重值越大，就越靠前，加权公式为:  ∑(value * weight) / ∑(weight).</p>
+<p>DSL语句示例:</p>
+<pre><code>POST /student/_search
+{
+    &quot;size&quot;: 0,
+    &quot;aggs&quot; : {
+        &quot;weighted_grade&quot;: {
+            &quot;weighted_avg&quot;: {
+                &quot;value&quot;: {
+                    &quot;field&quot;: &quot;grade&quot;
+                },
+                &quot;weight&quot;: {
+                    &quot;field&quot;: &quot;weight&quot;
+                }
+            }
+        }
+    }
+}
+</code></pre><h3 id="max-min-聚合"><a href="#max-min-聚合" class="headerlink" title="max/min 聚合"></a>max/min 聚合</h3><p>这里我们用一个示例来进行说明，得到班级的最高分和最低分。</p>
+<p>DSL语句示例:</p>
+<pre><code>POST /student/_search?size=0
+{
+    &quot;aggs&quot; : {
+        &quot;max_grade&quot; : { &quot;max&quot; : { &quot;field&quot; : &quot;grade&quot; } }
+    }
+}
+
+POST /student/_search?size=0
+{
+    &quot;aggs&quot; : {
+        &quot;min_grade&quot; : { &quot;min&quot; : { &quot;field&quot; : &quot;grade&quot; } }
+    }
+}
+</code></pre><h3 id="sum聚合"><a href="#sum聚合" class="headerlink" title="sum聚合"></a>sum聚合</h3><p>得到某字段总和的值。</p>
+<p>DSL语句示例:</p>
+<pre><code>POST /student/_search?size=0
+{
+
+    &quot;aggs&quot; : {
+        &quot;sum_grade&quot; : { &quot;sum&quot; : { &quot;field&quot; : &quot;grade&quot; } }
+    }
+}
+</code></pre><h3 id="top-聚合"><a href="#top-聚合" class="headerlink" title="top 聚合"></a>top 聚合</h3><blockquote>
+<p>一个top_hits指标聚合不断被聚合跟踪最相关的文档。该聚合器旨在用作子聚合器，以便可以按存储分区汇总最匹配的文档。该top_hits聚合器可以有效地通过某些字段经由铲斗聚合器用于将结果集。一个或多个存储桶聚合器确定将结果集切成哪些属性。</p>
+</blockquote>
+<p>选件</p>
+<ul>
+<li>from -与您要提取的第一个结果的偏移量。 </li>
+<li>size-每个存储区返回的最匹配匹配项的最大数量。默认情况下，返回前三个匹配项。<br>sort-热门匹配项的排序方式。默认情况下，命中按主要查询的分数排序。</li>
+</ul>
+<p>这里我们依旧通过一个示例来进行说明。<br>根据grade(成绩)降序取前2条数据，字段只包含grade(成绩)和name(姓名)。</p>
+<p>DSL语句示例:</p>
+<pre><code>POST /student/_search?size=0
+{
+    &quot;aggs&quot;: {
+        &quot;top_tags&quot;: {
+            &quot;terms&quot;: {
+                &quot;field&quot;: &quot;grade&quot;,
+                &quot;size&quot;: 2
+            },
+            &quot;aggs&quot;: {
+                &quot;top_sales_hits&quot;: {
+                    &quot;top_hits&quot;: {
+                        &quot;sort&quot;: [
+                            {
+                                &quot;grade&quot;: {
+                                    &quot;order&quot;: &quot;desc&quot;
+                                }
+                            }
+                        ],
+                        &quot;_source&quot;: {
+                            &quot;includes&quot;: [ &quot;grade&quot;, &quot;name&quot; ]
+                        },
+                        &quot;size&quot; : 1
+                    }
+                }
+            }
+        }
+    }
+}
+</code></pre><h3 id="JAVA代码示例"><a href="#JAVA代码示例" class="headerlink" title="JAVA代码示例"></a>JAVA代码示例</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"> /**</div><div class="line">     * @Author pancm</div><div class="line">     * @Description 平均聚合查询测试用例</div><div class="line">     * @Date  2019/4/1</div><div class="line">     * @Param []</div><div class="line">     * @return void</div><div class="line">     **/</div><div class="line">    private static  void avgSearch() throws IOException &#123;</div><div class="line"></div><div class="line">        String buk=&quot;t_grade_avg&quot;;</div><div class="line">        //直接求平均数</div><div class="line">        AggregationBuilder aggregation = AggregationBuilders.avg(buk).field(&quot;grade&quot;);</div><div class="line">        logger.info(&quot;求班级的平均分数:&quot;);</div><div class="line">        agg(aggregation,buk);</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private static  void maxSearch() throws  IOException&#123;</div><div class="line">        String buk=&quot;t_grade&quot;;</div><div class="line">        AggregationBuilder aggregation = AggregationBuilders.max(buk).field(&quot;grade&quot;);</div><div class="line">        logger.info(&quot;求班级的最高分数:&quot;);</div><div class="line">        agg(aggregation,buk);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private static  void sumSearch() throws  IOException&#123;</div><div class="line">        String buk=&quot;t_grade&quot;;</div><div class="line">        AggregationBuilder aggregation = AggregationBuilders.sum(buk).field(&quot;grade&quot;);</div><div class="line">        logger.info(&quot;求班级的总分数:&quot;);</div><div class="line">        agg(aggregation,buk);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">  private static SearchResponse search(AggregationBuilder aggregation) throws IOException &#123;</div><div class="line">        SearchRequest searchRequest = new SearchRequest();</div><div class="line">        searchRequest.indices(&quot;student&quot;);</div><div class="line">        searchRequest.types(&quot;_doc&quot;);</div><div class="line">        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();</div><div class="line">        //不需要解释</div><div class="line">        searchSourceBuilder.explain(false);</div><div class="line">        //不需要原始数据</div><div class="line">        searchSourceBuilder.fetchSource(false);</div><div class="line">        //不需要版本号</div><div class="line">        searchSourceBuilder.version(false);</div><div class="line">        searchSourceBuilder.aggregation(aggregation);</div><div class="line">        logger.info(&quot;查询的语句:&quot;+searchSourceBuilder.toString());</div><div class="line">        searchRequest.source(searchSourceBuilder);</div><div class="line">        // 同步查询</div><div class="line">        SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);</div><div class="line">        return  searchResponse;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">protected  static  void agg(AggregationBuilder aggregation, String buk) throws  IOException&#123;</div><div class="line">        SearchResponse searchResponse = search(aggregation);</div><div class="line">        if(RestStatus.OK.equals(searchResponse.status())) &#123;</div><div class="line">            // 获取聚合结果</div><div class="line">            Aggregations aggregations = searchResponse.getAggregations();</div><div class="line"></div><div class="line">            if(buk.contains(&quot;avg&quot;))&#123;</div><div class="line">                //取子聚合</div><div class="line">                Avg ba = aggregations.get(buk);</div><div class="line">                logger.info(buk+&quot;:&quot; + ba.getValue());</div><div class="line">                logger.info(&quot;------------------------------------&quot;);</div><div class="line">            &#125;else if(buk.contains(&quot;max&quot;))&#123;</div><div class="line">                //取子聚合</div><div class="line">                Max ba = aggregations.get(buk);</div><div class="line">                logger.info(buk+&quot;:&quot; + ba.getValue());</div><div class="line">                logger.info(&quot;------------------------------------&quot;);</div><div class="line"></div><div class="line">            &#125;else if(buk.contains(&quot;min&quot;))&#123;</div><div class="line">                //取子聚合</div><div class="line">                Min ba = aggregations.get(buk);</div><div class="line">                logger.info(buk+&quot;:&quot; + ba.getValue());</div><div class="line">                logger.info(&quot;------------------------------------&quot;);</div><div class="line">            &#125;else if(buk.contains(&quot;sum&quot;))&#123;</div><div class="line">                //取子聚合</div><div class="line">                Sum ba = aggregations.get(buk);</div><div class="line">                logger.info(buk+&quot;:&quot; + ba.getValue());</div><div class="line">                logger.info(&quot;------------------------------------&quot;);</div><div class="line">            &#125;else if(buk.contains(&quot;top&quot;))&#123;</div><div class="line">                //取子聚合TopHits</div><div class="line">                TopHits ba = aggregations.get(buk);</div><div class="line">                logger.info(buk+&quot;:&quot; + ba.getHits().totalHits);</div><div class="line">                logger.info(&quot;------------------------------------&quot;);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><p>参考:<br><a href="https://www.elastic.co/guide/en/elasticsearch/reference/6.5/search-aggregations.html" target="_blank" rel="external">https://www.elastic.co/guide/en/elasticsearch/reference/6.5/search-aggregations.html</a></p>
+<p>本篇文章的代码已收录在本人的<a href="https://github.com/xuwujing/java-study" target="_blank" rel="external">java-study</a>项目中，若有兴趣，欢迎star、fork和issues。<br>项目地址:<a href="https://github.com/xuwujing/java-study" target="_blank" rel="external">https://github.com/xuwujing/java-study</a></p>
+<p><a href="https://www.cnblogs.com/xuwujing/tag/elasticsearch/" target="_blank" rel="external">ElasticSearch实战系列</a>:</p>
+<ul>
+<li><a href="https://www.cnblogs.com/xuwujing/p/11385255.html" target="_blank" rel="external">ElasticSearch实战系列一: ElasticSearch集群+Kinaba安装教程</a></li>
+<li><a href="https://www.cnblogs.com/xuwujing/p/11567053.html" target="_blank" rel="external">ElasticSearch实战系列二: ElasticSearch的DSL语句使用教程—图文详解</a></li>
+<li><a href="https://www.cnblogs.com/xuwujing/p/11645630.html" target="_blank" rel="external">ElasticSearch实战系列三: ElasticSearch的JAVA API使用教程</a></li>
+<li><a href="https://www.cnblogs.com/xuwujing/p/12093933.html" target="_blank" rel="external">ElasticSearch实战系列四: ElasticSearch理论知识介绍</a></li>
+</ul>
+<h3 id="音乐推荐"><a href="#音乐推荐" class="headerlink" title="音乐推荐"></a>音乐推荐</h3><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=1366594775&auto=0&height=66"></iframe>
+
+
+
+<p>原创不易，如果感觉不错，希望给个推荐！您的支持是我写作的最大动力！<br>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a> </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/elasticsearch/" rel="tag"># elasticsearch</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/09/pancm127/" rel="next" title="认清自我，不在迷茫！2019个人年终总结！">
+                <i class="fa fa-chevron-left"></i> 认清自我，不在迷茫！2019个人年终总结！
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/08/17/pancm131/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">131</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">54</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://italker.imisty.cn" title="xiaowu" target="_blank">xiaowu</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ElasticSearch-Aggregation"><span class="nav-number">2.</span> <span class="nav-text">ElasticSearch  Aggregation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#度量-Metric-聚合"><span class="nav-number">3.</span> <span class="nav-text">度量(Metric)聚合</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#avg-聚合"><span class="nav-number">3.1.</span> <span class="nav-text">avg 聚合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#max-min-聚合"><span class="nav-number">3.2.</span> <span class="nav-text">max/min 聚合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sum聚合"><span class="nav-number">3.3.</span> <span class="nav-text">sum聚合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#top-聚合"><span class="nav-number">3.4.</span> <span class="nav-text">top 聚合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JAVA代码示例"><span class="nav-number">3.5.</span> <span class="nav-text">JAVA代码示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它"><span class="nav-number">4.</span> <span class="nav-text">其它</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#音乐推荐"><span class="nav-number">4.1.</span> <span class="nav-text">音乐推荐</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
