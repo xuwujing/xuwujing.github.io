@@ -1,0 +1,939 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="elasticsearch,filebeat," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言本文主要介绍的是ELK日志系统中的Filebeat快速入门教程。 ELK介绍ELK是三个开源软件的缩写，分别表示：Elasticsearch , Logstash, Kibana , 它们都是开源软件。新增了一个FileBeat，它是一个轻量级的日志收集处理工具(Agent)，Filebeat占用资源少，适合于在各个服务器上搜集日志后传输给Logstash，官方也推荐此工具。  Elasti">
+<meta name="keywords" content="elasticsearch,filebeat">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ElasticSearch实战系列八 Filebeat快速入门和使用---图文详解">
+<meta property="og:url" content="http://yoursite.com/2020/08/19/pancm133/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言本文主要介绍的是ELK日志系统中的Filebeat快速入门教程。 ELK介绍ELK是三个开源软件的缩写，分别表示：Elasticsearch , Logstash, Kibana , 它们都是开源软件。新增了一个FileBeat，它是一个轻量级的日志收集处理工具(Agent)，Filebeat占用资源少，适合于在各个服务器上搜集日志后传输给Logstash，官方也推荐此工具。  Elasti">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200819213306368.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200819213300950.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200814154553682.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200814152029745.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:updated_time" content="2021-03-06T05:51:43.006Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ElasticSearch实战系列八 Filebeat快速入门和使用---图文详解">
+<meta name="twitter:description" content="前言本文主要介绍的是ELK日志系统中的Filebeat快速入门教程。 ELK介绍ELK是三个开源软件的缩写，分别表示：Elasticsearch , Logstash, Kibana , 它们都是开源软件。新增了一个FileBeat，它是一个轻量级的日志收集处理工具(Agent)，Filebeat占用资源少，适合于在各个服务器上搜集日志后传输给Logstash，官方也推荐此工具。  Elasti">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200819213306368.png#pic_center">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/08/19/pancm133/"/>
+
+
+
+
+
+
+  <title>ElasticSearch实战系列八 Filebeat快速入门和使用---图文详解 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/19/pancm133/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ElasticSearch实战系列八 Filebeat快速入门和使用---图文详解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-19T00:00:00+08:00">
+                2020-08-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/elasticsearch/" itemprop="url" rel="index">
+                    <span itemprop="name">elasticsearch</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文主要介绍的是ELK日志系统中的Filebeat快速入门教程。</p>
+<h2 id="ELK介绍"><a href="#ELK介绍" class="headerlink" title="ELK介绍"></a>ELK介绍</h2><p>ELK是三个开源软件的缩写，分别表示：Elasticsearch , Logstash, Kibana , 它们都是开源软件。新增了一个FileBeat，它是一个轻量级的日志收集处理工具(Agent)，Filebeat占用资源少，适合于在各个服务器上搜集日志后传输给Logstash，官方也推荐此工具。</p>
+<ul>
+<li>Elasticsearch是个开源分布式搜索引擎，提供搜集、分析、存储数据三大功能。它的特点有：分布式，零配置，自动发现，索引自动分片，索引副本机制，restful风格接口，多数据源，自动搜索负载等。</li>
+</ul>
+<ul>
+<li><p>Logstash 主要是用来日志的搜集、分析、过滤日志的工具，支持大量的数据获取方式。一般工作方式为c/s架构，client端安装在需要收集日志的主机上，server端负责将收到的各节点日志进行过滤、修改等操作在一并发往elasticsearch上去。</p>
+</li>
+<li><p>Kibana 也是一个开源和免费的工具，Kibana可以为 Logstash 和 ElasticSearch 提供的日志分析友好的 Web 界面，可以帮助汇总、分析和搜索重要数据日志。</p>
+</li>
+<li><p>Filebeat是一个轻量型日志采集器，可以方便的同kibana集成，启动filebeat后，可以直接在kibana中观看对日志文件进行detail的过程。</p>
+</li>
+</ul>
+<h2 id="Filebeat介绍"><a href="#Filebeat介绍" class="headerlink" title="Filebeat介绍"></a>Filebeat介绍</h2><p>Filebeat 是使用 Golang 实现的轻量型日志采集器，也是 Elasticsearch stack 里面的一员。本质上是一个 agent ，可以安装在各个节点上，根据配置读取对应位置的日志，并上报到相应的地方去。<br>Filebeat 的可靠性很强，可以保证日志 At least once 的上报，同时也考虑了日志搜集中的各类问题，例如日志断点续读、文件名更改、日志 Truncated 等。<br>Filebeat 并不依赖于 ElasticSearch，可以单独存在。我们可以单独使用Filebeat进行日志的上报和搜集。filebeat 内置了常用的 Output 组件, 例如 kafka、ElasticSearch、redis 等，出于调试考虑，也可以输出到 console 和 file 。我们可以利用现有的 Output 组件，将日志进行上报。<br>当然，我们也可以自定义 Output 组件，让 Filebeat 将日志转发到我们想要的地方。<br>filebeat 其实是 elastic/beats 的一员，除了 filebeat 外，还有 HeartBeat、PacketBeat。这些 beat 的实现都是基于 libbeat 框架。</p>
+<p>Filebeat 由两个主要组件组成：harvester 和 prospector。</p>
+<p>采集器 harvester 的主要职责是读取单个文件的内容。读取每个文件，并将内容发送到 the output。 每个文件启动一个 harvester，harvester 负责打开和关闭文件，这意味着在运行时文件描述符保持打开状态。如果文件在读取时被删除或重命名，Filebeat 将继续读取文件。</p>
+<p>查找器 prospector 的主要职责是管理 harvester 并找到所有要读取的文件来源。如果输入类型为日志，则查找器将查找路径匹配的所有文件，并为每个文件启动一个 harvester。每个 prospector 都在自己的 Go 协程中运行。</p>
+<p>注：Filebeat prospector只能读取本地文件， 没有功能可以连接到远程主机来读取存储的文件或日志。</p>
+<p>示例图:</p>
+<h2 id="Filebeat安装使用"><a href="#Filebeat安装使用" class="headerlink" title="Filebeat安装使用"></a>Filebeat安装使用</h2><p>Filebeat下载地址推荐使用清华大学或华为的开源镜像站。</p>
+<p><strong>下载地址:</strong></p>
+<p> <a href="https://mirrors.huaweicloud.com/logstash" target="_blank" rel="external">https://mirrors.huaweicloud.com/logstash</a><br> <a href="https://mirrors.tuna.tsinghua.edu.cn/ELK" target="_blank" rel="external">https://mirrors.tuna.tsinghua.edu.cn/ELK</a></p>
+<p>ELK7.3.2百度网盘地址:<br>链接：<a href="https://pan.baidu.com/s/1tq3Czywjx3GGrreOAgkiGg" target="_blank" rel="external">https://pan.baidu.com/s/1tq3Czywjx3GGrreOAgkiGg</a><br>提取码：cxng</p>
+<h3 id="三、Filebeat安装"><a href="#三、Filebeat安装" class="headerlink" title="三、Filebeat安装"></a>三、Filebeat安装</h3><h4 id="1，文件准备"><a href="#1，文件准备" class="headerlink" title="1，文件准备"></a>1，文件准备</h4><p>将下载下来的filebeat-7.3.2-linux-x86_64.gz的配置文件进行解压<br>在linux上输入:</p>
+<blockquote>
+<p> tar  -xvf   filebeat-7.3.2-linux-x86_64.tar.gz</p>
+</blockquote>
+<p>然后移动到/opt/elk 里面，然后将文件夹重命名为 filebeat-7.3.2<br>输入</p>
+<blockquote>
+<p>mv  filebeat-7.3.2-linux-x86_64  /opt/elk<br>mv  filebeat-7.3.2-linux-x86_64  filebeat-7.3.2</p>
+</blockquote>
+<h4 id="2，配置修改"><a href="#2，配置修改" class="headerlink" title="2，配置修改"></a>2，配置修改</h4><p>这里简单介绍一下 filebeat.inputs，和outputs的主要配置。</p>
+<h5 id="inputs"><a href="#inputs" class="headerlink" title="inputs"></a>inputs</h5><p>inputs主要使用的几个配置项:</p>
+<ul>
+<li>paths:必选项,读取文件的路径，基于glob匹配语法。 </li>
+<li>enabled:是否启用该模块。</li>
+<li>exclude_lines: 排除匹配列表中的正则表达式。</li>
+<li>include_lines：包含匹配列表中的正则表达式。</li>
+<li>exclude_files: 排除的文件,匹配正则表达式的列表。</li>
+<li>fields: 可选的附加字段。这些字段可以自由选择,添加附加信息到抓取的日志文件进行过滤。</li>
+<li>multiline.pattern: 多行合并匹配规则，匹配正则表达式。</li>
+<li>multiline.match:匹配可以设置为“after”或“before”。它用于定义是否应该将行追加到模式中在之前或之后匹配的，或者只要模式没有基于negate匹配。注意:在Logstash中，After等同于previous, before等同于next.</li>
+<li>multiline.negate: 定义模式下的模式是否应该被否定。默认为false。这个配置有点绕，其实就是负负得正，如果符合上面的就配置false，否则就配置true。</li>
+</ul>
+<p><strong>一个简单的input输入示例:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">filebeat.inputs:</div><div class="line">- type: log</div><div class="line">  enabled: true</div><div class="line">  paths:</div><div class="line">    - /home/logs/*.txt</div></pre></td></tr></table></figure>
+<p>上述这段配置表示采集<code>/home/logs/</code>目录所有后缀名为.txt的日志。</p>
+<p>在采集日志时，会涉及到对于应用中异常堆栈日志的处理。在<a href="https://www.cnblogs.com/xuwujing/p/13520666.html" target="_blank" rel="external">上一篇博文</a>中，我们使用了logstash实现了日志归并，在本篇中我们也可以使用filbeat来实现合并。使用multiline.pattern、multiline.negate和multiline.match来实现，我们通过制定匹配规则将以空格开头的所有行合并到上一行,并把以Caused by开头的也追加到上一行。</p>
+<p>示例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">filebeat.inputs:</div><div class="line">- type: log</div><div class="line">  enabled: true</div><div class="line">  paths:</div><div class="line">    - /home/logs/*.txt</div><div class="line">  multiline.pattern: &apos;^[[:space:]]+(at|\.&#123;3&#125;)\b|^Caused by:&apos;</div><div class="line">  multiline.negate: false</div><div class="line">  multiline.match: after</div></pre></td></tr></table></figure>
+<p>若是想采集多个目录，第一种方式，直接在采集的目录下再添加一行<br>示例图:<br><img src="https://img-blog.csdnimg.cn/20200819213306368.png#pic_center" alt="在这里插入图片描述"></p>
+<p>第二种方式，想采集多个目录并且输出到不同的索引库中，可以增加fields来表示，类似<a href="https://www.cnblogs.com/xuwujing/p/13520666.html" target="_blank" rel="external">logstash</a>的type。<br>示例图:</p>
+<p><img src="https://img-blog.csdnimg.cn/20200819213300950.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>判断的时候，使用<code>if [fields][log-test] == &quot;true&quot;{ }</code> 这样既可。</p>
+<h5 id="output"><a href="#output" class="headerlink" title="output"></a>output</h5><p>output主要作用是将数据进行输出，比如输出到kafka、elasticsearch或者logstash中。<br>这里将数据输出到ElasticSearch中，如果是集群，通过逗号可以配置多个节点。</p>
+<p>示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">output.elasticsearch:</div><div class="line">  hosts: [&quot;127.0.0.1:9200&quot;]</div></pre></td></tr></table></figure></p>
+<p>按照上述配置会将读取的数据输出默认的模板索引库中，如果我们想指定索引库输出的话，只需要添加索引库名称即可。</p>
+<p>示例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">output.elasticsearch:</div><div class="line">  hosts: [&quot;127.0.0.1:9200&quot;]</div><div class="line">  index: &quot;mylog&quot;</div></pre></td></tr></table></figure></p>
+<p>输出到Logstash配置:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">output.logstash:</div><div class="line">  hosts: [&quot;localhost:5044&quot;]</div></pre></td></tr></table></figure></p>
+<h4 id="3，使用"><a href="#3，使用" class="headerlink" title="3，使用"></a>3，使用</h4><h5 id="demo"><a href="#demo" class="headerlink" title="demo"></a>demo</h5><p>在/home/logs/目录下添加一个日志文件， 然后在filebeat文件夹中创建一个<strong>filebeat_test.yml</strong>文件，然后在该文件中添加如下配置:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">filebeat.inputs:</div><div class="line">- type: log</div><div class="line">  enabled: true</div><div class="line">  paths:</div><div class="line">    - /home/logs/*.txt</div><div class="line">  multiline.pattern: &apos;^[[:space:]]+(at|\.&#123;3&#125;)\b|^Caused by:&apos;</div><div class="line">  multiline.negate: false</div><div class="line">  multiline.match: after</div><div class="line"></div><div class="line">output.elasticsearch:</div><div class="line">  hosts: [&quot;192.168.8.78:9200&quot;]</div></pre></td></tr></table></figure>
+<p>使用root用户在filebeat文件夹输入</p>
+<blockquote>
+<p> ./filebeat -c filebeat_test.yml test config</p>
+</blockquote>
+<p>进行配置启动测试</p>
+<p>启动命令:</p>
+<blockquote>
+<p>./filebeat -e -c filebeat_logstash.yml</p>
+</blockquote>
+<p>后台启动命令:</p>
+<blockquote>
+<p>nohup ./filebeat  -c filebeat_logstash.yml  &gt;/dev/null   2&gt;&amp;1 &amp;</p>
+</blockquote>
+<p>若是后台启动，可以在filebeat统计目录的logs目录查看日志信息。</p>
+<p>启动filebeat采集日志写入到ES中，默认会使用filebeat的模板， 如果想使用自定义模板实现，可以查看我上一篇博文，地址:<a href="https://www.cnblogs.com/xuwujing/p/13520666.html" target="_blank" rel="external">ElasticSearch实战系列七: Logstash实战使用-图文讲解</a></p>
+<p>示例图如下:<br><img src="https://img-blog.csdnimg.cn/20200814154553682.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<h4 id="自定义json写入"><a href="#自定义json写入" class="headerlink" title="自定义json写入"></a>自定义json写入</h4><p>有时候，我们想采集json文件并直接将json文件的数据按照格式写入到ES对应的索引库中，我们也可以通过filebeat去实现。</p>
+<p>1.在filebeat的目录下创建一个<code>filebeat_json.yml</code>的yml文件。</p>
+<p>配置文件:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">filebeat.inputs:</div><div class="line">- type: log</div><div class="line">  enabled: true</div><div class="line">  tags: [&quot;i&quot;, &quot;love&quot;, &quot;json&quot;]</div><div class="line">  json.message_key: user_name</div><div class="line">  json.keys_under_root: true</div><div class="line">  json.add_error_key: true</div><div class="line">  fields:</div><div class="line">    qwe: xuwujing</div><div class="line">  paths:</div><div class="line">    - /home/logs/myjson.log</div><div class="line"> </div><div class="line">output.elasticsearch:</div><div class="line">  hosts: [&quot;127.0.0.1:9200&quot;]</div><div class="line">  index: &quot;myjson_index&quot;</div><div class="line"> </div><div class="line">setup.ilm.enabled: false</div><div class="line">setup.template.name: myjson_index</div><div class="line">setup.template.pattern: myjson_index</div></pre></td></tr></table></figure>
+<p>2.在kibana的开发工具页面中执行如下语句:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">PUT myjson_index</div><div class="line">&#123;</div><div class="line">  &quot;mappings&quot;: &#123;</div><div class="line">    &quot;properties&quot;: &#123;</div><div class="line">      &quot;id&quot;: &#123;</div><div class="line">        &quot;type&quot;: &quot;long&quot;</div><div class="line">      &#125;,</div><div class="line">      &quot;user_name&quot;: &#123;</div><div class="line">        &quot;type&quot;: &quot;keyword&quot;</div><div class="line">      &#125;,</div><div class="line">      &quot;blog&quot;: &#123;</div><div class="line">        &quot;type&quot;: &quot;keyword&quot;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>3.创建json文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&#123;&quot;user_name&quot;: &quot;xuwujing&quot;, &quot;id&quot;: 1,  &quot;blog&quot;: &quot;www.panchengming.com&quot;&#125;</div><div class="line">&#123;&quot;user_name&quot;: &quot;xuwujing&quot;, &quot;id&quot;: 2,  &quot;blog&quot;: &quot;www.panchengming.com&quot;&#125;</div><div class="line">&#123;&quot;user_name&quot;: &quot;xuwujing&quot;, &quot;id&quot;: 3,  &quot;blog&quot;: &quot;www.panchengming.com&quot;&#125;</div></pre></td></tr></table></figure>
+<p>4.启动filebeat，并在kibana查询数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./filebeat -e -c filebeat_json.yml</div></pre></td></tr></table></figure>
+<p>示例图:<br><img src="https://img-blog.csdnimg.cn/20200814152029745.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><p><a href="https://www.cnblogs.com/xuwujing/tag/elasticsearch/" target="_blank" rel="external">ElasticSearch实战系列</a>:</p>
+<ul>
+<li><a href="https://www.cnblogs.com/xuwujing/p/11385255.html" target="_blank" rel="external">ElasticSearch实战系列一: ElasticSearch集群+Kinaba安装教程</a></li>
+<li><a href="https://www.cnblogs.com/xuwujing/p/11567053.html" target="_blank" rel="external">ElasticSearch实战系列二: ElasticSearch的DSL语句使用教程—图文详解</a></li>
+<li><a href="https://www.cnblogs.com/xuwujing/p/11645630.html" target="_blank" rel="external">ElasticSearch实战系列三: ElasticSearch的JAVA API使用教程</a></li>
+<li><a href="https://www.cnblogs.com/xuwujing/p/12093933.html" target="_blank" rel="external">ElasticSearch实战系列四: ElasticSearch理论知识介绍</a></li>
+<li><a href="https://www.cnblogs.com/xuwujing/p/12093933.html" target="_blank" rel="external">ElasticSearch实战系列四: ElasticSearch理论知识介绍</a></li>
+<li><a href="https://www.cnblogs.com/xuwujing/p/12385903.html" target="_blank" rel="external">ElasticSearch实战系列五: ElasticSearch的聚合查询基础使用教程之度量(Metric)聚合</a></li>
+<li><a href="https://www.cnblogs.com/xuwujing/p/13412108.html" target="_blank" rel="external">ElasticSearch实战系列六: Logstash快速入门</a></li>
+<li><a href="https://www.cnblogs.com/xuwujing/p/13520666.html" target="_blank" rel="external">ElasticSearch实战系列七: Logstash实战使用-图文讲解</a></li>
+</ul>
+<h3 id="音乐推荐"><a href="#音乐推荐" class="headerlink" title="音乐推荐"></a>音乐推荐</h3><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=490186189&auto=0&height=66"></iframe>
+
+
+
+<p>原创不易，如果感觉不错，希望给个推荐！您的支持是我写作的最大动力！<br>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a><br>掘金出处：<a href="https://juejin.im/user/5ae45d5bf265da0b8a6761e4" target="_blank" rel="external">https://juejin.im/user/5ae45d5bf265da0b8a6761e4</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/elasticsearch/" rel="tag"># elasticsearch</a>
+          
+            <a href="/tags/filebeat/" rel="tag"># filebeat</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/08/17/pancm132/" rel="next" title="ElasticSearch实战系列七_ Logstash实战使用-图文讲解">
+                <i class="fa fa-chevron-left"></i> ElasticSearch实战系列七_ Logstash实战使用-图文讲解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/10/24/pancm134/" rel="prev" title="ElasticSearch实战系列九:ELK日志系统介绍和安装">
+                ElasticSearch实战系列九:ELK日志系统介绍和安装 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">136</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">59</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://italker.imisty.cn" title="xiaowu" target="_blank">xiaowu</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ELK介绍"><span class="nav-number">2.</span> <span class="nav-text">ELK介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Filebeat介绍"><span class="nav-number">3.</span> <span class="nav-text">Filebeat介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Filebeat安装使用"><span class="nav-number">4.</span> <span class="nav-text">Filebeat安装使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#三、Filebeat安装"><span class="nav-number">4.1.</span> <span class="nav-text">三、Filebeat安装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1，文件准备"><span class="nav-number">4.1.1.</span> <span class="nav-text">1，文件准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2，配置修改"><span class="nav-number">4.1.2.</span> <span class="nav-text">2，配置修改</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#inputs"><span class="nav-number">4.1.2.1.</span> <span class="nav-text">inputs</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#output"><span class="nav-number">4.1.2.2.</span> <span class="nav-text">output</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3，使用"><span class="nav-number">4.1.3.</span> <span class="nav-text">3，使用</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#demo"><span class="nav-number">4.1.3.1.</span> <span class="nav-text">demo</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自定义json写入"><span class="nav-number">4.1.4.</span> <span class="nav-text">自定义json写入</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它"><span class="nav-number">5.</span> <span class="nav-text">其它</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#音乐推荐"><span class="nav-number">5.1.</span> <span class="nav-text">音乐推荐</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

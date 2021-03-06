@@ -1,0 +1,1081 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="elasticsearch," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言本文主要介绍的是ELK日志系统入门和使用教程。 ELK介绍ELK是三个开源软件的缩写，分别表示：Elasticsearch , Logstash, Kibana , 它们都是开源软件。新增了一个FileBeat，它是一个轻量级的日志收集处理工具(Agent)，Filebeat占用资源少，适合于在各个服务器上搜集日志后传输给Logstash，官方也推荐此工具。  Elasticsearch是个">
+<meta name="keywords" content="elasticsearch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ElasticSearch实战系列九:ELK日志系统介绍和安装">
+<meta property="og:url" content="http://yoursite.com/2020/10/24/pancm134/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言本文主要介绍的是ELK日志系统入门和使用教程。 ELK介绍ELK是三个开源软件的缩写，分别表示：Elasticsearch , Logstash, Kibana , 它们都是开源软件。新增了一个FileBeat，它是一个轻量级的日志收集处理工具(Agent)，Filebeat占用资源少，适合于在各个服务器上搜集日志后传输给Logstash，官方也推荐此工具。  Elasticsearch是个">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200731165920151.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201022203239598.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201022203449164.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201021202041743.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201020200918707.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201020201005363.png#pic_center">
+<meta property="og:updated_time" content="2021-03-06T05:55:43.802Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ElasticSearch实战系列九:ELK日志系统介绍和安装">
+<meta name="twitter:description" content="前言本文主要介绍的是ELK日志系统入门和使用教程。 ELK介绍ELK是三个开源软件的缩写，分别表示：Elasticsearch , Logstash, Kibana , 它们都是开源软件。新增了一个FileBeat，它是一个轻量级的日志收集处理工具(Agent)，Filebeat占用资源少，适合于在各个服务器上搜集日志后传输给Logstash，官方也推荐此工具。  Elasticsearch是个">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200731165920151.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/10/24/pancm134/"/>
+
+
+
+
+
+
+  <title>ElasticSearch实战系列九:ELK日志系统介绍和安装 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/10/24/pancm134/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ElasticSearch实战系列九:ELK日志系统介绍和安装</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-10-24T00:00:00+08:00">
+                2020-10-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/elasticsearch/" itemprop="url" rel="index">
+                    <span itemprop="name">elasticsearch</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文主要介绍的是ELK日志系统入门和使用教程。</p>
+<h2 id="ELK介绍"><a href="#ELK介绍" class="headerlink" title="ELK介绍"></a>ELK介绍</h2><p>ELK是三个开源软件的缩写，分别表示：Elasticsearch , Logstash, Kibana , 它们都是开源软件。新增了一个FileBeat，它是一个轻量级的日志收集处理工具(Agent)，Filebeat占用资源少，适合于在各个服务器上搜集日志后传输给Logstash，官方也推荐此工具。</p>
+<ul>
+<li>Elasticsearch是个开源分布式搜索引擎，提供搜集、分析、存储数据三大功能。它的特点有：分布式，零配置，自动发现，索引自动分片，索引副本机制，restful风格接口，多数据源，自动搜索负载等。</li>
+</ul>
+<ul>
+<li><p>Logstash 主要是用来日志的搜集、分析、过滤日志的工具，支持大量的数据获取方式。一般工作方式为c/s架构，client端安装在需要收集日志的主机上，server端负责将收到的各节点日志进行过滤、修改等操作在一并发往elasticsearch上去。</p>
+</li>
+<li><p>Kibana 也是一个开源和免费的工具，Kibana可以为 Logstash 和 ElasticSearch 提供的日志分析友好的 Web 界面，可以帮助汇总、分析和搜索重要数据日志。</p>
+</li>
+<li><p>Filebeat是一个轻量型日志采集器，可以方便的同kibana集成，启动filebeat后，可以直接在kibana中观看对日志文件进行detail的过程。</p>
+</li>
+</ul>
+<h2 id="ELasticSearch介绍"><a href="#ELasticSearch介绍" class="headerlink" title="ELasticSearch介绍"></a>ELasticSearch介绍</h2><h3 id="ElasticSearch是什么"><a href="#ElasticSearch是什么" class="headerlink" title="ElasticSearch是什么"></a><strong>ElasticSearch是什么</strong></h3><blockquote>
+<p>Elasticsearch 是一个基于JSON的分布式搜索和分析引擎。它可以从RESTful Web服务接口访问，并使用模式少JSON(JavaScript对象符号)文档来存储数据。它是基于Java编程语言，这使Elasticsearch能够在不同的平台上运行。使用户能够以非常快的速度来搜索非常大的数据量。</p>
+</blockquote>
+<h3 id="ElasticSearch可以做什么"><a href="#ElasticSearch可以做什么" class="headerlink" title="ElasticSearch可以做什么"></a><strong>ElasticSearch可以做什么</strong></h3><blockquote>
+<ul>
+<li>分布式的实时文件存储，每个字段都被索引并可被搜索</li>
+<li>分布式的实时分析搜索引擎</li>
+<li>可以扩展到上百台服务器，处理PB级结构化或非结构化数据</li>
+</ul>
+</blockquote>
+<h3 id="Lucene是什么"><a href="#Lucene是什么" class="headerlink" title="Lucene是什么"></a><strong>Lucene是什么</strong></h3><blockquote>
+<p>ApacheLucene将写入索引的所有信息组织成一种倒排索引（Inverted Index）的结构之中，该结构是种将词项映射到文档的数据结构。其工作方式与传统的关系数据库不同，大致来说倒排索引是面向词项而不是面向文档的。且Lucene索引之中还存储了很多其他的信息，如词向量等等，每个Lucene都是由多个段构成的，每个段只会被创建一次但会被查询多次，段一旦创建就不会再被修改。多个段会在段合并的阶段合并在一起，何时合并由Lucene的内在机制决定，段合并后数量会变少，但是相应的段本身会变大。段合并的过程是非常消耗I/O的，且与之同时会有些不再使用的信息被清理掉。在Lucene中，将数据转化为倒排索引，将完整串转化为可用于搜索的词项的过程叫做分析。文本分析由分析器（Analyzer）来执行，分析其由分词器（Tokenizer），过滤器（Filter）和字符映射器（Character Mapper）组成，其各个功能显而易见。</p>
+</blockquote>
+<p>更多ElasticSearch的相关介绍可以查看我的这篇博文:<a href="https://www.cnblogs.com/xuwujing/p/12093933.html" target="_blank" rel="external">https://www.cnblogs.com/xuwujing/p/12093933.html</a></p>
+<h2 id="Logstash介绍"><a href="#Logstash介绍" class="headerlink" title="Logstash介绍"></a>Logstash介绍</h2><p>Logstash是一个数据流引擎：</p>
+<blockquote>
+<p>它是用于数据物流的开源流式ETL引擎,在几分钟内建立数据流管道,具有水平可扩展及韧性且具有自适应缓冲,不可知的数据源,具有200多个集成和处理器的插件生态系统,使用Elastic Stack监视和管理部署</p>
+</blockquote>
+<p>Logstash包含3个主要部分： 输入(inputs)，过滤器(filters)和输出(outputs)。<br> inputs主要用来提供接收数据的规则，比如使用采集文件内容；<br> filters主要是对传输的数据进行过滤，比如使用grok规则进行数据过滤；<br> outputs主要是将接收的数据根据定义的输出模式来进行输出数据，比如输出到ElasticSearch中.</p>
+<p>示例图:</p>
+<p><img src="https://img-blog.csdnimg.cn/20200731165920151.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h2 id="Kibana介绍"><a href="#Kibana介绍" class="headerlink" title="Kibana介绍"></a>Kibana介绍</h2><blockquote>
+<pre><code>Kibana 是一款开源的数据分析和可视化平台，它是 Elastic Stack 成员之一，设计用于和 Elasticsearch 协作。您可以使用 Kibana 对 Elasticsearch 索引中的数据进行搜索、查看、交互操作。您可以很方便的利用图表、表格及地图对数据进行多元化的分析和呈现。
+</code></pre><p>Kibana 可以使大数据通俗易懂。它很简单，基于浏览器的界面便于您快速创建和分享动态数据仪表板来追踪 Elasticsearch 的实时数据变化。</p>
+</blockquote>
+<h2 id="Filebeat介绍"><a href="#Filebeat介绍" class="headerlink" title="Filebeat介绍"></a>Filebeat介绍</h2><p>Filebeat 是使用 Golang 实现的轻量型日志采集器，也是 Elasticsearch stack 里面的一员。本质上是一个 agent ，可以安装在各个节点上，根据配置读取对应位置的日志，并上报到相应的地方去。<br>Filebeat 的可靠性很强，可以保证日志 At least once 的上报，同时也考虑了日志搜集中的各类问题，例如日志断点续读、文件名更改、日志 Truncated 等。<br>Filebeat 并不依赖于 ElasticSearch，可以单独存在。我们可以单独使用Filebeat进行日志的上报和搜集。filebeat 内置了常用的 Output 组件, 例如 kafka、ElasticSearch、redis 等，出于调试考虑，也可以输出到 console 和 file 。我们可以利用现有的 Output 组件，将日志进行上报。<br>当然，我们也可以自定义 Output 组件，让 Filebeat 将日志转发到我们想要的地方。<br>filebeat 其实是 elastic/beats 的一员，除了 filebeat 外，还有 HeartBeat、PacketBeat。这些 beat 的实现都是基于 libbeat 框架。</p>
+<p>Filebeat 由两个主要组件组成：harvester 和 prospector。</p>
+<p>采集器 harvester 的主要职责是读取单个文件的内容。读取每个文件，并将内容发送到 the output。 每个文件启动一个 harvester，harvester 负责打开和关闭文件，这意味着在运行时文件描述符保持打开状态。如果文件在读取时被删除或重命名，Filebeat 将继续读取文件。</p>
+<p>查找器 prospector 的主要职责是管理 harvester 并找到所有要读取的文件来源。如果输入类型为日志，则查找器将查找路径匹配的所有文件，并为每个文件启动一个 harvester。每个 prospector 都在自己的 Go 协程中运行。</p>
+<p><strong>注：Filebeat prospector只能读取本地文件， 没有功能可以连接到远程主机来读取存储的文件或日志。</strong></p>
+<p>示例图:</p>
+<p><img src="https://img-blog.csdnimg.cn/20201022203239598.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<h2 id="ELK日志系统安装"><a href="#ELK日志系统安装" class="headerlink" title="ELK日志系统安装"></a>ELK日志系统安装</h2><h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><p>ELK下载地址推荐使用清华大学或华为的开源镜像站。</p>
+<p><strong>下载地址:</strong></p>
+<p> <a href="https://mirrors.huaweicloud.com/logstash" target="_blank" rel="external">https://mirrors.huaweicloud.com/logstash</a><br> <a href="https://mirrors.tuna.tsinghua.edu.cn/ELK" target="_blank" rel="external">https://mirrors.tuna.tsinghua.edu.cn/ELK</a></p>
+<p>ELK7.3.2百度网盘地址:<br>链接：<a href="https://pan.baidu.com/s/1tq3Czywjx3GGrreOAgkiGg" target="_blank" rel="external">https://pan.baidu.com/s/1tq3Czywjx3GGrreOAgkiGg</a><br>提取码：cxng</p>
+<h3 id="ELasticSearch集群安装"><a href="#ELasticSearch集群安装" class="headerlink" title="ELasticSearch集群安装"></a>ELasticSearch集群安装</h3><p>ElasticSearch集群安装依赖JDK，本文的ElasticSearch版本为7.3.2，对应的JDK的版本为12。</p>
+<h4 id="1，文件准备"><a href="#1，文件准备" class="headerlink" title="1，文件准备"></a>1，文件准备</h4><p>将下载好的elasticsearch文件解压 </p>
+<p>输入:</p>
+<blockquote>
+<p>tar -xvf elasticsearch-7.3.2-linux-x86_64.tar.gz</p>
+</blockquote>
+<p>然后移动到/opt/elk文件夹 里面，没有该文件夹则创建,然后将文件夹重命名为masternode.</p>
+<p>在/opt/elk输入</p>
+<blockquote>
+<p>mv elasticsearch-7.3.2-linux-x86_64 /opt/elk mv<br>elasticsearch-7.3.2-linux-x86_64  masternode</p>
+</blockquote>
+<h4 id="2，配置修改"><a href="#2，配置修改" class="headerlink" title="2，配置修改"></a>2，配置修改</h4><p>因为elasticsearch需要在非root的用户下面操作，并且elasticsearch的文件夹的权限也为非root权限， 因此我们需要创建一个用户进行操作，我们创建一个elastic用户，并赋予该目录的权限。<br>命令如下:</p>
+<blockquote>
+<p><a href="">adduser elastic</a></p>
+<p>chown -R elastic:elastic  /opt/elk/masternode</p>
+</blockquote>
+<p>这里我们顺便再来指定ElasticSearch数据和日志存放的路径地址，我们可以先使用df -h命令查看当前系统的盘主要的磁盘在哪，然后在确认数据和日志存放的路径，如果在/home 目录下的话，我们就在home目录下创建ElasticSearch数据和日志的文件夹，这里为了区分，我们可以根据不同的节点创建不同的文件夹。这里的文件夹创建用我们刚刚创建好的用户去创建，切换到elastic用户，然后创建文件夹。</p>
+<blockquote>
+<p>su elastic    </p>
+<p>mkdir  /home/elk<br>mkdir  /home/elk/masternode<br>mkdir  /home/elk/masternode/data<br>mkdir  /home/elk/masternode/logs<br>mkdir  /home/elk/datanode<br>mkdir  /home/elk/datanode/data<br>mkdir  /home/elk/datanode/logs</p>
+</blockquote>
+<p>创建成功之后，我们先修改masternode节点的配置，修改完成之后在同级目录进行copy一下，名称为datanode，然后只需少许更改datanode节点的配置即可。这里我们要修改elasticsearch.yml和jvm.options文件即可！ 注意这里还是elastic用户！</p>
+<p>&gt;</p>
+<blockquote>
+<p> cd /opt/elk/</p>
+<p>vim masternode/config/elasticsearch.yml<br>vim masternode/config/jvm.options</p>
+</blockquote>
+<p><strong>masternode配置</strong></p>
+<p>这里需要注意的是elasticsearch7.x的配置和6.x有一些不同，主要是在master选举这块。</p>
+<p> masternode的elasticsearch.yml文件配置如下:</p>
+<blockquote>
+<p>cluster.name: pancm-cluster<br>node.name: master-1<br>network.host: 192.168.0.1<br>path.data: /home/elastic/masternode/data<br>path.logs: /home/elastic/masternode/logs<br>discovery.seed_hosts: [“192.168.0.1:9300”,”192.168.0.2:9300”,”192.168.0.3:9300”]<br>cluster.initial_master_nodes: [“192.168.0.1:9300”,”192.168.0.2:9300”,”192.168.0.3:9300”]<br>node.master: true<br>node.data: false<br>transport.tcp.port: 9301<br>http.port: 9201<br>network.tcp.keep_alive: true<br>network.tcp.no_delay: true<br>transport.tcp.compress: true<br>cluster.routing.allocation.cluster_concurrent_rebalance: 16<br>cluster.routing.allocation.node_concurrent_recoveries: 16<br>cluster.routing.allocation.node_initial_primaries_recoveries: 16</p>
+</blockquote>
+<p><strong>elasticsearch.yml</strong>文件参数配置说明:</p>
+<ul>
+<li>cluster.name: 集群名称，同一集群的节点配置应该一致。es会自动发现在同一网段下的es，如果在同一网段下有多个集群，就可以用这个属性来区分不同的集群。</li>
+<li>node.name: 该节点的名称。命名格式建议为节点属性+ip末尾</li>
+<li>path.data: 数据存放的路径。</li>
+<li>path.logs: 日志存放的路径。</li>
+<li>network.host: 设置ip地址，可以是ipv4或ipv6的，默认为0.0.0.0。</li>
+<li>transport.tcp.port:设置节点间交互的tcp端口，默认是9300。</li>
+<li>http.port:设置对外服务的http端口，默认为9200。</li>
+<li>node.master: 指定该节点是否有资格被选举成为node，默认是true。</li>
+<li>node.data: 指定该节点是否存储索引数据，默认为true。</li>
+<li>。。。</li>
+</ul>
+<p>将jvm.options配置Xms和Xmx改成4G，配置如下:</p>
+<blockquote>
+<p>-Xms4g<br>-Xmx4g</p>
+</blockquote>
+<p><strong>datanode配置</strong></p>
+<p>在配置完masternode节点的ElasticSearch之后，我们再来配置datanode节点的，我们将masternode节点copy一份并重命名为datanode，然后根据上述示例图中红色框出来简单更改一下即可。<br>命令如下:</p>
+<blockquote>
+<p>cd /opt/elk/<br>cp -r  masternode/ datanode<br>vim datanode/config/elasticsearch.yml<br>vim datanode/config/jvm.options</p>
+</blockquote>
+<p>datenode的elasticsearch.yml文件配置如下:</p>
+<blockquote>
+<p>cluster.name: pancm-cluster<br>node.name: data-1<br>network.host: 192.168.0.1<br>path.data: /home/elastic/datanode/data<br>path.logs: /home/elastic/datanode/logs<br>discovery.seed_hosts: [“192.168.0.1:9300”,”192.168.0.2:9300”,”192.168.0.3:9300”]<br>cluster.initial_master_nodes: [“192.168.0.1:9300”,”192.168.0.2:9300”,”192.168.0.3:9300”]<br>node.master: false<br>node.data: true<br>transport.tcp.port: 9300<br>http.port: 9200<br>network.tcp.keep_alive: true<br>network.tcp.no_delay: true<br>transport.tcp.compress: true<br>cluster.routing.allocation.cluster_concurrent_rebalance: 16<br>cluster.routing.allocation.node_concurrent_recoveries: 16<br>cluster.routing.allocation.node_initial_primaries_recoveries: 16</p>
+</blockquote>
+<p>datanode的jvm配置请遵循如下规则，如果内存小于64G，则取对半，否则取32G。比如内存16G，该jvm设置8G，如果是128G，就可以设置32G。</p>
+<p>将jvm.options配置Xms和Xmx改成8G，配置如下:</p>
+<blockquote>
+<p>-Xms8g<br>-Xmx8g</p>
+</blockquote>
+<p><strong>注:配置完成之后需要使用ll命令检查一下masternode和datanode权限是否属于elastic用户的，若不属于，可以使用chown -R elastic:elastic +路径 命令进行赋予权限。</strong></p>
+<p>上述配置完成之后，可以使用相同的方法在其他的机器在操作一次，或者使用ftp工具进行传输，又或者使用scp命令进行远程传输文件然后根据不同的机器进行不同的修改。<br>scp命令示例:</p>
+<p>jdk环境传输:</p>
+<blockquote>
+<p>scp -r /opt/java root@slave1:/opt<br>scp -r /opt/java root@slave2:/opt</p>
+</blockquote>
+<p>ElasticSearch环境传输:</p>
+<blockquote>
+<p>scp -r /opt/elk root@slave1:/opt<br>scp -r /home/elk root@slave1:/opt<br>scp -r /opt/elk root@slave2:/opt<br>scp -r /home/elk root@slave2:/opt</p>
+</blockquote>
+<p>传输完成之后，在其他服务主要修改node.name、network.host这两个配置即可。</p>
+<h4 id="3，elasticsearch启动"><a href="#3，elasticsearch启动" class="headerlink" title="3，elasticsearch启动"></a>3，elasticsearch启动</h4><p>完成elasticsearch集群安装配置之后，需要使用elastic用户来进行启动，每台机器的每个节点都需要进行操作！<br>在/opt/elk的目录下输入:</p>
+<blockquote>
+<p>su elastic<br>cd /opt/elk<br>./masternode/bin/elasticsearch -d<br>./datanode/bin/elasticsearch -d</p>
+</blockquote>
+<p>启动成功之后，可以输入jps命令进行查看或者在浏览器上输入 ip+9200或ip+9201进行查看。<br>出现以下界面表示成功！</p>
+<p><img src="https://img-blog.csdnimg.cn/20201022203449164.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<p>Elasticsearch的6.x版本可以看这篇文章:<a href="https://www.cnblogs.com/xuwujing/p/11385255.html" target="_blank" rel="external">https://www.cnblogs.com/xuwujing/p/11385255.html</a></p>
+<h3 id="Kibana安装"><a href="#Kibana安装" class="headerlink" title="Kibana安装"></a>Kibana安装</h3><p><strong>注：只需要在一台服务器上安装即可！</strong></p>
+<h4 id="1，文件准备-1"><a href="#1，文件准备-1" class="headerlink" title="1，文件准备"></a>1，文件准备</h4><p>将下载下来的kibana-7.3.2-linux-x86_64.tar.gz的配置文件进行解压<br>在linux上输入:</p>
+<blockquote>
+<p> tar  -xvf   kibana-7.3.2-linux-x86_64.tar.gz</p>
+</blockquote>
+<p>然后移动到/opt/elk 里面，然后将文件夹重命名为 kibana-7.3.2<br>输入:</p>
+<blockquote>
+<p>mv  kibana-7.3.2-linux-x86_64  /opt/elk<br>mv  kibana-7.3.2-linux-x86_64  kibana-7.3.2</p>
+</blockquote>
+<h4 id="2，配置修改-1"><a href="#2，配置修改-1" class="headerlink" title="2，配置修改"></a>2，配置修改</h4><p>进入文件夹并修改kibana.yml配置文件:</p>
+<blockquote>
+<p>cd /opt/elk/kibana-7.3.2<br>vim config/kibana.yml</p>
+</blockquote>
+<p>将配置文件新增如下配置:</p>
+<blockquote>
+<p>server.port: 5601<br>server.host: “192.168.0.1”<br>elasticsearch.hosts: [“<a href="http://192.168.0.1:9200" target="_blank" rel="external">http://192.168.0.1:9200</a>“]<br>elasticsearch.requestTimeout: 180000</p>
+</blockquote>
+<h4 id="3，Kinaba-启动"><a href="#3，Kinaba-启动" class="headerlink" title="3，Kinaba 启动"></a>3，Kinaba 启动</h4><p>在启动这块，和kibana6.x有一些区别。</p>
+<p><strong>root用户下启动</strong></p>
+<p>在kibana上一级文件夹输入:</p>
+<blockquote>
+<p>nohup ./kibana-7.3.2/bin/kibana –allow-root &gt;/dev/null   2&gt;&amp;1 &amp;</p>
+</blockquote>
+<p><strong>非root用户启动</strong></p>
+<p>需要将kibana设置的权限改为对用的用户权限<br>权限修改命令实例:</p>
+<blockquote>
+<p>chown -R elastic:elastic  /opt/elk/kibana-7.3.2</p>
+</blockquote>
+<p>非root用户启动命令:</p>
+<blockquote>
+<p>nohup ./kibana-7.3.2/bin/kibana  &gt;/dev/null   2&gt;&amp;1 &amp;</p>
+</blockquote>
+<p>启动成功之后再浏览器输入:<br><a href="http://IP:5601" target="_blank" rel="external">http://IP:5601</a><br><img src="https://img-blog.csdnimg.cn/20201021202041743.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<p>示例图:</p>
+<p><img src="https://img-blog.csdnimg.cn/20201020200918707.png#pic_center" alt="在这里插入图片描述"></p>
+<h3 id="Logstash安装"><a href="#Logstash安装" class="headerlink" title="Logstash安装"></a>Logstash安装</h3><p><strong>注：只需要在一台服务器上安装即可！</strong></p>
+<h4 id="1，文件准备-2"><a href="#1，文件准备-2" class="headerlink" title="1，文件准备"></a>1，文件准备</h4><p>将下载下来的logstash-7.3.2.tar.gz的配置文件进行解压<br>在linux上输入:</p>
+<blockquote>
+<p> tar  -xvf   logstash-7.3.2.tar.gz</p>
+</blockquote>
+<p>然后移动到/opt/elk 里面，然后将文件夹重命名为 logstash-7.3.2<br>输入:</p>
+<blockquote>
+<p>mv  logstash-7.3.2.tar  /opt/elk<br>mv  logstash-7.3.2.tar  logstash-7.3.2</p>
+</blockquote>
+<h4 id="2，配置修改-2"><a href="#2，配置修改-2" class="headerlink" title="2，配置修改"></a>2，配置修改</h4><p>进入文件夹并创建logstash-filebeat.conf配置文件:</p>
+<blockquote>
+<p>cd /opt/elk/logstash-7.3.2<br>touch logstash-filebeat.conf<br>vim logstash-filebeat.conf</p>
+</blockquote>
+<p>在配置文件新增如下配置，filter部分请根据对应情况修改</p>
+<blockquote>
+<p>input {<br>    beats {<br>       type =&gt; “java”<br>       port =&gt; “5044”<br>    }<br>}</p>
+<p>filter {<br>  grok {<br>        match =&gt; { “message” =&gt;”|%{DATA:log_time}|%{DATA:thread}|%{DATA:log_level}|%{DATA:class_name}|-%{GREEDYDATA:content}” }<br>    }</p>
+<p> ruby {<br>   code =&gt; “event.set(‘timestamp’, event.get(‘@timestamp’).time.localtime + 8<em>60</em>60)”<br> }<br> ruby {<br>   code =&gt; “event.set(‘@timestamp’,event.get(‘timestamp’))”<br> }<br> mutate {<br>   remove_field =&gt; [“timestamp”]<br> } </p>
+<p>   date {<br>        match =&gt; [ “log_timestamp”, “yyyy-MM-dd-HH:mm:ss” ]<br>        locale =&gt; “cn”<br>      } </p>
+<p>mutate {<br>      rename =&gt; { “host” =&gt; “host.name” }<br>    }</p>
+<p>}</p>
+<p>output {</p>
+<p>  stdout {<br>    codec =&gt; rubydebug<br>  }<br>  elasticsearch {<br>    hosts =&gt; [“192.168.0.1:9200”]<br>    index =&gt; “mylogs-%{+YYYY.MM.dd}”<br>  }<br>}</p>
+</blockquote>
+<ul>
+<li><p>port :是logstash接受filebeat数据的端口，保证filebeat传输到logstash的端口是该端口即可。</p>
+</li>
+<li><p>hosts: 这个填写elasticsearch的地址和设置的端口，集群地址可以用逗号隔开。</p>
+</li>
+<li>Index : 写入索引库的名称。%{+YYYY.MM.dd} 表示按天创建索引库。</li>
+</ul>
+<h4 id="3，Logstash-启动"><a href="#3，Logstash-启动" class="headerlink" title="3，Logstash 启动"></a>3，Logstash 启动</h4><p>root用户下启动</p>
+<p>在 Logstash 文件夹输入:</p>
+<p>&gt;</p>
+<blockquote>
+<p>nohup ./bin/logstash -f logstash-filebeat.conf  &gt;/dev/null   2&gt;&amp;1 &amp;</p>
+</blockquote>
+<p>或对配置文件进行热加载启动:</p>
+<blockquote>
+<p>nohup ./bin/logstash -f logstash-filebeat.conf –config.reload.automatic  &gt;/dev/null   2&gt;&amp;1 &amp;</p>
+</blockquote>
+<p>示例图:<br><img src="https://img-blog.csdnimg.cn/20201020201005363.png#pic_center" alt="在这里插入图片描述"></p>
+<h3 id="Filebeat安装"><a href="#Filebeat安装" class="headerlink" title="Filebeat安装"></a>Filebeat安装</h3><h4 id="1，文件准备-3"><a href="#1，文件准备-3" class="headerlink" title="1，文件准备"></a>1，文件准备</h4><p>将下载下来的filebeat-7.3.2-linux-x86_64.gz的配置文件进行解压<br>在linux上输入:</p>
+<blockquote>
+<p>  tar  -xvf   filebeat-7.3.2-linux-x86_64.tar.gz</p>
+</blockquote>
+<p>然后移动到/opt/elk 里面，然后将文件夹重命名为 filebeat-7.3.2<br> 输入</p>
+<blockquote>
+<p> mv  filebeat-7.3.2-linux-x86_64  /opt/elk<br> mv  filebeat-7.3.2-linux-x86_64  filebeat-7.3.2</p>
+</blockquote>
+<p>配置启动测试，使用root用户在filebeat文件夹输入:</p>
+<blockquote>
+<p> ./filebeat -c filebeat_test.yml test config</p>
+</blockquote>
+<p>启动命令:</p>
+<blockquote>
+<p>./filebeat -e -c filebeat_logstash.yml</p>
+</blockquote>
+<p>后台启动命令:</p>
+<blockquote>
+<p>nohup ./filebeat  -c filebeat_logstash.yml  &gt;/dev/null   2&gt;&amp;1 &amp;</p>
+</blockquote>
+<p>若是后台启动，可以在filebeat统计目录的logs目录查看日志信息。</p>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><p><a href="https://www.cnblogs.com/xuwujing/tag/elasticsearch/" target="_blank" rel="external">ElasticSearch实战系列</a>:</p>
+<ul>
+<li><a href="https://www.cnblogs.com/xuwujing/p/11385255.html" target="_blank" rel="external">ElasticSearch实战系列一: ElasticSearch集群+Kinaba安装教程</a></li>
+<li><a href="https://www.cnblogs.com/xuwujing/p/11567053.html" target="_blank" rel="external">ElasticSearch实战系列二: ElasticSearch的DSL语句使用教程—图文详解</a></li>
+<li><a href="https://www.cnblogs.com/xuwujing/p/11645630.html" target="_blank" rel="external">ElasticSearch实战系列三: ElasticSearch的JAVA API使用教程</a></li>
+<li><a href="https://www.cnblogs.com/xuwujing/p/12093933.html" target="_blank" rel="external">ElasticSearch实战系列四: ElasticSearch理论知识介绍</a></li>
+<li><a href="https://www.cnblogs.com/xuwujing/p/12385903.html" target="_blank" rel="external">ElasticSearch实战系列五: ElasticSearch的聚合查询基础使用教程之度量(Metric)聚合</a></li>
+<li><a href="https://www.cnblogs.com/xuwujing/p/13412108.html" target="_blank" rel="external">ElasticSearch实战系列六: Logstash快速入门</a></li>
+<li><a href="https://www.cnblogs.com/xuwujing/p/13520666.html" target="_blank" rel="external">ElasticSearch实战系列七: Logstash实战使用-图文讲解</a></li>
+<li><a href="https://www.cnblogs.com/xuwujing/p/13532125.html" target="_blank" rel="external">ElasticSearch实战系列八: Filebeat快速入门和使用—图文详解</a></li>
+</ul>
+<h3 id="音乐推荐"><a href="#音乐推荐" class="headerlink" title="音乐推荐"></a>音乐推荐</h3><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=490186189&auto=0&height=66"></iframe>
+
+
+
+<p>原创不易，如果感觉不错，希望给个推荐！您的支持是我写作的最大动力！<br>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a><br>掘金出处：<a href="https://juejin.im/user/5ae45d5bf265da0b8a6761e4" target="_blank" rel="external">https://juejin.im/user/5ae45d5bf265da0b8a6761e4</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/elasticsearch/" rel="tag"># elasticsearch</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/08/19/pancm133/" rel="next" title="ElasticSearch实战系列八 Filebeat快速入门和使用---图文详解">
+                <i class="fa fa-chevron-left"></i> ElasticSearch实战系列八 Filebeat快速入门和使用---图文详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/12/01/pancm135/" rel="prev" title="Prometheus+Grafana+Alertmanager实现告警推送教程 ----- 图文详解">
+                Prometheus+Grafana+Alertmanager实现告警推送教程 ----- 图文详解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">136</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">59</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://italker.imisty.cn" title="xiaowu" target="_blank">xiaowu</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ELK介绍"><span class="nav-number">2.</span> <span class="nav-text">ELK介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ELasticSearch介绍"><span class="nav-number">3.</span> <span class="nav-text">ELasticSearch介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ElasticSearch是什么"><span class="nav-number">3.1.</span> <span class="nav-text">ElasticSearch是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ElasticSearch可以做什么"><span class="nav-number">3.2.</span> <span class="nav-text">ElasticSearch可以做什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lucene是什么"><span class="nav-number">3.3.</span> <span class="nav-text">Lucene是什么</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Logstash介绍"><span class="nav-number">4.</span> <span class="nav-text">Logstash介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kibana介绍"><span class="nav-number">5.</span> <span class="nav-text">Kibana介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Filebeat介绍"><span class="nav-number">6.</span> <span class="nav-text">Filebeat介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ELK日志系统安装"><span class="nav-number">7.</span> <span class="nav-text">ELK日志系统安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#环境准备"><span class="nav-number">7.1.</span> <span class="nav-text">环境准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ELasticSearch集群安装"><span class="nav-number">7.2.</span> <span class="nav-text">ELasticSearch集群安装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1，文件准备"><span class="nav-number">7.2.1.</span> <span class="nav-text">1，文件准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2，配置修改"><span class="nav-number">7.2.2.</span> <span class="nav-text">2，配置修改</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3，elasticsearch启动"><span class="nav-number">7.2.3.</span> <span class="nav-text">3，elasticsearch启动</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Kibana安装"><span class="nav-number">7.3.</span> <span class="nav-text">Kibana安装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1，文件准备-1"><span class="nav-number">7.3.1.</span> <span class="nav-text">1，文件准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2，配置修改-1"><span class="nav-number">7.3.2.</span> <span class="nav-text">2，配置修改</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3，Kinaba-启动"><span class="nav-number">7.3.3.</span> <span class="nav-text">3，Kinaba 启动</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Logstash安装"><span class="nav-number">7.4.</span> <span class="nav-text">Logstash安装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1，文件准备-2"><span class="nav-number">7.4.1.</span> <span class="nav-text">1，文件准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2，配置修改-2"><span class="nav-number">7.4.2.</span> <span class="nav-text">2，配置修改</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3，Logstash-启动"><span class="nav-number">7.4.3.</span> <span class="nav-text">3，Logstash 启动</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Filebeat安装"><span class="nav-number">7.5.</span> <span class="nav-text">Filebeat安装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1，文件准备-3"><span class="nav-number">7.5.1.</span> <span class="nav-text">1，文件准备</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它"><span class="nav-number">8.</span> <span class="nav-text">其它</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#音乐推荐"><span class="nav-number">8.1.</span> <span class="nav-text">音乐推荐</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

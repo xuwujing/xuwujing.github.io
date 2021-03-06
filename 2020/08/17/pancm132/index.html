@@ -1,0 +1,904 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="elasticsearch,logstash," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言在上一篇中我们介绍了Logstash快速入门，本文主要介绍的是ELK日志系统中的Logstash的实战使用。实战使用我打算从以下的几个场景来进行讲解。 时区问题解决方案在我们使用logstash将采集的数据传输到ES中的时候，会发现采集的时间@timestamp的时间和我们本地的不一致，这个主要是因为时区的问题导致的，我们在计算时间的时候需要将这个时间增加8小时，但是这样会很不方便。为了永久">
+<meta name="keywords" content="elasticsearch,logstash">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ElasticSearch实战系列七_ Logstash实战使用-图文讲解">
+<meta property="og:url" content="http://yoursite.com/2020/08/17/pancm132/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言在上一篇中我们介绍了Logstash快速入门，本文主要介绍的是ELK日志系统中的Logstash的实战使用。实战使用我打算从以下的几个场景来进行讲解。 时区问题解决方案在我们使用logstash将采集的数据传输到ES中的时候，会发现采集的时间@timestamp的时间和我们本地的不一致，这个主要是因为时区的问题导致的，我们在计算时间的时候需要将这个时间增加8小时，但是这样会很不方便。为了永久">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200813173634140.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200813174158330.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200813174422136.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200813174942382.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200813164346316.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200813174942382.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200813175244616.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200813175733878.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200813180752587.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:updated_time" content="2021-03-06T05:29:13.429Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ElasticSearch实战系列七_ Logstash实战使用-图文讲解">
+<meta name="twitter:description" content="前言在上一篇中我们介绍了Logstash快速入门，本文主要介绍的是ELK日志系统中的Logstash的实战使用。实战使用我打算从以下的几个场景来进行讲解。 时区问题解决方案在我们使用logstash将采集的数据传输到ES中的时候，会发现采集的时间@timestamp的时间和我们本地的不一致，这个主要是因为时区的问题导致的，我们在计算时间的时候需要将这个时间增加8小时，但是这样会很不方便。为了永久">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200813173634140.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70#pic_center">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/08/17/pancm132/"/>
+
+
+
+
+
+
+  <title>ElasticSearch实战系列七_ Logstash实战使用-图文讲解 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/17/pancm132/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ElasticSearch实战系列七_ Logstash实战使用-图文讲解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-17T00:00:00+08:00">
+                2020-08-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/elasticsearch/" itemprop="url" rel="index">
+                    <span itemprop="name">elasticsearch</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在上一篇中我们介绍了<a href="https://www.cnblogs.com/xuwujing/p/13412108.html" target="_blank" rel="external">Logstash快速入门</a>，本文主要介绍的是ELK日志系统中的Logstash的实战使用。实战使用我打算从以下的几个场景来进行讲解。</p>
+<h3 id="时区问题解决方案"><a href="#时区问题解决方案" class="headerlink" title="时区问题解决方案"></a>时区问题解决方案</h3><p>在我们使用logstash将采集的数据传输到ES中的时候，会发现采集的时间<code>@timestamp</code>的时间和我们本地的不一致，这个主要是因为时区的问题导致的，我们在计算时间的时候需要将这个时间增加8小时，但是这样会很不方便。为了永久解决这个问题，我们可以在logstash中的filter中对该字段进行转换，增加8小时。</p>
+<p>添加的配置如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">ruby &#123;</div><div class="line">  code =&gt; &quot;event.set(&apos;timestamp&apos;, event.get(&apos;@timestamp&apos;).time.localtime + 8*60*60)&quot;</div><div class="line">&#125;</div><div class="line">ruby &#123;</div><div class="line">  code =&gt; &quot;event.set(&apos;@timestamp&apos;,event.get(&apos;timestamp&apos;))&quot;</div><div class="line">&#125;</div><div class="line">mutate &#123;</div><div class="line">  remove_field =&gt; [&quot;timestamp&quot;]</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>原本示例图:<br><img src="https://img-blog.csdnimg.cn/20200813173634140.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<p>添加配置之后的示例图:<br><img src="https://img-blog.csdnimg.cn/20200813174158330.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>可以看到添加配置之后<code>@timestamp</code>时间已经和本地时间基本一致了。</p>
+<h3 id="日志内容切分"><a href="#日志内容切分" class="headerlink" title="日志内容切分"></a>日志内容切分</h3><p> 我们在进行采集日志到ES中的时候，有时需要对日志内容进行切割。比如得到日志内容的时间以及日志级别等等。这时我们就可以通过grok来对日志内容进行切分，比如将制定好的日志内容切割为日志时间、线程名称、日志级别、类名以及详细内容等等。我们只需要在logstash的filter中使用grok语法即可完成日志内容切割。<br>这里我们使用JAVA的Logback来制定日志输出格式，然后通过日志的格式编写grok语法，最后将grok配置添加到logstash的filter中。</p>
+<p><strong>Logback输出配置:</strong></p>
+<blockquote>
+<p>|%d{yyyy-MM-dd HH:mm:ss.SSS}|[%thread]|%-5level|%logger{50}|-%msg%n</p>
+</blockquote>
+<p><strong>日志样例数据:</strong></p>
+<blockquote>
+<p>|2020-07-24 17:08:33.159|[Thread-5]|INFO|com.pancm.Application|-测试示例三: All things in their being are good for something.  天生我才必有用3</p>
+</blockquote>
+<p><strong>grok模式:</strong></p>
+<blockquote>
+<p>|%{DATA:log_time}|%{DATA:thread}|%{DATA:log_level}|%{DATA:class_name}|-%{GREEDYDATA:content}</p>
+</blockquote>
+<p>使用grok分析<br><img src="https://img-blog.csdnimg.cn/20200813174422136.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>可以看到以及分析匹配成功了。</p>
+<p>然后我们在filter中添加如下配置:</p>
+<blockquote>
+<p>   grok {<br>         match =&gt; { “message” =&gt;”|%{DATA:log_time}|%{DATA:thread}|%{DATA:log_level}|%{DATA:class_name}|-%{GREEDYDATA:content}”<br>}<br>    }</p>
+</blockquote>
+<p>最终输出的日志到ES的示例图:</p>
+<p><img src="https://img-blog.csdnimg.cn/20200813174942382.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<h3 id="自定义模板"><a href="#自定义模板" class="headerlink" title="自定义模板"></a>自定义模板</h3><p>我们在使用Logstash采集日志的时候，如果没有指定索引库或模板，则会使用ElasticSearch默认自带的名字为”logstash”的模板，默认应用于Logstash写入数据到ElasticSearch使用。但是我们希望使用自定义的索引模板，将采集的日志按照我们自身的想法来写入，此时我们就需要用到自定义模板了。<br>主要有两种方式，一种是在logstash的output插件中使用template指定本机器上的一个模板json路径， 例如 <code>template =&gt; &quot;/home/logstash.json&quot;</code>，json里面的内容为我们自定的索引mapping，虽然这种方式简单，但是分散在Logstash机器上，维护起来比较麻烦。还有一种是在elasticsearc服务端自定义配置模板，事先将模板设置好，然后在logstash的output输出中指定该模板即可，这种方式比较灵活方便，可动态更改，全局生效。<br>这里我们还是通过一个示例来进行说明，我们首先创建一个template_mylog的模板，配置这几个字段:<br>log_time、thread、log_level、class_name、content。</p>
+<p>语句如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">PUT _template/template_mylog</div><div class="line">&#123;       </div><div class="line">        &quot;index_patterns&quot; : [</div><div class="line">            &quot;mylog-*&quot;</div><div class="line">        ],</div><div class="line">        &quot;order&quot; : 10,</div><div class="line">          &quot;settings&quot;: &#123;  </div><div class="line">              &quot;index.number_of_shards&quot;: 3,  </div><div class="line">              &quot;number_of_replicas&quot;: 1</div><div class="line">          &#125;,  </div><div class="line">      &quot;mappings&quot; : &#123;  </div><div class="line">          &quot;properties&quot; : &#123;  </div><div class="line">               &quot;log_level&quot; : &#123; &quot;type&quot; : &quot;keyword&quot; &#125;,</div><div class="line">            &quot;thread&quot; : &#123; &quot;type&quot; : &quot;keyword&quot; &#125;,</div><div class="line">             &quot;class_name&quot; : &#123; &quot;type&quot; : &quot;keyword&quot; &#125;,</div><div class="line">              &quot;content&quot; : &#123; &quot;type&quot; : &quot;keyword&quot; &#125;,</div><div class="line">             &quot;log_time&quot; : &#123;   &quot;type&quot; : &quot;date&quot;,&quot;format&quot; : &quot;yyyy-MM-dd HH:mm:ss.SSS&quot;&#125;</div><div class="line">          &#125;  </div><div class="line">         </div><div class="line">      &#125;  </div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>示例图:<br><img src="https://img-blog.csdnimg.cn/20200813164346316.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>注:上述的配置比其他mapping而言多了两个新配置，一个是index_patterns，该配置表明自动创建的索引开头以<code>mylog-</code>的索引库都会采用该模板；而order表示顺序级别，在有相同的索引模板中，该值越大，优先级越高。</p>
+<p>创建成功之后，我们只需在output中的添加如下配置即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">elasticsearch &#123;</div><div class="line">           hosts =&gt; [&quot;127.0.0.1:9200&quot;]</div><div class="line">           index =&gt; &quot;mylog-%&#123;+YYYY.MM.dd&#125;&quot;  </div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p>然后我们启动logstash进行日志的采集。<br>效果图:</p>
+<p><img src="https://img-blog.csdnimg.cn/20200813174942382.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<h3 id="写入多个索引库"><a href="#写入多个索引库" class="headerlink" title="写入多个索引库"></a>写入多个索引库</h3><p>我们在使用logstash采集日志的时候，有时有多种不同的日志并且需要采集到不同的索引库中，这时我们就可以通过标记来进行写入。比如采集/home/logs目录下的日志我定义一个标记为java，采集/home/logs2目录下的日志我定义一个标记为java2，那么在写入ElasticSearch的时候只需要根据该标记区分写入即可。</p>
+<p><strong>logstash input配置示例:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">file &#123;</div><div class="line">      path =&gt; [&quot;/home/logs/mylog-2020-08-13.0.txt&quot;]</div><div class="line">      type =&gt; &quot;java&quot;</div><div class="line">      start_position =&gt; &quot;beginning&quot;</div><div class="line">      sincedb_path =&gt; &quot;/dev/null&quot;</div><div class="line">  &#125;</div><div class="line">  file &#123;</div><div class="line">      path =&gt; [&quot;/home/logs2/*.txt&quot;]</div><div class="line">      type =&gt; &quot;java2&quot;</div><div class="line">      start_position =&gt; &quot;beginning&quot;</div><div class="line">      sincedb_path =&gt; &quot;/dev/null&quot;</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<p><strong>logstash output配置示例:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">if [type] == &quot;java&quot;&#123;</div><div class="line">  elasticsearch &#123;</div><div class="line">     hosts =&gt; [&quot;127.0.0.1:9200&quot;]</div><div class="line">     index =&gt; &quot;mylog-%&#123;+YYYY.MM.dd&#125;&quot;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">if [type] == &quot;java2&quot;&#123;</div><div class="line">  elasticsearch &#123;</div><div class="line">     hosts =&gt; [&quot;127.0.0.1:9200&quot;]</div><div class="line">     index =&gt; &quot;mylog-%&#123;+YYYY.MM&#125;&quot;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>示例图在<strong>多行内容合并</strong>场景中。</p>
+<h3 id="多行内容合并"><a href="#多行内容合并" class="headerlink" title="多行内容合并"></a>多行内容合并</h3><p>我们在采集日志的时候，经常会遇到异常日志，并且异常日志并非为一行内容，如果我们按照原有的方式采集，在ElasticSearch中显示的是一行一行的内容，这样的话我们排查问题会很头疼。幸好Logstash中支持多行日志合并，使用multiline.pattern、multiline.negate和multiline.what来实现配置实现。<br>下面的配置中，我们通过制定匹配规则将以空格开头的所有行合并到上一行,并把以Caused by开头的也追加到上一行。<br>在Logstash的input配置中添加如下配置:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">codec =&gt; multiline &#123;</div><div class="line">         pattern =&gt; &quot;\s*\[&quot;</div><div class="line">         negate =&gt; &quot;true&quot;</div><div class="line">         what =&gt; &quot;previous&quot;</div><div class="line">       &#125;</div></pre></td></tr></table></figure>
+<p><strong>异常日志:</strong><br><img src="https://img-blog.csdnimg.cn/20200813175244616.png#pic_center" alt="在这里插入图片描述"><br>原异常日志在ElasticSearch中示例图:<br><img src="https://img-blog.csdnimg.cn/20200813175733878.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<p>多行合并之后的效果图:<br><img src="https://img-blog.csdnimg.cn/20200813180752587.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<h3 id="完整配置"><a href="#完整配置" class="headerlink" title="完整配置"></a>完整配置</h3><p><strong>logstash-test.conf 配置</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line">input&#123;</div><div class="line">    file &#123;</div><div class="line">        path =&gt; [&quot;/home/logs/mylog-2020-08-13.0.txt&quot;]</div><div class="line">        type =&gt; &quot;java&quot;</div><div class="line">        start_position =&gt; &quot;beginning&quot;</div><div class="line">        sincedb_path =&gt; &quot;/dev/null&quot;</div><div class="line">    &#125;</div><div class="line">    file &#123;</div><div class="line">        path =&gt; [&quot;/home/logs2/*.txt&quot;]</div><div class="line">        type =&gt; &quot;java2&quot;</div><div class="line">        codec =&gt; multiline &#123;</div><div class="line">          pattern =&gt; &quot;\s*\[&quot;</div><div class="line">          negate =&gt; &quot;true&quot;</div><div class="line">          what =&gt; &quot;previous&quot;</div><div class="line">        &#125;</div><div class="line">        start_position =&gt; &quot;beginning&quot;</div><div class="line">        sincedb_path =&gt; &quot;/dev/null&quot;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">filter &#123;</div><div class="line"></div><div class="line">   grok &#123;</div><div class="line">         match =&gt; &#123; &quot;message&quot; =&gt;&quot;\|%&#123;DATA:log_time&#125;\|%&#123;DATA:thread&#125;\|%&#123;DATA:log_level&#125;\|%&#123;DATA:class_name&#125;\|-%&#123;GREEDYDATA:content&#125;&quot; &#125;       </div><div class="line">    &#125;</div><div class="line"></div><div class="line">  ruby &#123;</div><div class="line">   code =&gt; &quot;event.set(&apos;timestamp&apos;, event.get(&apos;@timestamp&apos;).time.localtime + 8*60*60)&quot;</div><div class="line"> &#125;</div><div class="line"> ruby &#123;</div><div class="line">   code =&gt; &quot;event.set(&apos;@timestamp&apos;,event.get(&apos;timestamp&apos;))&quot;</div><div class="line"> &#125;</div><div class="line"> mutate &#123;</div><div class="line">   remove_field =&gt; [&quot;timestamp&quot;]</div><div class="line"> &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">output &#123;</div><div class="line">  stdout &#123;</div><div class="line">    codec =&gt; rubydebug</div><div class="line">  &#125;</div><div class="line">    if [type] == &quot;java&quot;&#123;</div><div class="line">      elasticsearch &#123;</div><div class="line">         hosts =&gt; [&quot;127.0.0.1:9200&quot;]</div><div class="line">         index =&gt; &quot;mylog-%&#123;+YYYY.MM.dd&#125;&quot;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    if [type] == &quot;java2&quot;&#123;</div><div class="line">      elasticsearch &#123;</div><div class="line">         hosts =&gt; [&quot;127.0.0.1:9200&quot;]</div><div class="line">         index =&gt; &quot;mylog-%&#123;+YYYY.MM&#125;&quot;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="异常问题解决方案"><a href="#异常问题解决方案" class="headerlink" title="异常问题解决方案"></a>异常问题解决方案</h3><p>1.logstash: Could not execute action: PipelineAction::Create<main>, action_result: false</main></p>
+<p>解决办法: 斜杆采用“/”</p>
+<p>2, logstash: object mapping for [host] tried to parse field [host] as object, but found a concrete value</p>
+<p>解决办法: 在filter里面添加如下配置:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mutate &#123;</div><div class="line">     rename =&gt; &#123; &quot;host&quot; =&gt; &quot;host.name&quot; &#125;</div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><p><a href="https://www.cnblogs.com/xuwujing/tag/elasticsearch/" target="_blank" rel="external">ElasticSearch实战系列</a>:</p>
+<ul>
+<li><a href="https://www.cnblogs.com/xuwujing/p/11385255.html" target="_blank" rel="external">ElasticSearch实战系列一: ElasticSearch集群+Kinaba安装教程</a></li>
+<li><a href="https://www.cnblogs.com/xuwujing/p/11567053.html" target="_blank" rel="external">ElasticSearch实战系列二: ElasticSearch的DSL语句使用教程—图文详解</a></li>
+<li><a href="https://www.cnblogs.com/xuwujing/p/11645630.html" target="_blank" rel="external">ElasticSearch实战系列三: ElasticSearch的JAVA API使用教程</a></li>
+<li><a href="https://www.cnblogs.com/xuwujing/p/12093933.html" target="_blank" rel="external">ElasticSearch实战系列四: ElasticSearch理论知识介绍</a></li>
+<li><a href="https://www.cnblogs.com/xuwujing/p/12385903.html" target="_blank" rel="external">ElasticSearch实战系列五: ElasticSearch的聚合查询基础使用教程之度量(Metric)聚合</a></li>
+<li><a href="https://www.cnblogs.com/xuwujing/p/13412108.html" target="_blank" rel="external">ElasticSearch实战系列六: Logstash快速入门</a></li>
+</ul>
+<h3 id="音乐推荐"><a href="#音乐推荐" class="headerlink" title="音乐推荐"></a>音乐推荐</h3><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=557581057&auto=0&height=66"></iframe>
+
+
+
+
+<p>原创不易，如果感觉不错，希望给个推荐！您的支持是我写作的最大动力！<br>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/elasticsearch/" rel="tag"># elasticsearch</a>
+          
+            <a href="/tags/logstash/" rel="tag"># logstash</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/31/pancm131/" rel="next" title="ElasticSearch实战系列六:Logstash快速入门">
+                <i class="fa fa-chevron-left"></i> ElasticSearch实战系列六:Logstash快速入门
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/08/19/pancm133/" rel="prev" title="ElasticSearch实战系列八 Filebeat快速入门和使用---图文详解">
+                ElasticSearch实战系列八 Filebeat快速入门和使用---图文详解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">136</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">59</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://italker.imisty.cn" title="xiaowu" target="_blank">xiaowu</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#时区问题解决方案"><span class="nav-number">1.1.</span> <span class="nav-text">时区问题解决方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#日志内容切分"><span class="nav-number">1.2.</span> <span class="nav-text">日志内容切分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义模板"><span class="nav-number">1.3.</span> <span class="nav-text">自定义模板</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#写入多个索引库"><span class="nav-number">1.4.</span> <span class="nav-text">写入多个索引库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多行内容合并"><span class="nav-number">1.5.</span> <span class="nav-text">多行内容合并</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#完整配置"><span class="nav-number">1.6.</span> <span class="nav-text">完整配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异常问题解决方案"><span class="nav-number">1.7.</span> <span class="nav-text">异常问题解决方案</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它"><span class="nav-number">2.</span> <span class="nav-text">其它</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#音乐推荐"><span class="nav-number">2.1.</span> <span class="nav-text">音乐推荐</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

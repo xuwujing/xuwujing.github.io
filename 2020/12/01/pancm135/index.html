@@ -1,0 +1,1140 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="prometheus,grafana,alertmanage," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言本文主要介绍的是Prometheus采集数据，通过Grafana加上PromQL语句实现数据可视化以及通过Alertmanage实现告警推送功能。温馨提示，本篇文章特长，2w多的文字加上几十张图片，建议收藏观看。 Prometheus 介绍 Prometheus 是一套开源的系统监控报警框架。它启发于 Google 的 borgmon 监控系统，由工作在 SoundCloud 的 googl">
+<meta name="keywords" content="prometheus,grafana,alertmanage">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Prometheus+Grafana+Alertmanager实现告警推送教程 ----- 图文详解">
+<meta property="og:url" content="http://yoursite.com/2020/12/01/pancm135/index.html">
+<meta property="og:site_name" content="虚无境的博客">
+<meta property="og:description" content="前言本文主要介绍的是Prometheus采集数据，通过Grafana加上PromQL语句实现数据可视化以及通过Alertmanage实现告警推送功能。温馨提示，本篇文章特长，2w多的文字加上几十张图片，建议收藏观看。 Prometheus 介绍 Prometheus 是一套开源的系统监控报警框架。它启发于 Google 的 borgmon 监控系统，由工作在 SoundCloud 的 googl">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130161151142.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130161210554.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130161230711.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130161311758.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130230021844.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130161748865.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020113023031712.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130231447537.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130231456893.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130164833434.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130164802949.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130163644270.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130163533255.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130170534222.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130170547301.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130170618208.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130170632490.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130170648534.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020113017070077.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130170708293.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130170717335.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130170733478.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130170746108.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020113017075825.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130170812997.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130170827140.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020113017084420.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130170853164.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130170904288.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020113017091413.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130170925611.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130170933518.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130170941630.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130170953572.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130171002928.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130171018182.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130171031577.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130171044371.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130233326789.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130233339778.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130233346360.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130171114948.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130171130901.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130171151281.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020113017120380.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130165020226.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130171214178.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130234021796.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130234033135.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130234644566.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130234528701.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130234707687.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020113023501971.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130235401773.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130235410890.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201130235426222.png">
+<meta property="og:updated_time" content="2021-03-06T05:56:15.059Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Prometheus+Grafana+Alertmanager实现告警推送教程 ----- 图文详解">
+<meta name="twitter:description" content="前言本文主要介绍的是Prometheus采集数据，通过Grafana加上PromQL语句实现数据可视化以及通过Alertmanage实现告警推送功能。温馨提示，本篇文章特长，2w多的文字加上几十张图片，建议收藏观看。 Prometheus 介绍 Prometheus 是一套开源的系统监控报警框架。它启发于 Google 的 borgmon 监控系统，由工作在 SoundCloud 的 googl">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20201130161151142.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/12/01/pancm135/"/>
+
+
+
+
+
+
+  <title>Prometheus+Grafana+Alertmanager实现告警推送教程 ----- 图文详解 | 虚无境的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?39c177d10f6e05ddfa113e02139b9c1c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">虚无境的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/12/01/pancm135/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="虚无境">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/xuwujing.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="虚无境的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Prometheus+Grafana+Alertmanager实现告警推送教程 ----- 图文详解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-12-01T00:00:00+08:00">
+                2020-12-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/prometheus/" itemprop="url" rel="index">
+                    <span itemprop="name">prometheus</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文主要介绍的是Prometheus采集数据，通过Grafana加上PromQL语句实现数据可视化以及通过Alertmanage实现告警推送功能。温馨提示，本篇文章特长，2w多的文字加上几十张图片，建议收藏观看。</p>
+<h2 id="Prometheus-介绍"><a href="#Prometheus-介绍" class="headerlink" title="Prometheus 介绍"></a>Prometheus 介绍</h2><blockquote>
+<p>Prometheus 是一套开源的系统监控报警框架。它启发于 Google 的 borgmon 监控系统，由工作在 SoundCloud 的 google 前员工在 2012 年创建，作为社区开源项目进行开发，并于 2015 年正式发布。2016 年，Prometheus 正式加入 Cloud Native Computing Foundation，成为受欢迎度仅次于 Kubernetes 的项目。</p>
+</blockquote>
+<p>作为新一代的监控框架，Prometheus 具有以下特点：</p>
+<ul>
+<li>强大的多维度数据模型： 时间序列数据通过 metric 名和键值对来区分。 所有的 metrics 都可以设置任意的多维标签。</li>
+<li>数据模型更随意，不需要刻意设置为以点分隔的字符串。 可以对数据模型进行聚合，切割和切片操作。 </li>
+<li>支持双精度浮点类型，标签可以设为全unicode。 灵活而强大的查询语句（PromQL）：在同一个查询语句，可以对多个 metrics进行乘法、加法、连接、取分数位等操作。</li>
+<li>易于管理： Prometheus server是一个单独的二进制文件，可直接在本地工作，不依赖于分布式存储。 高效：平均每个采样点仅占 3.5 bytes，且一个 Prometheus server 可以处理数百万的 metrics。 使用 pull模式采集时间序列数据，这样不仅有利于本机测试而且可以避免有问题的服务器推送坏的 metrics。 可以采用 push gateway 的方式把时间序列数据推送至 Prometheus server 端。 可以通过服务发现或者静态配置去获取监控的 targets。</li>
+<li>有多种可视化图形界面。 易于伸缩。 需要指出的是，由于数据采集可能会有丢失，所以 Prometheus 不适用对采集数据要 100%</li>
+<li>准确的情形。但如果用于记录时间序列数据，Prometheus 具有很大的查询优势，此外，Prometheus 适用于微服务的体系架构。</li>
+</ul>
+<p><strong>示例图:</strong><br><img src="https://img-blog.csdnimg.cn/20201130161151142.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="Prometheus的适用场景"><a href="#Prometheus的适用场景" class="headerlink" title="Prometheus的适用场景"></a>Prometheus的适用场景</h3><blockquote>
+<p>在选择Prometheus作为监控工具前，要明确它的适用范围，以及不适用的场景。<br>Prometheus在记录纯数值时间序列方面表现非常好。它既适用于以服务器为中心的监控，也适用于高动态的面向服务架构的监控。<br>在微服务的监控上，Prometheus对多维度数据采集及查询的支持也是特殊的优势。<br>Prometheus更强调可靠性，即使在故障的情况下也能查看系统的统计信息。权衡利弊，以可能丢失少量数据为代价确保整个系统的可用性。因此，它不适用于对数据准确率要求100%的系统，比如实时计费系统（涉及到钱）。</p>
+</blockquote>
+<h3 id="Prometheus核心组件介绍"><a href="#Prometheus核心组件介绍" class="headerlink" title="Prometheus核心组件介绍"></a>Prometheus核心组件介绍</h3><p><strong>Prometheus Server:</strong></p>
+<blockquote>
+<p>Prometheus Server是Prometheus组件中的核心部分，负责实现对监控数据的获取，存储以及查询。 Prometheus Server可以通过静态配置管理监控目标，也可以配合使用Service Discovery的方式动态管理监控目标，并从这些监控目标中获取数据。其次Prometheus   Server需要对采集到的监控数据进行存储，Prometheus    Server本身就是一个时序数据库，将采集到的监控数据按照时间序列的方式存储在本地磁盘当中。最后Prometheus    Server对外提供了自定义的PromQL语言，实现对数据的查询以及分析。 Prometheus Server内置的Express   Browser UI，通过这个UI可以直接通过PromQL实现数据的查询以及可视化。 Prometheus    Server的联邦集群能力可以使其从其他的Prometheus   Server实例中获取数据，因此在大规模监控的情况下，可以通过联邦集群以及功能分区的方式对Prometheus Server进行扩展。</p>
+</blockquote>
+<p><strong>Exporters:</strong></p>
+<blockquote>
+<p>Exporter将监控数据采集的端点通过HTTP服务的形式暴露给Prometheus Server，Prometheus<br>Server通过访问该Exporter提供的Endpoint端点，即可获取到需要采集的监控数据。 一般来说可以将Exporter分为2类：<br>直接采集：这一类Exporter直接内置了对Prometheus监控的支持，比如cAdvisor，Kubernetes，Etcd，Gokit等，都直接内置了用于向Prometheus暴露监控数据的端点。<br>间接采集：间接采集，原有监控目标并不直接支持Prometheus，因此我们需要通过Prometheus提供的Client Library编写该监控目标的监控采集程序。例如： Mysql Exporter，JMX Exporter，Consul Exporter等。</p>
+</blockquote>
+<p><strong>PushGateway:</strong></p>
+<blockquote>
+<p>在Prometheus Server中支持基于PromQL创建告警规则，如果满足PromQL定义的规则，则会产生一条告警，而告警的后续处理流程则由AlertManager进行管理。在AlertManager中我们可以与邮件，Slack等等内置的通知方式进行集成，也可以通过Webhook自定义告警处理方式。</p>
+</blockquote>
+<p><strong>Service Discovery:</strong></p>
+<blockquote>
+<p>服务发现在Prometheus中是特别重要的一个部分，基于Pull模型的抓取方式，需要在Prometheus中配置大量的抓取节点信息才可以进行数据收集。有了服务发现后，用户通过服务发现和注册的工具对成百上千的节点进行服务注册，并最终将注册中心的地址配置在Prometheus的配置文件中，大大简化了配置文件的复杂程度，<br>也可以更好的管理各种服务。 在众多云平台中（AWS,OpenStack），Prometheus可以<br>通过平台自身的API直接自动发现运行于平台上的各种服务，并抓取他们的信息Kubernetes掌握并管理着所有的容器以及服务信息，那此时Prometheus只需要与Kubernetes打交道就可以找到所有需要监控的容器以及服务对象.</p>
+<ul>
+<li>Consul（官方推荐）等服务发现注册软件 </li>
+<li>通过DNS进行服务发现 </li>
+<li>通过静态配置文件（在服务节点规模不大的情况下）</li>
+</ul>
+</blockquote>
+<h3 id="Prometheus-UI"><a href="#Prometheus-UI" class="headerlink" title="Prometheus UI"></a>Prometheus UI</h3><p>Prometheus UI是Prometheus内置的一个可视化管理界面，通过Prometheus UI用户能够轻松的了解Prometheus当前的配置，监控任务运行状态等。 通过Graph面板，用户还能直接使用<strong>PromQL</strong>实时查询监控数据。访问ServerIP:9090/graph打开WEB页面，通过PromQL可以查询数据，可以进行基础的数据展示。<br><img src="https://img-blog.csdnimg.cn/20201130161210554.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>如下所示，查询主机负载变化情况，可以使用关键字node_load1可以查询出Prometheus采集到的主机负载的样本数据，这些样本数据按照时间先后顺序展示，形成了主机负载随时间变化的趋势图表：<br><img src="https://img-blog.csdnimg.cn/20201130161230711.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h2 id="Grafana介绍"><a href="#Grafana介绍" class="headerlink" title="Grafana介绍"></a>Grafana介绍</h2><blockquote>
+<p>Grafana是一个跨平台的开源的度量分析和可视化工具，可以通过将采集的数据查询然后可视化的展示。Grafana提供了对prometheus的友好支持，各种工具帮助你构建更加炫酷的数据可视化。</p>
+</blockquote>
+<h3 id="Grafana特点"><a href="#Grafana特点" class="headerlink" title="Grafana特点"></a><strong>Grafana特点</strong></h3><ul>
+<li>可视化：快速和灵活的客户端图形具有多种选项。面板插件为许多不同的方式可视化指标和日志。</li>
+<li>报警：可视化地为最重要的指标定义警报规则。Grafana将持续评估它们，并发送通知。</li>
+<li>通知：警报更改状态时，它会发出通知。接收电子邮件通知。</li>
+<li>动态仪表盘：使用模板变量创建动态和可重用的仪表板，这些模板变量作为下拉菜单出现在仪表板顶部。</li>
+<li>混合数据源：在同一个图中混合不同的数据源!可以根据每个查询指定数据源。这甚至适用于自定义数据源。</li>
+<li>注释：注释来自不同数据源图表。将鼠标悬停在事件上可以显示完整的事件元数据和标记。</li>
+<li>过滤器：过滤器允许您动态创建新的键/值过滤器，这些过滤器将自动应用于使用该数据源的所有查询。</li>
+</ul>
+<p>这里我们使用上面Prometheus使用关键字node_load1来使用Grafana进行可视化,点击侧边栏的加号图标，然后单击Dashboard点击创建，然后把刚刚Prometheus使用的查询语句放到Metries,点击右上角的apply即可。</p>
+<p>示例图:<br><img src="https://img-blog.csdnimg.cn/20201130161311758.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="Grafana-UI"><a href="#Grafana-UI" class="headerlink" title="Grafana UI"></a>Grafana UI</h3><p>上面的示例中我们通过prometheus+grafana通过PromQL进行了简单的服务器负载的监控可视化。我们也可以通过第三方提供可视化JSON文件来帮助我们快速实现服务器、Elasticsearch、MYSQL等等监控。这里我们在grafana提供的第三方dashboards的地址<a href="https://grafana.com/grafana/dashboards来下载对应的json文件然后导入到grafana实现服务器的监控。" target="_blank" rel="external">https://grafana.com/grafana/dashboards来下载对应的json文件然后导入到grafana实现服务器的监控。</a></p>
+<p>监控服务器的示例图:<br><img src="https://img-blog.csdnimg.cn/20201130230021844.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>除了服务端的监控，可以监控应用服务。Prometheus 监控应用的方式非常简单，只需要进程暴露了一个用于获取当前监控样本数据的 HTTP 访问地址。这样的一个程序称为Exporter，Exporter 的实例称为一个 Target 。Prometheus 通过轮训的方式定时从这些 Target 中获取监控数据样本，对于应用来讲，只需要暴露一个包含监控数据的 HTTP 访问地址即可，当然提供的数据需要满足一定的格式，这个格式就是 Metrics 格式: metric name&gt;{<label name="">=<label value="">, …} 。label name是标签,label value是标签的值。<br><img src="https://img-blog.csdnimg.cn/20201130161748865.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>grafana监控springboot应用实现效果图：<br><img src="https://img-blog.csdnimg.cn/2020113023031712.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></label></label></p>
+<h2 id="Prometheus-Grafana-Alertmanager等安装配置"><a href="#Prometheus-Grafana-Alertmanager等安装配置" class="headerlink" title="Prometheus+Grafana+Alertmanager等安装配置"></a>Prometheus+Grafana+Alertmanager等安装配置</h2><p>Prometheus以及相关组件使用的是2.x版本，Grafana使用的是7.x版本。</p>
+<p>下载地址推荐使用清华大学或华为的开源镜像站。</p>
+<p><strong>下载地址:</strong><br><a href="https://prometheus.io/download/" target="_blank" rel="external">https://prometheus.io/download/</a><br><a href="https://mirrors.tuna.tsinghua.edu.cn/grafana/" target="_blank" rel="external">https://mirrors.tuna.tsinghua.edu.cn/grafana/</a></p>
+<p>Prometheus以及相关组件百度网盘地址：</p>
+<p>链接：<a href="https://pan.baidu.com/s/1btErwq8EyAzG2-34lwGO4w" target="_blank" rel="external">https://pan.baidu.com/s/1btErwq8EyAzG2-34lwGO4w</a><br>提取码：4nlh </p>
+<h3 id="Prometheus安装"><a href="#Prometheus安装" class="headerlink" title="Prometheus安装"></a>Prometheus安装</h3><h4 id="1，文件准备"><a href="#1，文件准备" class="headerlink" title="1，文件准备"></a>1，文件准备</h4><p>将下载好的Prometheus文件解压 </p>
+<p>输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar -zxvf prometheus-2.19.3.linux-amd64.tar.gz</div></pre></td></tr></table></figure>
+<p>然后移动到/opt/prometheus文件夹里面，没有该文件夹则创建</p>
+<h4 id="2，配置修改"><a href="#2，配置修改" class="headerlink" title="2，配置修改"></a>2，配置修改</h4><p>在prometheus-2.19.3.linux-amd64文件夹目录下找到prometheus.yml配置文件并更改</p>
+<p>prometheus.yml文件配置如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"># my global config</div><div class="line">global:</div><div class="line">  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.</div><div class="line">  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.</div><div class="line">  # scrape_timeout is set to the global default (10s).</div><div class="line"></div><div class="line"># Alertmanager configuration</div><div class="line">alerting:</div><div class="line">  alertmanagers:</div><div class="line">  - static_configs:</div><div class="line">    - targets:</div><div class="line">       - alertmanager:9093</div><div class="line"></div><div class="line"># Load rules once and periodically evaluate them according to the global &apos;evaluation_interval&apos;.</div><div class="line">rule_files:</div><div class="line">  # - &quot;first_rules.yml&quot;</div><div class="line">  # - &quot;second_rules.yml&quot;</div><div class="line"></div><div class="line"># A scrape configuration containing exactly one endpoint to scrape:</div><div class="line"># Here it&apos;s Prometheus itself.</div><div class="line">scrape_configs:</div><div class="line">  # The job name is added as a label `job=&lt;job_name&gt;` to any timeseries scraped from this config.</div><div class="line">  - job_name: &apos;prometheus&apos;</div><div class="line"></div><div class="line">    # metrics_path defaults to &apos;/metrics&apos;</div><div class="line">    # scheme defaults to &apos;http&apos;.</div><div class="line"></div><div class="line">    static_configs:</div><div class="line">    - targets: [&apos;192.168.8.181:9090&apos;]</div></pre></td></tr></table></figure>
+<h4 id="3，prometheus-启动"><a href="#3，prometheus-启动" class="headerlink" title="3，prometheus 启动"></a>3，prometheus 启动</h4><p>在/opt/prometheus/prometheus-2.19.3.linux-amd64的目录下输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nohup ./prometheus   &gt;/dev/null   2&gt;&amp;1 &amp;</div></pre></td></tr></table></figure>
+<p>启动成功之后，在浏览器上输入 ip+9090可以查看相关信息。</p>
+<p><img src="https://img-blog.csdnimg.cn/20201130231447537.png" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20201130231456893.png" alt="在这里插入图片描述"></p>
+<h3 id="Grafana安装"><a href="#Grafana安装" class="headerlink" title="Grafana安装"></a>Grafana安装</h3><h4 id="1，文件准备-1"><a href="#1，文件准备-1" class="headerlink" title="1，文件准备"></a>1，文件准备</h4><p>将下载下来的grafana-7.1.1-1.x86_64.rpm的文件通过apm方式安装<br>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rpm -ivh grafana-7.1.1-1.x86_64.rpm</div></pre></td></tr></table></figure>
+<p>进行安装<br>如果出现如下错误:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">error: Failed dependencies:</div><div class="line">urw-fonts is needed by grafana-6.1.4-1.x86_64</div></pre></td></tr></table></figure>
+<p>一个依赖包没有安装，需要先安装这个依赖包，然后再安装grafana</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"># yum install -y urw-fonts</div></pre></td></tr></table></figure>
+<h4 id="2，grafana-启动"><a href="#2，grafana-启动" class="headerlink" title="2，grafana 启动"></a>2，grafana 启动</h4><p>root用户下启动</p>
+<p>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo /bin/systemctl start grafana-server.service</div></pre></td></tr></table></figure>
+<p>启动成功之后，在浏览器上输入 ip+3000可以查看相关信息</p>
+<p><img src="https://img-blog.csdnimg.cn/20201130164833434.png" alt="在这里插入图片描述"></p>
+<h3 id="Alertmanager安装"><a href="#Alertmanager安装" class="headerlink" title="Alertmanager安装"></a>Alertmanager安装</h3><h4 id="1，文件准备-2"><a href="#1，文件准备-2" class="headerlink" title="1，文件准备"></a>1，文件准备</h4><p>将下载好的Alertmanager文件解压 </p>
+<p>输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar -zxvf alertmanager-0.21.0.linux-386.tar.gz</div></pre></td></tr></table></figure>
+<p>然后移动到/opt/prometheus文件夹里面，没有该文件夹则创建</p>
+<h4 id="2，alertmanager启动"><a href="#2，alertmanager启动" class="headerlink" title="2，alertmanager启动"></a>2，alertmanager启动</h4><p>root用户下启动</p>
+<p>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nohup ./alertmanager   &gt;/dev/null   2&gt;&amp;1 &amp;</div></pre></td></tr></table></figure>
+<p>启动成功之后，在浏览器上输入 ip+9093可以查看相关信息</p>
+<p>示例图:<br><img src="https://img-blog.csdnimg.cn/20201130164802949.png" alt="在这里插入图片描述"></p>
+<h3 id="Pushgateway-安装"><a href="#Pushgateway-安装" class="headerlink" title="Pushgateway 安装"></a>Pushgateway 安装</h3><h4 id="1，文件准备-3"><a href="#1，文件准备-3" class="headerlink" title="1，文件准备"></a>1，文件准备</h4><p>将下载好的pushgateway文件解压 </p>
+<p>输入<br>tar -zxvf pushgateway-1.2.0.linux-amd64.tar.gz<br>然后移动到/opt/prometheus文件夹里面，没有该文件夹则创建</p>
+<h4 id="2，启动"><a href="#2，启动" class="headerlink" title="2，启动"></a>2，启动</h4><p>root用户下启动</p>
+<p>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nohup ./pushgateway   &gt;/dev/null   2&gt;&amp;1 &amp;</div></pre></td></tr></table></figure>
+<p>启动成功之后，在浏览器上输入 ip+9091可以查看相关信息</p>
+<p><img src="https://img-blog.csdnimg.cn/20201130163644270.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="5，Node-export安装"><a href="#5，Node-export安装" class="headerlink" title="5，Node_export安装"></a>5，Node_export安装</h3><h4 id="1，文件准备-4"><a href="#1，文件准备-4" class="headerlink" title="1，文件准备"></a>1，文件准备</h4><p>将下载好的Node_export文件解压 </p>
+<p>输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar -zxvf node_exporter-0.17.0.linux-amd64.tar.gz</div></pre></td></tr></table></figure>
+<p>然后移动到/opt/prometheus文件夹里面，没有该文件夹则创建</p>
+<h4 id="2，启动-1"><a href="#2，启动-1" class="headerlink" title="2，启动"></a>2，启动</h4><p>root用户下启动</p>
+<p>输入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nohup ./consul_exporter   &gt;/dev/null   2&gt;&amp;1 &amp;</div></pre></td></tr></table></figure>
+<p>启动成功之后，在浏览器上输入 ip+9100可以查看相关信息</p>
+<p><img src="https://img-blog.csdnimg.cn/20201130163533255.png" alt="在这里插入图片描述"></p>
+<h2 id="Prometheus使用教程"><a href="#Prometheus使用教程" class="headerlink" title="Prometheus使用教程"></a>Prometheus使用教程</h2><p>Prometheus界面地址: ip+9090。<br>这里我就使用图片加上注释来进行讲解。</p>
+<h3 id="1，基本使用"><a href="#1，基本使用" class="headerlink" title="1，基本使用"></a>1，基本使用</h3><h4 id="1-gt-Prometheus主界面说明"><a href="#1-gt-Prometheus主界面说明" class="headerlink" title="1&gt;,Prometheus主界面说明"></a>1&gt;,Prometheus主界面说明</h4><p><img src="https://img-blog.csdnimg.cn/20201130170534222.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h4 id="2-gt-Graph使用示例"><a href="#2-gt-Graph使用示例" class="headerlink" title="2&gt;,Graph使用示例"></a>2&gt;,Graph使用示例</h4><p><img src="https://img-blog.csdnimg.cn/20201130170547301.png" alt="在这里插入图片描述"></p>
+<h4 id="3-gt-查看运行信息"><a href="#3-gt-查看运行信息" class="headerlink" title="3&gt;,查看运行信息"></a>3&gt;,查看运行信息</h4><p><img src="https://img-blog.csdnimg.cn/20201130170618208.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h4 id="4-gt-查看命令标记值"><a href="#4-gt-查看命令标记值" class="headerlink" title="4&gt;,查看命令标记值"></a>4&gt;,查看命令标记值</h4><p><img src="https://img-blog.csdnimg.cn/20201130170632490.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h4 id="5-gt-查看配置信息"><a href="#5-gt-查看配置信息" class="headerlink" title="5&gt;,查看配置信息"></a>5&gt;,查看配置信息</h4><p><img src="https://img-blog.csdnimg.cn/20201130170648534.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h4 id="6-gt-查看集成的组件"><a href="#6-gt-查看集成的组件" class="headerlink" title="6,&gt;查看集成的组件"></a>6,&gt;查看集成的组件</h4><p>集成的组件需要下载对应export服务并启动运行，并且在prometheus的配置中进行添加！</p>
+<p><img src="https://img-blog.csdnimg.cn/2020113017070077.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h4 id="7-gt-查看服务发现"><a href="#7-gt-查看服务发现" class="headerlink" title="7&gt;,查看服务发现"></a>7&gt;,查看服务发现</h4><p><img src="https://img-blog.csdnimg.cn/20201130170708293.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h4 id="8-gt-查看告警规则"><a href="#8-gt-查看告警规则" class="headerlink" title="8&gt;,查看告警规则"></a>8&gt;,查看告警规则</h4><p>first_rules.yml的配置。</p>
+<p><img src="https://img-blog.csdnimg.cn/20201130170717335.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h4 id="9-gt-查看是否触发告警"><a href="#9-gt-查看是否触发告警" class="headerlink" title="9&gt;,查看是否触发告警"></a>9&gt;,查看是否触发告警</h4><p><img src="https://img-blog.csdnimg.cn/20201130170733478.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><strong>相关文档</strong>:<a href="https://prometheus.io/docs/prometheus/latest/getting_started/" target="_blank" rel="external">https://prometheus.io/docs/prometheus/latest/getting_started/</a></p>
+<h2 id="Grafana使用"><a href="#Grafana使用" class="headerlink" title="Grafana使用"></a>Grafana使用</h2><p>Grafanf 界面地址: ip+3000<br>初始账号密码: admin, admin<br>这里我依旧用图片加注释来进行讲解，想必这样会更容易理解吧。。。</p>
+<h3 id="1-gt-主界面信息"><a href="#1-gt-主界面信息" class="headerlink" title="1&gt;,主界面信息"></a>1&gt;,主界面信息</h3><p><img src="https://img-blog.csdnimg.cn/20201130170746108.png" alt="在这里插入图片描述"></p>
+<h3 id="2-gt-创建仪表盘监控实现"><a href="#2-gt-创建仪表盘监控实现" class="headerlink" title="2&gt;,创建仪表盘监控实现"></a>2&gt;,创建仪表盘监控实现</h3><p>1.添加数据源</p>
+<p><img src="https://img-blog.csdnimg.cn/2020113017075825.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/20201130170812997.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>2.选择prometheus<br><img src="https://img-blog.csdnimg.cn/20201130170827140.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>3.点击创建仪表盘</p>
+<p><img src="https://img-blog.csdnimg.cn/2020113017084420.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>4.点击创建</p>
+<p><img src="https://img-blog.csdnimg.cn/20201130170853164.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/20201130170904288.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/2020113017091413.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>5.输入node_load1表示语句，填写相关信息，点击apply完成，并将名称保存为Test<br><img src="https://img-blog.csdnimg.cn/20201130170925611.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>6.点击搜索Test，点击就可以查看</p>
+<p><img src="https://img-blog.csdnimg.cn/20201130170933518.png" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/20201130170941630.png" alt="在这里插入图片描述"></p>
+<h3 id="3-gt-使用第三方仪表盘监控实现"><a href="#3-gt-使用第三方仪表盘监控实现" class="headerlink" title="3&gt;,使用第三方仪表盘监控实现"></a>3&gt;,使用第三方仪表盘监控实现</h3><p>注:需提前添加好数据源。</p>
+<p>1.点击左上角的加号，点击import</p>
+<p><img src="https://img-blog.csdnimg.cn/20201130170953572.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><strong>在线模式</strong><br>地址:<a href="https://grafana.com/grafana/dashboards" target="_blank" rel="external">https://grafana.com/grafana/dashboards</a></p>
+<p><img src="https://img-blog.csdnimg.cn/20201130171002928.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p> <img src="https://img-blog.csdnimg.cn/20201130171018182.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p> <strong>离线模式</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/20201130171031577.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><strong>监控示例:</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/20201130171044371.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h2 id="监控告警实现"><a href="#监控告警实现" class="headerlink" title="监控告警实现"></a>监控告警实现</h2><p>监控告警实现需要依赖 Alertmanager，已经相关的组件，比如上述实例中的监控服务器应用的node_server组件。</p>
+<h3 id="邮件告警实现"><a href="#邮件告警实现" class="headerlink" title="邮件告警实现"></a>邮件告警实现</h3><p>需要安装Alertmanager，这里因为邮件发送比较简单，所以这里我就直接贴配置了，其中带有xxx字符的参数是需要根据情况进行更改的。下面的企业微信告警同理。<br>Alertmanagers服务的<strong>alertmanager.yml</strong>的配置如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">global:</div><div class="line">  resolve_timeout: 5m</div><div class="line">  smtp_from: &apos;xxx@qq.com&apos;</div><div class="line">  smtp_smarthost: &apos;smtp.qq.com:465&apos;</div><div class="line">  smtp_auth_username: &apos;xxx@qq.com&apos;</div><div class="line">  smtp_auth_password: &apos;xxx&apos;</div><div class="line">  smtp_require_tls: false</div><div class="line">  smtp_hello: &apos;qq.com&apos;</div><div class="line">route:</div><div class="line">  group_by: [&apos;alertname&apos;]</div><div class="line">  group_wait: 5s</div><div class="line">  group_interval: 5s</div><div class="line">  repeat_interval: 5m</div><div class="line">  receiver: &apos;email&apos;</div><div class="line">receivers:</div><div class="line">- name: &apos;email&apos;</div><div class="line">  email_configs:</div><div class="line">  - to: &apos;xxx@qq.com&apos;</div><div class="line">    send_resolved: true</div><div class="line">inhibit_rules:</div><div class="line">  - source_match:</div><div class="line">      severity: &apos;critical&apos;</div><div class="line">    target_match:</div><div class="line">      severity: &apos;warning&apos;</div><div class="line">    equal: [&apos;alertname&apos;, &apos;dev&apos;, &apos;instance&apos;]</div></pre></td></tr></table></figure>
+<p><strong>注: smtp_from、smtp_auth_username、to的邮箱可以填写同一个，smtp_auth_password填写鉴权码，需要开启POS3。</strong></p>
+<p>如果不知道怎么开启POS3，可以查看我的这篇文章: <a href="https://www.cnblogs.com/xuwujing/p/10945698.html" target="_blank" rel="external">https://www.cnblogs.com/xuwujing/p/10945698.html</a></p>
+<p>Prometheus服务的Prometheus.yml配置如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"># my global config</div><div class="line">global:</div><div class="line">  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.</div><div class="line">  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.</div><div class="line">  # scrape_timeout is set to the global default (10s).</div><div class="line"></div><div class="line"># Alertmanager configuration</div><div class="line">alerting:</div><div class="line">  alertmanagers:</div><div class="line">  - static_configs:</div><div class="line">    - targets: </div><div class="line">      - &apos;192.168.214.129:9093&apos;</div><div class="line"># Load rules once and periodically evaluate them according to the global &apos;evaluation_interval&apos;.</div><div class="line">rule_files:</div><div class="line">   - &quot;/opt/prometheus/prometheus-2.19.3.linux-amd64/first_rules.yml&quot;</div><div class="line">  # - &quot;second_rules.yml&quot;</div><div class="line"></div><div class="line"># A scrape configuration containing exactly one endpoint to scrape:</div><div class="line"># Here it&apos;s Prometheus itself.</div><div class="line">scrape_configs:</div><div class="line">  # The job name is added as a label `job=&lt;job_name&gt;` to any timeseries scraped from this config.</div><div class="line">  - job_name: &apos;prometheus&apos;</div><div class="line"></div><div class="line">    # metrics_path defaults to &apos;/metrics&apos;</div><div class="line">    # scheme defaults to &apos;http&apos;.</div><div class="line"></div><div class="line">    static_configs:</div><div class="line">    - targets: [&apos;192.168.214.129:9090&apos;]</div><div class="line"></div><div class="line">  - job_name: &apos;server&apos;</div><div class="line">    static_configs:</div><div class="line">    - targets: [&apos;192.168.214.129:9100&apos;]</div></pre></td></tr></table></figure>
+<p><strong>注：targets如果有多个配置的话，在后面加上其他服务的节点即可。alertmanagers最好写服务器的ip，不然可能会出现告警数据无法发送的情况。</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Error sending alert&quot; err=&quot;Post \&quot;http://alertmanager:9093/api/v1/alerts\&quot;: context deadline exceeded</div></pre></td></tr></table></figure>
+<p>配置了Prometheus.yml之后，我们还需要配置告警的规则，也就是触发条件，达到条件之后就进行触发。我们新建一个first_rules.yml，用于检测服务器挂掉的时候进行发送消息</p>
+<p>first_rules.yml告警配置:</p>
+<p><strong>注:job等于的服务名称填写Prometheus.yml配置对应的名称，比如这里设置的server对应Prometheus.yml配置的server。</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">groups:</div><div class="line">- name: node</div><div class="line">  rules:</div><div class="line">  - alert: server_status</div><div class="line">    expr: up&#123;job=&quot;server&quot;&#125; == 0 </div><div class="line">    for: 15s</div><div class="line">    annotations:</div><div class="line">      summary: &quot;机器&#123;&#123; $labels.instance &#125;&#125; 挂了&quot;</div><div class="line">      description: &quot;报告.请立即查看!&quot;</div></pre></td></tr></table></figure>
+<p>依次启动prometheus、altermanagers、node_server服务，查看告警，然后停止node_export服务，等待一段时间在查看。</p>
+<p><img src="https://img-blog.csdnimg.cn/20201130233326789.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20201130233339778.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/20201130233346360.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="企业微信告警实现"><a href="#企业微信告警实现" class="headerlink" title="企业微信告警实现"></a>企业微信告警实现</h3><p>和上面的示例操作基本一致，主要是配置的区别。</p>
+<p>1.在企业微信中创建一个应用，并得到secret、corp_id和agent_id配置。</p>
+<p><img src="https://img-blog.csdnimg.cn/20201130171114948.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/20201130171130901.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/20201130171151281.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/2020113017120380.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>2.然后修改alertmanager.yml配置，alertmanager.yml配置如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">global:</div><div class="line">  resolve_timeout: 5s</div><div class="line">  wechat_api_url: &apos;https://qyapi.weixin.qq.com/cgi-bin/&apos;</div><div class="line">  wechat_api_secret: &apos;xxx&apos;</div><div class="line">  wechat_api_corp_id: &apos;xxx&apos;</div><div class="line">templates:</div><div class="line">- &apos;/opt/prometheus/alertmanager-0.21.0.linux-386/template/wechat.tmpl&apos;</div><div class="line">route:</div><div class="line">  group_by: [&apos;alertname&apos;]</div><div class="line">  group_wait: 10s</div><div class="line">  group_interval: 10s</div><div class="line">  repeat_interval: 10s</div><div class="line">  receiver: &apos;wechat&apos;</div><div class="line">receivers:</div><div class="line">- name: &apos;wechat&apos;</div><div class="line">  wechat_configs:</div><div class="line">  - send_resolved: true</div><div class="line">    to_party: &apos;2&apos;</div><div class="line">    agent_id: xxx</div><div class="line">    corp_id: &apos;xxx&apos;</div><div class="line">    api_secret: &apos;xxx&apos;</div><div class="line">    api_url: &apos;https://qyapi.weixin.qq.com/cgi-bin/&apos;</div><div class="line">inhibit_rules:</div><div class="line">  - source_match:</div><div class="line">      severity: &apos;critical&apos;</div><div class="line">    target_match:</div><div class="line">      severity: &apos;warning&apos;</div><div class="line">    equal: [&apos;alertname&apos;, &apos;dev&apos;, &apos;instance&apos;]</div></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20201130165020226.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>配置成功之后，操作和上述邮件发送的一致，即可在企业微信看到如下信息。</p>
+<p><img src="https://img-blog.csdnimg.cn/20201130171214178.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>如果觉得上述的示例不好友好的话，我们也可以制定告警模板。</p>
+<p><strong>添加告警模板:</strong></p>
+<p>在alertmanagers的文件夹下创建一个template文件夹，然后在该文件夹创建一个微信告警的模板wechat.tmpl，添加如下配置:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&#123;&#123; define &quot;wechat.default.message&quot; &#125;&#125;</div><div class="line">&#123;&#123; range .Alerts &#125;&#125;</div><div class="line">========start=========</div><div class="line">告警程序: prometheus_alert</div><div class="line">告警级别: &#123;&#123; .Labels.severity&#125;&#125;</div><div class="line">告警类型: &#123;&#123; .Labels.alertname &#125;&#125;</div><div class="line">故障主机: &#123;&#123; .Labels.instance &#125;&#125;</div><div class="line">告警主题: &#123;&#123; .Annotations.summary &#125;&#125;</div><div class="line">告警详情: &#123;&#123; .Annotations.description &#125;&#125;</div><div class="line">=========end===========</div><div class="line">&#123;&#123; end &#125;&#125;</div><div class="line">&#123;&#123; end &#125;&#125;</div></pre></td></tr></table></figure>
+<p>然后再到alertmanager.yml 添加如下配置:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">templates:</div><div class="line">- &apos;/opt/prometheus/alertmanager-0.21.0.linux-386/template/wechat.tmpl&apos;</div></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20201130234021796.png" alt="在这里插入图片描述"></p>
+<p>效果图:<br><img src="https://img-blog.csdnimg.cn/20201130234033135.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="应用服务监控告警实现"><a href="#应用服务监控告警实现" class="headerlink" title="应用服务监控告警实现"></a>应用服务监控告警实现</h3><blockquote>
+<p>Prometheus 监控应用的方式非常简单，只需要进程暴露了一个用于获取当前监控样本数据的 HTTP<br>访问地址。这样的一个程序称为Exporter，Exporter 的实例称为一个 Target 。Prometheus通过轮训的方式定时从这些 Target 中获取监控数据样本，对于应用来讲，只需要暴露一个包含监控数据的 HTTP访问地址即可，当然提供的数据需要满足一定的格式，这个格式就是 Metrics 格式: metric name&gt;{<label name="">=<label value="">, …} 。label name是标签,label value是标签的值。</label></label></p>
+</blockquote>
+<p><strong>Springboot应用实现步骤</strong><br>1.在pom文件添加</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;io.micrometer&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;micrometer-registry-prometheus&lt;/artifactId&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>
+<p>2.在代码中添加如下配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">private Counter requestErrorCount;</div><div class="line">    private final MeterRegistry registry;</div><div class="line">    @Autowired</div><div class="line">    public PrometheusCustomMonitor(MeterRegistry registry) &#123;</div><div class="line">        this.registry = registry;</div><div class="line">    &#125;</div><div class="line">    @PostConstruct</div><div class="line">    private void init() &#123;</div><div class="line">        requestErrorCount = registry.counter(&quot;requests_error_total&quot;, &quot;status&quot;, &quot;error&quot;);</div><div class="line">    &#125;</div><div class="line">    public Counter getRequestErrorCount() &#123;</div><div class="line">        return requestErrorCount;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>3.在异常处理中添加如下记录:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">monitor.getRequestErrorCount().increment();</div></pre></td></tr></table></figure>
+<p>4.在prometheus的配置中添加springboot应用服务监控</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">-  job_name: &apos;springboot&apos; </div><div class="line">     metrics_path: &apos;/actuator/prometheus&apos; </div><div class="line">     scrape_interval: 5s</div><div class="line">     static_configs:</div><div class="line">     - targets: [&apos;192.168.8.45:8080&apos;]</div></pre></td></tr></table></figure>
+<p>5.Prometheu.yml配置如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">- job_name: &apos;springboot&apos; </div><div class="line">  metrics_path: &apos;/actuator/prometheus&apos; </div><div class="line">  scrape_interval: 5s</div><div class="line">  static_configs:</div><div class="line">  - targets: [&apos;192.168.8.45:8080&apos;]</div></pre></td></tr></table></figure>
+<p>规则文件配置如下:<br><img src="https://img-blog.csdnimg.cn/20201130234644566.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>6.在prometheus监控即可查看</p>
+<p><img src="https://img-blog.csdnimg.cn/20201130234528701.png" alt="在这里插入图片描述"><br>企业微信告警效果图:<br><img src="https://img-blog.csdnimg.cn/20201130234707687.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>监控的springboot项目地址:<a href="https://github.com/xuwujing/springBoot-study" target="_blank" rel="external">https://github.com/xuwujing/springBoot-study</a></p>
+<h2 id="其他配置"><a href="#其他配置" class="headerlink" title="其他配置"></a>其他配置</h2><h3 id="prometheus动态加载配置"><a href="#prometheus动态加载配置" class="headerlink" title="prometheus动态加载配置"></a>prometheus动态加载配置</h3><p>Prometheus数据源的配置主要分为静态配置和动态发现, 常用的为以下几类:</p>
+<ul>
+<li>static_configs: 静态服务发现 </li>
+<li>file_sd_configs: 文件服务发现 </li>
+<li>dns_sd_configs: DNS 服务发现 </li>
+<li>kubernetes_sd_configs: Kubernetes  服务发现 </li>
+<li>consul_sd_configs:Consul 服务发现（推荐使用）</li>
+</ul>
+<p>file_sd_configs的方式提供简单的接口，可以实现在单独的配置文件中配置拉取对象，并监视这些文件的变化并自动加载变化。基于这个机制，我们可以自行开发程序，监控监控对象的变化自动生成配置文件，实现监控对象的自动发现。</p>
+<p>在prometheus文件夹目录下创建targets.json文件<br>配置如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line">    &#123;</div><div class="line">      &quot;targets&quot;: [ &quot;192.168.214.129:9100&quot;],</div><div class="line">      &quot;labels&quot;: &#123;</div><div class="line">        &quot;instance&quot;: &quot;node&quot;,</div><div class="line">        &quot;job&quot;: &quot;server-129&quot;</div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">    &#123;</div><div class="line">        &quot;targets&quot;: [ &quot;192.168.214.134:9100&quot;],</div><div class="line">        &quot;labels&quot;: &#123;</div><div class="line">          &quot;instance&quot;: &quot;node&quot;,</div><div class="line">          &quot;job&quot;: &quot;server-134&quot;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">  ]</div></pre></td></tr></table></figure>
+<p>然后在prometheus目录下新增如下配置:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">- job_name: &apos;file_sd&apos;   </div><div class="line">   file_sd_configs:</div><div class="line">     - files:</div><div class="line">       - targets.json</div></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/2020113023501971.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="一些告警配置"><a href="#一些告警配置" class="headerlink" title="一些告警配置"></a>一些告警配置</h3><p>这是本人整理的一些服务应用告警的配置，也欢迎大家共同讨论一些常用的相关配置。</p>
+<p>内存告警设置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">- name: test-rule</div><div class="line">  rules:</div><div class="line">  - alert: &quot;内存报警&quot;</div><div class="line">    expr: 100 - ((node_memory_MemAvailable_bytes * 100) / node_memory_MemTotal_bytes) &gt; 30</div><div class="line">    for: 15s</div><div class="line">    labels:</div><div class="line">      severity: warning</div><div class="line">    annotations:</div><div class="line">      summary: &quot;服务名:&#123;&#123;$labels.instance&#125;&#125;内存使用率超过30%了&quot;</div><div class="line">      description: &quot;业务500报警: &#123;&#123; $value &#125;&#125;&quot;</div><div class="line">      value: &quot;&#123;&#123; $value &#125;&#125;&quot;</div></pre></td></tr></table></figure></p>
+<p>示例图:</p>
+<p><img src="https://img-blog.csdnimg.cn/20201130235401773.png" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/20201130235410890.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FhendzeHBjbQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>磁盘设置:</p>
+<p>总量百分比设置:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(node_filesystem_size_bytes &#123;mountpoint =&quot;/&quot;&#125; - node_filesystem_free_bytes &#123;mountpoint =&quot;/&quot;&#125;) / node_filesystem_size_bytes &#123;mountpoint =&quot;/&quot;&#125; * 100</div></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20201130235426222.png" alt="在这里插入图片描述"></p>
+<p>查看某一目录的磁盘使用百分比</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(node_filesystem_size_bytes&#123;mountpoint=&quot;/boot&quot;&#125;-node_filesystem_free_bytes&#123;mountpoint=&quot;/boot&quot;&#125;)/node_filesystem_size_bytes&#123;mountpoint=&quot;/boot&quot;&#125; * 100</div></pre></td></tr></table></figure>
+<p>正则表达式来匹配多个挂载点</p>
+<blockquote>
+<p>(node_filesystem_size_bytes{mountpoint=~”/|/run”}-node_filesystem_free_bytes{mountpoint=~”/|/run”})<br>/ node_filesystem_size_bytes{mountpoint=~”/|/run”} * 100</p>
+</blockquote>
+<p>预计多长时间磁盘爆满</p>
+<blockquote>
+<p>predict_linear(node_filesystem_free_bytes {mountpoint =”/“}[1h],<br>4<em>3600) &lt; 0 predict_linear(node_filesystem_free_bytes<br>{job=”node”}[1h], 4</em>3600) &lt; 0</p>
+</blockquote>
+<p>#CPU使用率</p>
+<blockquote>
+<p>100 - (avg(irate(node_cpu_seconds_total{mode=”idle”}[5m])) by<br>(instance) * 100)</p>
+</blockquote>
+<p>#空闲内存剩余率</p>
+<blockquote>
+<p>(node_memory_MemFree_bytes+node_memory_Cached_bytes+node_memory_Buffers_bytes)<br>/ node_memory_MemTotal_bytes * 100</p>
+</blockquote>
+<p>#内存使用率</p>
+<blockquote>
+<p>100 -<br>(node_memory_MemFree_bytes+node_memory_Cached_bytes+node_memory_Buffers_bytes)<br>/ node_memory_MemTotal_bytes * 100</p>
+</blockquote>
+<p>#磁盘使用率</p>
+<blockquote>
+<p>100 - (node_filesystem_free_bytes{mountpoint=”/“,fstype=~”ext4|xfs”} /<br>node_filesystem_size_bytes{mountpoint=”/“,fstype=~”ext4|xfs”} * 100)</p>
+</blockquote>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>这段时间比较忙，ELK相关得等待一段时间在进行更新，虽然发表的博客才对应去年整理的博客。。。。<br> 本篇文章准备了好久，边整理编写，没想到写了这么多。不过感觉这样也不错，一次写出来或许比分开一次次的写对读者而言要好上不上，毕竟不用一篇篇的去找了。</p>
+<h3 id="音乐推荐"><a href="#音乐推荐" class="headerlink" title="音乐推荐"></a>音乐推荐</h3><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=490186189&auto=0&height=66"></iframe>
+
+
+
+<p>原创不易，如果感觉不错，希望给个推荐！您的支持是我写作的最大动力！<br>版权声明:<br>作者：虚无境<br>博客园出处：<a href="http://www.cnblogs.com/xuwujing" target="_blank" rel="external">http://www.cnblogs.com/xuwujing</a><br>CSDN出处：<a href="http://blog.csdn.net/qazwsxpcm" target="_blank" rel="external">http://blog.csdn.net/qazwsxpcm</a><br>掘金出处：<a href="https://juejin.im/user/5ae45d5bf265da0b8a6761e4" target="_blank" rel="external">https://juejin.im/user/5ae45d5bf265da0b8a6761e4</a>　　　　<br>个人博客出处：<a href="http://www.panchengming.com" target="_blank" rel="external">http://www.panchengming.com</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+     
+    <div>
+	 +
+	  
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------ 本文结束 ------</div>
+<br/>
+<div style="border: 1px solid black">
+<div style="margin-left:10px">
+<span style="font-weight:blod">版权声明</span>
+<!-- <img src="/images/xuwujing.png" > -->
+<br/>
+<p style="font-size: 10px;line-height: 30px"><a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> by <a href="http://www.panchengming.com/" style="color:#258FC6">ChengMing Pan</a> is licensed under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">Creative Commons BY-NC-ND 4.0 International License</a>.<br/>
+由<a href="http://www.panchengming.com/" style="color:#258FC6">虚无境</a>创作并维护的<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a>博客采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color:#258FC6">创作共用保留署名-非商业-禁止演绎4.0国际许可证</a>。<br/>
+本文首发于<a href="http://www.panchengming.com/" style="color:#258FC6">xuwujing's Notes</a> 博客（ <a href="http://www.panchengming.com/" style="color:#258FC6">http://www.panchengming.com/</a> ），版权所有，侵权必究。</p>
+</div>
+</div>
+
+	
+	</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/prometheus/" rel="tag"># prometheus</a>
+          
+            <a href="/tags/grafana/" rel="tag"># grafana</a>
+          
+            <a href="/tags/alertmanage/" rel="tag"># alertmanage</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/10/24/pancm134/" rel="next" title="ElasticSearch实战系列九:ELK日志系统介绍和安装">
+                <i class="fa fa-chevron-left"></i> ElasticSearch实战系列九:ELK日志系统介绍和安装
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/01/05/pancm136/" rel="prev" title="纵然前路坎坷，也要毅然前行！2020年终总结！">
+                纵然前路坎坷，也要毅然前行！2020年终总结！ <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/xuwujing.png"
+               alt="虚无境" />
+          <p class="site-author-name" itemprop="name">虚无境</p>
+           
+              <p class="site-description motion-element" itemprop="description">The way of the future!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">136</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">59</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xuwujing" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/qazwsxpcm?viewmode=list" target="_blank" title="csdn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  csdn
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://home.cnblogs.com/u/xuwujing/" target="_blank" title="cnblogs">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  cnblogs
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.woainia.site/" title="woainia" target="_blank">woainia</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cmsblogs.com/" title="chenssy" target="_blank">chenssy</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://italker.imisty.cn" title="xiaowu" target="_blank">xiaowu</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Prometheus-介绍"><span class="nav-number">2.</span> <span class="nav-text">Prometheus 介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Prometheus的适用场景"><span class="nav-number">2.1.</span> <span class="nav-text">Prometheus的适用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Prometheus核心组件介绍"><span class="nav-number">2.2.</span> <span class="nav-text">Prometheus核心组件介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Prometheus-UI"><span class="nav-number">2.3.</span> <span class="nav-text">Prometheus UI</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Grafana介绍"><span class="nav-number">3.</span> <span class="nav-text">Grafana介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Grafana特点"><span class="nav-number">3.1.</span> <span class="nav-text">Grafana特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Grafana-UI"><span class="nav-number">3.2.</span> <span class="nav-text">Grafana UI</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Prometheus-Grafana-Alertmanager等安装配置"><span class="nav-number">4.</span> <span class="nav-text">Prometheus+Grafana+Alertmanager等安装配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Prometheus安装"><span class="nav-number">4.1.</span> <span class="nav-text">Prometheus安装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1，文件准备"><span class="nav-number">4.1.1.</span> <span class="nav-text">1，文件准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2，配置修改"><span class="nav-number">4.1.2.</span> <span class="nav-text">2，配置修改</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3，prometheus-启动"><span class="nav-number">4.1.3.</span> <span class="nav-text">3，prometheus 启动</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Grafana安装"><span class="nav-number">4.2.</span> <span class="nav-text">Grafana安装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1，文件准备-1"><span class="nav-number">4.2.1.</span> <span class="nav-text">1，文件准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2，grafana-启动"><span class="nav-number">4.2.2.</span> <span class="nav-text">2，grafana 启动</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Alertmanager安装"><span class="nav-number">4.3.</span> <span class="nav-text">Alertmanager安装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1，文件准备-2"><span class="nav-number">4.3.1.</span> <span class="nav-text">1，文件准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2，alertmanager启动"><span class="nav-number">4.3.2.</span> <span class="nav-text">2，alertmanager启动</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pushgateway-安装"><span class="nav-number">4.4.</span> <span class="nav-text">Pushgateway 安装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1，文件准备-3"><span class="nav-number">4.4.1.</span> <span class="nav-text">1，文件准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2，启动"><span class="nav-number">4.4.2.</span> <span class="nav-text">2，启动</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5，Node-export安装"><span class="nav-number">4.5.</span> <span class="nav-text">5，Node_export安装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1，文件准备-4"><span class="nav-number">4.5.1.</span> <span class="nav-text">1，文件准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2，启动-1"><span class="nav-number">4.5.2.</span> <span class="nav-text">2，启动</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Prometheus使用教程"><span class="nav-number">5.</span> <span class="nav-text">Prometheus使用教程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1，基本使用"><span class="nav-number">5.1.</span> <span class="nav-text">1，基本使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-gt-Prometheus主界面说明"><span class="nav-number">5.1.1.</span> <span class="nav-text">1>,Prometheus主界面说明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-gt-Graph使用示例"><span class="nav-number">5.1.2.</span> <span class="nav-text">2>,Graph使用示例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-gt-查看运行信息"><span class="nav-number">5.1.3.</span> <span class="nav-text">3>,查看运行信息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-gt-查看命令标记值"><span class="nav-number">5.1.4.</span> <span class="nav-text">4>,查看命令标记值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-gt-查看配置信息"><span class="nav-number">5.1.5.</span> <span class="nav-text">5>,查看配置信息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-gt-查看集成的组件"><span class="nav-number">5.1.6.</span> <span class="nav-text">6,>查看集成的组件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-gt-查看服务发现"><span class="nav-number">5.1.7.</span> <span class="nav-text">7>,查看服务发现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-gt-查看告警规则"><span class="nav-number">5.1.8.</span> <span class="nav-text">8>,查看告警规则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-gt-查看是否触发告警"><span class="nav-number">5.1.9.</span> <span class="nav-text">9>,查看是否触发告警</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Grafana使用"><span class="nav-number">6.</span> <span class="nav-text">Grafana使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-gt-主界面信息"><span class="nav-number">6.1.</span> <span class="nav-text">1>,主界面信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-gt-创建仪表盘监控实现"><span class="nav-number">6.2.</span> <span class="nav-text">2>,创建仪表盘监控实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-gt-使用第三方仪表盘监控实现"><span class="nav-number">6.3.</span> <span class="nav-text">3>,使用第三方仪表盘监控实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#监控告警实现"><span class="nav-number">7.</span> <span class="nav-text">监控告警实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#邮件告警实现"><span class="nav-number">7.1.</span> <span class="nav-text">邮件告警实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#企业微信告警实现"><span class="nav-number">7.2.</span> <span class="nav-text">企业微信告警实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用服务监控告警实现"><span class="nav-number">7.3.</span> <span class="nav-text">应用服务监控告警实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他配置"><span class="nav-number">8.</span> <span class="nav-text">其他配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#prometheus动态加载配置"><span class="nav-number">8.1.</span> <span class="nav-text">prometheus动态加载配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一些告警配置"><span class="nav-number">8.2.</span> <span class="nav-text">一些告警配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他"><span class="nav-number">9.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#音乐推荐"><span class="nav-number">9.1.</span> <span class="nav-text">音乐推荐</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">虚无境</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+ | 
+本站总访问量<span id="busuanzi_value_site_pv"></span>次
+ | 
+本站访客数<span id="busuanzi_value_site_uv"></span>人次
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=857896&auto=0&height=66"></iframe>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
